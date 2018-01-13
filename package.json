@@ -3,10 +3,7 @@
   "version": "0.0.0-development",
   "description": "Various components to use in react projects",
   "main": "dist/index.js",
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "files": ["dist", "README.md"],
   "scripts": {
     "commit": "git-cz",
     "test": "mocha src/index.test.js -w --require babel-core/register",
@@ -20,22 +17,15 @@
     "type": "git",
     "url": "https://github.com/gaithoben/cloudhub-react-components.git"
   },
-  "keywords": [
-    "kenya",
-    "counties",
-    "constituencies",
-    "wards"
-  ],
-  "author": "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
+  "keywords": ["kenya", "counties", "constituencies", "wards"],
+  "author":
+    "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gaithoben/cloudhub-react-components/issues"
   },
   "homepage": "https://github.com/gaithoben/cloudhub-react-components#readme",
   "dependencies": {
-    "@devexpress/dx-react-core": "1.0.0-beta.1",
-    "@devexpress/dx-react-grid": "1.0.0-beta.1",
-    "@devexpress/dx-react-grid-material-ui": "1.0.0-beta.1",
     "antd": "3.1.1",
     "awesome-phonenumber": "2.2.3",
     "material-ui": "0.20.0",
@@ -80,14 +70,7 @@
     }
   },
   "babel": {
-    "presets": [
-      "env",
-      "react",
-      "stage-2"
-    ],
-    "plugins": [
-      "transform-class-properties",
-      "transform-react-jsx"
-    ]
+    "presets": [["env", { "modules": false }], "react", "stage-2"],
+    "plugins": ["transform-class-properties", "transform-react-jsx"]
   }
 }
