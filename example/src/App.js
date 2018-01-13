@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Awesome from 'react-ckeditor5';
-import { PhoneInput } from 'cloudhub-react-components';
+import { PhoneInput, SimpleQuill } from 'cloudhub-react-components';
 class App extends Component {
   state = {
     value: 'hello',
@@ -20,6 +20,7 @@ class App extends Component {
       <div>
         <p className="App-intro">Phone Number</p>
         <PhoneInput />
+        <SimpleQuill />
       </div>
     );
   }
