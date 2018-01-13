@@ -1,0 +1,33 @@
+[
+  "Users",
+  "Staff",
+  "Farmer",
+  "Administration",
+  "ProduceReceipt",
+  "ColdroomInventory",
+  "Banks",
+  "ProcessingRecords",
+  "ContainerTransactions",
+  "StandardCareProcessing",
+  "MediumCareProcessing",
+  "HighCareProcessing",
+  "ProcessingTransactions",
+  "Dispatch",
+  "ProcessingInventory",
+  "Dispatching",
+  "Customers",
+  "Regions",
+  "Produce",
+  "Products",
+  "MixedProducts",
+  "Vehicles",
+  "Containers",
+  "ContainerAccounts",
+  "ColdRomoms",
+  "ProductPacks",
+  "Packhouses",
+  "Packaging",
+  "ProductLabels"
+
+
+]

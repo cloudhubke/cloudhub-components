@@ -1,0 +1,27 @@
+<div id='root'>
+</div>
+<div id="editor"></div>
+<!-- <script src="node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script> -->
+<script src="dist/index.umd.min.js"></script>
+<script src="https://unpkg.com/react@16.2.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.2.0/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+<script type="text/babel">
+    // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+    const rootElement = document.getElementById('root');
+    const Element = <div>Hello World </div>
+    console.log('====================================');
+    console.log(ClassicEditor);
+    console.log('====================================');
+    ReactDOM.render(Element, rootElement);
+
+    ClassicEditor
+	.create( document.querySelector( '#editor' ) )
+	.then( editor => {
+		window.editor = editor;
+	} )
+	.catch( err => {
+		console.error( err.stack );
+	} );
+
+</script>
