@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-select';
 import _ from 'lodash';
-import axios from 'axios';
 
 // import {
 //   Clear as ClearIcon,
@@ -17,7 +16,7 @@ export class RemoteSelector extends Component {
     displayField: '',
     returnkeys: [],
     url: '',
-    placeholder: 'Select...',
+    placeholder: 'Select...'
   };
 
   constructor(props) {
@@ -30,7 +29,7 @@ export class RemoteSelector extends Component {
       opts: [],
       selectedValue: '',
       isLoading: false,
-      searchText: '',
+      searchText: ''
     };
   }
 
@@ -39,19 +38,19 @@ export class RemoteSelector extends Component {
     if (!value || _.isEmpty(value)) {
       this.setState({
         opts: [],
-        selectedValue: '',
+        selectedValue: ''
       });
     } else {
       const opt = {
         ...value,
         key: value._id,
         value: 0,
-        label: value[displayField],
+        label: value[displayField]
       };
 
       this.setState({
         opts: [opt],
-        selectedValue: 0,
+        selectedValue: 0
       });
     }
   }
@@ -66,7 +65,7 @@ export class RemoteSelector extends Component {
         ...item,
         key: item._id,
         value: index,
-        label: item[displayField],
+        label: item[displayField]
       };
     });
     let selectedValue;

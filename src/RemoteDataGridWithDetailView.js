@@ -7,24 +7,26 @@ import {
   PagingState,
   SortingState,
   GroupingState,
-  LocalGrouping,
   FilteringState,
-  LocalFiltering,
-  ColumnOrderState,
   RowDetailState,
   TableColumnResizing,
+  IntegratedFiltering,
+  IntegratedGrouping,
+  IntegratedPaging,
+  IntegratedSorting,
+  IntegratedSelection
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
-  TableView,
+  Table,
   TableHeaderRow,
   TableSelection,
   PagingPanel,
   TableGroupRow,
   GroupingPanel,
-  DragDropContext,
+  DragDropProvider,
   TableFilterRow,
-  TableRowDetail,
+  TableRowDetail
 } from '@devexpress/dx-react-grid-material-ui';
 import {
   TableCell,
@@ -34,7 +36,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle
 } from 'material-ui';
 
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -46,25 +48,25 @@ import TableHeaderBar from './TableHeaderBar';
 
 const styleSheet = theme => ({
   commandButton: {
-    minWidth: '40px',
+    minWidth: '40px'
   },
   lookupEditCell: {
     verticalAlign: 'middle',
     paddingRight: theme.spacing.unit,
     '& ~ $lookupEditCell': {
-      paddingLeft: theme.spacing.unit,
-    },
+      paddingLeft: theme.spacing.unit
+    }
   },
   dialog: {
-    width: 'calc(100% - 16px)',
+    width: 'calc(100% - 16px)'
   },
   editDialog: {
     minWidth: '800px',
-    height: '600px',
+    height: '600px'
   },
   noDataCell: {
     textAlign: 'center',
-    padding: '40px 0',
+    padding: '40px 0'
   },
   iconButton: {
     border: 0,
@@ -73,11 +75,11 @@ const styleSheet = theme => ({
     opacity: 0.4,
     padding: '2px',
     '&:hover': {
-      opacity: 0.8,
-    },
+      opacity: 0.8
+    }
   },
   icon: {
-    margin: 0,
+    margin: 0
   },
   header: {
     display: 'flex',
@@ -85,15 +87,15 @@ const styleSheet = theme => ({
     paddingLeft: 20,
     paddingRight: 20,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   headerInputs: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    flexBasis: '50%',
-  },
+    flexBasis: '50%'
+  }
 });
 
 const counterColumn = [{ name: 'counter', title: '#' }];
@@ -109,7 +111,7 @@ const NoDataCellBase = ({ loading, colSpan, classes }) => (
 NoDataCellBase.propTypes = {
   loading: PropTypes.bool.isRequired,
   colSpan: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 // const NoDataCell = withStyles(styleSheet, { name: 'RemoteDataDemo' })(NoDataCellBase);
@@ -122,7 +124,7 @@ class RemoteDataGrid extends React.PureComponent {
     columnWidths: {},
     data: {
       items: [],
-      totalCount: 0,
+      totalCount: 0
     },
     detailTemplate: () => <div />,
     onEdit: () => {},
@@ -138,7 +140,7 @@ class RemoteDataGrid extends React.PureComponent {
     deletingRows: [],
     editingRow: null,
     url: '/',
-    onQueryChange: () => {},
+    onQueryChange: () => {}
   };
 
   constructor(props) {
@@ -149,7 +151,7 @@ class RemoteDataGrid extends React.PureComponent {
       defaultColumnWidths: {
         counter: 70,
         actions: 120,
-        ...this.props.columnWidths,
+        ...this.props.columnWidths
       },
       sorting: [],
       addedRows: [],
@@ -161,7 +163,7 @@ class RemoteDataGrid extends React.PureComponent {
       grouping: [],
       selection: [],
       filters: [],
-      searchTerm: '',
+      searchTerm: ''
     };
 
     this.changeExpandedDetails = expandedRows =>
@@ -184,8 +186,8 @@ class RemoteDataGrid extends React.PureComponent {
           ...rows,
           ...added.map((row, index) => ({
             id: startingAddedId + index,
-            ...row,
-          })),
+            ...row
+          }))
         ];
       }
       if (changed) {
@@ -245,7 +247,7 @@ class RemoteDataGrid extends React.PureComponent {
   componentDidMount() {
     this.loadData();
     this.setState({
-      loading: true,
+      loading: true
     });
   }
 
@@ -255,13 +257,13 @@ class RemoteDataGrid extends React.PureComponent {
   changeSorting(sorting) {
     this.setState({
       loading: true,
-      sorting,
+      sorting
     });
   }
   changeCurrentPage(currentPage) {
     this.setState({
       loading: true,
-      currentPage,
+      currentPage
     });
   }
   changePageSize(pageSize) {
@@ -272,7 +274,7 @@ class RemoteDataGrid extends React.PureComponent {
     this.setState({
       loading: true,
       pageSize,
-      currentPage,
+      currentPage
     });
   }
 
@@ -286,7 +288,7 @@ class RemoteDataGrid extends React.PureComponent {
 
     let queryString = {
       limit: pageSize,
-      skip: pageSize * currentPage,
+      skip: pageSize * currentPage
     };
 
     const columnSorting = sorting[0];
@@ -343,14 +345,13 @@ class RemoteDataGrid extends React.PureComponent {
       currentPage,
       pageSize,
       allowedPageSizes,
-      defaultColumnWidths,
+      defaultColumnWidths
     } = this.state;
 
     return (
       <div className="grid-container">
         {this.renderHeader()}
         <Grid rows={data.items} columns={columns}>
-          <ColumnOrderState defaultOrder={columns.map(column => column.name)} />
           <SelectionState
             selection={selection}
             onSelectionChange={this.changeSelection}
@@ -381,7 +382,7 @@ class RemoteDataGrid extends React.PureComponent {
           />
           <DragDropContext />
 
-          <TableView
+          <Table
             tableCellTemplate={this.tableCellTemplate}
             allowColumnReordering
           />
@@ -416,7 +417,7 @@ class RemoteDataGrid extends React.PureComponent {
               Are you sure to delete the following row?
             </DialogContentText>
             <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <TableView tableCellTemplate={this.tableCellTemplate} />
+              <Table tableCellTemplate={this.tableCellTemplate} />
               <TableHeaderRow />
             </Grid>
           </DialogContent>
@@ -440,7 +441,7 @@ class RemoteDataGrid extends React.PureComponent {
 }
 
 RemoteDataGrid.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styleSheet)(RemoteDataGrid);

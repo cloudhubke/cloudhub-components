@@ -5,19 +5,20 @@ import { createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { Provider } from 'react-redux';
 import ContactForm from './ContactForm';
+import GridDemo from './GridDemo';
 
 const rootReducer = combineReducers({
   // ...your other reducers here
   // you have to pass formReducer under 'form' key,
   // for custom keys look up the docs for 'getFormState'
-  form: formReducer,
+  form: formReducer
 });
 
 const store = createStore(rootReducer);
 
 class App extends Component {
   state = {
-    value: 'hello',
+    value: 'hello'
   };
   onChange = value => {
     this.setState({ value });
@@ -30,8 +31,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <p className="App-intro">Phone Number</p>
+        <p className="App-intro">Phone:</p>
         <ContactForm />
+        <GridDemo />
       </div>
     );
   }

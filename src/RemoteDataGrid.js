@@ -7,21 +7,24 @@ import {
   PagingState,
   SortingState,
   GroupingState,
-  LocalGrouping,
   FilteringState,
-  LocalFiltering,
   TableColumnResizing,
+  IntegratedFiltering,
+  IntegratedGrouping,
+  IntegratedPaging,
+  IntegratedSorting,
+  IntegratedSelection
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
-  TableView,
+  Table,
   TableHeaderRow,
   TableSelection,
   PagingPanel,
   TableGroupRow,
   GroupingPanel,
-  DragDropContext,
-  TableFilterRow,
+  DragDropProvider,
+  TableFilterRow
 } from '@devexpress/dx-react-grid-material-ui';
 import {
   TableCell,
@@ -30,8 +33,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
+  DialogTitle
 } from 'material-ui';
 
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -43,41 +45,41 @@ import TableHeaderBar from './TableHeaderBar';
 
 const styleSheet = theme => ({
   commandButton: {
-    minWidth: '40px',
+    minWidth: '40px'
   },
   lookupEditCell: {
     verticalAlign: 'middle',
     paddingRight: theme.spacing.unit,
     '& ~ $lookupEditCell': {
-      paddingLeft: theme.spacing.unit,
-    },
+      paddingLeft: theme.spacing.unit
+    }
   },
   dialog: {
-    width: 'calc(100% - 16px)',
+    width: 'calc(100% - 16px)'
   },
   editDialog: {
     minWidth: '800px',
-    height: '600px',
+    height: '600px'
   },
   noDataCell: {
     textAlign: 'center',
-    padding: '40px 0',
+    padding: '40px 0'
   },
   iconButton: {
     border: 0,
     height: 'auto',
     width: 'auto',
-    padding: '2px',
+    padding: '2px'
   },
   icon: {
-    margin: 0,
-  },
+    margin: 0
+  }
 });
 
 const counterColumn = [{ name: 'counter', title: '#', width: 70 }];
 
 const staticColumns = [
-  { name: 'actions', title: 'Actions', width: 150, align: 'left' },
+  { name: 'actions', title: 'Actions', width: 150, align: 'left' }
 ];
 
 const NoDataCellBase = ({ loading, colSpan, classes }) => (
@@ -89,7 +91,7 @@ const NoDataCellBase = ({ loading, colSpan, classes }) => (
 NoDataCellBase.propTypes = {
   loading: PropTypes.bool.isRequired,
   colSpan: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 // const NoDataCell = withStyles(styleSheet, { name: 'RemoteDataDemo' })(NoDataCellBase);
@@ -102,7 +104,7 @@ class RemoteDataGrid extends React.PureComponent {
     columnWidths: {},
     data: {
       items: [],
-      totalCount: 0,
+      totalCount: 0
     },
     allowColumnResizing: true,
     detailTemplate: () => <div />,
@@ -119,7 +121,7 @@ class RemoteDataGrid extends React.PureComponent {
     deletingRows: [],
     editingRow: null,
     url: '/',
-    onQueryChange: () => {},
+    onQueryChange: () => {}
   };
 
   constructor(props) {
@@ -130,7 +132,7 @@ class RemoteDataGrid extends React.PureComponent {
       defaultColumnWidths: {
         counter: 70,
         actions: 150,
-        ...this.props.columnWidths,
+        ...this.props.columnWidths
       },
       sorting: [],
       addedRows: [],
@@ -142,7 +144,7 @@ class RemoteDataGrid extends React.PureComponent {
       grouping: [],
       selection: [],
       filters: [],
-      searchTerm: '',
+      searchTerm: ''
     };
 
     this.changeExpandedDetails = expandedRows =>
@@ -165,8 +167,8 @@ class RemoteDataGrid extends React.PureComponent {
           ...rows,
           ...added.map((row, index) => ({
             id: startingAddedId + index,
-            ...row,
-          })),
+            ...row
+          }))
         ];
       }
       if (changed) {
@@ -226,7 +228,7 @@ class RemoteDataGrid extends React.PureComponent {
   componentDidMount() {
     this.loadData();
     this.setState({
-      loading: true,
+      loading: true
     });
   }
 
@@ -237,14 +239,14 @@ class RemoteDataGrid extends React.PureComponent {
   changeSorting(sorting) {
     this.setState({
       loading: true,
-      sorting,
+      sorting
     });
   }
 
   changeCurrentPage(currentPage) {
     this.setState({
       loading: true,
-      currentPage,
+      currentPage
     });
   }
   changePageSize(pageSize) {
@@ -255,7 +257,7 @@ class RemoteDataGrid extends React.PureComponent {
     this.setState({
       loading: true,
       pageSize,
-      currentPage,
+      currentPage
     });
   }
 
@@ -269,7 +271,7 @@ class RemoteDataGrid extends React.PureComponent {
 
     let queryString = {
       limit: pageSize,
-      skip: pageSize * currentPage,
+      skip: pageSize * currentPage
     };
 
     const columnSorting = sorting[0];
@@ -324,7 +326,7 @@ class RemoteDataGrid extends React.PureComponent {
       currentPage,
       pageSize,
       allowedPageSizes,
-      defaultColumnWidths,
+      defaultColumnWidths
     } = this.state;
 
     return (
@@ -339,18 +341,16 @@ class RemoteDataGrid extends React.PureComponent {
             sorting={sorting}
             onSortingChange={this.changeSorting}
           />
-          <DragDropContext />
+
           <GroupingState
             grouping={this.state.grouping}
             onGroupingChange={this.changeGrouping}
           />
-          <LocalGrouping />
 
           <FilteringState
             filters={this.state.filters}
             onFiltersChange={this.changeFilters}
           />
-          <LocalFiltering />
 
           <PagingState
             currentPage={currentPage}
@@ -360,9 +360,15 @@ class RemoteDataGrid extends React.PureComponent {
             totalCount={data.totalCount}
           />
 
-          <DragDropContext />
+          <IntegratedGrouping />
+          <IntegratedFiltering />
+          <IntegratedSorting />
+          <IntegratedPaging />
+          <IntegratedSelection />
 
-          <TableView
+          <DragDropProvider />
+
+          <Table
             tableCellTemplate={this.tableCellTemplate}
             allowColumnReordering
           />
@@ -426,7 +432,7 @@ class RemoteDataGrid extends React.PureComponent {
 }
 
 RemoteDataGrid.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styleSheet)(RemoteDataGrid);

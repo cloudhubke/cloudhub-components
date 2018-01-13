@@ -16,7 +16,6 @@ import Progress from './Progress';
 import RemoteDataGrid from './RemoteDataGrid';
 import RemoteDataGridWithDetailView from './RemoteDataGridWithDetailView';
 import RemoteSelector from './RemoteSelector';
-import SearchInput from './SearchInput';
 import Selector from './Selector';
 import SimpleDataGrid from './SimpleDataGrid';
 import SimpleQuill from './SimpleQuill';
@@ -43,7 +42,6 @@ export {
   RemoteDataGrid,
   RemoteDataGridWithDetailView,
   RemoteSelector,
-  SearchInput,
   Selector,
   SimpleDataGrid,
   SimpleQuill,

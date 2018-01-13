@@ -33,8 +33,12 @@
   },
   "homepage": "https://github.com/gaithoben/cloudhub-react-components#readme",
   "dependencies": {
+    "@devexpress/dx-react-core": "1.0.0-beta.3",
+    "@devexpress/dx-react-grid": "1.0.0-beta.3",
+    "@devexpress/dx-react-grid-material-ui": "1.0.0-beta.3",
     "antd": "3.1.1",
     "awesome-phonenumber": "2.2.3",
+    "axios": "0.17.1",
     "material-ui": "1.0.0-beta.27",
     "material-ui-icons": "1.0.0-beta.17",
     "react": "16.2.0",
