@@ -22,7 +22,6 @@ import SimpleDataGrid from './SimpleDataGrid';
 import SimpleQuill from './SimpleQuill';
 import StaticListSelector from './StaticListSelector';
 import TableHeaderBar from './TableHeaderBar';
-import Upload from './Upload';
 import UserRoles from './UserRoles';
 
 export {
@@ -50,6 +49,5 @@ export {
   SimpleQuill,
   StaticListSelector,
   TableHeaderBar,
-  Upload,
   UserRoles
 };
