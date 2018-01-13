@@ -227,18 +227,18 @@ class DataGridWithDetailView extends React.PureComponent {
               if (column.name === 'actions') {
                 return <TableCell />;
               }
-              return undefined;
+              return <TableCell />;
             }}
           />
           <TableSelection />
           <TableGroupRow />
           <GroupingPanel allowDragging />
-          <PagingPanel allowedPageSizes={allowedPageSizes} />
+          <PagingPanel pageSizes={allowedPageSizes} />
         </Grid>
 
         <Dialog
           open={!!deletingRows.length}
-          onRequestClose={this.cancelDelete}
+          onClose={this.cancelDelete}
           classes={{ paper: classes.dialog }}
         >
           <DialogTitle>Delete Row</DialogTitle>
@@ -247,7 +247,7 @@ class DataGridWithDetailView extends React.PureComponent {
               Are you sure to delete the following row?
             </DialogContentText>
             <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <TableView tableCellTemplate={this.tableCellTemplate} />
+              <TableView cellComponent={this.tableCellTemplate} />
               <TableHeaderRow />
             </Grid>
           </DialogContent>

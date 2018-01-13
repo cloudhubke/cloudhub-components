@@ -93,8 +93,8 @@ class DemoBase extends React.PureComponent {
       addedRows: [],
       changedRows: {},
       currentPage: 0,
-      pageSize: 0,
-      allowedPageSizes: [5, 10, 0],
+      pageSize: 20,
+      allowedPageSizes: [5, 10, 20],
       grouping: [],
       selection: [],
       filters: []
@@ -217,10 +217,7 @@ class DemoBase extends React.PureComponent {
 
           <DragDropProvider />
 
-          <Table
-            tableCellTemplate={this.tableCellTemplate}
-            allowColumnReordering
-          />
+          <Table cellComponent={this.tableCellTemplate} allowColumnReordering />
 
           <TableHeaderRow allowSorting allowDragging />
 
@@ -229,18 +226,18 @@ class DemoBase extends React.PureComponent {
               if (column.name === 'actions') {
                 return <TableCell />;
               }
-              return undefined;
+              return <TableCell />;
             }}
           />
           <TableSelection />
           <TableGroupRow />
           <GroupingPanel allowDragging />
-          <PagingPanel allowedPageSizes={allowedPageSizes} />
+          <PagingPanel pageSizes={allowedPageSizes} />
         </Grid>
 
         <Dialog
           open={!!deletingRows.length}
-          onRequestClose={this.cancelDelete}
+          onClose={this.cancelDelete}
           classes={{ paper: classes.dialog }}
         >
           <DialogTitle>Delete Row</DialogTitle>

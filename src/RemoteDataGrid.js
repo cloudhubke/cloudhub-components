@@ -8,12 +8,12 @@ import {
   SortingState,
   GroupingState,
   FilteringState,
-  TableColumnResizing,
   IntegratedFiltering,
   IntegratedGrouping,
   IntegratedPaging,
   IntegratedSorting,
-  IntegratedSelection
+  IntegratedSelection,
+  CustomPaging
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -24,7 +24,12 @@ import {
   TableGroupRow,
   GroupingPanel,
   DragDropProvider,
-  TableFilterRow
+  TableFilterRow,
+  TableColumnResizing,
+  TableColumnReordering,
+  Toolbar,
+  TableColumnVisibility,
+  ColumnChooser
 } from '@devexpress/dx-react-grid-material-ui';
 import {
   TableCell,
@@ -102,6 +107,7 @@ class RemoteDataGrid extends React.PureComponent {
     title: 'Table title',
     editTitle: 'Edit Record',
     columns: [],
+    hiddencolumns: [],
     columnWidths: {},
     data: {
       items: [],
@@ -220,6 +226,7 @@ class RemoteDataGrid extends React.PureComponent {
         );
       } else {
         return this.props.templates({ row, column, style });
+        // return <TableCell>col</TableCell>;
       }
     };
 
@@ -319,7 +326,13 @@ class RemoteDataGrid extends React.PureComponent {
   };
 
   render() {
-    const { data, classes, deletingRows, allowColumnResizing } = this.props;
+    const {
+      data,
+      classes,
+      deletingRows,
+      allowColumnResizing,
+      hiddencolumns
+    } = this.props;
     const {
       columns,
       selection,
@@ -358,28 +371,28 @@ class RemoteDataGrid extends React.PureComponent {
             onCurrentPageChange={this.changeCurrentPage}
             pageSize={pageSize}
             onPageSizeChange={this.changePageSize}
-            totalCount={data.totalCount}
           />
+          <CustomPaging totalCount={data.totalCount} />
 
           <IntegratedGrouping />
           <IntegratedFiltering />
           <IntegratedSorting />
-          <IntegratedPaging />
+
           <IntegratedSelection />
 
           <DragDropProvider />
 
-          <Table
-            tableCellTemplate={this.tableCellTemplate}
-            allowColumnReordering
-          />
+          <Table cellComponent={this.tableCellTemplate} allowColumnReordering />
 
           {allowColumnResizing && (
             <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
           )}
 
+          <TableColumnReordering
+            defaultOrder={columns.map(column => column.name)}
+          />
           <TableHeaderRow
-            allowSorting
+            showSortingControls
             allowDragging
             allowResizing={allowColumnResizing}
           />
@@ -389,18 +402,21 @@ class RemoteDataGrid extends React.PureComponent {
               if (column.name === 'actions' || column.name === 'counter') {
                 return <TableCell />;
               }
-              return undefined;
+              return <TableCell />;
             }}
           />
           <TableSelection />
           <TableGroupRow />
+          <TableColumnVisibility defaultHiddenColumns={hiddencolumns} />
+          <Toolbar />
           <GroupingPanel allowDragging />
-          <PagingPanel allowedPageSizes={allowedPageSizes} />
+          <PagingPanel pageSizes={allowedPageSizes} />
+          <ColumnChooser />
         </Grid>
 
         <Dialog
           open={!!deletingRows.length}
-          onRequestClose={this.cancelDelete}
+          onClose={this.cancelDelete}
           classes={{ paper: classes.dialog }}
         >
           <DialogTitle>Delete Row</DialogTitle>
@@ -409,7 +425,7 @@ class RemoteDataGrid extends React.PureComponent {
               Are you sure to delete the following row?
             </DialogContentText>
             <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <TableView tableCellTemplate={this.tableCellTemplate} />
+              <Table cellComponent={this.tableCellTemplate} />
               <TableHeaderRow />
             </Grid>
           </DialogContent>

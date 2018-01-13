@@ -4,17 +4,18 @@ import {
   Table,
   TableHeaderRow
 } from '@devexpress/dx-react-grid-material-ui';
+import TableCell from 'material-ui/Table/TableCell';
 
 export class SimpleDataGrid extends React.PureComponent {
   static defaultProps = {
-    templates: () => undefined
+    templates: () => <TableCell />
   };
   render() {
     const { rows, columns } = this.props;
 
     return (
       <Grid rows={rows} columns={columns || []}>
-        <Table tableCellTemplate={this.props.templates} />
+        <Table cellComponent={this.props.templates} />
         <TableHeaderRow />
       </Grid>
     );

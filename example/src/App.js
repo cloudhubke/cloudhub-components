@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { createStore, combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
+import { store } from './store/store';
 import { Provider } from 'react-redux';
 import ContactForm from './ContactForm';
 import GridDemo from './GridDemo';
-
-const rootReducer = combineReducers({
-  // ...your other reducers here
-  // you have to pass formReducer under 'form' key,
-  // for custom keys look up the docs for 'getFormState'
-  form: formReducer
-});
-
-const store = createStore(rootReducer);
+import Bank from './pages/Bank';
 
 class App extends Component {
   state = {
@@ -34,6 +25,7 @@ class App extends Component {
         <p className="App-intro">Phone:</p>
         <ContactForm />
         <GridDemo />
+        <Bank />
       </div>
     );
   }
