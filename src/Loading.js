@@ -8,3 +8,5 @@ export const Loading = () => (
     <CircularProgress className="loading-icon-mui" />
   </div>
 );
+
+export default Loading;

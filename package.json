@@ -3,7 +3,10 @@
   "version": "0.0.0-development",
   "description": "Various components to use in react projects",
   "main": "dist/index.js",
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "commit": "git-cz",
     "test": "mocha src/index.test.js -w --require babel-core/register",
@@ -17,9 +20,13 @@
     "type": "git",
     "url": "https://github.com/gaithoben/cloudhub-react-components.git"
   },
-  "keywords": ["kenya", "counties", "constituencies", "wards"],
-  "author":
-    "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
+  "keywords": [
+    "kenya",
+    "counties",
+    "constituencies",
+    "wards"
+  ],
+  "author": "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gaithoben/cloudhub-react-components/issues"
@@ -28,7 +35,7 @@
   "dependencies": {
     "antd": "3.1.1",
     "awesome-phonenumber": "2.2.3",
-    "material-ui": "0.20.0",
+    "material-ui": "1.0.0-beta.27",
     "material-ui-icons": "1.0.0-beta.17",
     "react": "16.2.0",
     "react-dom": "16.2.0",
@@ -47,10 +54,14 @@
     "babel-preset-es2015": "6.24.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "uglifyjs-webpack-plugin": "1.1.6",
     "babel-register": "6.26.0",
     "chai": "4.1.2",
     "css-loader": "0.28.8",
+    "eslint": "4.15.0",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-react": "7.5.1",
     "ghooks": "2.0.2",
     "json-loader": "0.5.7",
     "mocha": "4.0.1",
@@ -62,6 +73,7 @@
     "sass-loader": "6.0.6",
     "semantic-release": "^11.0.2",
     "style-loader": "0.19.1",
+    "uglifyjs-webpack-plugin": "1.1.6",
     "webpack": "3.10.0"
   },
   "config": {
@@ -70,7 +82,19 @@
     }
   },
   "babel": {
-    "presets": [["env", { "modules": false }], "react", "stage-2"],
-    "plugins": ["transform-class-properties", "transform-react-jsx"]
+    "presets": [
+      [
+        "env",
+        {
+          "modules": false
+        }
+      ],
+      "react",
+      "stage-2"
+    ],
+    "plugins": [
+      "transform-class-properties",
+      "transform-react-jsx"
+    ]
   }
 }
