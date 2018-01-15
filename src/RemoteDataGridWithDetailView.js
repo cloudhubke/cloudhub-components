@@ -342,7 +342,13 @@ class RemoteDataGrid extends React.PureComponent {
   };
 
   render() {
-    const { data, classes, deletingRows, hiddencolumns } = this.props;
+    const {
+      data,
+      classes,
+      deletingRows,
+      hiddencolumns,
+      allowColumnResizing
+    } = this.props;
     const {
       columns,
       selection,
