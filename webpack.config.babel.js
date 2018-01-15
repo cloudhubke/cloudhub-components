@@ -1,4 +1,5 @@
 import { join } from 'path';
+
 const include = join(__dirname, 'src');
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
 
@@ -8,7 +9,7 @@ export default {
   output: {
     path: join(__dirname, 'dist'),
     libraryTarget: 'umd',
-    library: 'react-ckeditor5',
+    library: 'react-ckeditor5'
   },
   module: {
     loaders: [
@@ -16,15 +17,16 @@ export default {
       { test: /\.css$/, loader: 'css-loader' },
       {
         test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader'],
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.svg$/,
-        use: ['raw-loader'],
-      },
-    ],
+        use: ['raw-loader']
+      }
+    ]
   },
   externals: {
     react: 'commonjs react', // this line is just to use the React dependency of our parent-testing-project instead of using our own React.
-  },
+    axios: 'axios'
+  }
 };
