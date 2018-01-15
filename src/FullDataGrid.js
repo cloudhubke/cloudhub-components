@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   SelectionState,
@@ -65,7 +65,7 @@ const styleSheet = theme => ({
 
 const staticColumns = [{ name: 'actions', title: 'Actions', width: 200 }];
 
-class DemoBase extends React.PureComponent {
+class FullDataGrid extends Component {
   static defaultProps = {
     title: 'Table title',
     editTitle: 'Edit Record',
@@ -199,13 +199,12 @@ class DemoBase extends React.PureComponent {
             grouping={this.state.grouping}
             onGroupingChange={this.changeGrouping}
           />
-          <LocalGrouping />
 
           <FilteringState
             filters={this.state.filters}
             onFiltersChange={this.changeFilters}
           />
-          <LocalFiltering />
+
           <PagingState
             currentPage={currentPage}
             onCurrentPageChange={this.changeCurrentPage}
@@ -275,8 +274,8 @@ class DemoBase extends React.PureComponent {
   }
 }
 
-DemoBase.propTypes = {
+FullDataGrid.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styleSheet)(DemoBase);
+export default withStyles(styleSheet)(FullDataGrid);
