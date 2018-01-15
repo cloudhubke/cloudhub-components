@@ -10,10 +10,10 @@ const styles = {
   root: {
     display: 'flex',
     flexDirection: 'row',
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
+    overflow: 'hidden'
   },
   inputs: {
     display: 'flex',
@@ -21,7 +21,8 @@ const styles = {
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-  },
+    marginLeft: 10
+  }
 };
 
 class TableHeaderBar extends Component {
@@ -30,12 +31,12 @@ class TableHeaderBar extends Component {
     onAdd: () => {},
     onRefresh: () => {},
     onSearchChange: () => {},
-    onPrint: () => {},
+    onPrint: () => {}
   };
   constructor(props) {
     super(props);
     this.state = {
-      value: 0,
+      value: 0
     };
 
     this.onSearch = _.debounce(this.onSearch, 500);
@@ -50,14 +51,12 @@ class TableHeaderBar extends Component {
 
     return (
       <Paper className={classes.root}>
-        <div>
-          <Typography type="title" gutterBottom>
-            {this.props.title}
-          </Typography>
-        </div>
+        <Typography type="title" gutterBottom>
+          {this.props.title}
+        </Typography>
         <div className={classes.inputs}>
           <Input
-            style={{ flex: 1 }}
+            style={{ flex: 1, minWidth: 200 }}
             icon="search"
             placeholder="Search..."
             onChange={e => this.onSearch(e.target.value)}

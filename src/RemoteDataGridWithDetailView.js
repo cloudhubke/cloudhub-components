@@ -27,6 +27,8 @@ import {
   GroupingPanel,
   DragDropProvider,
   TableFilterRow,
+  Toolbar,
+  TableColumnVisibility,
   TableRowDetail
 } from '@devexpress/dx-react-grid-material-ui';
 import {
@@ -123,6 +125,7 @@ class RemoteDataGrid extends React.PureComponent {
     editTitle: 'Edit Record',
     columns: [],
     columnWidths: {},
+    hiddencolumns: [],
     data: {
       items: [],
       totalCount: 0
@@ -202,7 +205,7 @@ class RemoteDataGrid extends React.PureComponent {
     this.tableCellTemplate = ({ row, column, style }) => {
       if (column.name === 'actions') {
         return (
-          <TableCell>
+          <TableCell style={{ display: 'flex', flexDirection: 'row' }}>
             <IconButton
               classes={{ root: props.classes.iconButton }}
               onClick={() => this.props.onView(row)}
@@ -339,7 +342,7 @@ class RemoteDataGrid extends React.PureComponent {
   };
 
   render() {
-    const { data, classes, deletingRows } = this.props;
+    const { data, classes, deletingRows, hiddencolumns } = this.props;
     const {
       columns,
       selection,
@@ -412,6 +415,8 @@ class RemoteDataGrid extends React.PureComponent {
           />
           <TableSelection />
           <TableGroupRow />
+          <TableColumnVisibility defaultHiddenColumns={hiddencolumns} />
+          <Toolbar />
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />
         </Grid>

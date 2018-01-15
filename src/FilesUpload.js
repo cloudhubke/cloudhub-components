@@ -9,26 +9,26 @@ const styles = () => ({
   fileList: {
     '& span': {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     },
     '& .ant-upload-list': {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     },
     '& .ant-upload-list-item': {
       border: '1px solid #DDDDDD',
       fontSize: 16,
       borderRadius: 3,
-      height: 'auto',
+      height: 'auto'
     },
     '& .ant-upload-list-item-info span': {
       display: 'flex',
       flexDirection: 'row',
-      padding: '5px 5px 5px 5px',
+      padding: '5px 5px 5px 5px'
     },
     '& .anticon.anticon-paper-clip': {
       fontSize: 22,
-      position: 'relative',
+      position: 'relative'
     },
     '& .ant-upload-list-item .anticon-cross': {
       display: 'flex',
@@ -37,9 +37,9 @@ const styles = () => ({
       alignItems: 'center',
       justifyContent: 'center',
       top: 0,
-      bottom: 0,
-    },
-  },
+      bottom: 0
+    }
+  }
 });
 
 class FilesUpload extends Component {
@@ -48,29 +48,46 @@ class FilesUpload extends Component {
     defaultCountry: 'ke',
     value: '',
     limit: 1,
+    url: '/fileapi/upload/file'
   };
 
   constructor(props) {
     super(props);
     this.state = {
       isMounted: true,
-      fileList: [],
+      fileList: []
     };
   }
 
   componentWillMount() {
     if (this.props.input.value) {
-      this.setState({
-        fileList: this.props.input.value.map((item, index) => ({
-          ...item,
-          uid: item.uid || index,
-          name: item.name || 'xxx.png',
-          status: 'done',
-          url: item.url || '',
-        })),
-      });
+      if (Array.isArray(this.props.input.value)) {
+        this.setState({
+          fileList: this.props.input.value.map((item, index) => ({
+            ...item,
+            uid: item.uid || index,
+            name: item.name || 'xxx.png',
+            status: 'done',
+            url: item.url || ''
+          }))
+        });
+      } else {
+        this.setState({
+          fileList: [this.props.input.value].map((item, index) => ({
+            ...item,
+            uid: item.uid || index,
+            name: item.name || item.filename || 'xxx.png',
+            status: 'done',
+            url: item.url || item.fd || ''
+          }))
+        });
+      }
     }
   }
+
+  componentWillReceiveProps = nextProps => {
+    // console.log('NXT', nextProps.input.value);
+  };
 
   handleChange = ({ fileList }) => {
     const files = fileList.map((item, index) => {
@@ -81,7 +98,11 @@ class FilesUpload extends Component {
     });
 
     this.setState({ fileList: files });
-    this.props.input.onChange(files);
+    if (this.props.limit === 1) {
+      this.props.input.onChange(files[0]);
+    } else {
+      this.props.input.onChange(files);
+    }
   };
 
   handleRemove = file => {
@@ -95,9 +116,7 @@ class FilesUpload extends Component {
 
   render() {
     const { fileList } = this.state;
-    const { limit, classes } = this.props;
-
-    console.log('CLASSES', classes);
+    const { limit, classes, url } = this.props;
 
     const { meta } = this.props;
     const uploadButton = (
@@ -108,7 +127,7 @@ class FilesUpload extends Component {
     return (
       <div className={classes.fileList}>
         <Upload
-          action="/fileapi/upload/file"
+          action={url}
           listType="text"
           fileList={fileList}
           multiple={limit > 1}

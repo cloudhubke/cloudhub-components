@@ -10,7 +10,7 @@ export class Select extends Component {
     onChange: () => {},
     displayField: '',
     returnkeys: [],
-    url: '',
+    url: ''
   };
 
   constructor(props) {
@@ -19,7 +19,7 @@ export class Select extends Component {
     this.state = {
       options: [],
       opts: [],
-      selectedValue: [],
+      selectedValue: []
     };
   }
 
@@ -44,9 +44,9 @@ export class Select extends Component {
       }
       return {
         ...item,
-        key: item._id,
+        key: item._id || item.id,
         value: index,
-        label: item[displayField],
+        label: item[displayField]
       };
     });
 
@@ -56,9 +56,9 @@ export class Select extends Component {
       }
       return {
         ...item,
-        key: item._id,
-        value: opts.findIndex(item2 => item2.key === item._id),
-        label: item[displayField],
+        key: item._id || item.id,
+        value: opts.findIndex(item2 => item2.key === (item._id || item.id)),
+        label: item[displayField]
       };
     });
     this.setState({ opts, options, selectedValue: vals });

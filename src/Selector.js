@@ -11,7 +11,7 @@ export class Select extends Component {
     displayField: '',
     returnkeys: [],
     url: '',
-    multi: false,
+    multi: false
   };
 
   constructor(props) {
@@ -20,7 +20,7 @@ export class Select extends Component {
     this.state = {
       options: [],
       opts: [],
-      selectedValue: '',
+      selectedValue: ''
     };
   }
 
@@ -44,9 +44,9 @@ export class Select extends Component {
       }
       return {
         ...item,
-        key: item._id,
+        key: item._id || item.id,
         value: index,
-        label: item[displayField],
+        label: item[displayField]
       };
     });
     let selectedValue;
@@ -54,7 +54,9 @@ export class Select extends Component {
       if (!_.isObject(value)) {
         selectedValue = value;
       } else {
-        selectedValue = opts.findIndex(item => item.key === value._id);
+        selectedValue = opts.findIndex(
+          item => item.key === (value._id || item.id)
+        );
       }
     }
     this.setState({ opts, options, selectedValue });

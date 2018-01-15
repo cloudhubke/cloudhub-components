@@ -12,33 +12,33 @@ const styles = () => ({
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      flexWrap: 'wrap',
+      flexWrap: 'wrap'
     },
     '& .ant-upload.ant-upload-select, .ant-upload-list-picture-card .ant-upload-list-item': {
       float: 'left',
       width: 150,
       height: 150,
-      margin: '0 8px 8px 0',
+      margin: '0 8px 8px 0'
     },
 
     '& .ant-upload-select-picture-card i': {
       fontSize: 28,
-      color: '#999',
+      color: '#999'
     },
 
     '& .ant-upload-select-picture-card .ant-upload-text': {
       marginTop: 8,
       fontSize: 12,
-      color: '#666',
-    },
-  },
+      color: '#666'
+    }
+  }
 });
 class ImagesUpload extends Component {
   static defaultProps = {
     preferredCountries: ['ke'],
     defaultCountry: 'ke',
     value: '',
-    limit: 1,
+    limit: 1
   };
 
   constructor(props) {
@@ -47,7 +47,7 @@ class ImagesUpload extends Component {
       isMounted: true,
       previewVisible: false,
       previewImage: '',
-      fileList: [],
+      fileList: []
     };
   }
 
@@ -65,8 +65,8 @@ class ImagesUpload extends Component {
           uid: item.uid || index,
           name: item.name || 'xxx.png',
           status: 'done',
-          url: item.url || '',
-        })),
+          url: item.url || ''
+        }))
       });
     }
   }
@@ -76,7 +76,7 @@ class ImagesUpload extends Component {
   handlePreview = file => {
     this.setState({
       previewImage: file.url || file.thumbUrl,
-      previewVisible: true,
+      previewVisible: true
     });
   };
 
@@ -89,7 +89,11 @@ class ImagesUpload extends Component {
     });
 
     this.setState({ fileList: files });
-    this.props.input.onChange(files);
+    if (this.props.limit === 1) {
+      this.props.input.onChange(files[0]);
+    } else {
+      this.props.input.onChange(files);
+    }
   };
 
   handleRemove = file => {
@@ -98,7 +102,11 @@ class ImagesUpload extends Component {
     filelist.splice(ind, 1);
 
     this.setState({ fileList: filelist });
-    this.props.input.onChange(filelist);
+    if (!filelist.length && this.props.limit === 1) {
+      this.props.input.onChange({});
+    } else {
+      this.props.input.onChange(filelist);
+    }
   };
 
   render() {

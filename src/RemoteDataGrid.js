@@ -39,7 +39,8 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  Paper
 } from 'material-ui';
 
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -85,7 +86,7 @@ const styleSheet = theme => ({
 const counterColumn = [{ name: 'counter', title: '#', width: 70 }];
 
 const staticColumns = [
-  { name: 'actions', title: 'Actions', width: 150, align: 'left' }
+  { name: 'actions', title: 'Actions', width: 140, align: 'right' }
 ];
 
 const NoDataCellBase = ({ loading, colSpan, classes }) => (
@@ -188,7 +189,7 @@ class RemoteDataGrid extends React.PureComponent {
     this.tableCellTemplate = ({ row, column, style }) => {
       if (column.name === 'actions') {
         return (
-          <TableCell>
+          <TableCell style={{ display: 'flex', flexDirection: 'row' }}>
             <IconButton
               classes={{ root: props.classes.iconButton }}
               onClick={() => this.props.onView(row)}
@@ -344,7 +345,7 @@ class RemoteDataGrid extends React.PureComponent {
     } = this.state;
 
     return (
-      <div className="grid-container">
+      <Paper className="grid-container">
         {this.renderHeader()}
         <Grid rows={data.items} columns={columns}>
           <SelectionState
@@ -443,7 +444,7 @@ class RemoteDataGrid extends React.PureComponent {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Paper>
     );
   }
 }

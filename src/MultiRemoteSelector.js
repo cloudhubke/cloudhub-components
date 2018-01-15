@@ -19,7 +19,7 @@ export class RemoteSelector extends Component {
     url: '',
     placeholder: 'Select...',
     value: [],
-    multi: false,
+    multi: false
   };
 
   constructor(props) {
@@ -32,8 +32,19 @@ export class RemoteSelector extends Component {
       opts: [],
       selectedValue: [],
       isLoading: false,
-      searchText: '',
+      searchText: ''
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      const { value, displayField } = nextProps;
+      if (!value || _.isEmpty(value)) {
+        this.setState({
+          selectedValue: []
+        });
+      }
+    }
   }
 
   componentWillMount() {
@@ -41,14 +52,14 @@ export class RemoteSelector extends Component {
     if (!value || _.isEmpty(value)) {
       this.setState({
         opts: [],
-        selectedValue: [],
+        selectedValue: []
       });
     } else {
       const opts = value.map((item, index) => ({
         ...item,
         key: item._id,
         value: index,
-        label: item[displayField],
+        label: item[displayField]
       }));
 
       this.setState({
@@ -57,15 +68,14 @@ export class RemoteSelector extends Component {
           ...item,
           key: item._id,
           value: opts.findIndex(item => item.key === value._id),
-          label: item[displayField],
-        })),
+          label: item[displayField]
+        }))
       });
     }
   }
 
   loadOptions = (options = []) => {
     const { displayField, value } = this.props;
-    console.log('Value...', value);
     const opts = options.map((item, index) => {
       if (!_.isObject(item)) {
         return { key: item, value: item, label: item };
@@ -74,7 +84,7 @@ export class RemoteSelector extends Component {
         ...item,
         key: item._id,
         value: index,
-        label: item[displayField],
+        label: item[displayField]
       };
     });
 
@@ -87,7 +97,7 @@ export class RemoteSelector extends Component {
         ...item,
         key: item._id,
         value: opts.findIndex(item2 => item2.key === item._id),
-        label: item[displayField],
+        label: item[displayField]
       };
     });
     this.setState({ opts, options, selectedValue: vals, isLoading: false });
@@ -134,7 +144,6 @@ export class RemoteSelector extends Component {
       return axiosinstance()
         .get(url, { params: { filter: text } })
         .then(({ data }) => {
-          console.log(data);
           this.setState({ isFetching: false });
           this.loadOptions(data.items || data);
         });

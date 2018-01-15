@@ -2,26 +2,26 @@ import React from 'react';
 import Select from './Selector';
 
 const StaticListSelector = ({ list, input, meta, onSelectChange }) => (
-  <Select
-    options={list}
-    value={input.value}
-    onChange={val => {
-      if (val) {
-        input.onChange(val);
-        if (onSelectChange) {
-          onSelectChange(val);
+    <Select
+      options={list}
+      value={input.value}
+      onChange={val => {
+        if (val) {
+          input.onChange(val);
+          if (onSelectChange) {
+            onSelectChange(val);
+          }
+          input.onBlur();
+        } else {
+          input.onChange(val);
+          if (onSelectChange) {
+            onSelectChange(val);
+          }
+          input.onBlur();
         }
-        input.onBlur();
-      } else {
-        input.onChange(val);
-        if (onSelectChange) {
-          onSelectChange(val);
-        }
-        input.onBlur();
-      }
-    }}
-    meta={meta}
-  />
+      }}
+      meta={meta}
+    />
 );
 
 export default StaticListSelector;

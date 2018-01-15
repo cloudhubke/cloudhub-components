@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-select';
 import _ from 'lodash';
-
-// import {
-//   Clear as ClearIcon,
-//   Autorenew as RefreshIcon,
-// } from 'material-ui-icons';
-// import { IconButton } from 'material-ui';
+import axios from 'axios';
+import './react-select.css';
 
 export class RemoteSelector extends Component {
   static defaultProps = {
@@ -16,7 +12,8 @@ export class RemoteSelector extends Component {
     displayField: '',
     returnkeys: [],
     url: '',
-    placeholder: 'Select...'
+    placeholder: 'Select...',
+    selectUp: false
   };
 
   constructor(props) {
@@ -33,6 +30,17 @@ export class RemoteSelector extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      const { value, displayField } = nextProps;
+      if (!value || _.isEmpty(value)) {
+        this.setState({
+          selectedValue: ''
+        });
+      }
+    }
+  }
+
   componentWillMount() {
     const { value, displayField } = this.props;
     if (!value || _.isEmpty(value)) {
@@ -43,7 +51,7 @@ export class RemoteSelector extends Component {
     } else {
       const opt = {
         ...value,
-        key: value._id,
+        key: value._id || value.id,
         value: 0,
         label: value[displayField]
       };
@@ -57,26 +65,31 @@ export class RemoteSelector extends Component {
 
   loadOptions = options => {
     const { displayField, value } = this.props;
-    const opts = options.map((item, index) => {
-      if (!_.isObject(item)) {
-        return { key: item, value: item, label: item };
+
+    if (Array.isArray(options)) {
+      const opts = options.map((item, index) => {
+        if (!_.isObject(item)) {
+          return { key: item, value: item, label: item };
+        }
+        return {
+          ...item,
+          key: item._id || item.id,
+          value: index,
+          label: item[displayField]
+        };
+      });
+      let selectedValue;
+      if (value) {
+        if (!_.isObject(value)) {
+          selectedValue = value;
+        } else {
+          selectedValue = opts.findIndex(
+            item => item.key === (value._id || value.id)
+          );
+        }
       }
-      return {
-        ...item,
-        key: item._id,
-        value: index,
-        label: item[displayField]
-      };
-    });
-    let selectedValue;
-    if (value) {
-      if (!_.isObject(value)) {
-        selectedValue = value;
-      } else {
-        selectedValue = opts.findIndex(item => item.key === value._id);
-      }
+      this.setState({ opts, options, selectedValue, isLoading: false });
     }
-    this.setState({ opts, options, selectedValue, isLoading: false });
   };
 
   logChange = val => {
@@ -150,7 +163,7 @@ export class RemoteSelector extends Component {
     // };
 
     return (
-      <div className="field">
+      <div className={this.props.selectUp ? 'select-up' : {}}>
         <Dropdown
           style={{ height: 28 }}
           name={name}

@@ -21,6 +21,8 @@ import {
   TableGroupRow,
   GroupingPanel,
   DragDropProvider,
+  Toolbar,
+  TableColumnVisibility,
   TableFilterRow
 } from '@devexpress/dx-react-grid-material-ui';
 import {
@@ -68,6 +70,8 @@ class DemoBase extends React.PureComponent {
     title: 'Table title',
     editTitle: 'Edit Record',
     columns: [],
+    columnWidths: {},
+    hiddencolumns: [],
     data: [],
     onEdit: () => {},
     onDelete: () => {},
@@ -132,7 +136,7 @@ class DemoBase extends React.PureComponent {
     this.tableCellTemplate = ({ row, column, style }) => {
       if (column.name === 'actions') {
         return (
-          <TableCell>
+          <TableCell style={{ display: 'flex', flexDirection: 'row' }}>
             <IconButton onClick={() => this.props.onView(row)} title="View row">
               <ViewList />
             </IconButton>
@@ -168,7 +172,7 @@ class DemoBase extends React.PureComponent {
     }
   };
   render() {
-    const { data, classes, deletingRows } = this.props;
+    const { data, classes, deletingRows, hiddencolumns } = this.props;
     const {
       columns,
       selection,
@@ -231,6 +235,8 @@ class DemoBase extends React.PureComponent {
           />
           <TableSelection />
           <TableGroupRow />
+          <TableColumnVisibility defaultHiddenColumns={hiddencolumns} />
+          <Toolbar />
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />
         </Grid>
