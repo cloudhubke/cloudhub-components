@@ -1,0 +1,4 @@
+.ant-calendar-picker-container {
+  position: absolute;
+  z-index: 10050;
+}

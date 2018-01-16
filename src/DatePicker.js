@@ -3,6 +3,7 @@ import { withStyles } from 'material-ui';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import 'antd/lib/date-picker/style/index.css';
+import './datepicker.css';
 
 const dateFormat = 'DD/MM/YYYY';
 
@@ -10,7 +11,7 @@ const styles = () => ({
   datePicker: {
     '& .ant-calendar-picker-container': {
       position: 'absolute',
-      zIndex: 100050
+      zIndex: 99999
     },
     '& .ant-input': {
       height: 36
@@ -36,7 +37,7 @@ class AntDatePicker extends Component {
     const { meta, classes } = this.props;
 
     return (
-      <div className={classes.datePicker}>
+      <div>
         <DatePicker
           style={{ width: '100%' }}
           defaultValue={value ? moment(value) : null}
