@@ -75,7 +75,9 @@ class DataGridWithDetailView extends React.PureComponent {
     columnWidths: {},
     hiddencolumns: [],
     data: [],
-    detailTemplate: () => <div />,
+    detailTemplate: ({ row, column }) => (
+      <TableCell>{row[column.name] || ''}</TableCell>
+    ),
     onEdit: () => {},
     onDelete: () => {},
     onDeleteRows: () => {},

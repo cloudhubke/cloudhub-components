@@ -130,7 +130,9 @@ class RemoteDataGrid extends React.PureComponent {
       items: [],
       totalCount: 0
     },
-    detailTemplate: () => <div />,
+    detailTemplate: ({ row, column }) => (
+      <TableCell>{row[column.name] || ''}</TableCell>
+    ),
     onEdit: () => {},
     onDelete: () => {},
     onDeleteRows: () => {},
