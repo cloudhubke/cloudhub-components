@@ -37,31 +37,32 @@ export class Select extends Component {
   }
   setOptions = props => {
     const { options, displayField, value } = props;
+    if (Array.isArray(options)) {
+      const opts = options.map((item, index) => {
+        if (!_.isObject(item)) {
+          return { key: item, value: item, label: item };
+        }
+        return {
+          ...item,
+          key: item._id || item.id,
+          value: index,
+          label: item[displayField]
+        };
+      });
 
-    const opts = options.map((item, index) => {
-      if (!_.isObject(item)) {
-        return { key: item, value: item, label: item };
-      }
-      return {
-        ...item,
-        key: item._id || item.id,
-        value: index,
-        label: item[displayField]
-      };
-    });
-
-    const vals = value.map(item => {
-      if (!_.isObject(item)) {
-        return { key: item, value: item, label: item };
-      }
-      return {
-        ...item,
-        key: item._id || item.id,
-        value: opts.findIndex(item2 => item2.key === (item._id || item.id)),
-        label: item[displayField]
-      };
-    });
-    this.setState({ opts, options, selectedValue: vals });
+      const vals = value.map(item => {
+        if (!_.isObject(item)) {
+          return { key: item, value: item, label: item };
+        }
+        return {
+          ...item,
+          key: item._id || item.id,
+          value: opts.findIndex(item2 => item2.key === (item._id || item.id)),
+          label: item[displayField]
+        };
+      });
+      this.setState({ opts, options, selectedValue: vals });
+    }
   };
 
   logChange = val => {

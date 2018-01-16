@@ -38,28 +38,30 @@ export class Select extends Component {
   }
   setOptions = props => {
     const { options, displayField, value } = props;
-    const opts = options.map((item, index) => {
-      if (!_.isObject(item)) {
-        return { key: item, value: item, label: item };
+    if (Array.isArray(options)) {
+      const opts = options.map((item, index) => {
+        if (!_.isObject(item)) {
+          return { key: item, value: item, label: item };
+        }
+        return {
+          ...item,
+          key: item._id || item.id,
+          value: index,
+          label: item[displayField]
+        };
+      });
+      let selectedValue;
+      if (value) {
+        if (!_.isObject(value)) {
+          selectedValue = value;
+        } else {
+          selectedValue = opts.findIndex(
+            item => item.key === (value._id || item.id)
+          );
+        }
       }
-      return {
-        ...item,
-        key: item._id || item.id,
-        value: index,
-        label: item[displayField]
-      };
-    });
-    let selectedValue;
-    if (value) {
-      if (!_.isObject(value)) {
-        selectedValue = value;
-      } else {
-        selectedValue = opts.findIndex(
-          item => item.key === (value._id || item.id)
-        );
-      }
+      this.setState({ opts, options, selectedValue });
     }
-    this.setState({ opts, options, selectedValue });
   };
 
   logChange = val => {

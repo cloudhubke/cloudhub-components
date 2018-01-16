@@ -76,31 +76,33 @@ export class RemoteSelector extends Component {
 
   loadOptions = (options = []) => {
     const { displayField, value } = this.props;
-    const opts = options.map((item, index) => {
-      if (!_.isObject(item)) {
-        return { key: item, value: item, label: item };
-      }
-      return {
-        ...item,
-        key: item._id,
-        value: index,
-        label: item[displayField]
-      };
-    });
+    if (Array.isArray(options)) {
+      const opts = options.map((item, index) => {
+        if (!_.isObject(item)) {
+          return { key: item, value: item, label: item };
+        }
+        return {
+          ...item,
+          key: item._id,
+          value: index,
+          label: item[displayField]
+        };
+      });
 
-    const v = value || [];
-    const vals = v.map(item => {
-      if (!_.isObject(item)) {
-        return { key: item, value: item, label: item };
-      }
-      return {
-        ...item,
-        key: item._id,
-        value: opts.findIndex(item2 => item2.key === item._id),
-        label: item[displayField]
-      };
-    });
-    this.setState({ opts, options, selectedValue: vals, isLoading: false });
+      const v = value || [];
+      const vals = v.map(item => {
+        if (!_.isObject(item)) {
+          return { key: item, value: item, label: item };
+        }
+        return {
+          ...item,
+          key: item._id,
+          value: opts.findIndex(item2 => item2.key === item._id),
+          label: item[displayField]
+        };
+      });
+      this.setState({ opts, options, selectedValue: vals, isLoading: false });
+    }
   };
 
   logChange = val => {
