@@ -7,17 +7,7 @@ import './datepicker.css';
 
 const dateFormat = 'DD/MM/YYYY';
 
-const styles = () => ({
-  datePicker: {
-    '& .ant-calendar-picker-container': {
-      position: 'absolute',
-      zIndex: 99999
-    },
-    '& .ant-input': {
-      height: 36
-    }
-  }
-});
+const styles = () => ({});
 
 class AntDatePicker extends Component {
   static defaultProps = {
