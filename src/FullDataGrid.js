@@ -185,7 +185,7 @@ class FullDataGrid extends Component {
     return (
       <div className="grid-container">
         {this.renderHeader()}
-        <Grid rows={data} columns={columns} getRowId={row => row.id}>
+        <Grid rows={data} columns={columns} getRowId={row => row._id || row.id}>
           <SelectionState
             selection={selection}
             onSelectionChange={this.changeSelection}

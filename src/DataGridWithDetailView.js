@@ -181,7 +181,7 @@ class DataGridWithDetailView extends React.PureComponent {
           onRefresh={this.props.onReresh}
           onPrint={this.props.onPrint}
         />
-        <Grid rows={data} columns={columns} getRowId={row => row.id}>
+        <Grid rows={data} columns={columns} getRowId={row => row._id || row.id}>
           <SelectionState
             selection={selection}
             onSelectionChange={this.changeSelection}
