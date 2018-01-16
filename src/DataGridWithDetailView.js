@@ -224,7 +224,7 @@ class DataGridWithDetailView extends React.PureComponent {
           <TableHeaderRow allowSorting allowDragging />
 
           <RowDetailState />
-          <TableRowDetail template={this.props.detailTemplate} />
+          <TableRowDetail contentComponent={this.props.detailTemplate} />
 
           <TableFilterRow
             filterCellTemplate={({ column, setFilter }) => {

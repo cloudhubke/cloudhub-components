@@ -409,7 +409,7 @@ class RemoteDataGrid extends React.PureComponent {
           />
 
           <RowDetailState />
-          <TableRowDetail template={this.props.detailTemplate} />
+          <TableRowDetail contentComponent={this.props.detailTemplate} />
 
           <TableFilterRow
             filterCellTemplate={({ column, setFilter }) => {
