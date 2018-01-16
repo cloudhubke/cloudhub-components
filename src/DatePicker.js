@@ -10,17 +10,17 @@ const styles = () => ({
   datePicker: {
     '& .ant-calendar-picker-container': {
       position: 'absolute',
-      zIndex: 10050,
+      zIndex: 100050
     },
     '& .ant-input': {
-      height: 33,
-    },
-  },
+      height: 36
+    }
+  }
 });
 
 class AntDatePicker extends Component {
   static defaultProps = {
-    defaultValue: '',
+    defaultValue: ''
   };
   componentDidMount() {}
   onDateChanged = date => {
