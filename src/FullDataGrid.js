@@ -263,7 +263,7 @@ class FullDataGrid extends Component {
               onClick={() => {
                 this.props.onDeleteRows(this.props.deleting);
               }}
-              color="accent"
+              color="secondary"
             >
               Delete
             </Button>

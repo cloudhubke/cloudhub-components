@@ -207,7 +207,7 @@ class RemoteDataGrid extends React.PureComponent {
             </IconButton>
             <IconButton
               classes={{ root: props.classes.iconButton }}
-              color="accent"
+              color="secondary"
               onClick={() => this.props.onDelete(row)}
               title="Delete row"
             >
@@ -438,7 +438,7 @@ class RemoteDataGrid extends React.PureComponent {
               onClick={() => {
                 this.props.onDeleteRows(this.props.deleting);
               }}
-              color="accent"
+              color="secondary"
             >
               Delete
             </Button>

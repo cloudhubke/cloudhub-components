@@ -267,7 +267,7 @@ class DataGridWithDetailView extends React.PureComponent {
               onClick={() => {
                 this.props.onDeleteRows(this.props.deleting);
               }}
-              color="accent"
+              color="secondary"
             >
               Delete
             </Button>
