@@ -50,7 +50,9 @@ export class Select extends Component {
         };
       });
 
-      const vals = value.map(item => {
+      const values = Array.isArray(value) ? [...value] : [];
+
+      const vals = values.map(item => {
         if (!_.isObject(item)) {
           return { key: item, value: item, label: item };
         }

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { PhoneInput, SimpleQuill, CheckBox } from 'cloudhub-react-components';
+import PhoneInput from 'cloudhub-react-components/dist/PhoneInput';
+import CheckBox from 'cloudhub-react-components/dist/CheckBox';
+import SimpleQuill from 'cloudhub-react-components/dist/SimpleQuill';
 
-let ContactForm = props => {
+const ContactForm = props => {
   const { handleSubmit } = props;
   return (
     <form onSubmit={handleSubmit} style={{ width: 500, margin: 50 }}>
@@ -48,9 +50,7 @@ let ContactForm = props => {
   );
 };
 
-ContactForm = reduxForm({
+export default reduxForm({
   // a unique name for the form
-  form: 'contact',
+  form: 'contact'
 })(ContactForm);
-
-export default ContactForm;

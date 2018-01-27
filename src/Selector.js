@@ -56,7 +56,7 @@ export class Select extends Component {
           selectedValue = value;
         } else {
           selectedValue = opts.findIndex(
-            item => item.key === (value._id || item.id)
+            item => item.key === (value._id || value.id)
           );
         }
       }

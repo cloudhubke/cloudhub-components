@@ -1,33 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
-import {
-  SortingState,
-  SelectionState,
-  FilteringState,
-  PagingState,
-  GroupingState,
-  IntegratedFiltering,
-  IntegratedGrouping,
-  IntegratedPaging,
-  IntegratedSorting,
-  IntegratedSelection
-} from '@devexpress/dx-react-grid';
-import {
-  Grid,
-  Table,
-  TableHeaderRow,
-  TableFilterRow,
-  TableSelection,
-  TableGroupRow,
-  PagingPanel,
-  GroupingPanel,
-  DragDropProvider,
-  TableColumnReordering,
-  Toolbar,
-  TableColumnVisibility,
-  ColumnChooser
-} from '@devexpress/dx-react-grid-material-ui';
+import { TableCell } from 'material-ui/Table';
+import { FullDataGrid } from 'cloudhub-react-components';
 
 import { ProgressBarCell } from './templates/progress-bar-cell';
 import { HighlightedCell } from './templates/highlighted-cell';
@@ -41,7 +16,7 @@ const Cell = props => {
   if (props.column.name === 'amount') {
     return <HighlightedCell {...props} />;
   }
-  return <Table.Cell {...props} />;
+  return <TableCell>{props.row[props.column.name] || ''}</TableCell>;
 };
 Cell.propTypes = {
   column: PropTypes.shape({ name: PropTypes.string }).isRequired
@@ -70,53 +45,20 @@ export default class Demo extends React.PureComponent {
 
     return (
       <Paper>
-        <Grid rows={rows} columns={columns}>
-          <FilteringState
-            defaultFilters={[{ columnName: 'saleDate', value: '2016-02' }]}
-          />
-          <SortingState
-            defaultSorting={[
-              { columnName: 'product', direction: 'asc' },
-              { columnName: 'saleDate', direction: 'asc' }
-            ]}
-          />
-
-          <SelectionState />
-
-          <GroupingState
-            defaultGrouping={[{ columnName: 'product' }]}
-            defaultExpandedGroups={['EnviroCare Max']}
-          />
-          <PagingState defaultCurrentPage={0} defaultPageSize={10} />
-
-          <IntegratedGrouping />
-          <IntegratedFiltering />
-          <IntegratedSorting />
-          <IntegratedPaging />
-          <IntegratedSelection />
-
-          <DragDropProvider />
-
-          <Table
-            columnExtensions={tableColumnExtensions}
-            cellComponent={Cell}
-          />
-          <TableSelection showSelectAll />
-
-          <TableColumnReordering
-            defaultOrder={columns.map(column => column.name)}
-          />
-
-          <TableHeaderRow showSortingControls />
-          <TableFilterRow />
-          <PagingPanel pageSizes={pageSizes} />
-
-          <TableGroupRow />
-          <TableColumnVisibility defaultHiddenColumns={['customer']} />
-          <Toolbar />
-          <GroupingPanel showSortingControls />
-          <ColumnChooser />
-        </Grid>
+        <FullDataGrid
+          title="Banks"
+          columns={columns}
+          allowColumnResizing={false}
+          onQueryChange={this.getRecords}
+          data={rows}
+          templates={Cell}
+          onAdd={() => {}}
+          onRefresh={() => {}}
+          onDelete={this.confirmDelete}
+          onDeleteRows={this.deleteRows}
+          onCancelDelete={this.cancelDelete}
+          onEdit={this.editRow}
+        />
       </Paper>
     );
   }
