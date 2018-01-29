@@ -10,8 +10,8 @@ const styles = {
   input: {
     background: 'red',
     height: 33,
-    padding: 2,
-  },
+    padding: 2
+  }
 };
 
 class PhoneInput extends Component {
@@ -20,11 +20,12 @@ class PhoneInput extends Component {
     defaultCountry: 'ke',
     onChange: () => {},
     value: '',
+    fieldId: ''
   };
 
   state = {
     touched: false,
-    value: '',
+    value: ''
   };
 
   componentDidMount() {
@@ -61,6 +62,7 @@ class PhoneInput extends Component {
           defaultCountry={this.props.defaultCountry}
           css={['intl-tel-input']}
           value={this.state.value.toString()}
+          fieldId={this.props.fieldId}
           onPhoneNumberChange={this.validate}
         />
         {meta.touched &&
