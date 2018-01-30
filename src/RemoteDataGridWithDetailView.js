@@ -124,7 +124,7 @@ class RemoteDataGrid extends React.PureComponent {
     title: 'Table title',
     editTitle: 'Edit Record',
     columns: [],
-    columnWidths: {},
+    columnWidths: [],
     hiddencolumns: [],
     data: {
       items: [],
@@ -154,11 +154,11 @@ class RemoteDataGrid extends React.PureComponent {
 
     this.state = {
       columns: [...counterColumn, ...this.props.columns, ...staticColumns],
-      defaultColumnWidths: {
-        counter: 70,
-        actions: 120,
+      defaultColumnWidths: [
+        { columnName: 'counter', width: 70 },
+        { columnName: 'actions', width: 50 },
         ...this.props.columnWidths
-      },
+      ],
       sorting: [],
       addedRows: [],
       changedRows: {},

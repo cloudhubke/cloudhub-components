@@ -72,7 +72,7 @@ class DataGridWithDetailView extends React.PureComponent {
     title: 'Table title',
     editTitle: 'Edit Record',
     columns: [],
-    columnWidths: {},
+    columnWidths: [],
     hiddencolumns: [],
     data: [],
     detailTemplate: ({ row, column }) => (
@@ -97,6 +97,11 @@ class DataGridWithDetailView extends React.PureComponent {
 
     this.state = {
       columns: [...this.props.columns, ...staticColumns],
+      defaultColumnWidths: [
+        { columnName: 'counter', width: 70 },
+        { columnName: 'actions', width: 50 },
+        ...this.props.columnWidths
+      ],
       sorting: [],
       addedRows: [],
       changedRows: {},
