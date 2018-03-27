@@ -22,6 +22,11 @@ const styles = {
     alignItems: 'center',
     flexBasis: '50%',
     marginLeft: 10
+  },
+  buttonStyle: {
+    fontWeight: 500,
+    textTransform: 'capitalize',
+    fontSize: 12
   }
 };
 
@@ -61,13 +66,13 @@ class TableHeaderBar extends Component {
             placeholder="Search..."
             onChange={e => this.onSearch(e.target.value)}
           />
-          <Button onClick={this.props.onAdd}>
+          <Button onClick={this.props.onAdd} style={styles.buttonStyle}>
             <AddIcon /> Add{' '}
           </Button>
-          <Button onClick={this.props.onRefresh}>
+          <Button onClick={this.props.onRefresh} style={styles.buttonStyle}>
             <RefreshIcon /> Refresh{' '}
           </Button>
-          <Button onClick={this.props.onPrint}>
+          <Button onClick={this.props.onPrint} style={styles.buttonStyle}>
             <PrintIcon /> Print{' '}
           </Button>
         </div>

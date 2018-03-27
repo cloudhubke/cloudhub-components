@@ -9,7 +9,6 @@ import {
   GroupingState,
   FilteringState,
   RowDetailState,
-  TableColumnResizing,
   IntegratedFiltering,
   IntegratedGrouping,
   IntegratedPaging,
@@ -27,8 +26,11 @@ import {
   GroupingPanel,
   DragDropProvider,
   TableFilterRow,
+  TableColumnResizing,
+  TableColumnReordering,
   Toolbar,
   TableColumnVisibility,
+  ColumnChooser,
   TableRowDetail
 } from '@devexpress/dx-react-grid-material-ui';
 import {
@@ -156,7 +158,7 @@ class RemoteDataGrid extends React.PureComponent {
       columns: [...counterColumn, ...this.props.columns, ...staticColumns],
       defaultColumnWidths: [
         { columnName: 'counter', width: 70 },
-        { columnName: 'actions', width: 50 },
+        { columnName: 'actions', width: 150 },
         ...this.props.columnWidths
       ],
       sorting: [],
@@ -207,30 +209,38 @@ class RemoteDataGrid extends React.PureComponent {
     this.tableCellTemplate = ({ row, column, style }) => {
       if (column.name === 'actions') {
         return (
-          <TableCell style={{ display: 'flex', flexDirection: 'row' }}>
-            <IconButton
-              classes={{ root: props.classes.iconButton }}
-              onClick={() => this.props.onView(row)}
-              title="View row"
+          <TableCell>
+            <div
+              style={{
+                height: '100%',
+                width: '100%',
+                minWidth: 150
+              }}
             >
-              <ViewList className={props.classes.icon} />
-            </IconButton>
-            <IconButton
-              classes={{ root: props.classes.iconButton }}
-              color="primary"
-              onClick={() => this.props.onEdit(row)}
-              title="Edit row"
-            >
-              <EditIcon className={props.classes.icon} />
-            </IconButton>
-            <IconButton
-              classes={{ root: props.classes.iconButton }}
-              color="secondary"
-              onClick={() => this.props.onDelete(row)}
-              title="Delete row"
-            >
-              <DeleteIcon className={props.classes.icon} />
-            </IconButton>
+              <IconButton
+                classes={{ root: props.classes.iconButton }}
+                onClick={() => this.props.onView(row)}
+                title="View row"
+              >
+                <ViewList className={props.classes.icon} />
+              </IconButton>
+              <IconButton
+                classes={{ root: props.classes.iconButton }}
+                color="primary"
+                onClick={() => this.props.onEdit(row)}
+                title="Edit row"
+              >
+                <EditIcon className={props.classes.icon} />
+              </IconButton>
+              <IconButton
+                classes={{ root: props.classes.iconButton }}
+                color="secondary"
+                onClick={() => this.props.onDelete(row)}
+                title="Delete row"
+              >
+                <DeleteIcon className={props.classes.icon} />
+              </IconButton>
+            </div>
           </TableCell>
         );
       } else if (column.name === 'counter') {
@@ -351,6 +361,7 @@ class RemoteDataGrid extends React.PureComponent {
       hiddencolumns,
       allowColumnResizing
     } = this.props;
+
     const {
       columns,
       selection,
@@ -404,27 +415,31 @@ class RemoteDataGrid extends React.PureComponent {
           {allowColumnResizing && (
             <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
           )}
+          <Toolbar />
           <TableHeaderRow
             showSortingControls
             allowDragging
             allowResizing={allowColumnResizing}
           />
-
+          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          <ColumnChooser />
           <RowDetailState />
           <TableRowDetail contentComponent={this.props.detailTemplate} />
 
           <TableFilterRow
-            filterCellTemplate={({ column, setFilter }) => {
-              if (column.name === 'actions' || column.name === 'counter') {
+            cellComponent={props => {
+              if (
+                props.column.name === 'actions' ||
+                props.column.name === 'counter'
+              ) {
                 return <TableCell />;
               }
-              return <TableCell />;
+              return <TableFilterRow.Cell {...props} />;
             }}
           />
           <TableSelection />
           <TableGroupRow />
-          <TableColumnVisibility defaultHiddenColumns={hiddencolumns} />
-          <Toolbar />
+
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />
         </Grid>
