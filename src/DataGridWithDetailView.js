@@ -148,14 +148,14 @@ class DataGridWithDetailView extends React.PureComponent {
     this.tableCellTemplate = ({ row, column, style }) => {
       if (column.name === 'actions') {
         return (
-          <div
-            style={{
-              height: '100%',
-              width: '100%',
-              minWidth: 150
-            }}
-          >
-            <TableCell style={{ display: 'flex', flexDirection: 'row' }}>
+          <TableCell style={{ display: 'flex', flexDirection: 'row' }}>
+            <div
+              style={{
+                height: '100%',
+                width: '100%',
+                minWidth: 150
+              }}
+            >
               <IconButton
                 onClick={() => this.props.onView(row)}
                 title="View row"
@@ -174,8 +174,8 @@ class DataGridWithDetailView extends React.PureComponent {
               >
                 <DeleteIcon />
               </IconButton>
-            </TableCell>
-          </div>
+            </div>
+          </TableCell>
         );
       } else {
         return this.props.templates({ row, column, style });
