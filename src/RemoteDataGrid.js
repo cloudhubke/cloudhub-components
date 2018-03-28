@@ -190,7 +190,7 @@ class RemoteDataGrid extends React.PureComponent {
     this.tableCellTemplate = ({ row, column, style }) => {
       if (column.name === 'actions') {
         return (
-          <TableCell style={{ display: 'flex', flexDirection: 'row' }}>
+          <TableCell>
             <div
               style={{
                 height: '100%',

@@ -141,7 +141,7 @@ export class RemoteSelector extends Component {
 
   handleInputChange = text => {
     const { axiosinstance, url } = this.props;
-    if (text === '' && this.state.opts.length <= 1) {
+    if (text === '' && this.state.opts.length <= this.props.value.length) {
       this.setState({ isFetching: true, searchText: text });
       return axiosinstance()
         .get(url, { params: { filter: text } })
