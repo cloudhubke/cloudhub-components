@@ -77,6 +77,7 @@ class FullDataGrid extends Component {
     onDelete: () => {},
     onDeleteRows: () => {},
     onCancelDelete: () => {},
+    rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
     onSaveRow: () => {},
     onCancelEdit: () => {},
     onView: () => {},
@@ -172,7 +173,13 @@ class FullDataGrid extends Component {
     }
   };
   render() {
-    const { data, classes, deletingRows, hiddencolumns } = this.props;
+    const {
+      data,
+      classes,
+      deletingRows,
+      hiddencolumns,
+      rowComponent
+    } = this.props;
     const {
       columns,
       selection,
@@ -220,7 +227,11 @@ class FullDataGrid extends Component {
 
           <DragDropProvider />
 
-          <Table cellComponent={this.tableCellTemplate} allowColumnReordering />
+          <Table
+            rowComponent={rowComponent}
+            cellComponent={this.tableCellTemplate}
+            allowColumnReordering
+          />
 
           <TableHeaderRow allowSorting allowDragging />
 

@@ -78,6 +78,7 @@ class DataGridWithDetailView extends React.PureComponent {
     detailTemplate: ({ row, column }) => (
       <TableCell>{row[column.name] || ''}</TableCell>
     ),
+    rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
     onEdit: () => {},
     onDelete: () => {},
     onDeleteRows: () => {},
@@ -169,7 +170,13 @@ class DataGridWithDetailView extends React.PureComponent {
   }
 
   render() {
-    const { data, classes, deletingRows, hiddencolumns } = this.props;
+    const {
+      data,
+      classes,
+      deletingRows,
+      hiddencolumns,
+      rowComponent
+    } = this.props;
     const {
       columns,
       selection,
@@ -224,6 +231,7 @@ class DataGridWithDetailView extends React.PureComponent {
           <DragDropProvider />
 
           <Table
+            rowComponent={rowComponent}
             tableCellTemplate={this.tableCellTemplate}
             allowColumnReordering
           />
@@ -243,7 +251,7 @@ class DataGridWithDetailView extends React.PureComponent {
           />
           <TableSelection />
           <TableGroupRow />
-          <TableColumnVisibility defaultHiddenColumns={hiddencolumns} />
+          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
           <Toolbar />
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />

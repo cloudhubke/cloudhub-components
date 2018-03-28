@@ -116,6 +116,7 @@ class RemoteDataGrid extends React.PureComponent {
     },
     allowColumnResizing: true,
     detailTemplate: () => <div />,
+    rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
     onEdit: () => {},
     onDelete: () => {},
     onDeleteRows: () => {},
@@ -340,7 +341,8 @@ class RemoteDataGrid extends React.PureComponent {
       classes,
       deletingRows,
       allowColumnResizing,
-      hiddencolumns
+      hiddencolumns,
+      rowComponent
     } = this.props;
     const {
       columns,
@@ -391,7 +393,11 @@ class RemoteDataGrid extends React.PureComponent {
 
           <DragDropProvider />
 
-          <Table cellComponent={this.tableCellTemplate} allowColumnReordering />
+          <Table
+            rowComponent={rowComponent}
+            cellComponent={this.tableCellTemplate}
+            allowColumnReordering
+          />
 
           {allowColumnResizing && (
             <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
