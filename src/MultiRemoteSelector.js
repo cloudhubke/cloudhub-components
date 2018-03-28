@@ -49,7 +49,7 @@ export class RemoteSelector extends Component {
 
   componentWillMount() {
     const { value, displayField } = this.props;
-    if (!value || _.isEmpty(value)) {
+    if (!value || _.isEmpty(value) || !Array.isArray(value)) {
       this.setState({
         opts: [],
         selectedValue: []

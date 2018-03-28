@@ -169,6 +169,21 @@ class DataGridWithDetailView extends React.PureComponent {
     };
   }
 
+  renderHeader = () => {
+    if (this.props.header) {
+      return this.props.header({ ...this.state, ...this.props });
+    } else {
+      return (
+        <TableHeaderBar
+          title={this.props.title}
+          onAdd={this.props.onAdd}
+          onRefresh={this.props.onReresh}
+          onPrint={this.props.onPrint}
+        />
+      );
+    }
+  };
+
   render() {
     const {
       data,
@@ -188,13 +203,7 @@ class DataGridWithDetailView extends React.PureComponent {
 
     return (
       <div>
-        <TableHeaderBar
-          onSearchChange={this.searchChange}
-          title={this.props.title}
-          onAdd={this.props.onAdd}
-          onRefresh={this.props.onReresh}
-          onPrint={this.props.onPrint}
-        />
+        {this.renderHeader()}
         <Grid rows={data} columns={columns} getRowId={row => row._id || row.id}>
           <SelectionState
             selection={selection}

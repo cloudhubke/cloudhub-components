@@ -321,7 +321,12 @@ class RemoteDataGrid extends React.PureComponent {
 
   renderHeader = () => {
     if (this.props.header) {
-      return this.props.header(this.props);
+      return this.props.header({
+        ...this.props,
+        ...this.state,
+        queryString: this.queryString(),
+        onSearch: this.searchChange
+      });
     } else {
       return (
         <TableHeaderBar

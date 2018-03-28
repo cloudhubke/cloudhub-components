@@ -160,7 +160,7 @@ class FullDataGrid extends Component {
 
   renderHeader = () => {
     if (this.props.header) {
-      return this.props.header();
+      return this.props.header({ ...this.state, ...this.props });
     } else {
       return (
         <TableHeaderBar

@@ -319,7 +319,6 @@ class RemoteDataGrid extends React.PureComponent {
     if (this.state.searchTerm !== '') {
       queryString.filter = this.state.searchTerm;
     }
-
     return queryString;
   }
 
@@ -340,7 +339,12 @@ class RemoteDataGrid extends React.PureComponent {
 
   renderHeader = () => {
     if (this.props.header) {
-      return this.props.header({ ...this.props, onSearch: this.searchChange });
+      return this.props.header({
+        ...this.props,
+        ...this.state,
+        queryString: this.queryString(),
+        onSearch: this.searchChange
+      });
     } else {
       return (
         <TableHeaderBar
