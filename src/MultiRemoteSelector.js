@@ -89,7 +89,7 @@ export class RemoteSelector extends Component {
         };
       });
 
-      const v = value || [];
+      const v = _.isArray(value) ? value : [];
       const vals = v.map(item => {
         if (!_.isObject(item)) {
           return { key: item, value: item, label: item };
