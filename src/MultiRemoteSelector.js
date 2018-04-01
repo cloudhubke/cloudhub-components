@@ -141,24 +141,26 @@ export class MultiRemoteSelector extends Component {
 
   handleInputChange = text => {
     const { axiosinstance, url } = this.props;
-    // const len = this.props.value.length || 0;
-    if (text === '' && this.state.opts.length <= 1) {
-      this.setState({ isFetching: true, searchText: text });
-      return axiosinstance()
-        .get(url, { params: { filter: text } })
-        .then(({ data }) => {
-          this.setState({ isFetching: false });
-          this.loadOptions(data.items || data);
-        });
-    } else if (text !== '') {
-      if (this.state.searchText !== text) {
+    const len = this.props.value.length || 0;
+    if (text !== this.state.searchText) {
+      if (text === '' && this.state.opts.length <= len) {
         this.setState({ isFetching: true, searchText: text });
-        axiosinstance()
+        return axiosinstance()
           .get(url, { params: { filter: text } })
           .then(({ data }) => {
             this.setState({ isFetching: false });
             this.loadOptions(data.items || data);
           });
+      } else if (text !== '') {
+        if (this.state.searchText !== text) {
+          this.setState({ isFetching: true, searchText: text });
+          axiosinstance()
+            .get(url, { params: { filter: text } })
+            .then(({ data }) => {
+              this.setState({ isFetching: false });
+              this.loadOptions(data.items || data);
+            });
+        }
       }
     }
   };
