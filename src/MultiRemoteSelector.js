@@ -108,7 +108,7 @@ export class RemoteSelector extends Component {
   logChange = val => {
     const { onChange, returnkeys } = this.props;
     if (val) {
-      this.setState({ selectedValue: val });
+      this.setState({ selectedValue: val, searchText: '' });
     } else {
       this.setState({ selectedValue: [] });
     }
@@ -141,7 +141,8 @@ export class RemoteSelector extends Component {
 
   handleInputChange = text => {
     const { axiosinstance, url } = this.props;
-    if (text === '' && this.state.opts.length <= this.props.value.length) {
+    // const len = this.props.value.length || 0;
+    if (text === '' && this.state.opts.length <= 1) {
       this.setState({ isFetching: true, searchText: text });
       return axiosinstance()
         .get(url, { params: { filter: text } })
@@ -164,24 +165,8 @@ export class RemoteSelector extends Component {
 
   render() {
     const { meta, name, placeholder } = this.props;
-
-    // const renderClear = () => {
-    //   if (this.state.selectedValue !== '') {
-    //     return (
-    //       <IconButton style={{ height: 20 }}>
-    //         <ClearIcon style={{ height: 12, width: 12 }} />
-    //       </IconButton>
-    //     );
-    //   }
-    //   return (
-    //     <IconButton onClick={this.refreShOptions} style={{ height: 20 }}>
-    //       <RefreshIcon style={{ height: 12, width: 12 }} />
-    //     </IconButton>
-    //   );
-    // };
-
     return (
-      <div className="field">
+      <div className={this.props.selectUp ? 'select-up' : {}}>
         <Dropdown
           style={{ height: 28 }}
           name={name}
@@ -195,6 +180,7 @@ export class RemoteSelector extends Component {
           onOpen={() => this.handleInputChange('')}
           isLoading={this.state.isFetching}
           placeholder={placeholder}
+          inputProps={{ value: this.state.searchText }}
         />
         {meta.touched &&
           meta.error && <span className="error">{meta.error}</span>}
