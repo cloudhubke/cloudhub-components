@@ -9,7 +9,7 @@ import axios from 'axios';
 // } from 'material-ui-icons';
 // import { IconButton } from 'material-ui';
 
-export class RemoteSelector extends Component {
+export class MultiRemoteSelector extends Component {
   static defaultProps = {
     axiosinstance: () => axios.create({}),
     options: [],
@@ -189,4 +189,4 @@ export class RemoteSelector extends Component {
   }
 }
 
-export default RemoteSelector;
+export default MultiRemoteSelector;
