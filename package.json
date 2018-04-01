@@ -17,7 +17,7 @@
     "type": "git",
     "url": "https://github.com/gaithoben/cloudhub-react-components.git"
   },
-  "keywords": ["kenya", "counties", "constituencies", "wards"],
+  "keywords": ["cloudhub"],
   "author":
     "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
   "license": "MIT",
