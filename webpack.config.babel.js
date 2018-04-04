@@ -1,15 +1,11 @@
-import { join } from 'path';
+const join = require().join;
 
-const include = join(__dirname, 'src');
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
-
-export default {
+module.exports = {
   devtool: 'source-map',
-  entry: [require.resolve('regenerator-runtime/runtime.js'), './src/index'],
+  entry: './src/index',
   output: {
     path: join(__dirname, 'dist'),
-    libraryTarget: 'umd',
-    library: 'react-ckeditor5'
+    libraryTarget: 'umd'
   },
   module: {
     loaders: [

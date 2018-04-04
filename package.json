@@ -3,10 +3,7 @@
   "version": "1.3.1",
   "description": "Various components to use in react projects",
   "main": "dist/index.js",
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "files": ["dist", "README.md"],
   "scripts": {
     "commit": "git-cz",
     "test": "mocha src/index.test.js -w --require babel-core/register",
@@ -20,10 +17,9 @@
     "type": "git",
     "url": "https://github.com/gaithoben/cloudhub-react-components.git"
   },
-  "keywords": [
-    "cloudhub"
-  ],
-  "author": "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
+  "keywords": ["cloudhub"],
+  "author":
+    "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gaithoben/cloudhub-react-components/issues"
@@ -87,15 +83,12 @@
       [
         "env",
         {
-          "modules": false
+          "modules": "umd"
         }
       ],
       "react",
       "stage-2"
     ],
-    "plugins": [
-      "transform-class-properties",
-      "transform-react-jsx"
-    ]
+    "plugins": ["transform-class-properties", "transform-react-jsx"]
   }
 }
