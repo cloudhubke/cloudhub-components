@@ -7,7 +7,6 @@ import FilesUpload from './FilesUpload';
 import FullDataGrid from './FullDataGrid';
 import ImagesUpload from './ImagesUpload';
 import Loading from './Loading';
-import MediumQuill from './MediumQuill';
 import MultiRemoteSelector from './MultiRemoteSelector';
 import MultiSelector from './MultiSelector';
 import MultiStaticListSelector from './MultiStaticListSelector';
@@ -18,7 +17,6 @@ import RemoteDataGridWithDetailView from './RemoteDataGridWithDetailView';
 import RemoteSelector from './RemoteSelector';
 import Selector from './Selector';
 import SimpleDataGrid from './SimpleDataGrid';
-import SimpleQuill from './SimpleQuill';
 import StaticListSelector from './StaticListSelector';
 import TableHeaderBar from './TableHeaderBar';
 import UserRoles from './UserRoles';
@@ -33,7 +31,6 @@ export {
   FullDataGrid,
   ImagesUpload,
   Loading,
-  MediumQuill,
   MultiRemoteSelector,
   MultiSelector,
   MultiStaticListSelector,
@@ -44,7 +41,6 @@ export {
   RemoteSelector,
   Selector,
   SimpleDataGrid,
-  SimpleQuill,
   StaticListSelector,
   TableHeaderBar,
   UserRoles
