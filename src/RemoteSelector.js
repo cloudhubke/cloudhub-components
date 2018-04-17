@@ -130,24 +130,14 @@ export class RemoteSelector extends Component {
 
   handleInputChange = text => {
     const { axiosinstance, url, params } = this.props;
-    if (text === '' && this.state.options.length === 0) {
+    if (this.state.searchText !== text) {
       this.setState({ isFetching: true, searchText: text });
-      return axiosinstance()
+      axiosinstance()
         .get(url, { params: { ...params, filter: text } })
         .then(({ data }) => {
           this.setState({ isFetching: false });
           this.loadOptions(data.items || data);
         });
-    } else if (text !== '') {
-      if (this.state.searchText !== text) {
-        this.setState({ isFetching: true, searchText: text });
-        axiosinstance()
-          .get(url, { params: { ...params, filter: text } })
-          .then(({ data }) => {
-            this.setState({ isFetching: false });
-            this.loadOptions(data.items || data);
-          });
-      }
     }
   };
 
