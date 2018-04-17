@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import ContactForm from './ContactForm';
 import GridDemo from './GridDemo';
 import Bank from './pages/Bank';
+import CourseSelector from './pages/CourseSelector';
 
 class App extends Component {
   state = {
@@ -22,10 +23,12 @@ class App extends Component {
   render() {
     return (
       <div>
-        <p className="App-intro">Phone:</p>
-        <ContactForm />
-        <GridDemo />
-        <Bank />
+        <CourseSelector />
+        {
+          // <ContactForm />
+          // <GridDemo />
+          // <Bank />
+        }
       </div>
     );
   }

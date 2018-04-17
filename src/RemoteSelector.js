@@ -23,11 +23,12 @@ export class RemoteSelector extends Component {
     this.handleInputChange = _.debounce(this.handleInputChange, 500);
 
     this.state = {
+      firstoptions: [],
       options: [],
       opts: [],
       selectedValue: '',
       isLoading: false,
-      searchText: null
+      searchText: ''
     };
   }
 
@@ -89,6 +90,9 @@ export class RemoteSelector extends Component {
           );
         }
       }
+      if (this.state.firstoptions.length === 0) {
+        this.setState({ firstoptions: options });
+      }
       this.setState({ opts, options, selectedValue, isLoading: false });
     }
   };
@@ -98,13 +102,8 @@ export class RemoteSelector extends Component {
     if (val) {
       this.setState({ selectedValue: val.value });
     } else {
-      this.setState({ selectedValue: '', isFetching: true, searchText: '' });
-      axiosinstance()
-        .get(url, { params: { ...params, filter: '' } })
-        .then(({ data }) => {
-          this.setState({ isFetching: false });
-          this.loadOptions(data.items || data);
-        });
+      this.setState({ selectedValue: '', searchText: '' });
+      this.loadOptions(this.state.firstoptions);
     }
 
     if (val) {
@@ -130,14 +129,24 @@ export class RemoteSelector extends Component {
 
   handleInputChange = text => {
     const { axiosinstance, url, params } = this.props;
-    if (this.state.searchText !== text) {
+    if (text === '' && this.state.firstoptions.length === 0) {
       this.setState({ isFetching: true, searchText: text });
-      axiosinstance()
+      return axiosinstance()
         .get(url, { params: { ...params, filter: text } })
         .then(({ data }) => {
           this.setState({ isFetching: false });
           this.loadOptions(data.items || data);
         });
+    } else if (text !== '') {
+      if (this.state.searchText !== text) {
+        this.setState({ isFetching: true, searchText: text });
+        axiosinstance()
+          .get(url, { params: { ...params, filter: text } })
+          .then(({ data }) => {
+            this.setState({ isFetching: false });
+            this.loadOptions(data.items || data);
+          });
+      }
     }
   };
 
