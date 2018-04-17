@@ -6,6 +6,7 @@ import './react-select.css';
 
 export class RemoteSelector extends Component {
   static defaultProps = {
+    params: {},
     axiosinstance: () => axios.create({}),
     options: [],
     onChange: () => {},
@@ -122,11 +123,11 @@ export class RemoteSelector extends Component {
   };
 
   handleInputChange = text => {
-    const { axiosinstance, url } = this.props;
-    if (text === '' && this.state.opts.length <= 1) {
+    const { axiosinstance, url, params } = this.props;
+    if (text === '' && this.state.options.length === 0) {
       this.setState({ isFetching: true, searchText: text });
       return axiosinstance()
-        .get(url, { params: { filter: text } })
+        .get(url, { params: { ...params, filter: text } })
         .then(({ data }) => {
           this.setState({ isFetching: false });
           this.loadOptions(data.items || data);
@@ -135,7 +136,7 @@ export class RemoteSelector extends Component {
       if (this.state.searchText !== text) {
         this.setState({ isFetching: true, searchText: text });
         axiosinstance()
-          .get(url, { params: { filter: text } })
+          .get(url, { params: { ...params, filter: text } })
           .then(({ data }) => {
             this.setState({ isFetching: false });
             this.loadOptions(data.items || data);
