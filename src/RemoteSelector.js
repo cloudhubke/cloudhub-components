@@ -27,7 +27,7 @@ export class RemoteSelector extends Component {
       opts: [],
       selectedValue: '',
       isLoading: false,
-      searchText: ''
+      searchText: null
     };
   }
 
