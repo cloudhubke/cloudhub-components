@@ -94,11 +94,17 @@ export class RemoteSelector extends Component {
   };
 
   logChange = val => {
-    const { onChange, returnkeys } = this.props;
+    const { onChange, returnkeys, url, params } = this.props;
     if (val) {
       this.setState({ selectedValue: val.value });
     } else {
-      this.setState({ selectedValue: '' });
+      this.setState({ selectedValue: '', isFetching: true, searchText: text });
+      axiosinstance()
+        .get(url, { params: { ...params, filter: '' } })
+        .then(({ data }) => {
+          this.setState({ isFetching: false });
+          this.loadOptions(data.items || data);
+        });
     }
 
     if (val) {
