@@ -98,7 +98,7 @@ export class RemoteSelector extends Component {
     if (val) {
       this.setState({ selectedValue: val.value });
     } else {
-      this.setState({ selectedValue: '', isFetching: true, searchText: text });
+      this.setState({ selectedValue: '', isFetching: true, searchText: '' });
       axiosinstance()
         .get(url, { params: { ...params, filter: '' } })
         .then(({ data }) => {
