@@ -23,10 +23,10 @@ class App extends Component {
   render() {
     return (
       <div>
-        <CourseSelector />
         {
+          // <CourseSelector />
           // <ContactForm />
-          // <GridDemo />
+          <GridDemo />
           // <Bank />
         }
       </div>
