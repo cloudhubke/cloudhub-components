@@ -171,7 +171,7 @@ export class RemoteSelector extends Component {
     return (
       <div className={this.props.selectUp ? 'select-up' : {}}>
         <Dropdown
-          style={{ height: 28 }}
+          style={{ height: 31 }}
           name={name}
           value={this.state.selectedValue}
           options={this.state.opts}

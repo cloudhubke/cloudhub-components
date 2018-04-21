@@ -218,68 +218,73 @@ class DataGridWithDetailView extends React.PureComponent {
     return (
       <div>
         {this.renderHeader()}
-        <Grid rows={data} columns={columns} getRowId={row => row._id || row.id}>
-          <SelectionState
-            selection={selection}
-            onSelectionChange={this.changeSelection}
-          />
-          <SortingState
-            sorting={sorting}
-            onSortingChange={this.changeSorting}
-          />
+        <div className="grid-container">
+          <Grid
+            rows={data}
+            columns={columns}
+            getRowId={row => row._id || row.id}
+          >
+            <SelectionState
+              selection={selection}
+              onSelectionChange={this.changeSelection}
+            />
+            <SortingState
+              sorting={sorting}
+              onSortingChange={this.changeSorting}
+            />
 
-          <GroupingState
-            grouping={this.state.grouping}
-            onGroupingChange={this.changeGrouping}
-          />
+            <GroupingState
+              grouping={this.state.grouping}
+              onGroupingChange={this.changeGrouping}
+            />
 
-          <FilteringState
-            filters={this.state.filters}
-            onFiltersChange={this.changeFilters}
-          />
+            <FilteringState
+              filters={this.state.filters}
+              onFiltersChange={this.changeFilters}
+            />
 
-          <PagingState
-            currentPage={currentPage}
-            onCurrentPageChange={this.changeCurrentPage}
-            pageSize={pageSize}
-            onPageSizeChange={this.changePageSize}
-          />
+            <PagingState
+              currentPage={currentPage}
+              onCurrentPageChange={this.changeCurrentPage}
+              pageSize={pageSize}
+              onPageSizeChange={this.changePageSize}
+            />
 
-          <IntegratedGrouping />
-          <IntegratedFiltering />
-          <IntegratedSorting />
-          <IntegratedPaging />
-          <IntegratedSelection />
+            <IntegratedGrouping />
+            <IntegratedFiltering />
+            <IntegratedSorting />
+            <IntegratedPaging />
+            <IntegratedSelection />
 
-          <DragDropProvider />
+            <DragDropProvider />
 
-          <Table
-            rowComponent={rowComponent}
-            tableCellTemplate={this.tableCellTemplate}
-            allowColumnReordering
-          />
+            <Table
+              rowComponent={rowComponent}
+              tableCellTemplate={this.tableCellTemplate}
+              allowColumnReordering
+            />
 
-          <TableHeaderRow allowSorting allowDragging />
+            <TableHeaderRow allowSorting allowDragging />
 
-          <RowDetailState />
-          <TableRowDetail contentComponent={this.props.detailTemplate} />
+            <RowDetailState />
+            <TableRowDetail contentComponent={this.props.detailTemplate} />
 
-          <TableFilterRow
-            filterCellTemplate={({ column, setFilter }) => {
-              if (column.name === 'actions') {
+            <TableFilterRow
+              filterCellTemplate={({ column, setFilter }) => {
+                if (column.name === 'actions') {
+                  return <TableCell />;
+                }
                 return <TableCell />;
-              }
-              return <TableCell />;
-            }}
-          />
-          <TableSelection />
-          <TableGroupRow />
-          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-          <Toolbar />
-          <GroupingPanel allowDragging />
-          <PagingPanel pageSizes={allowedPageSizes} />
-        </Grid>
-
+              }}
+            />
+            <TableSelection />
+            <TableGroupRow />
+            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+            <Toolbar />
+            <GroupingPanel allowDragging />
+            <PagingPanel pageSizes={allowedPageSizes} />
+          </Grid>
+        </div>
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}

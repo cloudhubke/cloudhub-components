@@ -360,83 +360,84 @@ class RemoteDataGrid extends React.PureComponent {
     } = this.state;
 
     return (
-      <Paper className="grid-container">
+      <Paper>
         {this.renderHeader()}
-        <Grid rows={data.items} columns={columns}>
-          <SelectionState
-            selection={selection}
-            onSelectionChange={this.changeSelection}
-          />
-          <SortingState
-            sorting={sorting}
-            onSortingChange={this.changeSorting}
-          />
+        <div className="grid-container">
+          <Grid rows={data.items} columns={columns}>
+            <SelectionState
+              selection={selection}
+              onSelectionChange={this.changeSelection}
+            />
+            <SortingState
+              sorting={sorting}
+              onSortingChange={this.changeSorting}
+            />
 
-          <GroupingState
-            grouping={this.state.grouping}
-            onGroupingChange={this.changeGrouping}
-          />
+            <GroupingState
+              grouping={this.state.grouping}
+              onGroupingChange={this.changeGrouping}
+            />
 
-          <FilteringState
-            filters={this.state.filters}
-            onFiltersChange={this.changeFilters}
-          />
+            <FilteringState
+              filters={this.state.filters}
+              onFiltersChange={this.changeFilters}
+            />
 
-          <PagingState
-            currentPage={currentPage}
-            onCurrentPageChange={this.changeCurrentPage}
-            pageSize={pageSize}
-            onPageSizeChange={this.changePageSize}
-          />
-          <CustomPaging totalCount={data.totalCount} />
+            <PagingState
+              currentPage={currentPage}
+              onCurrentPageChange={this.changeCurrentPage}
+              pageSize={pageSize}
+              onPageSizeChange={this.changePageSize}
+            />
+            <CustomPaging totalCount={data.totalCount} />
 
-          <IntegratedGrouping />
-          <IntegratedFiltering />
-          <IntegratedSorting />
+            <IntegratedGrouping />
+            <IntegratedFiltering />
+            <IntegratedSorting />
 
-          <IntegratedSelection />
+            <IntegratedSelection />
 
-          <DragDropProvider />
+            <DragDropProvider />
 
-          <Table
-            rowComponent={rowComponent}
-            cellComponent={this.tableCellTemplate}
-            allowColumnReordering
-          />
+            <Table
+              rowComponent={rowComponent}
+              cellComponent={this.tableCellTemplate}
+              allowColumnReordering
+            />
 
-          {allowColumnResizing && (
-            <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
-          )}
+            {allowColumnResizing && (
+              <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
+            )}
 
-          <TableColumnReordering
-            defaultOrder={columns.map(column => column.name)}
-          />
-          <TableHeaderRow
-            showSortingControls
-            allowDragging
-            allowResizing={allowColumnResizing}
-          />
+            <TableColumnReordering
+              defaultOrder={columns.map(column => column.name)}
+            />
+            <TableHeaderRow
+              showSortingControls
+              allowDragging
+              allowResizing={allowColumnResizing}
+            />
 
-          <TableFilterRow
-            cellComponent={props => {
-              if (
-                props.column.name === 'actions' ||
-                props.column.name === 'counter'
-              ) {
-                return <TableCell />;
-              }
-              return <TableFilterRow.Cell {...props} />;
-            }}
-          />
-          <TableSelection />
-          <TableGroupRow />
-          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-          <Toolbar />
-          <GroupingPanel allowDragging />
-          <PagingPanel pageSizes={allowedPageSizes} />
-          <ColumnChooser />
-        </Grid>
-
+            <TableFilterRow
+              cellComponent={props => {
+                if (
+                  props.column.name === 'actions' ||
+                  props.column.name === 'counter'
+                ) {
+                  return <TableCell />;
+                }
+                return <TableFilterRow.Cell {...props} />;
+              }}
+            />
+            <TableSelection />
+            <TableGroupRow />
+            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+            <Toolbar />
+            <GroupingPanel allowDragging />
+            <PagingPanel pageSizes={allowedPageSizes} />
+            <ColumnChooser />
+          </Grid>
+        </div>
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}

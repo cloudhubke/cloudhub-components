@@ -9,25 +9,25 @@ const lgreen = lightGreen[500];
 const styles = {
   root: {
     width: '100%',
-    marginTop: 30,
+    marginTop: 30
   },
   lgreen: {
     backgroundColor: lgreen,
-    color: lgreen,
-  },
+    color: lgreen
+  }
 };
 
 function Progress(props) {
-  const classes = props.classes;
+  const { classes } = props;
   return (
     <div className={classes.root}>
-      <LinearProgress classes={{ primaryColor: classes.lgreen }} />
+      <LinearProgress classes={{ colorPrimary: classes.lgreen }} />
     </div>
   );
 }
 
 Progress.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Progress);

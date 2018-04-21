@@ -100,7 +100,7 @@ export class Select extends Component {
     return (
       <div className="field">
         <Dropdown
-          style={{ height: 33 }}
+          style={{ height: 31 }}
           placeholder={placeholder}
           name={name}
           value={this.state.selectedValue}
