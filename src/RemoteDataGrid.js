@@ -49,6 +49,7 @@ import ViewList from 'material-ui-icons/ViewList';
 
 import { withStyles } from 'material-ui/styles';
 import TableHeaderBar from './TableHeaderBar';
+import { red } from 'material-ui/colors';
 
 const styleSheet = theme => ({
   commandButton: {
@@ -202,12 +203,13 @@ class RemoteDataGrid extends React.PureComponent {
                 classes={{ root: props.classes.iconButton }}
                 onClick={() => this.props.onView(row)}
                 title="View row"
+                color="primary"
               >
                 <ViewList className={props.classes.icon} />
               </IconButton>
               <IconButton
                 classes={{ root: props.classes.iconButton }}
-                color="primary"
+                color="secondary"
                 onClick={() => this.props.onEdit(row)}
                 title="Edit row"
               >
@@ -215,7 +217,8 @@ class RemoteDataGrid extends React.PureComponent {
               </IconButton>
               <IconButton
                 classes={{ root: props.classes.iconButton }}
-                color="secondary"
+                color="primary"
+                style={{ color: red[500] }}
                 onClick={() => this.props.onDelete(row)}
                 title="Delete row"
               >

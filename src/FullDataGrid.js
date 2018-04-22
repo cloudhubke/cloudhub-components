@@ -42,6 +42,7 @@ import ViewList from 'material-ui-icons/ViewList';
 
 import { withStyles } from 'material-ui/styles';
 import TableHeaderBar from './TableHeaderBar';
+import { red } from 'material-ui/colors';
 
 const styleSheet = theme => ({
   commandButton: {
@@ -148,18 +149,22 @@ class FullDataGrid extends Component {
               <IconButton
                 onClick={() => this.props.onView(row)}
                 title="View row"
+                color="primary"
               >
                 <ViewList />
               </IconButton>
               <IconButton
                 onClick={() => this.props.onEdit(row)}
                 title="Edit row"
+                color="secondary"
               >
                 <EditIcon />
               </IconButton>
               <IconButton
                 onClick={() => this.props.onDelete(row)}
                 title="Delete row"
+                color="primary"
+                style={{ color: red[500] }}
               >
                 <DeleteIcon />
               </IconButton>
@@ -290,7 +295,7 @@ class FullDataGrid extends Component {
               onClick={() => {
                 this.props.onDeleteRows(this.props.deleting);
               }}
-              color="secondary"
+              style={{ color: red }}
             >
               Delete
             </Button>

@@ -37,6 +37,7 @@ import {
   DialogContentText,
   DialogTitle
 } from 'material-ui';
+import { red } from 'material-ui/colors';
 
 import DeleteIcon from 'material-ui-icons/Delete';
 import EditIcon from 'material-ui-icons/Edit';
@@ -158,17 +159,21 @@ class DataGridWithDetailView extends React.PureComponent {
             >
               <IconButton
                 onClick={() => this.props.onView(row)}
+                color="primary"
                 title="View row"
               >
                 <ViewList />
               </IconButton>
               <IconButton
                 onClick={() => this.props.onEdit(row)}
+                color="secondary"
                 title="Edit row"
               >
                 <EditIcon />
               </IconButton>
               <IconButton
+                color="primary"
+                style={{ color: red[500] }}
                 onClick={() => this.props.onDelete(row)}
                 title="Delete row"
               >
@@ -308,7 +313,7 @@ class DataGridWithDetailView extends React.PureComponent {
               onClick={() => {
                 this.props.onDeleteRows(this.props.deleting);
               }}
-              color="secondary"
+              style={{ color: red }}
             >
               Delete
             </Button>
