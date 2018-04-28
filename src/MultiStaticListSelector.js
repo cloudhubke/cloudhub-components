@@ -7,7 +7,9 @@ class StaticListSelector extends Component {
       value: null,
       onChange: () => {}
     },
-    onChange: () => {}
+    onChange: () => {},
+    meta: {},
+    list: []
   };
   constructor(props) {
     super(props);

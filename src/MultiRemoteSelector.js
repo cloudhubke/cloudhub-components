@@ -49,6 +49,7 @@ export class MultiRemoteSelector extends Component {
     this.handleInputChange = _.debounce(this.handleInputChange, 500);
 
     this.state = {
+      firstoptions: [],
       options: [],
       opts: [],
       selectedValue: [],
@@ -95,6 +96,9 @@ export class MultiRemoteSelector extends Component {
           label: item[displayField]
         };
       });
+      if (this.state.firstoptions.length === 0) {
+        this.setState({ firstoptions: options });
+      }
       this.setState({ opts, options, selectedValue: vals, isLoading: false });
     }
   };
@@ -104,7 +108,8 @@ export class MultiRemoteSelector extends Component {
     if (val) {
       this.setState({ selectedValue: val, searchText: '' });
     } else {
-      this.setState({ selectedValue: [] });
+      this.setState({ selectedValue: [], searchText: '' });
+      this.loadOptions(this.state.firstoptions);
     }
 
     if (val) {
@@ -134,27 +139,24 @@ export class MultiRemoteSelector extends Component {
   };
 
   handleInputChange = text => {
-    const { axiosinstance, url } = this.props;
-    const len = this.props.value.length || 0;
-    if (text !== this.state.searchText) {
-      if (text === '' && this.state.opts.length <= len) {
+    const { axiosinstance, url, params } = this.props;
+    if (text === '' && this.state.firstoptions.length === 0) {
+      this.setState({ isFetching: true, searchText: text });
+      return axiosinstance()
+        .get(url, { params: { ...params, filter: text } })
+        .then(({ data }) => {
+          this.setState({ isFetching: false });
+          this.loadOptions(data.items || data);
+        });
+    } else if (text !== '') {
+      if (this.state.searchText !== text) {
         this.setState({ isFetching: true, searchText: text });
-        return axiosinstance()
-          .get(url, { params: { filter: text } })
+        axiosinstance()
+          .get(url, { params: { ...params, filter: text } })
           .then(({ data }) => {
             this.setState({ isFetching: false });
             this.loadOptions(data.items || data);
           });
-      } else if (text !== '') {
-        if (this.state.searchText !== text) {
-          this.setState({ isFetching: true, searchText: text });
-          axiosinstance()
-            .get(url, { params: { filter: text } })
-            .then(({ data }) => {
-              this.setState({ isFetching: false });
-              this.loadOptions(data.items || data);
-            });
-        }
       }
     }
   };
