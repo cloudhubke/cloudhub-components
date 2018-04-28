@@ -8,6 +8,7 @@ class StaticListSelector extends Component {
       onChange: () => {},
       onBlur: () => {}
     },
+    value: null,
     onChange: () => {},
     meta: {},
     list: []
@@ -20,11 +21,11 @@ class StaticListSelector extends Component {
   }
 
   render() {
-    const { list, input, meta, onChange, onSelectChange } = this.props;
+    const { list, value, input, meta, onChange, onSelectChange } = this.props;
     return (
       <Select
         options={list}
-        value={input.value || this.state.val}
+        value={value || input.value || this.state.val}
         onChange={val => {
           if (val) {
             this.setState({ val });
