@@ -50,6 +50,7 @@ import ViewList from 'material-ui-icons/ViewList';
 import { withStyles } from 'material-ui/styles';
 import TableHeaderBar from './TableHeaderBar';
 import { red } from 'material-ui/colors';
+import { Loading } from './Loading';
 
 const styleSheet = theme => ({
   commandButton: {
@@ -323,7 +324,7 @@ class RemoteDataGrid extends React.PureComponent {
     const queryString = this.queryString();
 
     if (_.isEqual(queryString, this.lastQuery)) {
-      return;
+      this.setState({ loading: false });
     } else {
       onQueryChange(queryString);
     }
@@ -376,7 +377,8 @@ class RemoteDataGrid extends React.PureComponent {
       currentPage,
       pageSize,
       allowedPageSizes,
-      defaultColumnWidths
+      defaultColumnWidths,
+      loading
     } = this.state;
 
     return (
@@ -458,6 +460,7 @@ class RemoteDataGrid extends React.PureComponent {
             <ColumnChooser />
           </Grid>
         </div>
+        {loading && <Loading />}
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}
