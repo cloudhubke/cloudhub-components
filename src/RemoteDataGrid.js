@@ -324,9 +324,12 @@ class RemoteDataGrid extends React.PureComponent {
     const queryString = this.queryString();
 
     if (_.isEqual(queryString, this.lastQuery)) {
-      this.setState({ loading: false });
+      if (!_.isEqual(this.props.data, this.state.data)) {
+        this.setState({ loading: false, data: this.props.data });
+      }
+      return;
     }
-
+    this.setState({ loading: true });
     onQueryChange(queryString);
 
     this.lastQuery = queryString;
