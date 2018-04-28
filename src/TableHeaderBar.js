@@ -58,11 +58,11 @@ class TableHeaderBar extends Component {
   };
 
   render() {
-    const { classes, permissions } = this.props;
+    const { classes, allowprint, allowadd } = this.props;
 
     return (
       <Paper className={classes.root}>
-        <Typography type="title" gutterBottom>
+        <Typography variant="title" gutterBottom>
           {this.props.title}
         </Typography>
         <div className={classes.inputs}>
@@ -75,7 +75,7 @@ class TableHeaderBar extends Component {
           <Button
             onClick={this.props.onAdd}
             style={styles.buttonStyle}
-            disabled={!permissions.allowadd}
+            disabled={!allowadd}
           >
             <AddIcon /> Add
           </Button>
@@ -85,7 +85,7 @@ class TableHeaderBar extends Component {
           <Button
             onClick={this.props.onPrint}
             style={styles.buttonStyle}
-            disabled={!permissions.allowprint}
+            disabled={!allowprint}
           >
             <PrintIcon /> Print
           </Button>
