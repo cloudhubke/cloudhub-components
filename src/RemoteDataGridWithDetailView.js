@@ -282,13 +282,6 @@ class RemoteDataGrid extends React.PureComponent {
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!_.isEqual(nextProps.data, this.props.data)) {
-      return true;
-    }
-    return false;
-  }
-
   componentDidUpdate() {
     this.loadData();
   }
