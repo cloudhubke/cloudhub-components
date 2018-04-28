@@ -5,7 +5,8 @@ class StaticListSelector extends Component {
   static defaultProps = {
     input: {
       value: null,
-      onChange: () => {}
+      onChange: () => {},
+      onBlur: () => {}
     },
     onChange: () => {},
     meta: {},
