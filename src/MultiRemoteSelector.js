@@ -3,12 +3,6 @@ import Dropdown from 'react-select';
 import _ from 'lodash';
 import axios from 'axios';
 
-// import {
-//   Clear as ClearIcon,
-//   Autorenew as RefreshIcon,
-// } from 'material-ui-icons';
-// import { IconButton } from 'material-ui';
-
 export class MultiRemoteSelector extends Component {
   static defaultProps = {
     axiosinstance: () => axios.create({}),
@@ -21,6 +15,33 @@ export class MultiRemoteSelector extends Component {
     value: [],
     multi: false
   };
+
+  static getDerivedStateFromProps(nextProps) {
+    const { value, displayField } = nextProps;
+    if (!value || _.isEmpty(value) || !Array.isArray(value)) {
+      return {
+        opts: [],
+        selectedValue: []
+      };
+    } else {
+      const opts = value.map((item, index) => ({
+        ...item,
+        key: item._id,
+        value: index,
+        label: item[displayField]
+      }));
+
+      return {
+        opts,
+        selectedValue: value.map(item => ({
+          ...item,
+          key: item._id,
+          value: opts.findIndex(item => item.key === value._id),
+          label: item[displayField]
+        }))
+      };
+    }
+  }
 
   constructor(props) {
     super(props);
@@ -36,41 +57,14 @@ export class MultiRemoteSelector extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      const { value, displayField } = nextProps;
+  componentDidUpdate(prevProps) {
+    if (prevProps.value !== this.props.value) {
+      const { value, displayField } = this.props;
       if (!value || _.isEmpty(value)) {
         this.setState({
           selectedValue: []
         });
       }
-    }
-  }
-
-  componentWillMount() {
-    const { value, displayField } = this.props;
-    if (!value || _.isEmpty(value) || !Array.isArray(value)) {
-      this.setState({
-        opts: [],
-        selectedValue: []
-      });
-    } else {
-      const opts = value.map((item, index) => ({
-        ...item,
-        key: item._id,
-        value: index,
-        label: item[displayField]
-      }));
-
-      this.setState({
-        opts,
-        selectedValue: value.map(item => ({
-          ...item,
-          key: item._id,
-          value: opts.findIndex(item => item.key === value._id),
-          label: item[displayField]
-        }))
-      });
     }
   }
 

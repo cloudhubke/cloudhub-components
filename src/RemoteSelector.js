@@ -17,6 +17,35 @@ export class RemoteSelector extends Component {
     selectUp: false
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { value, displayField } = nextProps;
+    if (!value || _.isEmpty(value)) {
+      return {
+        selectedValue: ''
+      };
+    } else {
+      const opt = {
+        ...value,
+        key: value._id || value.id,
+        value: 0,
+        label: value[displayField]
+      };
+
+      const opts = prevState.opts || [];
+      const ind = opts.findIndex(i => i.key === opt.key);
+      if (ind === -1) {
+        return {
+          opts: [opt],
+          selectedValue: 0
+        };
+      } else {
+        return {
+          selectedValue: ind
+        };
+      }
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -32,36 +61,33 @@ export class RemoteSelector extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      const { value, displayField } = nextProps;
+  componentDidUpdate(prevProps) {
+    if (prevProps.value !== this.props.value) {
+      const { value, displayField } = this.props;
       if (!value || _.isEmpty(value)) {
         this.setState({
           selectedValue: ''
         });
+      } else {
+        const opt = {
+          ...value,
+          key: value._id || value.id,
+          value: 0,
+          label: value[displayField]
+        };
+
+        const ind = this.state.opts.findIndex(i => i.key === opt.key);
+        if (ind === -1) {
+          this.setState({
+            opts: [opt],
+            selectedValue: 0
+          });
+        } else {
+          this.setState({
+            selectedValue: ind
+          });
+        }
       }
-    }
-  }
-
-  componentWillMount() {
-    const { value, displayField } = this.props;
-    if (!value || _.isEmpty(value)) {
-      this.setState({
-        opts: [],
-        selectedValue: ''
-      });
-    } else {
-      const opt = {
-        ...value,
-        key: value._id || value.id,
-        value: 0,
-        label: value[displayField]
-      };
-
-      this.setState({
-        opts: [opt],
-        selectedValue: 0
-      });
     }
   }
 

@@ -13,6 +13,13 @@ export class Select extends Component {
     url: ''
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.value === null || nextProps.value === '') {
+      return { selectedValue: [] };
+    }
+    return null;
+  }
+
   constructor(props) {
     super(props);
 
@@ -23,18 +30,12 @@ export class Select extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setOptions(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value === null || nextProps.value === '') {
-      this.setState({ selectedValue: [] });
-    }
+  componentDidUpdate(prevProps) {
     if (nextProps.options !== this.props.options) {
       this.setOptions(nextProps);
     }
   }
+
   setOptions = props => {
     const { options, displayField, value } = props;
     if (Array.isArray(options)) {
