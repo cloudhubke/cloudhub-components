@@ -131,7 +131,8 @@ class RemoteDataGrid extends React.PureComponent {
     deletingRows: [],
     editingRow: null,
     url: '/',
-    onQueryChange: () => {}
+    onQueryChange: () => {},
+    permissions: {}
   };
 
   constructor(props) {
@@ -189,6 +190,12 @@ class RemoteDataGrid extends React.PureComponent {
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
     this.tableCellTemplate = ({ row, column, style }) => {
+      const permissions = {
+        allowadd: props.permissions.allowadd || false,
+        allowedit: props.permissions.allowedit || false,
+        allowdelete: props.permissions.allowdelete || false,
+        allowprint: props.permissions.allowprint || false
+      };
       if (column.name === 'actions') {
         return (
           <TableCell>
@@ -212,6 +219,7 @@ class RemoteDataGrid extends React.PureComponent {
                 color="secondary"
                 onClick={() => this.props.onEdit(row)}
                 title="Edit row"
+                disabled={!permissions.allowedit}
               >
                 <EditIcon className={props.classes.icon} />
               </IconButton>
@@ -221,6 +229,7 @@ class RemoteDataGrid extends React.PureComponent {
                 style={{ color: red[500] }}
                 onClick={() => this.props.onDelete(row)}
                 title="Delete row"
+                disabled={!permissions.allowdelete}
               >
                 <DeleteIcon className={props.classes.icon} />
               </IconButton>
@@ -323,16 +332,24 @@ class RemoteDataGrid extends React.PureComponent {
   }
 
   renderHeader = () => {
+    const permissions = {
+      allowadd: this.props.permissions.allowadd || false,
+      allowedit: this.props.permissions.allowedit || false,
+      allowdelete: this.props.permissions.allowdelete || false,
+      allowprint: this.props.permissions.allowprint || false
+    };
     if (this.props.header) {
       return this.props.header({
         ...this.props,
         ...this.state,
+        ...permissions,
         queryString: this.queryString(),
         onSearch: this.searchChange
       });
     } else {
       return (
         <TableHeaderBar
+          {...permissions}
           title={this.props.title}
           onSearchChange={this.searchChange}
           onAdd={this.props.onAdd}

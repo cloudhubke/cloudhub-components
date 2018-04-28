@@ -91,7 +91,8 @@ class DataGridWithDetailView extends React.PureComponent {
     onRefresh: () => {},
     onPrint: () => {},
     deletingRows: [],
-    editingRow: null
+    editingRow: null,
+    permissions: {}
   };
 
   constructor(props) {
@@ -147,6 +148,12 @@ class DataGridWithDetailView extends React.PureComponent {
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
     this.tableCellTemplate = ({ row, column, style }) => {
+      const permissions = {
+        allowadd: props.permissions.allowadd || false,
+        allowedit: props.permissions.allowedit || false,
+        allowdelete: props.permissions.allowdelete || false,
+        allowprint: props.permissions.allowprint || false
+      };
       if (column.name === 'actions') {
         return (
           <TableCell>
@@ -168,6 +175,7 @@ class DataGridWithDetailView extends React.PureComponent {
                 onClick={() => this.props.onEdit(row)}
                 color="secondary"
                 title="Edit row"
+                disabled={!permissions.allowedit}
               >
                 <EditIcon />
               </IconButton>
@@ -176,6 +184,7 @@ class DataGridWithDetailView extends React.PureComponent {
                 style={{ color: red[500] }}
                 onClick={() => this.props.onDelete(row)}
                 title="Delete row"
+                disabled={!permissions.allowdelete}
               >
                 <DeleteIcon />
               </IconButton>
@@ -189,8 +198,18 @@ class DataGridWithDetailView extends React.PureComponent {
   }
 
   renderHeader = () => {
+    const permissions = {
+      allowadd: this.props.permissions.allowadd || false,
+      allowedit: this.props.permissions.allowedit || false,
+      allowdelete: this.props.permissions.allowdelete || false,
+      allowprint: this.props.permissions.allowprint || false
+    };
     if (this.props.header) {
-      return this.props.header({ ...this.state, ...this.props });
+      return this.props.header({
+        ...this.state,
+        ...permissions,
+        ...this.props
+      });
     } else {
       return (
         <TableHeaderBar
@@ -198,6 +217,7 @@ class DataGridWithDetailView extends React.PureComponent {
           onAdd={this.props.onAdd}
           onRefresh={this.props.onReresh}
           onPrint={this.props.onPrint}
+          {...permissions}
         />
       );
     }

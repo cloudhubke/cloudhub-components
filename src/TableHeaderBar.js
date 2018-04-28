@@ -36,7 +36,13 @@ class TableHeaderBar extends Component {
     onAdd: () => {},
     onRefresh: () => {},
     onSearchChange: () => {},
-    onPrint: () => {}
+    onPrint: () => {},
+    permissions: {
+      allowadd: false,
+      allowedit: false,
+      allowdelete: false,
+      allowprint: false
+    }
   };
   constructor(props) {
     super(props);
@@ -52,7 +58,7 @@ class TableHeaderBar extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, permissions } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -66,14 +72,22 @@ class TableHeaderBar extends Component {
             placeholder="Search..."
             onChange={e => this.onSearch(e.target.value)}
           />
-          <Button onClick={this.props.onAdd} style={styles.buttonStyle}>
-            <AddIcon /> Add{' '}
+          <Button
+            onClick={this.props.onAdd}
+            style={styles.buttonStyle}
+            disabled={!permissions.allowadd}
+          >
+            <AddIcon /> Add
           </Button>
           <Button onClick={this.props.onRefresh} style={styles.buttonStyle}>
-            <RefreshIcon /> Refresh{' '}
+            <RefreshIcon /> Refresh
           </Button>
-          <Button onClick={this.props.onPrint} style={styles.buttonStyle}>
-            <PrintIcon /> Print{' '}
+          <Button
+            onClick={this.props.onPrint}
+            style={styles.buttonStyle}
+            disabled={!permissions.allowprint}
+          >
+            <PrintIcon /> Print
           </Button>
         </div>
       </Paper>

@@ -87,7 +87,8 @@ class FullDataGrid extends Component {
     onPrint: () => {},
     deletingRows: [],
     editingRow: null,
-    header: null
+    header: null,
+    permissions: {}
   };
 
   constructor(props) {
@@ -136,6 +137,12 @@ class FullDataGrid extends Component {
     };
 
     this.tableCellTemplate = ({ row, column, style }) => {
+      const permissions = {
+        allowadd: props.permissions.allowadd || false,
+        allowedit: props.permissions.allowedit || false,
+        allowdelete: props.permissions.allowdelete || false,
+        allowprint: props.permissions.allowprint || false
+      };
       if (column.name === 'actions') {
         return (
           <TableCell>
@@ -157,6 +164,7 @@ class FullDataGrid extends Component {
                 onClick={() => this.props.onEdit(row)}
                 title="Edit row"
                 color="secondary"
+                disabled={!permissions.allowedit}
               >
                 <EditIcon />
               </IconButton>
@@ -165,6 +173,7 @@ class FullDataGrid extends Component {
                 title="Delete row"
                 color="primary"
                 style={{ color: red[500] }}
+                disabled={!permissions.allowdelete}
               >
                 <DeleteIcon />
               </IconButton>
@@ -178,11 +187,22 @@ class FullDataGrid extends Component {
   }
 
   renderHeader = () => {
+    const permissions = {
+      allowadd: this.props.permissions.allowadd || false,
+      allowedit: this.props.permissions.allowedit || false,
+      allowdelete: this.props.permissions.allowdelete || false,
+      allowprint: this.props.permissions.allowprint || false
+    };
     if (this.props.header) {
-      return this.props.header({ ...this.state, ...this.props });
+      return this.props.header({
+        ...this.state,
+        ...permissions,
+        ...this.props
+      });
     } else {
       return (
         <TableHeaderBar
+          {...permissions}
           title={this.props.title}
           onAdd={this.props.onAdd}
           onRefresh={this.props.onReresh}
