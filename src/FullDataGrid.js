@@ -78,6 +78,7 @@ class FullDataGrid extends Component {
     onDelete: () => {},
     onDeleteRows: () => {},
     onCancelDelete: () => {},
+    onChangeSelection: () => {},
     rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
     onSaveRow: () => {},
     onCancelEdit: () => {},
@@ -112,7 +113,10 @@ class FullDataGrid extends Component {
     this.changeCurrentPage = currentPage => this.setState({ currentPage });
     this.changePageSize = pageSize => this.setState({ pageSize });
     this.changeGrouping = grouping => this.setState({ grouping });
-    this.changeSelection = selection => this.setState({ selection });
+    this.changeSelection = selection => {
+      this.setState({ selection });
+      props.onChangeSelection(selection);
+    };
     this.changeFilters = filters => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
@@ -283,7 +287,7 @@ class FullDataGrid extends Component {
                 return <TableCell />;
               }}
             />
-            <TableSelection />
+            <TableSelection showSelectAll />
             <TableGroupRow />
             <TableColumnVisibility defaultHiddenColumns={hiddencolumns} />
             <Toolbar />

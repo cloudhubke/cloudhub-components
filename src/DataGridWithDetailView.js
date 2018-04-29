@@ -86,6 +86,7 @@ class DataGridWithDetailView extends React.PureComponent {
     onCancelDelete: () => {},
     onSaveRow: () => {},
     onCancelEdit: () => {},
+    onChangeSelection: () => {},
     onView: () => {},
     onAdd: () => {},
     onRefresh: () => {},
@@ -124,7 +125,10 @@ class DataGridWithDetailView extends React.PureComponent {
     this.changeCurrentPage = currentPage => this.setState({ currentPage });
     this.changePageSize = pageSize => this.setState({ pageSize });
     this.changeGrouping = grouping => this.setState({ grouping });
-    this.changeSelection = selection => this.setState({ selection });
+    this.changeSelection = selection => {
+      this.setState({ selection });
+      props.onChangeSelection(selection);
+    };
     this.changeFilters = filters => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
@@ -302,7 +306,7 @@ class DataGridWithDetailView extends React.PureComponent {
                 return <TableCell />;
               }}
             />
-            <TableSelection />
+            <TableSelection showSelectAll />
             <TableGroupRow />
             <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
             <Toolbar />
