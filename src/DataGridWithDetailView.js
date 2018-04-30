@@ -170,7 +170,12 @@ class DataGridWithDetailView extends React.PureComponent {
               }}
             >
               {props.rowmenu ? (
-                props.rowmenu()
+                props.rowmenu({
+                  row,
+                  column,
+                  classes: props.classes,
+                  ...permissions
+                })
               ) : (
                 <IconButton
                   classes={{ root: props.classes.iconButton }}
