@@ -153,7 +153,8 @@ class RemoteDataGrid extends React.PureComponent {
     editingRow: null,
     url: '/',
     onQueryChange: () => {},
-    permissions: {}
+    permissions: {},
+    rowmenu: null
   };
 
   constructor(props) {
@@ -235,14 +236,18 @@ class RemoteDataGrid extends React.PureComponent {
                 minWidth: 150
               }}
             >
-              <IconButton
-                classes={{ root: props.classes.iconButton }}
-                onClick={() => this.props.onView(row)}
-                title="View row"
-                color="primary"
-              >
-                <ViewList className={props.classes.icon} />
-              </IconButton>
+              {props.rowmenu ? (
+                props.rowmenu()
+              ) : (
+                <IconButton
+                  classes={{ root: props.classes.iconButton }}
+                  onClick={() => this.props.onView(row)}
+                  title="View row"
+                  color="primary"
+                >
+                  <ViewList className={props.classes.icon} />
+                </IconButton>
+              )}
               <IconButton
                 classes={{ root: props.classes.iconButton }}
                 color="secondary"

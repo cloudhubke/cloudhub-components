@@ -89,7 +89,8 @@ class FullDataGrid extends Component {
     deletingRows: [],
     editingRow: null,
     header: null,
-    permissions: {}
+    permissions: {},
+    rowmenu: null
   };
 
   constructor(props) {
@@ -157,13 +158,18 @@ class FullDataGrid extends Component {
                 minWidth: 150
               }}
             >
-              <IconButton
-                onClick={() => this.props.onView(row)}
-                title="View row"
-                color="primary"
-              >
-                <ViewList />
-              </IconButton>
+              {props.rowmenu ? (
+                props.rowmenu()
+              ) : (
+                <IconButton
+                  classes={{ root: props.classes.iconButton }}
+                  onClick={() => this.props.onView(row)}
+                  title="View row"
+                  color="primary"
+                >
+                  <ViewList className={props.classes.icon} />
+                </IconButton>
+              )}
               <IconButton
                 onClick={() => this.props.onEdit(row)}
                 title="Edit row"
