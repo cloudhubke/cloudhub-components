@@ -104,11 +104,8 @@ const styleSheet = theme => ({
     flexBasis: '50%'
   }
 });
-
 const counterColumn = [{ name: 'counter', title: '#' }];
-
 const staticColumns = [{ name: 'actions', title: '', align: 'left' }];
-
 const NoDataCellBase = ({ loading, colSpan, classes }) => (
   <TableCell className={classes.noDataCell} colSpan={colSpan}>
     <strong>{loading ? '' : 'No data'}</strong>
