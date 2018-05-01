@@ -145,7 +145,7 @@ class RemoteDataGrid extends React.PureComponent {
       columns: [...counterColumn, ...this.props.columns, ...staticColumns],
       defaultColumnWidths: [
         { columnName: 'counter', width: 70 },
-        { columnName: 'actions', width: 50 },
+        { columnName: 'actions', width: 150 },
         ...this.props.columnWidths
       ],
       sorting: [],

@@ -104,7 +104,7 @@ class DataGridWithDetailView extends React.PureComponent {
       columns: [...this.props.columns, ...staticColumns],
       defaultColumnWidths: [
         { columnName: 'counter', width: 70 },
-        { columnName: 'actions', width: 50 },
+        { columnName: 'actions', width: 150 },
         ...this.props.columnWidths
       ],
       sorting: [],
