@@ -89,7 +89,12 @@ class FullDataGrid extends Component {
     deletingRows: [],
     editingRow: null,
     header: null,
-    permissions: {},
+    permissions: {
+      allowadd: true,
+      allowedit: true,
+      allowdelete: true,
+      allowprint: true
+    },
     rowmenu: null
   };
 

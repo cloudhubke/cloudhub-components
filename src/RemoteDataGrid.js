@@ -134,7 +134,12 @@ class RemoteDataGrid extends React.PureComponent {
     editingRow: null,
     url: '/',
     onQueryChange: () => {},
-    permissions: {},
+    permissions: {
+      allowadd: true,
+      allowedit: true,
+      allowdelete: true,
+      allowprint: true
+    },
     rowmenu: null
   };
 

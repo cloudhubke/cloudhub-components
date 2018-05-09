@@ -93,7 +93,12 @@ class DataGridWithDetailView extends React.PureComponent {
     onPrint: () => {},
     deletingRows: [],
     editingRow: null,
-    permissions: {},
+    permissions: {
+      allowadd: true,
+      allowedit: true,
+      allowdelete: true,
+      allowprint: true
+    },
     rowmenu: null
   };
 
