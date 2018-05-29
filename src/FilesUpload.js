@@ -120,7 +120,7 @@ class FilesUpload extends Component {
 
     const { meta } = this.props;
     const uploadButton = (
-      <Button raised>
+      <Button variant="raised">
         <UploadIcon /> upload
       </Button>
     );
