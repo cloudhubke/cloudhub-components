@@ -51,6 +51,7 @@ import { withStyles } from 'material-ui/styles';
 import TableHeaderBar from './TableHeaderBar';
 import { red } from 'material-ui/colors';
 import { Loading } from './Loading';
+import './grid.css';
 
 const styleSheet = theme => ({
   commandButton: {
@@ -82,7 +83,43 @@ const styleSheet = theme => ({
   },
   icon: {
     margin: 0
-  }
+  },
+
+  // ===================================================== Header ========================
+
+  headerBar: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: '10px 20px 10px 20px',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    overflow: 'hidden'
+  },
+  headerInputs: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexBasis: '50%',
+    marginLeft: 10
+  },
+  headerButton: {
+    fontWeight: 500,
+    textTransform: 'capitalize',
+    fontSize: 12
+  },
+  filterBar: {
+    marginBottom: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap'
+  },
+  filterField: { width: 200, marginLeft: 10 }
 });
 
 const counterColumn = [{ name: 'counter', title: '#', width: 70 }];

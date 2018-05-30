@@ -1,0 +1,5 @@
+.grid-container td {
+  overflow: hidden;
+  padding-left: 10px;
+  padding-right: 10px;
+}

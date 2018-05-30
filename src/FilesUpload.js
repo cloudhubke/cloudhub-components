@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Upload } from 'antd';
-import { Button, withStyles } from 'material-ui';
-import { ArrowUpward as UploadIcon } from 'material-ui-icons';
+import { Upload, List, Icon, Progress, Input } from 'antd';
+import { Button, withStyles, IconButton } from 'material-ui';
+import { ArrowUpward as UploadIcon, Close } from 'material-ui-icons';
 
 import 'antd/lib/upload/style/index.css';
+import { Typography } from 'material-ui';
 
 const styles = () => ({
   fileList: {
@@ -39,6 +40,20 @@ const styles = () => ({
       top: 0,
       bottom: 0
     }
+  },
+  listItem: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  iconButton: {
+    border: 0,
+    height: 'auto',
+    width: 'auto',
+    padding: '2px'
   }
 });
 
@@ -89,6 +104,14 @@ class FilesUpload extends Component {
     // console.log('NXT', nextProps.input.value);
   };
 
+  removeUnUploadedFiles() {
+    const { fileList } = this.state;
+    const newfilelist = fileList.filter(i => i.Location !== undefined);
+
+    setTimeout(() => {
+      this.setState({ fileList: newfilelist });
+    }, 100);
+  }
   handleChange = ({ fileList }) => {
     const files = fileList.map((item, index) => {
       if (item.response) {
@@ -97,10 +120,11 @@ class FilesUpload extends Component {
       return item;
     });
 
-    this.setState({ fileList: files });
     if (this.props.limit === 1) {
+      this.setState({ fileList: [...files[0]] });
       this.props.input.onChange(files[0]);
     } else {
+      this.setState({ fileList: [...files] });
       this.props.input.onChange(files);
     }
   };
@@ -114,6 +138,19 @@ class FilesUpload extends Component {
     this.props.input.onChange(filelist);
   };
 
+  changeItemName = ({ FileName, index }) => {
+    const { fileList } = this.state;
+
+    const newfilelist = fileList.map((item, i) => {
+      if (index === i) {
+        return { ...item, FileName };
+      }
+      return item;
+    });
+    this.props.input.onChange(newfilelist);
+    this.setState({ fileList: newfilelist });
+  };
+
   render() {
     const { fileList } = this.state;
     const { limit, classes, url } = this.props;
@@ -124,20 +161,78 @@ class FilesUpload extends Component {
         <UploadIcon /> upload
       </Button>
     );
+
     return (
       <div className={classes.fileList}>
         <Upload
           action={url}
           listType="text"
           fileList={fileList}
+          showUploadList={false}
           multiple={limit > 1}
           onChange={this.handleChange}
           onRemove={this.handleRemove}
+          beforeUpload={(file, fileList) => {
+            const fullfilelist = [...this.state.fileList, ...fileList];
+            if (fullfilelist.length > limit) {
+              this.setState({
+                uploaderror:
+                  'Files could not be uploaded. Limit of ' + limit + ' exceeded'
+              });
+              this.removeUnUploadedFiles();
+              return false;
+            }
+            return true;
+          }}
         >
           {fileList.length >= limit ? null : uploadButton}
         </Upload>
+        <List
+          size="large"
+          header={<Typography variant="title">Files</Typography>}
+          bordered
+          dataSource={fileList}
+          renderItem={(item, index) => (
+            <List.Item>
+              <div className={classes.listItem}>
+                <Icon type="paper-clip" />
+                <Typography variant="body1" style={{ marginLeft: 20 }}>
+                  {index + 1}.
+                </Typography>
+                <Typography variant="body1" style={{ flex: 1, marginLeft: 5 }}>
+                  <Input
+                    defaultValue={item.FileName || item.name}
+                    onChange={e =>
+                      this.changeItemName({ FileName: e.target.value, index })
+                    }
+                  />
+                </Typography>
+
+                {item.percent && (
+                  <Progress
+                    type="circle"
+                    percent={Number(item.percent)}
+                    width={60}
+                  />
+                )}
+
+                <IconButton
+                  classes={{ root: classes.iconButton }}
+                  onClick={() => this.handleRemove(item)}
+                >
+                  <Close />
+                </IconButton>
+              </div>
+            </List.Item>
+          )}
+        />
         {meta.touched &&
-          meta.error && <div className="error">{meta.error}</div>}
+          meta.error && (
+            <div className="error">{meta.error || this.state.uploaderror}</div>
+          )}
+        {this.state.uploaderror && (
+          <div className="error">{this.state.uploaderror}</div>
+        )}
       </div>
     );
   }
