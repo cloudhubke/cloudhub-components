@@ -5,13 +5,13 @@ import moment from 'moment';
 import 'antd/lib/date-picker/style/index.css';
 import './datepicker.css';
 
-const dateFormat = 'DD/MM/YYYY';
-
 const styles = () => ({});
 
 class AntDatePicker extends Component {
   static defaultProps = {
-    defaultValue: ''
+    defaultValue: '',
+    dateFormat: 'DD MMM, YYYY hh:mm',
+    showTime: false
   };
   componentDidMount() {}
   onDateChanged = date => {
@@ -24,7 +24,7 @@ class AntDatePicker extends Component {
 
   render() {
     const { value } = this.props.input;
-    const { meta, classes } = this.props;
+    const { meta, classes, dateFormat } = this.props;
 
     return (
       <div>
@@ -33,6 +33,7 @@ class AntDatePicker extends Component {
           defaultValue={value ? moment(value) : null}
           format={dateFormat}
           onChange={this.onDateChanged}
+          showTime={this.props.showTime}
         />
         {meta.touched &&
           meta.error && <div className="error">{meta.error}</div>}
