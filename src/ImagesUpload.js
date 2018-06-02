@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
 import { withStyles } from 'material-ui';
 
-import 'antd/lib/upload/style/index.css';
-import 'antd/lib/modal/style/index.css';
-
 const styles = () => ({
   imagesList: {
     display: 'flex',
