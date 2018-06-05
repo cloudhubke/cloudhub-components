@@ -83,7 +83,6 @@ export class MultiRemoteSelector extends Component {
           label: item[displayField]
         };
       });
-
       const v = _.isArray(value) ? value : [];
       const vals = v.map(item => {
         if (!_.isObject(item)) {
@@ -102,7 +101,6 @@ export class MultiRemoteSelector extends Component {
       this.setState({ opts, options, selectedValue: vals, isLoading: false });
     }
   };
-
   logChange = val => {
     const { onChange, returnkeys } = this.props;
     if (val) {
