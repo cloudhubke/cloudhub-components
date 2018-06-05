@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Paper, withStyles, Typography, Button } from 'material-ui';
-import AddIcon from 'material-ui-icons/Add';
-import PrintIcon from 'material-ui-icons/Print';
-import RefreshIcon from 'material-ui-icons/Cached';
+import { Paper, withStyles, Typography, Button } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import PrintIcon from '@material-ui/icons/Print';
+import RefreshIcon from '@material-ui/icons/Cached';
 import { Input } from 'antd';
 import _ from 'lodash';
 

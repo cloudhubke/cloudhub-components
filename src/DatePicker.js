@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui';
+import { withStyles } from '@material-ui/core/styles';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import './datepicker.css';

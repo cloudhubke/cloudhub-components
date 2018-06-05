@@ -42,15 +42,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle
-} from 'material-ui';
+} from '@material-ui/core';
 
-import DeleteIcon from 'material-ui-icons/Delete';
-import EditIcon from 'material-ui-icons/Edit';
-import ViewList from 'material-ui-icons/ViewList';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import ViewList from '@material-ui/icons/ViewList';
 
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TableHeaderBar from './TableHeaderBar';
-import { red } from 'material-ui/colors';
+import { red } from '@material-ui/core/colors';
 import { Loading } from './Loading';
 import './grid.css';
 

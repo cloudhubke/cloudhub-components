@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Upload, List, Icon, Progress, Input } from 'antd';
-import { Button, withStyles, IconButton } from 'material-ui';
-import { ArrowUpward as UploadIcon, Close } from 'material-ui-icons';
-import { Typography } from 'material-ui';
+import { Button, withStyles, IconButton } from '@material-ui/core';
+import { ArrowUpward as UploadIcon, Close } from '@material-ui/icons';
+import { Typography } from '@material-ui/core';
 
 const styles = () => ({
   fileList: {

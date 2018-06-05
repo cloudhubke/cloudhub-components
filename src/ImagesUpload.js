@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
-import { withStyles } from 'material-ui';
+import { withStyles } from '@material-ui/core';
 
 const styles = () => ({
   imagesList: {

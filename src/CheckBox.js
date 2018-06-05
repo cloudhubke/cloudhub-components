@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, FormControlLabel, withStyles } from 'material-ui';
+import { Checkbox, FormControlLabel, withStyles } from '@material-ui/core';
 
 const styles = {
   root: {
@@ -11,8 +11,8 @@ const styles = {
     background: '#eeeeee',
     marginLeft: 10,
     borderRadius: 3,
-    marginRight: 0,
-  },
+    marginRight: 0
+  }
 };
 
 const checkbox = ({ input, label, classes }) => (
@@ -26,7 +26,7 @@ const checkbox = ({ input, label, classes }) => (
 );
 
 checkbox.defaultProps = {
-  label: '',
+  label: ''
 };
 
 export const CheckBox = withStyles(styles)(checkbox);

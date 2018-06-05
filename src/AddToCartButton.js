@@ -1,13 +1,14 @@
 import React from 'react';
-import { withStyles, IconButton, Button, Paper } from 'material-ui';
-import { red } from 'material-ui/colors';
-import { Add as AddIcon, Remove as RemoveIcon } from 'material-ui-icons';
+import { IconButton, Button, Paper } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
+import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons';
 
 const styles = () => ({
   button: {
     borderRadius: 3,
     flex: 1,
-    height: 42,
+    height: 42
   },
   paperButton: {
     display: 'flex',
@@ -22,9 +23,9 @@ const styles = () => ({
     cursor: 'pointer',
     background: red[500],
     '&:hover': {
-      background: red[900],
+      background: red[900]
     },
-    height: 42,
+    height: 42
   },
   paperCartButton: {
     display: 'flex',
@@ -38,14 +39,14 @@ const styles = () => ({
     fontWeight: 500,
     cursor: 'pointer',
     background: red[500],
-    height: 42,
+    height: 42
   },
   itemButton: {
-    color: '#FFF',
+    color: '#FFF'
   },
   addremoveButton: {
-    color: '#FFF',
-  },
+    color: '#FFF'
+  }
 });
 
 const AddToCartButton = ({ classes, onAddItem, onRemoveItem, Qty }) => {

@@ -36,14 +36,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle
-} from 'material-ui';
-import { red } from 'material-ui/colors';
+} from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 
-import DeleteIcon from 'material-ui-icons/Delete';
-import EditIcon from 'material-ui-icons/Edit';
-import ViewList from 'material-ui-icons/ViewList';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import ViewList from '@material-ui/icons/ViewList';
 
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TableHeaderBar from './TableHeaderBar';
 import './grid.css';
 

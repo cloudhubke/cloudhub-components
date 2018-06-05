@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui';
+import { withStyles } from '@material-ui/core';
 import 'antd/lib/table/style/index.css';
 import { Table } from 'antd';
 
-import { IconButton } from 'material-ui';
+import { IconButton } from '@material-ui/icons';
 import {
   CheckBox as YesIcon,
-  CheckBoxOutlineBlank as NoIcon,
-} from 'material-ui-icons';
-import { grey, green } from 'material-ui/colors';
+  CheckBoxOutlineBlank as NoIcon
+} from '@material-ui/icons';
+import { grey, green } from '@material-ui/core/colors';
 
 import permissions from './permissions.json';
 
@@ -17,7 +17,7 @@ import permissions from './permissions.json';
 const renderContent = (value, row, index) => {
   const obj = {
     children: `${value}`,
-    props: {},
+    props: {}
   };
   return obj;
 };
@@ -29,28 +29,29 @@ const styles = theme => ({
     width: 36,
     height: 36,
     '&:hover': {
-      fill: green[700],
-    },
+      fill: green[700]
+    }
   },
   noicon: {
     fill: grey[500],
     width: 36,
     height: 36,
     '&:hover': {
-      fill: green[500],
-    },
-  },
+      fill: green[500]
+    }
+  }
 });
 
-const initialData = () => permissions.map(item => ({
-  key: item.toLowerCase(),
-  modulename: item,
-  permissions: {
-    R: false,
-    RW: false,
-    RWD: false,
-  },
-}));
+const initialData = () =>
+  permissions.map(item => ({
+    key: item.toLowerCase(),
+    modulename: item,
+    permissions: {
+      R: false,
+      RW: false,
+      RWD: false
+    }
+  }));
 
 export class UserRoles extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ export class UserRoles extends Component {
         {
           title: 'Module Name',
           dataIndex: 'modulename',
-          render: renderContent,
+          render: renderContent
         },
         {
           title: 'Permissions',
@@ -71,25 +72,25 @@ export class UserRoles extends Component {
               dataIndex: 'permissions.R',
               render: (text, row, index) =>
                 this.renderPermission({ text, row, index, permission: 'R' }),
-              width: 150,
+              width: 150
             },
             {
               title: 'Read Write',
               dataIndex: 'permissions.RW',
               render: (text, row, index) =>
                 this.renderPermission({ text, row, index, permission: 'RW' }),
-              width: 150,
+              width: 150
             },
             {
               title: 'Read Write Delete',
               dataIndex: 'permissions.RWD',
               render: (text, row, index) =>
                 this.renderPermission({ text, row, index, permission: 'RWD' }),
-              width: 150,
-            },
-          ],
-        },
-      ],
+              width: 150
+            }
+          ]
+        }
+      ]
     };
   }
 
@@ -99,7 +100,7 @@ export class UserRoles extends Component {
     if (ind !== -1) {
       perms[ind] = {
         ...row,
-        permissions: { ...row.permissions, [permission]: text },
+        permissions: { ...row.permissions, [permission]: text }
       };
       this.props.input.onChange(perms);
       this.setState({ data: perms });
@@ -136,7 +137,7 @@ export class UserRoles extends Component {
         return (
           <YesIcon
             classes={{
-              root: classes.yesicon,
+              root: classes.yesicon
             }}
           />
         );
@@ -144,7 +145,7 @@ export class UserRoles extends Component {
       return (
         <NoIcon
           classes={{
-            root: classes.noicon,
+            root: classes.noicon
           }}
         />
       );
@@ -161,7 +162,7 @@ export class UserRoles extends Component {
           </IconButton>
         </div>
       ),
-      props: {},
+      props: {}
     };
   };
 
