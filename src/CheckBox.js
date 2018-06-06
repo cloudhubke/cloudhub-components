@@ -1,5 +1,7 @@
 import React from 'react';
-import { Checkbox, FormControlLabel, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import MuiCheckBox from '@material-ui/core/CheckBox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = {
   root: {
@@ -19,7 +21,11 @@ const checkbox = ({ input, label, classes }) => (
   <FormControlLabel
     classes={{ root: classes.root }}
     control={
-      <Checkbox label={label} checked={input.value} onChange={input.onChange} />
+      <MuiCheckBox
+        label={label}
+        checked={input.value}
+        onChange={input.onChange}
+      />
     }
     label={label}
   />

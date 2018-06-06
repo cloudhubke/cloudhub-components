@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import 'antd/lib/table/style/index.css';
-import { Table } from 'antd';
+import Table from 'antd/lib/table';
 
-import { IconButton } from '@material-ui/icons';
-import {
-  CheckBox as YesIcon,
-  CheckBoxOutlineBlank as NoIcon
-} from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import YesIcon from '@material-ui/icons/CheckBox';
+import NoIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+
 import { grey, green } from '@material-ui/core/colors';
 
 import permissions from './permissions.json';

@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Paper, withStyles, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+
 import AddIcon from '@material-ui/icons/Add';
 import PrintIcon from '@material-ui/icons/Print';
 import RefreshIcon from '@material-ui/icons/Cached';
-import { Input } from 'antd';
+import Input from 'antd/lib/input';
 import _ from 'lodash';
 
 const styles = {
