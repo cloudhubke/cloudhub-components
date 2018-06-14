@@ -10,12 +10,18 @@ class AntDatePicker extends Component {
   static defaultProps = {
     defaultValue: '',
     dateFormat: 'DD MMM, YYYY hh:mm',
-    showTime: false
+    showTime: false,
+    timestamp: true
   };
   componentDidMount() {}
   onDateChanged = date => {
+    const { timestamp, dateFormat } = this.props;
     if (date) {
-      this.props.input.onChange(date.format());
+      if (timestamp) {
+        this.props.input.onChange(date.valueOf());
+      } else {
+        this.props.input.onChange(date.format(dateFormat));
+      }
     } else {
       this.props.input.onChange('');
     }
