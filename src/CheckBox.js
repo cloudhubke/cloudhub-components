@@ -16,7 +16,6 @@ const styles = {
     marginRight: 0
   }
 };
-
 const checkbox = ({ input, label, classes }) => (
   <FormControlLabel
     classes={{ root: classes.root }}
