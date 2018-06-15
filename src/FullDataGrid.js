@@ -112,11 +112,6 @@ class FullDataGrid extends Component {
     columnWidths: {},
     hiddencolumns: [],
     allowColumnResizing: false,
-    defaultColumnWidths: [
-      { columnName: 'counter', width: 70 },
-      { columnName: 'actions', width: 150 },
-      ...this.props.columnWidths
-    ],
     data: [],
     onEdit: () => {},
     onDelete: () => {},
@@ -147,6 +142,11 @@ class FullDataGrid extends Component {
 
     this.state = {
       columns: [...this.props.columns, ...staticColumns],
+      defaultColumnWidths: [
+        { columnName: 'counter', width: 70 },
+        { columnName: 'actions', width: 150 },
+        ...this.props.columnWidths
+      ],
       sorting: [],
       addedRows: [],
       changedRows: {},
