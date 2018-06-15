@@ -22,8 +22,11 @@ import {
   GroupingPanel,
   DragDropProvider,
   Toolbar,
+  TableColumnResizing,
+  TableColumnReordering,
+  TableFilterRow,
   TableColumnVisibility,
-  TableFilterRow
+  ColumnChooser
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -328,14 +331,29 @@ class FullDataGrid extends Component {
               allowColumnReordering
             />
 
-            <TableHeaderRow allowSorting allowDragging />
+            {allowColumnResizing && (
+              <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
+            )}
+
+            <TableColumnReordering
+              defaultOrder={columns.map(column => column.name)}
+            />
+
+            <TableHeaderRow
+              showSortingControls
+              allowDragging
+              allowResizing={allowColumnResizing}
+            />
 
             <TableFilterRow
-              filterCellTemplate={({ column, setFilter }) => {
-                if (column.name === 'actions') {
+              cellComponent={props => {
+                if (
+                  props.column.name === 'actions' ||
+                  props.column.name === 'counter'
+                ) {
                   return <TableCell />;
                 }
-                return <TableCell />;
+                return <TableFilterRow.Cell {...props} />;
               }}
             />
             <TableSelection showSelectAll />
@@ -344,6 +362,7 @@ class FullDataGrid extends Component {
             <Toolbar />
             <GroupingPanel allowDragging />
             <PagingPanel pageSizes={allowedPageSizes} />
+            <ColumnChooser />
           </Grid>
         </div>
 
