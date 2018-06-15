@@ -112,6 +112,11 @@ class FullDataGrid extends Component {
     columnWidths: {},
     hiddencolumns: [],
     allowColumnResizing: false,
+    defaultColumnWidths: [
+      { columnName: 'counter', width: 70 },
+      { columnName: 'actions', width: 150 },
+      ...this.props.columnWidths
+    ],
     data: [],
     onEdit: () => {},
     onDelete: () => {},
@@ -285,7 +290,8 @@ class FullDataGrid extends Component {
       sorting,
       currentPage,
       pageSize,
-      allowedPageSizes
+      allowedPageSizes,
+      defaultColumnWidths
     } = this.state;
 
     return (
@@ -360,7 +366,7 @@ class FullDataGrid extends Component {
             />
             <TableSelection showSelectAll />
             <TableGroupRow />
-            <TableColumnVisibility defaultHiddenColumns={hiddencolumns} />
+            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
             <Toolbar />
             <GroupingPanel allowDragging />
             <PagingPanel pageSizes={allowedPageSizes} />
