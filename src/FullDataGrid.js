@@ -111,6 +111,7 @@ class FullDataGrid extends Component {
     columns: [],
     columnWidths: {},
     hiddencolumns: [],
+    allowColumnResizing: false,
     data: [],
     onEdit: () => {},
     onDelete: () => {},
@@ -274,6 +275,7 @@ class FullDataGrid extends Component {
       data,
       classes,
       deletingRows,
+      allowColumnResizing,
       hiddencolumns,
       rowComponent
     } = this.props;
