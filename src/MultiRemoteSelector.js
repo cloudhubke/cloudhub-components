@@ -16,29 +16,34 @@ export class MultiRemoteSelector extends Component {
     multi: false
   };
 
-  static getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, prevState) {
     const { value, displayField } = nextProps;
     if (!value || _.isEmpty(value) || !Array.isArray(value)) {
       return {
-        opts: [],
-        selectedValue: []
+        selectedValue: prevState.selectedValue || []
       };
     } else {
-      const opts = value.map((item, index) => ({
+      const opts =
+        prevState.opts.length > 0
+          ? prevState.opts
+          : [...(value || [])].map((item, index) => ({
+              ...item,
+              key: item._id,
+              value: index,
+              label: item[displayField]
+            }));
+
+      const selectedValue = [...(value || [])].map((item, index) => ({
         ...item,
         key: item._id,
-        value: index,
+        value: opts.findIndex(item => item.key === value._id),
         label: item[displayField]
       }));
-
       return {
         opts,
-        selectedValue: value.map(item => ({
-          ...item,
-          key: item._id,
-          value: opts.findIndex(item => item.key === value._id),
-          label: item[displayField]
-        }))
+        selectedValue: [...(value || [])].map(i =>
+          opts.findIndex(item => item.key === i._id)
+        )
       };
     }
   }
@@ -58,16 +63,7 @@ export class MultiRemoteSelector extends Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
-      const { value, displayField } = this.props;
-      if (!value || _.isEmpty(value)) {
-        this.setState({
-          selectedValue: []
-        });
-      }
-    }
-  }
+  componentDidUpdate(prevProps) {}
 
   loadOptions = (options = []) => {
     const { displayField, value } = this.props;
@@ -103,8 +99,14 @@ export class MultiRemoteSelector extends Component {
   };
   logChange = val => {
     const { onChange, returnkeys } = this.props;
+    const { opts } = this.state;
     if (val) {
-      this.setState({ selectedValue: val, searchText: '' });
+      this.setState({
+        selectedValue: [...(val || [])].map(i =>
+          opts.findIndex(item => item.key === i._id)
+        ),
+        searchText: ''
+      });
     } else {
       this.setState({ selectedValue: [], searchText: '' });
       this.loadOptions(this.state.firstoptions);
@@ -127,8 +129,9 @@ export class MultiRemoteSelector extends Component {
             obj[key] = objValue[key];
           });
           return obj;
+        } else {
+          return objValue;
         }
-        return objValue;
       });
       return onChange(retval);
     }
