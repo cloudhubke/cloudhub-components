@@ -179,22 +179,6 @@ export class RemoteSelector extends Component {
 
   render() {
     const { meta, name, placeholder, disabled } = this.props;
-
-    // const renderClear = () => {
-    //   if (this.state.selectedValue !== '') {
-    //     return (
-    //       <IconButton style={{ height: 20 }}>
-    //         <ClearIcon style={{ height: 12, width: 12 }} />
-    //       </IconButton>
-    //     );
-    //   }
-    //   return (
-    //     <IconButton onClick={this.refreShOptions} style={{ height: 20 }}>
-    //       <RefreshIcon style={{ height: 12, width: 12 }} />
-    //     </IconButton>
-    //   );
-    // };
-
     return (
       <div className={this.props.selectUp ? 'select-up' : {}}>
         <Dropdown
