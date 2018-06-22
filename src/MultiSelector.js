@@ -10,7 +10,8 @@ export class Select extends Component {
     onChange: () => {},
     displayField: '',
     returnkeys: [],
-    url: ''
+    url: '',
+    disabled: false
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -102,7 +103,7 @@ export class Select extends Component {
   };
 
   render() {
-    const { meta, name, placeholder } = this.props;
+    const { meta, name, placeholder, disabled } = this.props;
 
     return (
       <div className="field">
@@ -116,6 +117,7 @@ export class Select extends Component {
           openOnFocus
           multi
           onBlurResetsInput={false}
+          disabled={disabled}
         />
         {meta.touched &&
           meta.error && <span className="error">{meta.error}</span>}

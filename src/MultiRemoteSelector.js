@@ -13,7 +13,8 @@ export class MultiRemoteSelector extends Component {
     url: '',
     placeholder: 'Select...',
     value: [],
-    multi: false
+    multi: false,
+    disabled: false
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -163,7 +164,7 @@ export class MultiRemoteSelector extends Component {
   };
 
   render() {
-    const { meta, name, placeholder } = this.props;
+    const { meta, name, placeholder, disabled } = this.props;
     return (
       <div className={this.props.selectUp ? 'select-up' : {}}>
         <Dropdown
@@ -180,6 +181,7 @@ export class MultiRemoteSelector extends Component {
           isLoading={this.state.isFetching}
           placeholder={placeholder}
           inputProps={{ value: this.state.searchText }}
+          disabled={disabled}
         />
         {meta.touched &&
           meta.error && <span className="error">{meta.error}</span>}

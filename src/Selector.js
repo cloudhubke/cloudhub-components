@@ -11,7 +11,8 @@ export class Select extends Component {
     displayField: '',
     returnkeys: [],
     url: '',
-    multi: false
+    multi: false,
+    disabled: false
   };
 
   constructor(props) {
@@ -95,7 +96,7 @@ export class Select extends Component {
   };
 
   render() {
-    const { meta, name, placeholder, multi } = this.props;
+    const { meta, name, placeholder, multi, disabled } = this.props;
 
     return (
       <div className="field">
@@ -109,6 +110,7 @@ export class Select extends Component {
           openOnFocus
           multi={multi}
           onBlurResetsInput={false}
+          disabled={disabled}
         />
         {meta.touched &&
           meta.error && <span className="error">{meta.error}</span>}

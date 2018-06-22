@@ -14,7 +14,8 @@ export class RemoteSelector extends Component {
     returnkeys: [],
     url: '',
     placeholder: 'Select...',
-    selectUp: false
+    selectUp: false,
+    disabled: false
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -177,7 +178,7 @@ export class RemoteSelector extends Component {
   };
 
   render() {
-    const { meta, name, placeholder } = this.props;
+    const { meta, name, placeholder, disabled } = this.props;
 
     // const renderClear = () => {
     //   if (this.state.selectedValue !== '') {
@@ -208,6 +209,7 @@ export class RemoteSelector extends Component {
           onOpen={() => this.handleInputChange('')}
           isLoading={this.state.isFetching}
           placeholder={placeholder}
+          disabled={disabled}
         />
         {meta.touched &&
           meta.error && <span className="error">{meta.error}</span>}
