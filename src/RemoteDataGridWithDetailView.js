@@ -551,7 +551,6 @@ class RemoteDataGrid extends React.PureComponent {
     );
   }
 }
-
 RemoteDataGrid.propTypes = {
   classes: PropTypes.object.isRequired
 };
