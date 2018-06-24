@@ -10,7 +10,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText
-} from 'material-ui';
+} from '@material-ui/core';
 import { addBank } from '../store/actions';
 
 const styles = () => ({
@@ -110,4 +110,9 @@ const validate = values => {
 export default reduxForm({
   form: 'bankForm',
   validate
-})(connect(null, { addBank })(withStyles(styles)(BankForm)));
+})(
+  connect(
+    null,
+    { addBank }
+  )(withStyles(styles)(BankForm))
+);

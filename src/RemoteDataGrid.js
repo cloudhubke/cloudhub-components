@@ -437,7 +437,7 @@ class RemoteDataGrid extends React.PureComponent {
     } = this.state;
 
     return (
-      <Paper>
+      <Paper style={{ position: 'relative', margin: 5 }}>
         {this.renderHeader()}
         <div className="grid-container">
           <Grid rows={data.items} columns={columns}>
@@ -514,8 +514,9 @@ class RemoteDataGrid extends React.PureComponent {
             <PagingPanel pageSizes={allowedPageSizes} />
             <ColumnChooser />
           </Grid>
+
+          {loading && <Loading />}
         </div>
-        {loading && <Loading />}
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
-import { TableCell } from 'material-ui/Table';
-import { FullDataGrid } from 'cloudhub-react-components';
+import Paper from '@material-ui/core/Paper';
+import TableCell from '@material-ui/core/TableCell';
+import RemoteDataGrid from 'cloudhub-react-components/dist/RemoteDataGrid';
 
 import { ProgressBarCell } from './templates/progress-bar-cell';
 import { HighlightedCell } from './templates/highlighted-cell';
@@ -16,7 +16,7 @@ const Cell = props => {
   if (props.column.name === 'amount') {
     return <HighlightedCell {...props} />;
   }
-  return <TableCell>{props.row[props.column.name] || ''}</TableCell>;
+  return <TableCell>Helo</TableCell>;
 };
 Cell.propTypes = {
   column: PropTypes.shape({ name: PropTypes.string }).isRequired
@@ -36,7 +36,7 @@ export default class Demo extends React.PureComponent {
         { name: 'customer', title: 'Customer' }
       ],
       tableColumnExtensions: [{ columnName: 'amount', align: 'right' }],
-      rows: generateRows({ columnValues: globalSalesValues, length: 1000 }),
+      rows: generateRows({ columnValues: globalSalesValues, length: 20 }),
       pageSizes: [5, 10, 15]
     };
   }
@@ -44,22 +44,20 @@ export default class Demo extends React.PureComponent {
     const { rows, columns, tableColumnExtensions, pageSizes } = this.state;
 
     return (
-      <Paper>
-        <FullDataGrid
-          title="Banks"
-          columns={columns}
-          allowColumnResizing={false}
-          onQueryChange={this.getRecords}
-          data={rows}
-          templates={Cell}
-          onAdd={() => {}}
-          onRefresh={() => {}}
-          onDelete={this.confirmDelete}
-          onDeleteRows={this.deleteRows}
-          onCancelDelete={this.cancelDelete}
-          onEdit={this.editRow}
-        />
-      </Paper>
+      <RemoteDataGrid
+        title="Banks"
+        columns={columns}
+        allowColumnResizing={false}
+        onQueryChange={this.getRecords}
+        data={{ items: rows, totalCount: 20 }}
+        templates={Cell}
+        onAdd={() => {}}
+        onRefresh={() => {}}
+        onDelete={this.confirmDelete}
+        onDeleteRows={this.deleteRows}
+        onCancelDelete={this.cancelDelete}
+        onEdit={this.editRow}
+      />
     );
   }
 }

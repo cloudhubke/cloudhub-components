@@ -36,6 +36,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Paper from '@material-ui/core/Paper';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -295,7 +296,7 @@ class FullDataGrid extends Component {
     } = this.state;
 
     return (
-      <div>
+      <Paper style={{ position: 'relative', margin: 5 }}>
         {this.renderHeader()}
         <div className="grid-container">
           <Grid rows={data} columns={columns}>
@@ -403,7 +404,7 @@ class FullDataGrid extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Paper>
     );
   }
 }

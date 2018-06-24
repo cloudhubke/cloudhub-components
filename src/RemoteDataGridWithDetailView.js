@@ -37,6 +37,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Dialog from '@material-ui/core/Dialog';
+import Paper from '@material-ui/core/Paper';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -439,7 +440,7 @@ class RemoteDataGrid extends React.PureComponent {
     } = this.state;
 
     return (
-      <div>
+      <Paper style={{ position: 'relative', margin: 5 }}>
         {this.renderHeader()}
         <div className="grid-container">
           <Grid rows={data.items} columns={columns}>
@@ -546,7 +547,7 @@ class RemoteDataGrid extends React.PureComponent {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Paper>
     );
   }
 }

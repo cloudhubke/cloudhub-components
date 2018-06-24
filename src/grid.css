@@ -1,3 +1,8 @@
+.grid-container {
+  margin: 5px;
+  max-width: 100%;
+  overflow: auto;
+}
 .grid-container td {
   overflow: hidden;
   padding-left: 10px;

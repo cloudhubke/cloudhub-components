@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withStyles, TableCell } from 'material-ui';
+import { withStyles, TableCell } from '@material-ui/core';
 import { RemoteDataGrid } from 'cloudhub-react-components';
 
 import BankForm from '../containers/BankForm';
@@ -102,9 +102,12 @@ const mapStateToProps = ({ bank }) => ({
   banks: bank.banks,
   totalCount: bank.totalCount
 });
-export default connect(mapStateToProps, {
-  getBanks,
-  editBankRow,
-  deleteBanks,
-  addToDeleteBanks
-})(withStyles(styles)(Bank));
+export default connect(
+  mapStateToProps,
+  {
+    getBanks,
+    editBankRow,
+    deleteBanks,
+    addToDeleteBanks
+  }
+)(withStyles(styles)(Bank));

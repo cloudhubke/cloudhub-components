@@ -21,14 +21,18 @@ class App extends Component {
     }, 5000);
   }
   render() {
+    console.log('====================================');
+    console.log('RENDERING>>>>');
+    console.log('====================================');
     return (
-      <div>
+      <div style={{ padding: 30 }}>
         {
           // <CourseSelector />
           // <ContactForm />
-          <GridDemo />
+          // <GridDemo />
           // <Bank />
         }
+        <GridDemo />
       </div>
     );
   }
