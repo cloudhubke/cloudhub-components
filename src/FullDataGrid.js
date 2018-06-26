@@ -270,7 +270,7 @@ class FullDataGrid extends Component {
           {...permissions}
           title={this.props.title}
           onAdd={this.props.onAdd}
-          onRefresh={this.props.onReresh}
+          onRefresh={this.props.onRefresh}
           onPrint={this.props.onPrint}
         />
       );
