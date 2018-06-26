@@ -15,7 +15,8 @@ class AntDatePicker extends Component {
     onChange: () => {},
     input: {
       onChange: () => {}
-    }
+    },
+    meta: {}
   };
   componentDidMount() {}
   onDateChanged = date => {

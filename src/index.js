@@ -19,6 +19,7 @@ import Selector from './Selector';
 import SimpleDataGrid from './SimpleDataGrid';
 import StaticListSelector from './StaticListSelector';
 import TableHeaderBar from './TableHeaderBar';
+import DateFilter from './DateFilter';
 import UserRoles from './UserRoles';
 
 export {
@@ -43,5 +44,6 @@ export {
   SimpleDataGrid,
   StaticListSelector,
   TableHeaderBar,
-  UserRoles
+  UserRoles,
+  DateFilter
 };
