@@ -50,7 +50,7 @@ import ViewList from '@material-ui/icons/ViewList';
 import { withStyles } from '@material-ui/core/styles';
 import TableHeaderBar from './TableHeaderBar';
 import { red } from '@material-ui/core/colors';
-import { Loading } from './Loading';
+import GridLoading from './GridLoading';
 import './grid.css';
 
 const styleSheet = theme => ({
@@ -516,7 +516,7 @@ class RemoteDataGrid extends React.PureComponent {
             <PagingPanel pageSizes={allowedPageSizes} />
           </Grid>
         </div>
-        {loading && <Loading />}
+        {loading && <GridLoading />}
 
         <Dialog
           open={!!deletingRows.length}
