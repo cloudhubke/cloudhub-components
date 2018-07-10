@@ -39,7 +39,11 @@ class ImagesUpload extends Component {
     preferredCountries: ['ke'],
     defaultCountry: 'ke',
     value: '',
-    limit: 1
+    limit: 1,
+    input: {
+      value: {},
+      onChange: () => {}
+    }
   };
 
   constructor(props) {
@@ -52,15 +56,16 @@ class ImagesUpload extends Component {
     };
   }
 
-  componentWillMount() {
+  static getDerivedStateFromProps(nextProps, prevState) {
     let images = [];
-    if (this.props.input.value) {
-      if (Array.isArray(this.props.input.value)) {
-        images = this.props.input.value;
+    if (nextProps.input.value) {
+      if (Array.isArray(nextProps.input.value)) {
+        images = nextProps.input.value;
       } else {
-        images = [this.props.input.value];
+        images = [nextProps.input.value];
       }
-      this.setState({
+      return {
+        ...prevState,
         fileList: images.map((item, index) => ({
           ...item,
           uid: item.uid || index,
@@ -68,7 +73,9 @@ class ImagesUpload extends Component {
           status: 'done',
           url: item.url || ''
         }))
-      });
+      };
+    } else {
+      return { ...prevState };
     }
   }
 
@@ -89,12 +96,13 @@ class ImagesUpload extends Component {
       return item;
     });
 
-    this.setState({ fileList: files });
-    if (this.props.limit === 1) {
-      this.props.input.onChange(files[0]);
-    } else {
-      this.props.input.onChange(files);
-    }
+    this.setState({ fileList: files }, () => {
+      if (this.props.limit === 1) {
+        this.props.input.onChange(files[0]);
+      } else {
+        this.props.input.onChange(files);
+      }
+    });
   };
 
   handleRemove = file => {

@@ -11,7 +11,9 @@ class StaticListSelector extends Component {
     value: null,
     onChange: () => {},
     meta: {},
-    list: []
+    list: [],
+    displayField: '',
+    returnkeys: []
   };
   constructor(props) {
     super(props);
@@ -45,6 +47,8 @@ class StaticListSelector extends Component {
             input.onBlur();
           }
         }}
+        displayField={this.props.displayField}
+        returnkeys={this.props.returnkeys}
         meta={meta}
       />
     );

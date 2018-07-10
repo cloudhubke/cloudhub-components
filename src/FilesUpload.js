@@ -70,7 +70,12 @@ class FilesUpload extends Component {
     defaultCountry: 'ke',
     value: '',
     limit: 1,
-    url: '/fileapi/upload/file'
+    url: '/fileapi/upload/file',
+    input: {
+      value: {},
+      onChange: () => {}
+    },
+    onChange: () => {}
   };
 
   constructor(props) {
@@ -81,35 +86,33 @@ class FilesUpload extends Component {
     };
   }
 
-  componentWillMount() {
-    if (this.props.input.value) {
-      if (Array.isArray(this.props.input.value)) {
-        this.setState({
-          fileList: this.props.input.value.map((item, index) => ({
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.input.value) {
+      if (Array.isArray(nextProps.input.value)) {
+        return {
+          ...prevState,
+          fileList: nextProps.input.value.map((item, index) => ({
             ...item,
             uid: item.uid || index,
             name: item.name || 'xxx.png',
             status: 'done',
             url: item.url || ''
           }))
-        });
+        };
       } else {
-        this.setState({
-          fileList: [this.props.input.value].map((item, index) => ({
+        return {
+          ...prevState,
+          fileList: [nextProps.input.value].map((item, index) => ({
             ...item,
             uid: item.uid || index,
             name: item.name || item.filename || 'xxx.png',
             status: 'done',
             url: item.url || item.fd || ''
           }))
-        });
+        };
       }
     }
   }
-
-  componentWillReceiveProps = nextProps => {
-    // console.log('NXT', nextProps.input.value);
-  };
 
   removeUnUploadedFiles() {
     const { fileList } = this.state;
@@ -119,7 +122,7 @@ class FilesUpload extends Component {
       this.setState({ fileList: newfilelist });
     }, 100);
   }
-  handleChange = ({ fileList }) => {
+  handleChange = ({ file, fileList }) => {
     const files = fileList.map((item, index) => {
       if (item.response) {
         return { ...item.response[0], uid: index, status: 'done' };
@@ -128,11 +131,13 @@ class FilesUpload extends Component {
     });
 
     if (this.props.limit === 1) {
-      this.setState({ fileList: [...files[0]] });
-      this.props.input.onChange(files[0]);
+      this.setState({ fileList: [...files[0]] }, () => {
+        this.props.input.onChange(files[0]);
+      });
     } else {
-      this.setState({ fileList: [...files] });
-      this.props.input.onChange(files);
+      this.setState({ fileList: [...files] }, () => {
+        this.props.input.onChange(files);
+      });
     }
   };
 
