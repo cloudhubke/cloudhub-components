@@ -12,30 +12,18 @@ export default class Loading extends Component {
   }
 
   render() {
-    if (this.props.isLoading) {
-      if (this.props.timedOut) {
-        return <div>Loader timed out!</div>;
-      }
-      if (this.props.pastDelay) {
-        return (
-          <div
-            style={{
-              height: '100%',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <CircularProgress color="secondary" size={this.props.size} />
-          </div>
-        );
-      }
-      return null;
-    }
-    if (this.props.error) {
-      return <div>Error!</div>;
-    }
-    return null;
+    return (
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <CircularProgress color="secondary" size={this.props.size} />
+      </div>
+    );
   }
 }
