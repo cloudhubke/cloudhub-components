@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { DatePicker } from 'antd';
+import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
-import 'antd/lib/date-picker/style/index.css';
 // import './datepicker.css';
 
 const { RangePicker } = DatePicker;
@@ -16,9 +15,9 @@ class AntRangePicker extends Component {
     defaultValue: [moment().startOf('day'), moment().endOf('day')],
     onChange: () => {},
     input: {
-      onChange: () => {},
+      onChange: () => {}
     },
-    meta: {},
+    meta: {}
   };
   componentDidMount() {}
   onDateChanged = date => {
@@ -49,7 +48,8 @@ class AntRangePicker extends Component {
           format={dateFormat}
           onChange={this.onDateChanged}
         /> */}
-        {meta.touched && meta.error && <div className="error">{meta.error}</div>}
+        {meta.touched &&
+          meta.error && <div className="error">{meta.error}</div>}
       </div>
     );
   }

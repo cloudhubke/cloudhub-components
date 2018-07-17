@@ -66,8 +66,6 @@ const styles = () => ({
 
 class FilesUpload extends Component {
   static defaultProps = {
-    preferredCountries: ['ke'],
-    defaultCountry: 'ke',
     value: '',
     limit: 1,
     url: '/fileapi/upload/file',

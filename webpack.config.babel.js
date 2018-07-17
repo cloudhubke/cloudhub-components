@@ -21,5 +21,5 @@ module.exports = {
       }
     ]
   },
-  externals: ['axios', 'react', 'react-dom', '@material-ui/core', 'antd']
+  externals: ['react']
 };
