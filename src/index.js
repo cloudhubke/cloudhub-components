@@ -20,7 +20,6 @@ import SimpleDataGrid from './SimpleDataGrid';
 import StaticListSelector from './StaticListSelector';
 import TableHeaderBar from './TableHeaderBar';
 import DateFilter from './DateFilter';
-import UserRoles from './UserRoles';
 
 export {
   CheckBox,
@@ -44,6 +43,5 @@ export {
   SimpleDataGrid,
   StaticListSelector,
   TableHeaderBar,
-  UserRoles,
   DateFilter
 };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import { reduxForm, Field } from 'redux-form';
 import Input from 'antd/lib/input';
 import moment from 'moment';

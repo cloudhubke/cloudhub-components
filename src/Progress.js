@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { lightGreen } from '@material-ui/core/colors';
+import lightGreen from '@material-ui/core/colors/lightGreen';
 
 const lgreen = lightGreen[500];
 

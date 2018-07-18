@@ -4,7 +4,7 @@ import Upload from 'antd/lib/upload';
 import Icon from 'antd/lib/icon';
 import Modal from 'antd/lib/modal';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = () => ({
   imagesList: {

@@ -47,9 +47,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ViewList from '@material-ui/icons/ViewList';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import TableHeaderBar from './TableHeaderBar';
-import { red } from '@material-ui/core/colors';
+import red from '@material-ui/core/colors/red';
 import GridLoading from './GridLoading';
 import './grid.css';
 

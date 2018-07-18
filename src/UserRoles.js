@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import Table from 'antd/lib/table';
 
 import IconButton from '@material-ui/core/IconButton';
 import YesIcon from '@material-ui/icons/CheckBox';
 import NoIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
-import { grey, green } from '@material-ui/core/colors';
+import grey from '@material-ui/core/colors/grey';
+import green from '@material-ui/core/colors/green';
 
 import permissions from './permissions.json';
 

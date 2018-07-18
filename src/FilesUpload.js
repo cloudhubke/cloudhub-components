@@ -5,7 +5,7 @@ import Icon from 'antd/lib/icon';
 import Progress from 'antd/lib/progress';
 import Input from 'antd/lib/input';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 

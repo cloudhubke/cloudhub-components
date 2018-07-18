@@ -1,25 +1,29 @@
-const join = require().join;
+const path = require('path');
 
 module.exports = {
   devtool: 'source-map',
   entry: './src/index',
   output: {
-    path: join(__dirname, 'dist'),
-    libraryTarget: 'umd'
+    path: path.resolve(__dirname, 'build'),
+    filename: 'index.js',
+    libraryTarget: 'commonjs2'
   },
   module: {
-    loaders: [
-      { test: /\.js$/, loader: 'babel-loader' },
-      { test: /\.css$/, loader: 'css-loader' },
+    rules: [
       {
-        test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.svg$/,
-        use: ['raw-loader']
+        test: /\.js$/,
+        include: path.resolve(__dirname, 'src'),
+        exclude: /(node_modules|bower_components|build)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['es2015']
+          }
+        }
       }
     ]
   },
-  externals: ['react']
+  externals: {
+    react: 'commonjs react' // this line is just to use the React dependency of our parent-testing-project instead of using our own React.
+  }
 };
