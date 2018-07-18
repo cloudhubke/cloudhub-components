@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import 'antd/lib/table/style/index.css';
 import Table from 'antd/lib/table';
 
 import IconButton from '@material-ui/core/IconButton';
