@@ -41,12 +41,6 @@ class AntRangePicker extends Component {
           placeholder={['Start Time', 'End Time']}
           onChange={this.onDateChanged}
         />
-        {/* <DatePicker
-          style={{ width: '100%' }}
-          defaultValue={value ? moment(value) : null}
-          format={dateFormat}
-          onChange={this.onDateChanged}
-        /> */}
         {meta.touched &&
           meta.error && <div className="error">{meta.error}</div>}
       </div>
