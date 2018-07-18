@@ -1,6 +1,6 @@
 {
   "name": "cloudhub-react-components",
-  "version": "1.9.7",
+  "version": "0.0.0-development",
   "description": "Various components to use in react projects",
   "main": "dist/index.js",
   "files": [
@@ -72,7 +72,7 @@
     "regenerator-runtime": "0.11.1",
     "rimraf": "2.6.2",
     "sass-loader": "6.0.6",
-    "semantic-release": "^11.0.2",
+    "semantic-release": "^15.8.0",
     "style-loader": "0.19.1",
     "uglifyjs-webpack-plugin": "1.1.6",
     "webpack": "3.10.0"
