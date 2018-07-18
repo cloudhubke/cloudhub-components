@@ -3,9 +3,15 @@ const join = require().join;
 module.exports = {
   devtool: 'source-map',
   entry: './src/index',
+  include: [
+    // Include everything from your app path
+    path.resolve(__dirname, './src')
+  ],
+  exclude: /node_modules/,
   output: {
     path: join(__dirname, 'dist'),
-    libraryTarget: 'umd'
+    libraryTarget: 'umd-module',
+    library: 'CloudhubComponents'
   },
   module: {
     loaders: [
@@ -21,5 +27,5 @@ module.exports = {
       }
     ]
   },
-  externals: ['react']
+  externals: [/^@material-ui\/core\/.*/]
 };
