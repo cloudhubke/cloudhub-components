@@ -102,7 +102,7 @@
   "babel": {
     "presets": [
       [
-        "env",
+        "es2015",
         {
           "modules": false
         }
@@ -110,8 +110,8 @@
       "react"
     ],
     "plugins": [
+      "external-helpers",
       "transform-class-properties",
-      "transform-react-jsx",
       "transform-object-rest-spread"
     ]
   }
