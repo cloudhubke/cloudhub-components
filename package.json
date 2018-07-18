@@ -101,6 +101,12 @@
   },
   "babel": {
     "presets": [
+      [
+        "env",
+        {
+          "modules": false
+        }
+      ],
       "react"
     ],
     "plugins": [
