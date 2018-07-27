@@ -3,7 +3,7 @@ import Dropdown from 'react-select';
 import _ from 'lodash';
 import axios from 'axios';
 
-export class MultiRemoteSelector extends Component {
+class MultiRemoteSelector extends Component {
   static defaultProps = {
     axiosinstance: () => axios.create({}),
     options: [],

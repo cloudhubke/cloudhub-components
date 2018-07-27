@@ -28,6 +28,7 @@ import {
   TableFilterRow
 } from '@devexpress/dx-react-grid-material-ui';
 
+import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -36,13 +37,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import red from '@material-ui/core/colors/red';
+
+import { red } from '@material-ui/core/colors';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ViewList from '@material-ui/icons/ViewList';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from '@material-ui/core/styles';
 import TableHeaderBar from './TableHeaderBar';
 import './grid.css';
 
@@ -297,9 +299,8 @@ class DataGridWithDetailView extends React.PureComponent {
     } = this.state;
 
     return (
-      <div>
+      <Paper className="grid-container">
         {this.renderHeader()}
-        <div className="grid-container">
           <Grid
             rows={data}
             columns={columns}
@@ -365,7 +366,6 @@ class DataGridWithDetailView extends React.PureComponent {
             <GroupingPanel allowDragging />
             <PagingPanel pageSizes={allowedPageSizes} />
           </Grid>
-        </div>
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}
@@ -395,7 +395,7 @@ class DataGridWithDetailView extends React.PureComponent {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Paper>
     );
   }
 }

@@ -8,17 +8,20 @@ import url from 'rollup-plugin-url';
 import pkg from './package.json';
 
 export default {
-  input: 'src/index.js',
+  input: ['src/CheckBox.js'],
+  experimentalCodeSplitting: true,
   output: [
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
+      dir: 'cjs'
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true
+      sourcemap: true,
+      dire: 'es'
     }
   ],
   plugins: [
@@ -27,10 +30,10 @@ export default {
       modules: true
     }),
     url(),
+    resolve(),
     babel({
       exclude: 'node_modules/**'
     }),
-    resolve(),
     commonjs()
   ]
 };

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-
+import isEmpty from 'lodash/isEmpty';
 import Upload from 'antd/lib/upload';
 import Icon from 'antd/lib/icon';
 import Modal from 'antd/lib/modal';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
   imagesList: {
@@ -41,9 +41,11 @@ class ImagesUpload extends Component {
     value: '',
     limit: 1,
     input: {
-      value: {},
+      value: null,
       onChange: () => {}
-    }
+    },
+    value: null,
+    onChange: () => {}
   };
 
   constructor(props) {
@@ -58,11 +60,13 @@ class ImagesUpload extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let images = [];
-    if (nextProps.input.value) {
-      if (Array.isArray(nextProps.input.value)) {
-        images = nextProps.input.value;
+    const value = nextProps.input.value || nextProps.value || {};
+
+    if (!isEmpty(value)) {
+      if (Array.isArray(value)) {
+        images = value;
       } else {
-        images = [nextProps.input.value];
+        images = [value];
       }
       return {
         ...prevState,
@@ -75,7 +79,13 @@ class ImagesUpload extends Component {
         }))
       };
     } else {
-      return { ...prevState };
+      return {
+        ...prevState,
+        isMounted: true,
+        previewVisible: false,
+        previewImage: '',
+        fileList: []
+      };
     }
   }
 
@@ -99,8 +109,10 @@ class ImagesUpload extends Component {
     this.setState({ fileList: files }, () => {
       if (this.props.limit === 1) {
         this.props.input.onChange(files[0]);
+        this.props.onChange(files[0]);
       } else {
         this.props.input.onChange(files);
+        this.props.onChange(files);
       }
     });
   };
@@ -113,8 +125,10 @@ class ImagesUpload extends Component {
     this.setState({ fileList: filelist });
     if (!filelist.length && this.props.limit === 1) {
       this.props.input.onChange({});
+      this.props.onChange({});
     } else {
       this.props.input.onChange(filelist);
+      this.props.onChange(filelist);
     }
   };
 

@@ -3,9 +3,8 @@ import {
   Grid,
   Table,
   TableHeaderRow,
-  columnExtensions,
   DragDropProvider,
-  TableColumnReordering
+  TableColumnReordering,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 
@@ -14,8 +13,9 @@ export class SimpleDataGrid extends React.PureComponent {
     templates: ({ row, column }) => (
       <TableCell>{`${row[column.name]}`}</TableCell>
     ),
-    columnExtensions: []
+    columnExtensions: [],
   };
+
   render() {
     const { rows, columns, columnExtensions } = this.props;
 

@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
 import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
 import './datepicker.css';
-
-const styles = () => ({});
 
 class AntDatePicker extends Component {
   static defaultProps = {
     defaultValue: '',
     dateFormat: 'DD MMM, YYYY hh:mm a',
-    showTime: true,
+    showTime: false,
     timestamp: true,
     onChange: () => {},
     input: {
@@ -55,4 +52,4 @@ class AntDatePicker extends Component {
   }
 }
 
-export default withStyles(styles)(AntDatePicker);
+export default AntDatePicker;

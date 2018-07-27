@@ -3,7 +3,7 @@ import Dropdown from 'react-select';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
 
-export class Select extends Component {
+class Select extends Component {
   static defaultProps = {
     options: [],
     placeholder: 'Select...',

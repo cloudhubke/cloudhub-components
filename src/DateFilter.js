@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
 import { reduxForm, Field } from 'redux-form';
 import Input from 'antd/lib/input';
 import moment from 'moment';
@@ -28,7 +27,7 @@ class DateFilter extends Component {
     const { meta, classes } = this.props;
     return (
       <div>
-        <div className={classes.fieldItem}>
+        <div style={styles.fieldItem}>
           <label>Date Filter</label>
           <AntRangePicker
             defaultValue={this.props.Range}
@@ -43,4 +42,4 @@ class DateFilter extends Component {
   }
 }
 
-export default withStyles(styles)(DateFilter);
+export default DateFilter;

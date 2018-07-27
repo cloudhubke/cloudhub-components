@@ -5,13 +5,8 @@ import Icon from 'antd/lib/icon';
 import Progress from 'antd/lib/progress';
 import Input from 'antd/lib/input';
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-
-import UploadIcon from '@material-ui/icons/ArrowUpward';
-import Close from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import Button from 'antd/lib/button';
 
 const styles = () => ({
   fileList: {
@@ -57,10 +52,7 @@ const styles = () => ({
     alignItems: 'center'
   },
   iconButton: {
-    border: 0,
-    height: 'auto',
-    width: 'auto',
-    padding: '2px'
+    marginLeft: 5
   }
 });
 
@@ -110,6 +102,7 @@ class FilesUpload extends Component {
         };
       }
     }
+    return { ...prevState };
   }
 
   removeUnUploadedFiles() {
@@ -167,8 +160,8 @@ class FilesUpload extends Component {
 
     const { meta } = this.props;
     const uploadButton = (
-      <Button variant="raised">
-        <UploadIcon /> upload
+      <Button style={{ height: 65, marginBottom: 10 }}>
+        <Icon type="upload" /> upload
       </Button>
     );
 
@@ -199,24 +192,24 @@ class FilesUpload extends Component {
         </Upload>
         <List
           size="large"
-          header={<Typography variant="title">Files</Typography>}
+          header={<p style={{ fontWeight: 'bold' }}>Files</p>}
           bordered
           dataSource={fileList}
           renderItem={(item, index) => (
             <List.Item>
               <div className={classes.listItem}>
                 <Icon type="paper-clip" />
-                <Typography variant="body1" style={{ marginLeft: 20 }}>
+                <p style={{ fontWeight: 'bold', marginLeft: 20 }}>
                   {index + 1}.
-                </Typography>
-                <Typography variant="body1" style={{ flex: 1, marginLeft: 5 }}>
+                </p>
+                <p style={{ fontWeight: 'bold', marginLeft: 20, flex: 1 }}>
                   <Input
                     defaultValue={item.FileName || item.name}
                     onChange={e =>
                       this.changeItemName({ FileName: e.target.value, index })
                     }
                   />
-                </Typography>
+                </p>
 
                 {item.percent && (
                   <Progress
@@ -226,12 +219,13 @@ class FilesUpload extends Component {
                   />
                 )}
 
-                <IconButton
-                  classes={{ root: classes.iconButton }}
+                <Button
+                  shape="circle"
+                  className={classes.iconButton}
                   onClick={() => this.handleRemove(item)}
                 >
-                  <Close />
-                </IconButton>
+                  <Icon type="close" />
+                </Button>
               </div>
             </List.Item>
           )}

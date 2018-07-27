@@ -4,7 +4,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import './react-select.css';
 
-export class RemoteSelector extends Component {
+class RemoteSelector extends Component {
   static defaultProps = {
     params: {},
     axiosinstance: () => axios.create({}),

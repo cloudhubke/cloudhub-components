@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -17,7 +17,7 @@ const styles = {
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   inputs: {
     display: 'flex',
@@ -25,13 +25,13 @@ const styles = {
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   buttonStyle: {
     fontWeight: 500,
     textTransform: 'capitalize',
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 };
 
 class TableHeaderBar extends Component {
@@ -45,15 +45,15 @@ class TableHeaderBar extends Component {
       allowadd: false,
       allowedit: false,
       allowdelete: false,
-      allowprint: false
-    }
+      allowprint: false,
+    },
   };
+
   constructor(props) {
     super(props);
     this.state = {
-      value: 0
+      value: 0,
     };
-
     this.onSearch = _.debounce(this.onSearch, 500);
   }
 

@@ -10,7 +10,7 @@ import {
   IntegratedGrouping,
   IntegratedPaging,
   IntegratedSorting,
-  IntegratedSelection
+  IntegratedSelection,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -26,7 +26,7 @@ import {
   TableColumnReordering,
   TableFilterRow,
   TableColumnVisibility,
-  ColumnChooser
+  ColumnChooser,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -42,35 +42,35 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ViewList from '@material-ui/icons/ViewList';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
 import TableHeaderBar from './TableHeaderBar';
-import red from '@material-ui/core/colors/red';
 import './grid.css';
 
 const styleSheet = theme => ({
   commandButton: {
-    minWidth: '40px'
+    minWidth: '40px',
   },
   lookupEditCell: {
     verticalAlign: 'middle',
     paddingRight: theme.spacing.unit,
     '& ~ $lookupEditCell': {
-      paddingLeft: theme.spacing.unit
-    }
+      paddingLeft: theme.spacing.unit,
+    },
   },
   dialog: {
-    width: 'calc(100% - 16px)'
+    width: 'calc(100% - 16px)',
   },
   editDialog: {
     minWidth: '800px',
-    height: '600px'
+    height: '600px',
   },
 
   // ===================================================== Header ========================
 
   headerBar: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   header: {
     display: 'flex',
@@ -78,7 +78,7 @@ const styleSheet = theme => ({
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   headerInputs: {
     display: 'flex',
@@ -86,21 +86,21 @@ const styleSheet = theme => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
-    fontSize: 12
+    fontSize: 12,
   },
   filterBar: {
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
-  filterField: { width: 200, marginLeft: 10 }
+  filterField: { width: 200, marginLeft: 10 },
 });
 
 const staticColumns = [{ name: 'actions', title: 'Actions', width: 200 }];
@@ -133,9 +133,9 @@ class FullDataGrid extends Component {
       allowadd: true,
       allowedit: true,
       allowdelete: true,
-      allowprint: true
+      allowprint: true,
     },
-    rowmenu: null
+    rowmenu: null,
   };
 
   constructor(props) {
@@ -146,7 +146,7 @@ class FullDataGrid extends Component {
       defaultColumnWidths: [
         { columnName: 'counter', width: 70 },
         { columnName: 'actions', width: 150 },
-        ...this.props.columnWidths
+        ...this.props.columnWidths,
       ],
       sorting: [],
       addedRows: [],
@@ -156,7 +156,7 @@ class FullDataGrid extends Component {
       allowedPageSizes: [5, 10, 20],
       grouping: [],
       selection: [],
-      filters: []
+      filters: [],
     };
 
     this.changeSorting = sorting => this.setState({ sorting });
@@ -173,14 +173,13 @@ class FullDataGrid extends Component {
     this.commitChanges = ({ added, changed, deleted }) => {
       let rows = this.state.rows;
       if (added) {
-        const startingAddedId =
-          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
             id: startingAddedId + index,
-            ...row
-          }))
+            ...row,
+          })),
         ];
       }
       if (changed) {
@@ -196,7 +195,7 @@ class FullDataGrid extends Component {
         allowadd: props.permissions.allowadd || false,
         allowedit: props.permissions.allowedit || false,
         allowdelete: props.permissions.allowdelete || false,
-        allowprint: props.permissions.allowprint || false
+        allowprint: props.permissions.allowprint || false,
       };
       if (column.name === 'actions') {
         return (
@@ -205,7 +204,7 @@ class FullDataGrid extends Component {
               style={{
                 height: '100%',
                 width: '100%',
-                minWidth: 150
+                minWidth: 150,
               }}
             >
               {props.rowmenu ? (
@@ -213,7 +212,7 @@ class FullDataGrid extends Component {
                   row,
                   column,
                   classes: props.classes,
-                  ...permissions
+                  ...permissions,
                 })
               ) : (
                 <IconButton
@@ -245,9 +244,8 @@ class FullDataGrid extends Component {
             </div>
           </TableCell>
         );
-      } else {
-        return this.props.templates({ row, column, style });
       }
+      return this.props.templates({ row, column, style });
     };
   }
 
@@ -256,16 +254,16 @@ class FullDataGrid extends Component {
       allowadd: this.props.permissions.allowadd || false,
       allowedit: this.props.permissions.allowedit || false,
       allowdelete: this.props.permissions.allowdelete || false,
-      allowprint: this.props.permissions.allowprint || false
+      allowprint: this.props.permissions.allowprint || false,
     };
     if (this.props.header) {
       return this.props.header({
         ...this.state,
         ...permissions,
-        ...this.props
+        ...this.props,
       });
-    } else {
-      return (
+    }
+    return (
         <TableHeaderBar
           {...permissions}
           title={this.props.title}
@@ -273,9 +271,9 @@ class FullDataGrid extends Component {
           onRefresh={this.props.onRefresh}
           onPrint={this.props.onPrint}
         />
-      );
-    }
+    );
   };
+
   render() {
     const {
       data,
@@ -283,7 +281,7 @@ class FullDataGrid extends Component {
       deletingRows,
       allowColumnResizing,
       hiddencolumns,
-      rowComponent
+      rowComponent,
     } = this.props;
     const {
       columns,
@@ -292,88 +290,86 @@ class FullDataGrid extends Component {
       currentPage,
       pageSize,
       allowedPageSizes,
-      defaultColumnWidths
+      defaultColumnWidths,
     } = this.state;
 
     return (
-      <Paper style={{ position: 'relative', margin: 5 }}>
+      <Paper className="grid-container">
         {this.renderHeader()}
-        <div className="grid-container">
-          <Grid rows={data} columns={columns}>
-            <SelectionState
-              selection={selection}
-              onSelectionChange={this.changeSelection}
-            />
-            <SortingState
-              sorting={sorting}
-              onSortingChange={this.changeSorting}
-            />
+        <Grid rows={data} columns={columns}>
+          <SelectionState
+            selection={selection}
+            onSelectionChange={this.changeSelection}
+          />
+          <SortingState
+            sorting={sorting}
+            onSortingChange={this.changeSorting}
+          />
 
-            <GroupingState
-              grouping={this.state.grouping}
-              onGroupingChange={this.changeGrouping}
-            />
+          <GroupingState
+            grouping={this.state.grouping}
+            onGroupingChange={this.changeGrouping}
+          />
 
-            <FilteringState
-              filters={this.state.filters}
-              onFiltersChange={this.changeFilters}
-            />
+          <FilteringState
+            filters={this.state.filters}
+            onFiltersChange={this.changeFilters}
+          />
 
-            <PagingState
-              currentPage={currentPage}
-              onCurrentPageChange={this.changeCurrentPage}
-              pageSize={pageSize}
-              onPageSizeChange={this.changePageSize}
-            />
+          <PagingState
+            currentPage={currentPage}
+            onCurrentPageChange={this.changeCurrentPage}
+            pageSize={pageSize}
+            onPageSizeChange={this.changePageSize}
+          />
 
-            <IntegratedGrouping />
-            <IntegratedFiltering />
-            <IntegratedSorting />
-            <IntegratedPaging />
-            <IntegratedSelection />
+          <IntegratedGrouping />
+          <IntegratedFiltering />
+          <IntegratedSorting />
+          <IntegratedPaging />
+          <IntegratedSelection />
 
-            <DragDropProvider />
+          <DragDropProvider />
 
-            <Table
-              rowComponent={rowComponent}
-              cellComponent={this.tableCellTemplate}
-              allowColumnReordering
-            />
+          <Table
+            rowComponent={rowComponent}
+            cellComponent={this.tableCellTemplate}
+            allowColumnReordering
+          />
 
-            {allowColumnResizing && (
-              <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
-            )}
+          {allowColumnResizing && (
+            <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
+          )}
 
-            <TableColumnReordering
-              defaultOrder={columns.map(column => column.name)}
-            />
+          <TableColumnReordering
+            defaultOrder={columns.map(column => column.name)}
+          />
 
-            <TableHeaderRow
-              showSortingControls
-              allowDragging
-              allowResizing={allowColumnResizing}
-            />
+          <TableHeaderRow
+            showSortingControls
+            allowDragging
+            allowResizing={allowColumnResizing}
+          />
 
-            <TableFilterRow
-              cellComponent={props => {
-                if (
-                  props.column.name === 'actions' ||
-                  props.column.name === 'counter'
-                ) {
-                  return <TableCell />;
-                }
-                return <TableFilterRow.Cell {...props} />;
-              }}
-            />
-            <TableSelection showSelectAll />
-            <TableGroupRow />
-            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-            <Toolbar />
-            <GroupingPanel allowDragging />
-            <PagingPanel pageSizes={allowedPageSizes} />
-            <ColumnChooser />
-          </Grid>
-        </div>
+          <TableFilterRow
+            cellComponent={props => {
+              if (
+                props.column.name === 'actions'
+                || props.column.name === 'counter'
+              ) {
+                return <TableCell />;
+              }
+              return <TableFilterRow.Cell {...props} />;
+            }}
+          />
+          <TableSelection showSelectAll />
+          <TableGroupRow />
+          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          <Toolbar />
+          <GroupingPanel allowDragging />
+          <PagingPanel pageSizes={allowedPageSizes} />
+          <ColumnChooser />
+        </Grid>
 
         <Dialog
           open={!!deletingRows.length}
@@ -410,7 +406,7 @@ class FullDataGrid extends Component {
 }
 
 FullDataGrid.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styleSheet)(FullDataGrid);

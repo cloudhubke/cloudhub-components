@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
@@ -10,7 +10,6 @@ import {
   FilteringState,
   IntegratedFiltering,
   IntegratedGrouping,
-  IntegratedPaging,
   IntegratedSorting,
   IntegratedSelection,
   CustomPaging
@@ -45,9 +44,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ViewList from '@material-ui/icons/ViewList';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from '@material-ui/core/styles';
 import TableHeaderBar from './TableHeaderBar';
-import red from '@material-ui/core/colors/red';
+import { red } from '@material-ui/core/colors';
 import GridLoading from './GridLoading';
 import './grid.css';
 
@@ -437,86 +436,86 @@ class RemoteDataGrid extends React.PureComponent {
     } = this.state;
 
     return (
-      <Paper style={{ position: 'relative', margin: 5 }}>
-        {this.renderHeader()}
-        <div className="grid-container">
-          <Grid rows={data.items} columns={columns}>
-            <SelectionState
-              selection={selection}
-              onSelectionChange={this.changeSelection}
-            />
-            <SortingState
-              sorting={sorting}
-              onSortingChange={this.changeSorting}
-            />
+      <Paper className="grid-container">
+      {this.renderHeader()}
+        <Grid rows={data.items} columns={columns}>
+          <SelectionState
+            selection={selection}
+            onSelectionChange={this.changeSelection}
+          />
+          <SortingState
+            sorting={sorting}
+            onSortingChange={this.changeSorting}
+          />
 
-            <GroupingState
-              grouping={this.state.grouping}
-              onGroupingChange={this.changeGrouping}
-            />
+          <GroupingState
+            grouping={this.state.grouping}
+            onGroupingChange={this.changeGrouping}
+          />
 
-            <FilteringState
-              filters={this.state.filters}
-              onFiltersChange={this.changeFilters}
-            />
+          <FilteringState
+            filters={this.state.filters}
+            onFiltersChange={this.changeFilters}
+          />
 
-            <PagingState
-              currentPage={currentPage}
-              onCurrentPageChange={this.changeCurrentPage}
-              pageSize={pageSize}
-              onPageSizeChange={this.changePageSize}
-            />
-            <CustomPaging totalCount={data.totalCount} />
+          <PagingState
+            currentPage={currentPage}
+            onCurrentPageChange={this.changeCurrentPage}
+            pageSize={pageSize}
+            onPageSizeChange={this.changePageSize}
+          />
+          <CustomPaging totalCount={data.totalCount} />
 
-            <IntegratedGrouping />
-            <IntegratedFiltering />
-            <IntegratedSorting />
+          <IntegratedGrouping />
+          <IntegratedFiltering />
+          <IntegratedSorting />
 
-            <IntegratedSelection />
+          <IntegratedSelection />
 
-            <DragDropProvider />
+          <DragDropProvider />
 
-            <Table
-              rowComponent={rowComponent}
-              cellComponent={this.tableCellTemplate}
-              allowColumnReordering
-            />
+          <Table
+            rowComponent={rowComponent}
+            cellComponent={this.tableCellTemplate}
+            allowColumnReordering
+          />
 
-            {allowColumnResizing && (
-              <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
-            )}
+          {allowColumnResizing && (
+            <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
+          )}
 
-            <TableColumnReordering
-              defaultOrder={columns.map(column => column.name)}
-            />
-            <TableHeaderRow
-              showSortingControls
-              allowDragging
-              allowResizing={allowColumnResizing}
-            />
+          <TableColumnReordering
+            defaultOrder={columns.map(column => column.name)}
+          />
+          <TableHeaderRow
+            showSortingControls
+            allowDragging
+            allowResizing={allowColumnResizing}
+          />
 
-            <TableFilterRow
-              cellComponent={props => {
-                if (
-                  props.column.name === 'actions' ||
-                  props.column.name === 'counter'
-                ) {
-                  return <TableCell />;
-                }
-                return <TableFilterRow.Cell {...props} />;
-              }}
-            />
-            <TableSelection showSelectAll />
-            <TableGroupRow />
-            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-            <Toolbar />
-            <GroupingPanel allowDragging />
-            <PagingPanel pageSizes={allowedPageSizes} />
-            <ColumnChooser />
-          </Grid>
+          <TableFilterRow
+            cellComponent={props => {
+              if (
+                props.column.name === 'actions' ||
+                props.column.name === 'counter'
+              ) {
+                return <TableCell />;
+              }
+              return <TableFilterRow.Cell {...props} />;
+            }}
+          />
+          <TableSelection showSelectAll />
+          <TableGroupRow />
+          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          <Toolbar />
+          <GroupingPanel allowDragging />
+          <PagingPanel pageSizes={allowedPageSizes} />
+          <ColumnChooser />
+        </Grid>
 
-          {loading && <GridLoading />}
-        </div>
+        {loading && <GridLoading />}
+
+        
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}

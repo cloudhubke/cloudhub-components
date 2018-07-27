@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
 import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
 
 const { RangePicker } = DatePicker;
 
 const dateFormat = 'DD-MM-YYYY hh:mm a';
-
-const styles = () => ({});
 
 class AntRangePicker extends Component {
   static defaultProps = {
@@ -48,4 +45,4 @@ class AntRangePicker extends Component {
   }
 }
 
-export default withStyles(styles)(AntRangePicker);
+export default AntRangePicker;
