@@ -2,36 +2,32 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import CheckBox from '@material-ui/icons/CheckBox';
 import green from '@material-ui/core/colors/green';
-
 import CheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
 
 class checkbox extends Component {
   static defaultProps = {
     input: {
       value: null,
-      onChange: () => {},
+      onChange: () => {}
     },
     value: null,
     onChange: () => {},
-    height: 32,
+    height: 32
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      checkvalue: false,
+      checkvalue: false
     };
   }
 
   onCheck = () => {
-    // this.setState({ checkvalue: !this.state.checkvalue }, () => {
-
-    // });
     this.setState(({ checkvalue }) => {
       this.props.input.onChange(!checkvalue);
       this.props.onChange(!checkvalue);
       return {
-        checkvalue: !checkvalue,
+        checkvalue: !checkvalue
       };
     });
   };
@@ -40,7 +36,7 @@ class checkbox extends Component {
     const checkvalue = nextProps.input.value || nextProps.value;
     return {
       ...prevState,
-      checkvalue,
+      checkvalue
     };
   }
 
@@ -55,7 +51,7 @@ class checkbox extends Component {
           textTransform: 'none',
           display: 'flex',
           justifyContent: 'flex-start',
-          padding: 0,
+          padding: 0
         }}
       >
         {checkvalue ? (
@@ -64,7 +60,7 @@ class checkbox extends Component {
               height,
               width: height,
               color: green[500],
-              marginRight: 5,
+              marginRight: 5
             }}
           />
         ) : (
