@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import Upload from 'antd/lib/upload';
 import Icon from 'antd/lib/icon';
 import Modal from 'antd/lib/modal';
 
 import { withStyles } from '@material-ui/core/styles';
+import { resolve } from 'path';
 
 const styles = () => ({
   imagesList: {
@@ -45,7 +46,10 @@ class ImagesUpload extends Component {
       onChange: () => {}
     },
     value: null,
-    onChange: () => {}
+    onChange: () => {},
+    sizelimit: 0,
+    width: 0,
+    height: 0
   };
 
   constructor(props) {
@@ -54,7 +58,8 @@ class ImagesUpload extends Component {
       isMounted: true,
       previewVisible: false,
       previewImage: '',
-      fileList: []
+      fileList: [],
+      error: ''
     };
   }
 
@@ -89,6 +94,67 @@ class ImagesUpload extends Component {
     }
   }
 
+  getFileList = () => {
+    const { height, width } = this.props;
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        const fl = this.uploader.state.fileList;
+
+        const flist = fl.map(file => {
+          let img = new Image();
+          img.src = file.url || file.thumbUrl;
+          img.onload = () => {
+            const imageheight = img.height;
+            const imagewidth = img.height;
+            console.log(imagewidth, imageheight);
+            if (imageheight !== height || height !== imageheight) {
+              this.setState({
+                error: `Your image dimensions are not correct. Expecting ${width} x ${height}`
+              });
+            }
+          };
+          return file;
+        });
+        const list = await Promise.all(flist);
+
+        console.log('LIST', list);
+      }, 1000);
+    });
+  };
+
+  beforeUpload = (file, filelist) => {
+    const { sizelimit, width, height } = this.props;
+    const isImage = ['image/jpeg', 'image/png'].includes(file.type);
+
+    //  this.getFileList();
+
+    if (!isImage) {
+      this.setState({ error: 'You can only upload JPG/PNG file!' });
+    }
+
+    let isSize = true;
+
+    if (sizelimit) {
+      isSize = file.size / 1024 / 1024 < sizelimit;
+      if (!isSize) {
+        this.setState(
+          { error: `Image must be smaller than ${sizelimit}MB!` },
+          () => {
+            setTimeout(() => {
+              this.removeFile(file);
+            }, 2000);
+          }
+        );
+      }
+    }
+
+    return isSize && isImage;
+  };
+
+  handleSize(image) {
+    console.log(image.offsetWidth, image.offsetHeight);
+  }
+
   handleCancel = () => this.setState({ previewVisible: false });
 
   handlePreview = file => {
@@ -98,8 +164,8 @@ class ImagesUpload extends Component {
     });
   };
 
-  handleChange = ({ fileList }) => {
-    const files = fileList.map((item, index) => {
+  handleChange = ({ file, fileList }) => {
+    const files = [...(fileList || [])].map((item, index) => {
       if (item.response) {
         return { ...item.response[0], uid: index, status: 'done' };
       }
@@ -115,6 +181,21 @@ class ImagesUpload extends Component {
         this.props.onChange(files);
       }
     });
+  };
+
+  removeFile = file => {
+    const ind = this.state.fileList.findIndex(item => item.uid === file.uid);
+    const filelist = [...this.state.fileList];
+    filelist.splice(ind, 1);
+
+    this.setState({ fileList: filelist });
+    if (!filelist.length && this.props.limit === 1) {
+      this.props.input.onChange({});
+      this.props.onChange({});
+    } else {
+      this.props.input.onChange(filelist);
+      this.props.onChange(filelist);
+    }
   };
 
   handleRemove = file => {
@@ -144,30 +225,37 @@ class ImagesUpload extends Component {
       </div>
     );
     return (
-      <div className={classes.imagesList}>
-        <Upload
-          accept="image/*"
-          action="/fileapi/upload/image"
-          listType="picture-card"
-          fileList={fileList}
-          multiple={limit > 1}
-          onPreview={this.handlePreview}
-          onChange={this.handleChange}
-          onRemove={this.handleRemove}
-        >
-          {fileList.length >= limit ? null : uploadButton}
-        </Upload>
-        <Modal
-          zIndex={10000}
-          visible={previewVisible}
-          footer={null}
-          onCancel={this.handleCancel}
-        >
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal>
+      <Fragment>
+        <div className={classes.imagesList}>
+          <Upload
+            accept="image/*"
+            action="/fileapi/upload/image"
+            listType="picture-card"
+            fileList={fileList}
+            multiple={limit > 1}
+            beforeUpload={this.beforeUpload}
+            onPreview={this.handlePreview}
+            onChange={this.handleChange}
+            onRemove={this.handleRemove}
+            ref={node => {
+              this.uploader = node;
+            }}
+          >
+            {fileList.length >= limit ? null : uploadButton}
+          </Upload>
+          <Modal
+            zIndex={10000}
+            visible={previewVisible}
+            footer={null}
+            onCancel={this.handleCancel}
+          >
+            <img alt="preview" style={{ width: '100%' }} src={previewImage} />
+          </Modal>
+        </div>
         {meta.touched &&
           meta.error && <div className="error">{meta.error}</div>}
-      </div>
+        {this.state.error && <div className="error">{this.state.error}</div>}
+      </Fragment>
     );
   }
 }
