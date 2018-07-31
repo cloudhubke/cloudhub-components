@@ -3,13 +3,17 @@ import isEmpty from 'lodash/isEmpty';
 import Upload from 'antd/lib/upload';
 import Icon from 'antd/lib/icon';
 import Modal from 'antd/lib/modal';
+import Progress from 'antd/lib/progress';
 
 import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import { resolve } from 'path';
 
 const styles = () => ({
   imagesList: {
     display: 'flex',
+    position: 'relative',
     '& .ant-upload-list': {
       display: 'flex',
       flexDirection: 'row',
@@ -59,7 +63,8 @@ class ImagesUpload extends Component {
       previewVisible: false,
       previewImage: '',
       fileList: [],
-      error: ''
+      error: '',
+      isuploading: false
     };
   }
 
@@ -116,8 +121,6 @@ class ImagesUpload extends Component {
           return file;
         });
         const list = await Promise.all(flist);
-
-        console.log('LIST', list);
       }, 1000);
     });
   };
@@ -172,15 +175,18 @@ class ImagesUpload extends Component {
       return item;
     });
 
-    this.setState({ fileList: files }, () => {
-      if (this.props.limit === 1) {
-        this.props.input.onChange(files[0]);
-        this.props.onChange(files[0]);
-      } else {
-        this.props.input.onChange(files);
-        this.props.onChange(files);
+    this.setState(
+      { fileList: files, isuploading: files.filter(f => !!f.uid).length > 0 },
+      () => {
+        if (this.props.limit === 1) {
+          this.props.input.onChange(files[0]);
+          this.props.onChange(files[0]);
+        } else {
+          this.props.input.onChange(files);
+          this.props.onChange(files);
+        }
       }
-    });
+    );
   };
 
   removeFile = file => {
@@ -251,6 +257,24 @@ class ImagesUpload extends Component {
           >
             <img alt="preview" style={{ width: '100%' }} src={previewImage} />
           </Modal>
+
+          {this.state.isuploading && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'rgba(0,21,41, 0.3)'
+              }}
+            >
+              <CircularProgress />
+            </div>
+          )}
         </div>
         {meta.touched &&
           meta.error && <div className="error">{meta.error}</div>}
