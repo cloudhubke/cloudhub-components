@@ -194,7 +194,7 @@ class ImagesUpload extends Component {
     const filelist = [...this.state.fileList];
     filelist.splice(ind, 1);
 
-    this.setState({ fileList: filelist });
+    this.setState({ fileList: filelist, isuploading: false });
     if (!filelist.length && this.props.limit === 1) {
       this.props.input.onChange({});
       this.props.onChange({});
@@ -209,7 +209,7 @@ class ImagesUpload extends Component {
     const filelist = [...this.state.fileList];
     filelist.splice(ind, 1);
 
-    this.setState({ fileList: filelist });
+    this.setState({ fileList: filelist, isuploading: false });
     if (!filelist.length && this.props.limit === 1) {
       this.props.input.onChange({});
       this.props.onChange({});
