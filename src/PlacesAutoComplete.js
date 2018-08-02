@@ -30,7 +30,6 @@ class PlacesAutoComplete extends Component {
 
     const value = nextProps.value || nextProps.input.value;
 
-    console.log(value);
     if (!value || _.isEmpty(value)) {
       return {
         selectedValue: ''
@@ -60,9 +59,7 @@ class PlacesAutoComplete extends Component {
 
   constructor(props) {
     super(props);
-
     this.handleInputChange = _.debounce(this.handleInputChange, 500);
-
     this.state = {
       firstoptions: [],
       options: [],
@@ -112,7 +109,6 @@ class PlacesAutoComplete extends Component {
       delete objValue.key;
       delete objValue.value;
       delete objValue.label;
-
       // get latitude & longitude
 
       const searchurl = `/mapsapi/maps/api/place/details/json?placeid=${
