@@ -14,10 +14,9 @@ class PlacesAutoComplete extends Component {
       value: {},
       onChange: () => {}
     },
-    displayField: '',
     returnkeys: [],
     url: '',
-    placeholder: 'Select...',
+    placeholder: 'Search...',
     selectUp: false,
     disabled: false,
     latitude: '-1.292066',
@@ -26,8 +25,6 @@ class PlacesAutoComplete extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { displayField } = nextProps;
-
     const value = nextProps.value || nextProps.input.value;
 
     if (!value || _.isEmpty(value)) {
@@ -39,7 +36,7 @@ class PlacesAutoComplete extends Component {
         ...value,
         key: value._id || value.id,
         value: 0,
-        label: value[displayField]
+        label: value['name']
       };
 
       const opts = prevState.opts || [];
@@ -71,7 +68,7 @@ class PlacesAutoComplete extends Component {
   }
 
   loadOptions = options => {
-    const { displayField, value } = this.props;
+    const value = this.props.value || this.props.input.value;
 
     if (Array.isArray(options)) {
       const opts = options.map((item, index) => {
