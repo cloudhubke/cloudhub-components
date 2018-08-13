@@ -11,6 +11,10 @@ import RemoteSelector from './RemoteSelector';
 import Selector from './Selector';
 import StaticListSelector from './StaticListSelector';
 import DateFilter from './DateFilter';
+import RemoteDataGrid from './grid/RemoteDataGrid';
+import FullDataGrid from './grid/FullDataGrid';
+import RemoteDataGridWithDetailView from './grid/RemoteDataGridWithDetailView';
+import DataGridWithDetailView from './grid/DataGridWithDetailView';
 
 export {
   CountrySelector,
@@ -25,5 +29,9 @@ export {
   RemoteSelector,
   Selector,
   StaticListSelector,
-  DateFilter
+  DateFilter,
+  RemoteDataGrid,
+  FullDataGrid,
+  RemoteDataGridWithDetailView,
+  DataGridWithDetailView
 };
