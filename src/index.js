@@ -11,6 +11,7 @@ import RemoteSelector from './RemoteSelector';
 import Selector from './Selector';
 import StaticListSelector from './StaticListSelector';
 import DateFilter from './DateFilter';
+import SimpleDataGrid from './grid/SimpleDataGrid';
 import RemoteDataGrid from './grid/RemoteDataGrid';
 import FullDataGrid from './grid/FullDataGrid';
 import RemoteDataGridWithDetailView from './grid/RemoteDataGridWithDetailView';
@@ -33,5 +34,6 @@ export {
   RemoteDataGrid,
   FullDataGrid,
   RemoteDataGridWithDetailView,
-  DataGridWithDetailView
+  DataGridWithDetailView,
+  SimpleDataGrid
 };
