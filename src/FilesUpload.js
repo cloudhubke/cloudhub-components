@@ -116,7 +116,14 @@ class FilesUpload extends Component {
   handleChange = ({ file, fileList }) => {
     const files = fileList.map((item, index) => {
       if (item.response) {
-        return { ...item.response[0], uid: index, status: 'done' };
+        const fl = item.response[0] || {};
+        return {
+          ...fl,
+          uid:
+            (fl.fd || '').replace('files', '').replace(/\//g, '') ||
+            new Date().getTime(),
+          status: 'done'
+        };
       }
       return item;
     });

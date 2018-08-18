@@ -170,13 +170,23 @@ class ImagesUpload extends Component {
   handleChange = ({ file, fileList }) => {
     const files = [...(fileList || [])].map((item, index) => {
       if (item.response) {
-        return { ...item.response[0], uid: index, status: 'done' };
+        const fl = item.response[0] || {};
+        return {
+          ...fl,
+          uid:
+            (fl.fd || '').replace('images', '').replace(/\//g, '') ||
+            new Date().getTime(),
+          status: 'done'
+        };
       }
       return item;
     });
 
     this.setState(
-      { fileList: files, isuploading: files.filter(f => !!f.uid).length > 0 },
+      {
+        fileList: files,
+        isuploading: files.filter(f => !!f.percent).length > 0
+      },
       () => {
         if (this.props.limit === 1) {
           this.props.input.onChange(files[0]);
