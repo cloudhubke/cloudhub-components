@@ -524,7 +524,6 @@ class RemoteDataGrid extends React.PureComponent {
           {hiddencolumns.length > 0 && <ColumnChooser />}
         </Grid>
         {loading && <GridLoading />}
-
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}
