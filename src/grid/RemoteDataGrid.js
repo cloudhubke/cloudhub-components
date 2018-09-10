@@ -437,7 +437,7 @@ class RemoteDataGrid extends React.PureComponent {
 
     return (
       <Paper className="grid-container">
-      {this.renderHeader()}
+        {this.renderHeader()}
         <Grid rows={data.items} columns={columns}>
           <SelectionState
             selection={selection}
@@ -506,7 +506,9 @@ class RemoteDataGrid extends React.PureComponent {
           />
           <TableSelection showSelectAll />
           <TableGroupRow />
-          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          {hiddencolumns.length > 0 && (
+            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          )}
           <Toolbar />
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />
@@ -515,7 +517,6 @@ class RemoteDataGrid extends React.PureComponent {
 
         {loading && <GridLoading />}
 
-        
         <Dialog
           open={!!deletingRows.length}
           onClose={this.cancelDelete}
