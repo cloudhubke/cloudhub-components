@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
@@ -506,12 +506,14 @@ class RemoteDataGrid extends React.PureComponent {
           />
           <TableSelection showSelectAll />
           <TableGroupRow />
-          {hiddencolumns.length > 0 && (
-            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-          )}
+
           <Toolbar />
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />
+
+          {hiddencolumns && (
+            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          )}
           <ColumnChooser />
         </Grid>
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   SelectionState,
@@ -365,10 +365,19 @@ class FullDataGrid extends Component {
           />
           <TableSelection showSelectAll />
           <TableGroupRow />
-          <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          {hiddencolumns.length > 0 && (
+            <Fragment>
+              <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+              <ColumnChooser />
+            </Fragment>
+          )}
           <Toolbar />
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />
+
+          {hiddencolumns && (
+            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
+          )}
           <ColumnChooser />
         </Grid>
 

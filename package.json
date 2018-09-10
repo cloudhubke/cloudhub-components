@@ -81,7 +81,7 @@
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-url": "^1.4.0",
     "sass-loader": "6.0.6",
-    "semantic-release": "^15.8.0",
+    "semantic-release": "^15.9.14",
     "style-loader": "0.19.1",
     "uglifyjs-webpack-plugin": "1.1.6",
     "webpack": "3.10.0"
