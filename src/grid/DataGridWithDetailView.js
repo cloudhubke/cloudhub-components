@@ -363,10 +363,10 @@ class DataGridWithDetailView extends React.PureComponent {
           <GroupingPanel allowDragging />
           <PagingPanel pageSizes={allowedPageSizes} />
 
-          {hiddencolumns && (
+          {hiddencolumns.length > 0 && (
             <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
           )}
-          <ColumnChooser />
+          {hiddencolumns.length > 0 && <ColumnChooser />}
         </Grid>
         <Dialog
           open={!!deletingRows.length}

@@ -508,13 +508,14 @@ class RemoteDataGrid extends React.PureComponent {
           <TableGroupRow />
 
           <Toolbar />
-          <GroupingPanel allowDragging />
-          <PagingPanel pageSizes={allowedPageSizes} />
 
-          {hiddencolumns && (
+          {hiddencolumns.length > 0 && (
             <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
           )}
-          <ColumnChooser />
+          {hiddencolumns.length > 0 && <ColumnChooser />}
+
+          <GroupingPanel allowDragging />
+          <PagingPanel pageSizes={allowedPageSizes} />
         </Grid>
 
         {loading && <GridLoading />}

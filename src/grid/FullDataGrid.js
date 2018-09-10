@@ -365,20 +365,13 @@ class FullDataGrid extends Component {
           />
           <TableSelection showSelectAll />
           <TableGroupRow />
-          {hiddencolumns.length > 0 && (
-            <Fragment>
-              <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-              <ColumnChooser />
-            </Fragment>
-          )}
           <Toolbar />
-          <GroupingPanel allowDragging />
-          <PagingPanel pageSizes={allowedPageSizes} />
-
-          {hiddencolumns && (
+          {hiddencolumns.length > 0 && (
             <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
           )}
-          <ColumnChooser />
+          {hiddencolumns.length > 0 && <ColumnChooser />}
+          <GroupingPanel allowDragging />
+          <PagingPanel pageSizes={allowedPageSizes} />
         </Grid>
 
         <Dialog
