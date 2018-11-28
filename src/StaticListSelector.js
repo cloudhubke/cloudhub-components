@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Select from './Selector';
+import isObject from 'lodash/isObject';
 
 class StaticListSelector extends Component {
   static defaultProps = {
@@ -30,13 +31,24 @@ class StaticListSelector extends Component {
         value={value || input.value || this.state.val}
         onChange={val => {
           if (val) {
-            this.setState({ val });
-            input.onChange(val);
-            onChange(val);
-            if (onSelectChange) {
-              onSelectChange(val);
+            if (isObject(val)) {
+              const { simple, full } = val;
+              this.setState({ val: simple });
+              input.onChange(simple);
+              onChange(simple);
+              if (onSelectChange) {
+                onSelectChange(full);
+              }
+              input.onBlur();
+            } else {
+              this.setState({ val });
+              input.onChange(val);
+              onChange(val);
+              if (onSelectChange) {
+                onSelectChange(val);
+              }
+              input.onBlur();
             }
-            input.onBlur();
           } else {
             this.setState({ val });
             input.onChange(val);
