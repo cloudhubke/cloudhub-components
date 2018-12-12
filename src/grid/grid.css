@@ -6,3 +6,9 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.grid-container th {
+  overflow: hidden;
+  padding-left: 10px;
+  padding-right: 10px;
+}
