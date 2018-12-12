@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
 import Input from 'antd/lib/input';
 import moment from 'moment';
 import AntRangePicker from './AntRangePicker';

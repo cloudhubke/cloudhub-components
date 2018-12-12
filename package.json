@@ -31,11 +31,11 @@
   },
   "homepage": "https://github.com/gaithoben/cloudhub-react-components#readme",
   "dependencies": {
-    "@devexpress/dx-react-core": "^1.4.0",
-    "@devexpress/dx-react-grid": "^1.4.0",
-    "@devexpress/dx-react-grid-material-ui": "^1.4.0",
-    "@material-ui/core": "^1.4.0",
-    "@material-ui/icons": "^1.1.0",
+    "@devexpress/dx-react-core": "1.9.1",
+    "@devexpress/dx-react-grid": "1.9.1",
+    "@devexpress/dx-react-grid-material-ui": "1.9.1",
+    "@material-ui/core": "3.6.2",
+    "@material-ui/icons": "3.0.1",
     "antd": "3.8.4",
     "awesome-phonenumber": "^2.2.3",
     "axios": "^0.17.1",
@@ -47,17 +47,20 @@
     "react-select": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.42",
-    "@babel/core": "7.0.0-beta.42",
-    "@babel/node": "7.0.0-beta.42",
-    "@babel/plugin-transform-object-assign": "7.0.0-beta.42",
-    "@babel/plugin-transform-runtime": "7.0.0-beta.42",
-    "@babel/preset-env": "7.0.0-beta.42",
-    "@babel/preset-flow": "7.0.0-beta.42",
-    "@babel/preset-react": "7.0.0-beta.42",
-    "@babel/preset-stage-1": "7.0.0-beta.42",
-    "@babel/register": "7.0.0-beta.42",
+    "@babel/cli": "7.2.0",
+    "@babel/core": "7.2.0",
+    "@babel/node": "7.2.0",
+    "@babel/plugin-transform-object-assign": "7.2.0",
+    "@babel/plugin-transform-runtime": "7.2.0",
+    "@babel/preset-env": "7.2.0",
+    "@babel/preset-flow": "7.0.0",
+    "@babel/preset-react": "7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
     "babel-core": "7.0.0-bridge.0",
+    "@babel/register": "7.0.0",
     "chai": "4.1.2",
     "css-loader": "0.28.8",
     "eslint": "4.15.0",
@@ -83,7 +86,7 @@
     "@devexpress/dx-react-core": "1.4.0",
     "@devexpress/dx-react-grid": "1.4.0",
     "@devexpress/dx-react-grid-material-ui": "1.4.0",
-    "@material-ui/core": "^1.1.0",
+    "@material-ui/core": "^1.4.0",
     "@material-ui/icons": "^1.1.0",
     "antd": "^3.8.4",
     "awesome-phonenumber": "2.2.3",
@@ -107,17 +110,14 @@
           "modules": "commonjs"
         }
       ],
-      [
-        "@babel/preset-stage-1",
-        {
-          "loose": true
-        }
-      ],
       "@babel/preset-react",
       "@babel/flow"
     ],
     "plugins": [
-      "@babel/plugin-transform-object-assign"
+      "@babel/plugin-syntax-dynamic-import",
+      "@babel/plugin-syntax-import-meta",
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-json-strings"
     ]
   }
 }
