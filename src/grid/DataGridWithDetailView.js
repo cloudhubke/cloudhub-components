@@ -93,7 +93,8 @@ const styleSheet = theme => ({
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
-    fontSize: 12
+    fontSize: 12,
+    marginLeft: 5
   },
   filterBar: {
     marginBottom: 10,
