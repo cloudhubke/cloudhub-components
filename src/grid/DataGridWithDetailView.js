@@ -190,8 +190,8 @@ class DataGridWithDetailView extends React.PureComponent {
         ];
       }
       if (changed) {
-        rows = rows.map(
-          row => (changed[row.id] ? { ...row, ...changed[row.id] } : row)
+        rows = rows.map(row =>
+          changed[row.id] ? { ...row, ...changed[row.id] } : row
         );
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
@@ -264,22 +264,25 @@ class DataGridWithDetailView extends React.PureComponent {
       allowprint: this.props.permissions.allowprint || false
     };
     if (this.props.header) {
-      return this.props.header({
-        ...this.state,
-        ...permissions,
-        ...this.props
-      });
-    } else {
       return (
-        <TableHeaderBar
-          title={this.props.title}
-          onAdd={this.props.onAdd}
-          onRefresh={this.props.onReresh}
-          onPrint={this.props.onPrint}
-          {...permissions}
-        />
+        <div>
+          {this.props.header({
+            ...this.state,
+            ...permissions,
+            ...this.props
+          })}
+        </div>
       );
     }
+    return (
+      <TableHeaderBar
+        title={this.props.title}
+        onAdd={this.props.onAdd}
+        onRefresh={this.props.onReresh}
+        onPrint={this.props.onPrint}
+        {...permissions}
+      />
+    );
   };
 
   render() {

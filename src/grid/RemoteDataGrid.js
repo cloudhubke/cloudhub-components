@@ -228,8 +228,8 @@ class RemoteDataGrid extends React.PureComponent {
         ];
       }
       if (changed) {
-        rows = rows.map(
-          row => (changed[row.id] ? { ...row, ...changed[row.id] } : row)
+        rows = rows.map(row =>
+          changed[row.id] ? { ...row, ...changed[row.id] } : row
         );
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
@@ -394,25 +394,28 @@ class RemoteDataGrid extends React.PureComponent {
       allowprint: this.props.permissions.allowprint || false
     };
     if (this.props.header) {
-      return this.props.header({
-        ...this.props,
-        ...this.state,
-        ...permissions,
-        queryString: this.queryString(),
-        onSearch: this.searchChange
-      });
-    } else {
       return (
-        <TableHeaderBar
-          {...permissions}
-          title={this.props.title}
-          onSearchChange={this.searchChange}
-          onAdd={this.props.onAdd}
-          onRefresh={this.props.onRefresh}
-          onPrint={this.props.onPrint}
-        />
+        <div>
+          {this.props.header({
+            ...this.props,
+            ...this.state,
+            ...permissions,
+            queryString: this.queryString(),
+            onSearch: this.searchChange
+          })}
+        </div>
       );
     }
+    return (
+      <TableHeaderBar
+        {...permissions}
+        title={this.props.title}
+        onSearchChange={this.searchChange}
+        onAdd={this.props.onAdd}
+        onRefresh={this.props.onRefresh}
+        onPrint={this.props.onPrint}
+      />
+    );
   };
 
   render() {

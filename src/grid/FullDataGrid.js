@@ -184,8 +184,8 @@ class FullDataGrid extends Component {
         ];
       }
       if (changed) {
-        rows = rows.map(
-          row => (changed[row.id] ? { ...row, ...changed[row.id] } : row)
+        rows = rows.map(row =>
+          changed[row.id] ? { ...row, ...changed[row.id] } : row
         );
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
@@ -258,11 +258,15 @@ class FullDataGrid extends Component {
       allowprint: this.props.permissions.allowprint || false
     };
     if (this.props.header) {
-      return this.props.header({
-        ...this.state,
-        ...permissions,
-        ...this.props
-      });
+      return (
+        <div>
+          {this.props.header({
+            ...this.state,
+            ...permissions,
+            ...this.props
+          })}
+        </div>
+      );
     }
     return (
       <TableHeaderBar
