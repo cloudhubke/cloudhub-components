@@ -20,7 +20,11 @@ class PhoneInput extends Component {
     defaultCountry: 'ke',
     onChange: () => {},
     value: '',
-    fieldId: ''
+    fieldId: '',
+    input: {
+      value: '',
+      onChange: () => {}
+    }
   };
 
   state = {
@@ -28,18 +32,23 @@ class PhoneInput extends Component {
     value: ''
   };
 
-  componentDidMount() {
-    this.setState({ value: this.props.input.value });
-  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const value = nextProps.input.value || nextProps.value;
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.input.value !== null && nextProps.input.value !== '') {
-      this.setState({ value: nextProps.input.value });
+    const pn = new PhoneNumber(value);
+    if (pn.isValid()) {
+      return {
+        ...prevState,
+        value
+      };
     }
+    return { ...prevState };
   }
 
   validate = (isValid, phone, country) => {
-    const { input: { onChange } } = this.props;
+    const {
+      input: { onChange }
+    } = this.props;
 
     this.setState({ touched: true, value: phone });
 
@@ -53,6 +62,7 @@ class PhoneInput extends Component {
       }
     }
   };
+
   render() {
     const { meta } = this.props;
     return (
@@ -65,8 +75,9 @@ class PhoneInput extends Component {
           fieldId={this.props.fieldId}
           onPhoneNumberChange={this.validate}
         />
-        {meta.touched &&
-          meta.error && <div className="error">{meta.error}</div>}
+        {meta.touched && meta.error && (
+          <div className="error">{meta.error}</div>
+        )}
       </div>
     );
   }
