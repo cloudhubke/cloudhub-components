@@ -22,7 +22,7 @@ class RemoteSelector extends Component {
     const { value, displayField } = nextProps;
     if (!value || _.isEmpty(value)) {
       return {
-        selectedValue: ''
+        selectedValue: null
       };
     } else {
       const opt = {
@@ -56,41 +56,41 @@ class RemoteSelector extends Component {
       firstoptions: [],
       options: [],
       opts: [],
-      selectedValue: '',
+      selectedValue: null,
       isLoading: false,
       searchText: ''
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
-      const { value, displayField } = this.props;
-      if (!value || _.isEmpty(value)) {
-        this.setState({
-          selectedValue: ''
-        });
-      } else {
-        const opt = {
-          ...value,
-          key: value._id || value.id,
-          value: 0,
-          label: value[displayField]
-        };
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.value !== this.props.value) {
+  //     const { value, displayField } = this.props;
+  //     if (!value || _.isEmpty(value)) {
+  //       this.setState({
+  //         selectedValue: null
+  //       });
+  //     } else {
+  //       const opt = {
+  //         ...value,
+  //         key: value._id || value.id,
+  //         value: 0,
+  //         label: value[displayField]
+  //       };
 
-        const ind = this.state.opts.findIndex(i => i.key === opt.key);
-        if (ind === -1) {
-          this.setState({
-            opts: [opt],
-            selectedValue: 0
-          });
-        } else {
-          this.setState({
-            selectedValue: ind
-          });
-        }
-      }
-    }
-  }
+  //       const ind = this.state.opts.findIndex(i => i.key === opt.key);
+  //       if (ind === -1) {
+  //         this.setState({
+  //           opts: [opt],
+  //           selectedValue: 0
+  //         });
+  //       } else {
+  //         this.setState({
+  //           selectedValue: ind
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
   loadOptions = options => {
     const { displayField, value } = this.props;
@@ -129,7 +129,7 @@ class RemoteSelector extends Component {
     if (val) {
       this.setState({ selectedValue: val.value });
     } else {
-      this.setState({ selectedValue: '', searchText: '' });
+      this.setState({ selectedValue: null, searchText: '' });
       this.loadOptions(this.state.firstoptions);
     }
 
@@ -195,8 +195,9 @@ class RemoteSelector extends Component {
           placeholder={placeholder}
           disabled={disabled}
         />
-        {meta.touched &&
-          meta.error && <span className="error">{meta.error}</span>}
+        {meta.touched && meta.error && (
+          <span className="error">{meta.error}</span>
+        )}
       </div>
     );
   }
