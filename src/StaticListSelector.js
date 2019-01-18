@@ -28,7 +28,7 @@ class StaticListSelector extends Component {
     return (
       <Select
         options={list}
-        value={value || input.value || this.state.val}
+        value={input.value || value}
         onChange={val => {
           if (val) {
             if (isObject(val)) {
