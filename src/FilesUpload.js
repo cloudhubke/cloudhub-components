@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import Upload from 'antd/lib/upload';
 import List from 'antd/lib/list';
 import Icon from 'antd/lib/icon';
-import Progress from 'antd/lib/progress';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
+import Close from '@material-ui/icons/Close';
+
 import Input from 'antd/lib/input';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -128,14 +131,16 @@ class FilesUpload extends Component {
       return item;
     });
 
-    if (this.props.limit === 1) {
-      this.setState({ fileList: [...files[0]] }, () => {
-        this.props.input.onChange(files[0]);
-      });
-    } else {
-      this.setState({ fileList: [...files] }, () => {
-        this.props.input.onChange(files);
-      });
+    if (files.length > 0) {
+      if (this.props.limit === 1) {
+        this.setState({ fileList: [files[0]] }, () => {
+          this.props.input.onChange(files[0]);
+        });
+      } else {
+        this.setState({ fileList: [...files] }, () => {
+          this.props.input.onChange(files);
+        });
+      }
     }
   };
 
@@ -218,29 +223,23 @@ class FilesUpload extends Component {
                   />
                 </p>
 
-                {item.percent && (
-                  <Progress
-                    type="circle"
-                    percent={Number(item.percent)}
-                    width={60}
-                  />
+                {item.percent ? (
+                  <CircularProgress />
+                ) : (
+                  <IconButton
+                    className={classes.iconButton}
+                    onClick={() => this.handleRemove(item)}
+                  >
+                    <Close />
+                  </IconButton>
                 )}
-
-                <Button
-                  shape="circle"
-                  className={classes.iconButton}
-                  onClick={() => this.handleRemove(item)}
-                >
-                  <Icon type="close" />
-                </Button>
               </div>
             </List.Item>
           )}
         />
-        {meta.touched &&
-          meta.error && (
-            <div className="error">{meta.error || this.state.uploaderror}</div>
-          )}
+        {meta.touched && meta.error && (
+          <div className="error">{meta.error || this.state.uploaderror}</div>
+        )}
         {this.state.uploaderror && (
           <div className="error">{this.state.uploaderror}</div>
         )}
