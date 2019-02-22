@@ -1,190 +1,200 @@
 import React, { Component } from 'react';
-import Dropdown from 'react-select';
-import _ from 'lodash';
+import AsyncSelect from 'react-select/lib/Async';
+import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isEmpty';
+import isObject from 'lodash/isObject';
 import axios from 'axios';
+import './react-select.css';
 
 class MultiRemoteSelector extends Component {
   static defaultProps = {
+    params: {},
     axiosinstance: () => axios.create({}),
+    value: [],
     options: [],
     onChange: () => {},
     displayField: '',
     returnkeys: [],
     url: '',
     placeholder: 'Select...',
-    value: [],
-    multi: false,
+    selectUp: false,
     disabled: false
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { value, displayField } = nextProps;
-    if (!value || _.isEmpty(value) || !Array.isArray(value)) {
+    const values = value || [];
+
+    if (!values || isEmpty(values)) {
       return {
-        selectedValue: prevState.selectedValue || []
+        ...prevState
       };
     } else {
-      const opts =
-        prevState.opts.length > 0
-          ? prevState.opts
-          : [...(value || [])].map((item, index) => ({
-              ...item,
-              key: item._id,
-              value: index,
-              label: item[displayField]
-            }));
-
-      const selectedValue = [...(value || [])].map((item, index) => ({
-        ...item,
-        key: item._id,
-        value: opts.findIndex(item => item.key === value._id),
-        label: item[displayField]
-      }));
-      return {
-        opts,
-        selectedValue: [...(value || [])].map(i =>
-          opts.findIndex(item => item.key === i._id)
-        )
-      };
+      if (Array.isArray(values)) {
+        const options = values.map(value => ({
+          item: value,
+          value: value._id || value.id,
+          label: value[displayField]
+        }));
+        return {
+          ...prevState,
+          options
+        };
+      }
+      return { ...prevState };
     }
   }
 
   constructor(props) {
     super(props);
 
-    this.handleInputChange = _.debounce(this.handleInputChange, 500);
+    // this.loadOptions = debounce(this.loadOptions, 500);
 
     this.state = {
-      firstoptions: [],
       options: [],
-      opts: [],
-      selectedValue: [],
-      isLoading: false,
-      searchText: ''
+      selectedValues: null,
+      firstoptions: [],
+      searchText: '',
+      canLoad: false,
+      refKey: new Date().getTime(),
+      defaultOptions: []
     };
   }
 
-  componentDidUpdate(prevProps) {}
-
-  loadOptions = (options = []) => {
-    const { displayField, value } = this.props;
-    if (Array.isArray(options)) {
-      const opts = options.map((item, index) => {
-        if (!_.isObject(item)) {
-          return { key: item, value: item, label: item };
-        }
-        return {
-          ...item,
-          key: item._id,
-          value: index,
-          label: item[displayField]
-        };
-      });
-      const v = _.isArray(value) ? value : [];
-      const vals = v.map(item => {
-        if (!_.isObject(item)) {
-          return { key: item, value: item, label: item };
-        }
-        return {
-          ...item,
-          key: item._id,
-          value: opts.findIndex(item2 => item2.key === item._id),
-          label: item[displayField]
-        };
-      });
-      if (this.state.firstoptions.length === 0) {
-        this.setState({ firstoptions: options });
-      }
-      this.setState({ opts, options, selectedValue: vals, isLoading: false });
+  onMenuOpen = () => {
+    const { displayField, value, axiosinstance, url, params } = this.props;
+    if (!this.state.canLoad) {
+      axiosinstance()
+        .get(url, { params: { ...params, filter: '' } })
+        .then(({ data }) => {
+          const options = (data.items || []).map(item => ({
+            label: item[displayField],
+            value: item._id || item.id,
+            item
+          }));
+          this.setState({
+            canLoad: true,
+            options,
+            firstoptions: data.items,
+            defaultOptions: options
+          });
+        });
     }
   };
-  logChange = val => {
-    const { onChange, returnkeys } = this.props;
-    const { opts } = this.state;
-    if (val) {
-      this.setState({
-        selectedValue: [...(val || [])].map(i =>
-          opts.findIndex(item => item.key === i._id)
-        ),
-        searchText: ''
-      });
+
+  loadOptions = (inputValue, callback) => {
+    const { displayField, value, axiosinstance, url, params } = this.props;
+    // if (!this.state.canLoad) {
+    //   return callback(this.state.options);
+    // }
+
+    if (this.state.searchText !== inputValue) {
+      this.setState({ searchText: inputValue });
+      axiosinstance()
+        .get(url, { params: { ...params, filter: inputValue.trim() } })
+        .then(({ data }) => {
+          const options = (data.items || []).map(item => ({
+            label: item[displayField],
+            value: item._id || item.id,
+            item
+          }));
+          this.setState({ options });
+
+          callback(options);
+        });
     } else {
-      this.setState({ selectedValue: [], searchText: '' });
-      this.loadOptions(this.state.firstoptions);
+      if (this.state.firstoptions.length === 0) {
+        axiosinstance()
+          .get(url, { params: { ...params, filter: inputValue.trim() } })
+          .then(({ data }) => {
+            const options = (data.items || []).map(item => ({
+              label: item[displayField],
+              value: item._id || item.id,
+              item
+            }));
+            this.setState({
+              options,
+              firstoptions: data.items,
+              selectOptions: {}
+            });
+
+            callback(options);
+          });
+      } else {
+        callback(this.state.options);
+      }
+    }
+  };
+
+  logChange = selectedOptions => {
+    const { onChange, returnkeys, axiosinstance, url, params } = this.props;
+    const vals = selectedOptions;
+
+    if (vals) {
+      this.setState({ selectedValues: vals });
+    } else {
+      this.setState({ selectedValues: [], searchText: '' });
     }
 
-    if (val) {
-      if (!_.isObject(this.state.options[0])) {
-        return onChange(val.map(item => item.value));
-      }
-
-      const retval = val.map(item => {
-        const objValue = { ...item };
-        const obj = {};
-        delete objValue.key;
-        delete objValue.value;
-        delete objValue.label;
+    if (vals && Array.isArray(vals)) {
+      const options = vals.map(item => {
+        if (!isObject(item.item)) {
+          return item.item;
+        }
+        const objValue = { ...item.item };
 
         if (returnkeys.length > 1) {
+          const obj = {};
           returnkeys.forEach(key => {
             obj[key] = objValue[key];
           });
-          return obj;
-        } else {
-          return objValue;
+          return { ...obj };
         }
+        return { ...objValue };
       });
-      return onChange(retval);
+      return onChange([...options]);
     }
 
-    return onChange([]);
+    return onChange([...vals]);
   };
 
-  handleInputChange = text => {
-    const { axiosinstance, url, params } = this.props;
-    if (text === '' && this.state.firstoptions.length === 0) {
-      this.setState({ isFetching: true, searchText: text });
-      return axiosinstance()
-        .get(url, { params: { ...params, filter: text } })
-        .then(({ data }) => {
-          this.setState({ isFetching: false });
-          this.loadOptions(data.items || data);
-        });
-    } else if (text !== '') {
-      if (this.state.searchText !== text) {
-        this.setState({ isFetching: true, searchText: text });
-        axiosinstance()
-          .get(url, { params: { ...params, filter: text } })
-          .then(({ data }) => {
-            this.setState({ isFetching: false });
-            this.loadOptions(data.items || data);
-          });
+  handleInputChange = searchText => {
+    this.setState({ searchText });
+  };
+  getDefaultValue = () => {
+    const value = this.props.value || [];
+    const options = this.state.options.filter(i => {
+      if (isObject) {
+        const ids = Array.isArray(value) ? value.map(v => v._id || v.id) : [];
+        return ids.includes(i.value);
       }
-    }
+      return value.includes[i];
+    });
+    return options;
   };
 
   render() {
     const { meta, name, placeholder, disabled } = this.props;
+
     return (
       <div className={this.props.selectUp ? 'select-up' : {}}>
-        <Dropdown
-          style={{ height: 28 }}
-          name={name}
-          value={this.state.selectedValue}
-          options={this.state.opts}
+        <AsyncSelect
+          style={{ height: 31 }}
+          cacheOptions
+          isClearable
+          defaultOptions={this.state.defaultOptions}
+          value={this.getDefaultValue()}
+          loadOptions={this.loadOptions}
           onChange={this.logChange}
-          openOnFocus
-          multi
-          onBlurResetsInput={false}
-          onInputChange={this.handleInputChange}
-          onOpen={() => this.handleInputChange('')}
-          isLoading={this.state.isFetching}
           placeholder={placeholder}
-          inputProps={{ value: this.state.searchText }}
           disabled={disabled}
+          onInputChange={this.handleInputChange}
+          onMenuOpen={this.onMenuOpen}
+          isMulti
         />
-        {meta.touched &&
-          meta.error && <span className="error">{meta.error}</span>}
+        {meta.touched && meta.error && (
+          <span className="error">{meta.error}</span>
+        )}
       </div>
     );
   }

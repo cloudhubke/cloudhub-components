@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import Dropdown from 'react-select';
-import _ from 'lodash';
+import AsyncSelect from 'react-select/lib/Async';
+import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isEmpty';
+import isObject from 'lodash/isObject';
 import axios from 'axios';
 import './react-select.css';
 
@@ -8,6 +10,7 @@ class RemoteSelector extends Component {
   static defaultProps = {
     params: {},
     axiosinstance: () => axios.create({}),
+    value: null,
     options: [],
     onChange: () => {},
     displayField: '',
@@ -20,28 +23,28 @@ class RemoteSelector extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { value, displayField } = nextProps;
-    if (!value || _.isEmpty(value)) {
+    if (!value || isEmpty(value)) {
       return {
-        selectedValue: null
+        ...prevState
       };
     } else {
-      const opt = {
-        ...value,
-        key: value._id || value.id,
-        value: 0,
+      const option = {
+        item: value,
+        value: value._id || value.id,
         label: value[displayField]
       };
 
-      const opts = prevState.opts || [];
-      const ind = opts.findIndex(i => i.key === opt.key);
+      const options = prevState.options || [];
+      const ind = options.findIndex(i => i.value === option.value);
       if (ind === -1) {
         return {
-          opts: [opt],
-          selectedValue: 0
+          ...prevState,
+          options: [option]
         };
       } else {
         return {
-          selectedValue: ind
+          ...prevState,
+          options: [option]
         };
       }
     }
@@ -50,97 +53,99 @@ class RemoteSelector extends Component {
   constructor(props) {
     super(props);
 
-    this.handleInputChange = _.debounce(this.handleInputChange, 500);
+    // this.loadOptions = debounce(this.loadOptions, 500);
 
     this.state = {
-      firstoptions: [],
       options: [],
-      opts: [],
       selectedValue: null,
-      isLoading: false,
-      searchText: ''
+      firstoptions: [],
+      searchText: '',
+      canLoad: false,
+      refKey: new Date().getTime(),
+      defaultOptions: []
     };
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.value !== this.props.value) {
-  //     const { value, displayField } = this.props;
-  //     if (!value || _.isEmpty(value)) {
-  //       this.setState({
-  //         selectedValue: null
-  //       });
-  //     } else {
-  //       const opt = {
-  //         ...value,
-  //         key: value._id || value.id,
-  //         value: 0,
-  //         label: value[displayField]
-  //       };
-
-  //       const ind = this.state.opts.findIndex(i => i.key === opt.key);
-  //       if (ind === -1) {
-  //         this.setState({
-  //           opts: [opt],
-  //           selectedValue: 0
-  //         });
-  //       } else {
-  //         this.setState({
-  //           selectedValue: ind
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
-
-  loadOptions = options => {
-    const { displayField, value } = this.props;
-
-    if (Array.isArray(options)) {
-      const opts = options.map((item, index) => {
-        if (!_.isObject(item)) {
-          return { key: item, value: item, label: item };
-        }
-        return {
-          ...item,
-          key: item._id || item.id,
-          value: index,
-          label: item[displayField]
-        };
-      });
-      let selectedValue;
-      if (value) {
-        if (!_.isObject(value)) {
-          selectedValue = value;
-        } else {
-          selectedValue = opts.findIndex(
-            item => item.key === (value._id || value.id)
-          );
-        }
-      }
-      if (this.state.firstoptions.length === 0) {
-        this.setState({ firstoptions: options });
-      }
-      this.setState({ opts, options, selectedValue, isLoading: false });
+  onMenuOpen = () => {
+    const { displayField, value, axiosinstance, url, params } = this.props;
+    if (!this.state.canLoad) {
+      axiosinstance()
+        .get(url, { params: { ...params, filter: '' } })
+        .then(({ data }) => {
+          const options = (data.items || []).map(item => ({
+            label: item[displayField],
+            value: item._id || item.id,
+            item
+          }));
+          this.setState({
+            canLoad: true,
+            options,
+            firstoptions: data.items,
+            defaultOptions: options
+          });
+        });
     }
   };
 
-  logChange = val => {
+  loadOptions = (inputValue, callback) => {
+    const { displayField, value, axiosinstance, url, params } = this.props;
+    // if (!this.state.canLoad) {
+    //   return callback(this.state.options);
+    // }
+
+    if (this.state.searchText !== inputValue) {
+      this.setState({ searchText: inputValue });
+      axiosinstance()
+        .get(url, { params: { ...params, filter: inputValue.trim() } })
+        .then(({ data }) => {
+          const options = (data.items || []).map(item => ({
+            label: item[displayField],
+            value: item._id || item.id,
+            item
+          }));
+          this.setState({ options });
+
+          callback(options);
+        });
+    } else {
+      if (this.state.firstoptions.length === 0) {
+        axiosinstance()
+          .get(url, { params: { ...params, filter: inputValue.trim() } })
+          .then(({ data }) => {
+            const options = (data.items || []).map(item => ({
+              label: item[displayField],
+              value: item._id || item.id,
+              item
+            }));
+            this.setState({
+              options,
+              firstoptions: data.items,
+              selectOptions: {}
+            });
+
+            callback(options);
+          });
+      } else {
+        callback(this.state.options);
+      }
+    }
+  };
+
+  logChange = selectedOption => {
     const { onChange, returnkeys, axiosinstance, url, params } = this.props;
+    const val = selectedOption;
+
     if (val) {
       this.setState({ selectedValue: val.value });
     } else {
       this.setState({ selectedValue: null, searchText: '' });
-      this.loadOptions(this.state.firstoptions);
     }
 
     if (val) {
-      if (!_.isObject(this.state.options[0])) {
-        return onChange(val.value);
+      if (!isObject(this.state.options[0])) {
+        return onChange(val.item);
       }
-      const objValue = { ...val };
-      delete objValue.key;
-      delete objValue.value;
-      delete objValue.label;
+      const objValue = { ...val.item };
 
       if (returnkeys.length > 1) {
         const obj = {};
@@ -154,46 +159,37 @@ class RemoteSelector extends Component {
     return onChange(val);
   };
 
-  handleInputChange = text => {
-    const { axiosinstance, url, params } = this.props;
-    if (text === '' && this.state.firstoptions.length === 0) {
-      this.setState({ isFetching: true, searchText: text });
-      return axiosinstance()
-        .get(url, { params: { ...params, filter: text } })
-        .then(({ data }) => {
-          this.setState({ isFetching: false });
-          this.loadOptions(data.items || data);
-        });
-    } else if (text !== '') {
-      if (this.state.searchText !== text) {
-        this.setState({ isFetching: true, searchText: text });
-        axiosinstance()
-          .get(url, { params: { ...params, filter: text } })
-          .then(({ data }) => {
-            this.setState({ isFetching: false });
-            this.loadOptions(data.items || data);
-          });
+  handleInputChange = searchText => {
+    this.setState({ searchText });
+  };
+  getDefaultValue = () => {
+    const value = this.props.value || {};
+    const ind = this.state.options.findIndex(i => {
+      if (isObject) {
+        return i.value === (value._id || value.id);
       }
-    }
+      return i === value;
+    });
+    return this.state.options[ind] || null;
   };
 
   render() {
     const { meta, name, placeholder, disabled } = this.props;
+
     return (
       <div className={this.props.selectUp ? 'select-up' : {}}>
-        <Dropdown
+        <AsyncSelect
           style={{ height: 31 }}
-          name={name}
-          value={this.state.selectedValue}
-          options={this.state.opts}
+          cacheOptions
+          isClearable
+          defaultOptions={this.state.defaultOptions}
+          value={this.getDefaultValue()}
+          loadOptions={this.loadOptions}
           onChange={this.logChange}
-          openOnFocus
-          onBlurResetsInput={false}
-          onInputChange={this.handleInputChange}
-          onOpen={() => this.handleInputChange('')}
-          isLoading={this.state.isFetching}
           placeholder={placeholder}
           disabled={disabled}
+          onInputChange={this.handleInputChange}
+          onMenuOpen={this.onMenuOpen}
         />
         {meta.touched && meta.error && (
           <span className="error">{meta.error}</span>

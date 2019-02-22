@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-select';
-import 'react-select/dist/react-select.css';
-import _ from 'lodash';
+import isObject from 'lodash/isObject';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 
 class Select extends Component {
   static defaultProps = {
@@ -11,7 +12,6 @@ class Select extends Component {
     displayField: '',
     returnkeys: [],
     url: '',
-    multi: false,
     disabled: false
   };
 
@@ -19,68 +19,84 @@ class Select extends Component {
     super(props);
 
     this.state = {
-      options: [],
+      value: '',
       opts: [],
+      options: [],
       selectedValue: ''
     };
   }
 
-  componentDidMount() {
-    this.setOptions(this.props);
-  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { value, displayField, options } = nextProps;
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value === null || nextProps.value === '') {
-      this.setState({ selectedValue: '' });
-    }
-    if (nextProps.options !== this.props.options) {
-      this.setOptions(nextProps);
-    }
-  }
-  setOptions = props => {
-    const { options, displayField, value } = props;
-    if (Array.isArray(options)) {
-      const opts = options.map((item, index) => {
-        if (!_.isObject(item)) {
-          return { key: item, value: item, label: item };
-        }
+    if (!isEqual(value, prevState.value) || !isEqual(prevState.opts, options)) {
+      let state = {};
+
+      const getOptions = () => {
+        return options.map(item => {
+          if (!isObject(item)) {
+            return {
+              item,
+              value: item,
+              label: item
+            };
+          }
+
+          return {
+            item,
+            value: item._id || item.id,
+            label: item[displayField]
+          };
+        });
+      };
+
+      if (!value || isEmpty(value)) {
         return {
-          ...item,
-          key: item._id || item.id,
-          value: index,
-          label: item[displayField]
+          ...prevState,
+          options: getOptions()
         };
-      });
-      let selectedValue;
-      if (value) {
-        if (!_.isObject(value)) {
-          selectedValue = value;
-        } else {
-          selectedValue = opts.findIndex(
-            item => item.key === (value._id || value.id)
-          );
-        }
       }
-      this.setState({ opts, options, selectedValue });
+
+      const option = isObject(value)
+        ? {
+            item: value,
+            value: value._id || value.id,
+            label: value[displayField]
+          }
+        : {
+            item: value,
+            label: value,
+            value
+          };
+
+      if (options.length === 0) {
+        return {
+          ...prevState,
+          options: [option],
+          selectedValue: option,
+          opts: options,
+          value
+        };
+      } else {
+        return {
+          ...prevState,
+          options: getOptions(),
+          selectedValue: option,
+          opts: options,
+          value
+        };
+      }
     }
-  };
+    return { ...prevState };
+  }
 
   logChange = val => {
     const { onChange, returnkeys } = this.props;
     if (val) {
-      this.setState({ selectedValue: val.value });
-    } else {
-      this.setState({ selectedValue: '' });
-    }
-
-    if (val) {
-      if (!_.isObject(this.state.options[0])) {
-        return onChange(val.value);
+      if (!isObject(val.item)) {
+        return onChange(val.item);
       }
-      const objValue = { ...val };
-      delete objValue.key;
-      delete objValue.value;
-      delete objValue.label;
+      const objValue = { ...val.item };
 
       if (returnkeys.length > 1) {
         const obj = {};
@@ -89,14 +105,14 @@ class Select extends Component {
         });
         return onChange({ simple: obj, full: objValue });
       }
-
-      return onChange(objValue);
+      return onChange({ simple: objValue, full: objValue });
+    } else {
+      return onChange(val);
     }
-    return onChange(val);
   };
 
   render() {
-    const { meta, name, placeholder, multi, disabled } = this.props;
+    const { meta, name, placeholder, disabled } = this.props;
 
     return (
       <div className="field">
@@ -105,15 +121,16 @@ class Select extends Component {
           placeholder={placeholder}
           name={name}
           value={this.state.selectedValue}
-          options={this.state.opts}
+          options={this.state.options}
           onChange={this.logChange}
           openOnFocus
-          multi={multi}
+          isClearable
           onBlurResetsInput={false}
           disabled={disabled}
         />
-        {meta.touched &&
-          meta.error && <span className="error">{meta.error}</span>}
+        {meta.touched && meta.error && (
+          <span className="error">{meta.error}</span>
+        )}
       </div>
     );
   }
