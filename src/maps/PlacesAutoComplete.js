@@ -52,7 +52,7 @@ class PlacesAutoComplete extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const value = nextProps.input.value || nextProps.value;
-    if (!isEqual(value, prevState.value)) {
+    if (!isEqual(value, prevState.value) && Boolean(value)) {
       const defaultValue = {
         item: { name: value.name, id: value.id, place_id: value.place_id },
         value: value.place_id,
@@ -105,7 +105,8 @@ class PlacesAutoComplete extends Component {
   handleScriptLoad = () => {
     const { center } = this.props;
 
-    const map = new google.maps.Map(this.mapRef, { center });
+    this.div = document.createElement('div');
+    const map = new google.maps.Map(this.div, { center });
 
     this.mapservice = new google.maps.places.AutocompleteService();
     this.placesService = new google.maps.places.PlacesService(map);
@@ -135,6 +136,24 @@ class PlacesAutoComplete extends Component {
     }
   };
 
+  renderMap = () => {
+    if (typeof google === 'object') {
+      if (!this.mapservice) {
+        this.handleScriptLoad();
+      }
+      return null;
+    } else {
+      return (
+        <Script
+          url={`https://maps.googleapis.com/maps/api/js?key=${
+            this.props.API_KEY
+          }&libraries=places`}
+          onLoad={this.handleScriptLoad}
+        />
+      );
+    }
+  };
+
   render() {
     return (
       <div>
@@ -143,12 +162,7 @@ class PlacesAutoComplete extends Component {
             this.mapRef = node;
           }}
         />
-        <Script
-          url={`https://maps.googleapis.com/maps/api/js?key=${
-            this.props.API_KEY
-          }&libraries=places`}
-          onLoad={this.handleScriptLoad}
-        />
+        {this.renderMap()}
 
         <AsyncSelect
           cacheOptions
