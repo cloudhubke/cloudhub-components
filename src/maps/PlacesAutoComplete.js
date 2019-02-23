@@ -137,7 +137,7 @@ class PlacesAutoComplete extends Component {
   };
 
   renderMap = () => {
-    if (typeof google === 'object') {
+    if (typeof google === 'object' && google.maps === 'object') {
       if (!this.mapservice) {
         this.handleScriptLoad();
       }
