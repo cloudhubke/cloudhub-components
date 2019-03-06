@@ -64,6 +64,7 @@ class RemoteSelector extends Component {
       refKey: new Date().getTime(),
       defaultOptions: []
     };
+    this.loadOptions = debounce(this.loadOptions, 400);
   }
 
   onMenuOpen = () => {
@@ -89,46 +90,28 @@ class RemoteSelector extends Component {
 
   loadOptions = (inputValue, callback) => {
     const { displayField, value, axiosinstance, url, params } = this.props;
-    // if (!this.state.canLoad) {
-    //   return callback(this.state.options);
-    // }
+    this.setState({ searchText: inputValue });
+    axiosinstance()
+      .get(url, { params: { ...params, filter: inputValue.trim() } })
+      .then(({ data }) => {
+        const options = (data.items || []).map(item => ({
+          label: item[displayField],
+          value: item._id || item.id,
+          item
+        }));
 
-    if (this.state.searchText !== inputValue) {
-      this.setState({ searchText: inputValue });
-      axiosinstance()
-        .get(url, { params: { ...params, filter: inputValue.trim() } })
-        .then(({ data }) => {
-          const options = (data.items || []).map(item => ({
-            label: item[displayField],
-            value: item._id || item.id,
-            item
-          }));
-          this.setState({ options });
-
-          callback(options);
-        });
-    } else {
-      if (this.state.firstoptions.length === 0) {
-        axiosinstance()
-          .get(url, { params: { ...params, filter: inputValue.trim() } })
-          .then(({ data }) => {
-            const options = (data.items || []).map(item => ({
-              label: item[displayField],
-              value: item._id || item.id,
-              item
-            }));
-            this.setState({
-              options,
-              firstoptions: data.items,
-              selectOptions: {}
-            });
-
-            callback(options);
+        if (this.state.firstoptions.length === 0) {
+          this.setState({
+            options,
+            firstoptions: data.items,
+            selectOptions: {}
           });
-      } else {
-        callback(this.state.options);
-      }
-    }
+        } else {
+          this.setState({ options });
+        }
+
+        callback(options);
+      });
   };
 
   logChange = selectedOption => {
