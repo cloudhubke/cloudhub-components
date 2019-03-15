@@ -12,7 +12,8 @@ class Select extends Component {
     displayField: '',
     returnkeys: [],
     url: '',
-    disabled: false
+    disabled: false,
+    menuPlacement: 'auto'
   };
 
   constructor(props) {
@@ -115,7 +116,7 @@ class Select extends Component {
     const { meta, name, placeholder, disabled } = this.props;
 
     return (
-      <div className="field">
+      <div>
         <Dropdown
           style={{ height: 31 }}
           placeholder={placeholder}
@@ -127,6 +128,7 @@ class Select extends Component {
           isClearable
           onBlurResetsInput={false}
           disabled={disabled}
+          menuPlacement={this.props.menuPlacement || 'auto'}
         />
         {meta.touched && meta.error && (
           <span className="error">{meta.error}</span>

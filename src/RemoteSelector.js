@@ -18,7 +18,8 @@ class RemoteSelector extends Component {
     url: '',
     placeholder: 'Select...',
     selectUp: false,
-    disabled: false
+    disabled: false,
+    menuPlacement: 'auto'
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -160,7 +161,7 @@ class RemoteSelector extends Component {
     const { meta, name, placeholder, disabled } = this.props;
 
     return (
-      <div className={this.props.selectUp ? 'select-up' : {}}>
+      <div>
         <AsyncSelect
           style={{ height: 31 }}
           cacheOptions
@@ -173,6 +174,7 @@ class RemoteSelector extends Component {
           disabled={disabled}
           onInputChange={this.handleInputChange}
           onMenuOpen={this.onMenuOpen}
+          menuPlacement={this.props.menuPlacement || 'auto'}
         />
         {meta.touched && meta.error && (
           <span className="error">{meta.error}</span>

@@ -37,7 +37,7 @@
     "awesome-phonenumber": "^2.2.3",
     "react-intl-tel-input": "^4.3.0",
     "react-quill": "^1.2.3",
-    "react-select": "^1.0.0"
+    "react-select": "2.4.2"
   },
   "devDependencies": {
     "axios": "^0.17.1",

@@ -18,7 +18,8 @@ class MultiRemoteSelector extends Component {
     url: '',
     placeholder: 'Select...',
     selectUp: false,
-    disabled: false
+    disabled: false,
+    menuPlacement: 'auto'
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -174,6 +175,7 @@ class MultiRemoteSelector extends Component {
           onInputChange={this.handleInputChange}
           onMenuOpen={this.onMenuOpen}
           isMulti
+          menuPlacement={this.props.menuPlacement || 'auto'}
         />
         {meta.touched && meta.error && (
           <span className="error">{meta.error}</span>

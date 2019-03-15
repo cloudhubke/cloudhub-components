@@ -18,7 +18,15 @@ class StaticListSelector extends Component {
     this.state = {};
   }
   render() {
-    const { list, input, value, meta, onChange, onSelectChange } = this.props;
+    const {
+      list,
+      input,
+      value,
+      meta,
+      onChange,
+      onSelectChange,
+      menuPlacement
+    } = this.props;
     const selectedvalue = input.value || value;
     return (
       <Select
@@ -42,6 +50,7 @@ class StaticListSelector extends Component {
           }
         }}
         meta={meta}
+        menuPlacement={menuPlacement}
       />
     );
   }

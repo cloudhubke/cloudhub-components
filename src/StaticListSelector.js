@@ -24,7 +24,15 @@ class StaticListSelector extends Component {
   }
 
   render() {
-    const { list, value, input, meta, onChange, onSelectChange } = this.props;
+    const {
+      list,
+      value,
+      input,
+      meta,
+      onChange,
+      onSelectChange,
+      menuPlacement
+    } = this.props;
     return (
       <Select
         options={list}
@@ -62,6 +70,7 @@ class StaticListSelector extends Component {
         displayField={this.props.displayField}
         returnkeys={this.props.returnkeys}
         meta={meta}
+        menuPlacement={menuPlacement}
       />
     );
   }

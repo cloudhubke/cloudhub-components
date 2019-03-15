@@ -12,7 +12,8 @@ class Select extends Component {
     displayField: '',
     returnkeys: [],
     url: '',
-    disabled: false
+    disabled: false,
+    menuPlacement: 'auto'
   };
 
   constructor(props) {
@@ -139,6 +140,7 @@ class Select extends Component {
           isClearable
           onBlurResetsInput={false}
           disabled={disabled}
+          menuPlacement={this.props.menuPlacement || 'auto'}
         />
         {meta.touched && meta.error && (
           <span className="error">{meta.error}</span>
