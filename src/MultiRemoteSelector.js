@@ -69,7 +69,9 @@ class MultiRemoteSelector extends Component {
       axiosinstance()
         .get(url, { params: { ...params, filter: '' } })
         .then(({ data }) => {
-          const options = (data.items || []).map(item => ({
+          const array = data ? data.items || data : [];
+
+          const options = array.map(item => ({
             label: item[displayField],
             value: item._id || item.id,
             item
@@ -77,7 +79,7 @@ class MultiRemoteSelector extends Component {
           this.setState({
             canLoad: true,
             options,
-            firstoptions: data.items,
+            firstoptions: array,
             defaultOptions: options
           });
         });
@@ -90,7 +92,9 @@ class MultiRemoteSelector extends Component {
     axiosinstance()
       .get(url, { params: { ...params, filter: inputValue.trim() } })
       .then(({ data }) => {
-        const options = (data.items || []).map(item => ({
+        const array = data ? data.items || data : [];
+
+        const options = array.map(item => ({
           label: item[displayField],
           value: item._id || item.id,
           item
@@ -99,7 +103,7 @@ class MultiRemoteSelector extends Component {
         if (this.state.firstoptions.length === 0) {
           this.setState({
             options,
-            firstoptions: data.items,
+            firstoptions: array,
             selectOptions: {}
           });
         } else {
