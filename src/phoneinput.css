@@ -19,11 +19,11 @@
   margin-right: 0;
   width: 100%;
 }
-.intl-tel-input .selected-flag {
-  position: relative;
-  width: 36px;
-  height: 100%;
-  padding: 0 0 0 8px;
+.country-list {
+  z-index: 2000;
+  background-color: red;
+  border-width: 1px;
+  border-radius: 10px;
 }
 
 /*

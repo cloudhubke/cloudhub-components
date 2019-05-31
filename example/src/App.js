@@ -5,12 +5,10 @@ import { store } from './store/store';
 import { Provider } from 'react-redux';
 import ContactForm from './ContactForm';
 import GridDemo from './GridDemo';
-import Bank from './pages/Bank';
-import CourseSelector from './pages/CourseSelector';
 
 class App extends Component {
   state = {
-    value: 'hello'
+    value: 'hello',
   };
   onChange = value => {
     this.setState({ value });
@@ -20,10 +18,8 @@ class App extends Component {
       this.setState({ value: 'Hello whoever' });
     }, 5000);
   }
+
   render() {
-    console.log('====================================');
-    console.log('RENDERING>>>>');
-    console.log('====================================');
     return (
       <div style={{ padding: 30 }}>
         {
@@ -44,4 +40,4 @@ const ReduxApp = () => (
   </Provider>
 );
 
-export default ReduxApp;
+export default App;

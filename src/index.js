@@ -6,7 +6,7 @@ import MultiRemoteSelector from './MultiRemoteSelector';
 import MultiSelector from './MultiSelector';
 import MultiStaticListSelector from './MultiStaticListSelector';
 import Progress from './Progress';
-import PhoneInput from './PhoneInput';
+// import PhoneInput from './PhoneInput';
 import RemoteSelector from './RemoteSelector';
 import Selector from './Selector';
 import StaticListSelector from './StaticListSelector';
@@ -26,7 +26,7 @@ export {
   MultiSelector,
   MultiStaticListSelector,
   Progress,
-  PhoneInput,
+  // PhoneInput,
   RemoteSelector,
   Selector,
   StaticListSelector,

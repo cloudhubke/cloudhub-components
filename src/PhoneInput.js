@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import IntlTelInput from 'react-intl-tel-input';
 import 'react-intl-tel-input/dist/libphonenumber';
 
@@ -24,7 +24,8 @@ class PhoneInput extends Component {
     input: {
       value: '',
       onChange: () => {}
-    }
+    },
+    inputClassName: 'phone-input'
   };
 
   state = {
@@ -66,17 +67,18 @@ class PhoneInput extends Component {
   render() {
     const { meta } = this.props;
     return (
-      <div style={{ width: '100%', flex: 1 }}>
+      <div>
         <IntlTelInput
           preferredCountries={this.props.preferredCountries}
           defaultCountry={this.props.defaultCountry}
-          css={['intl-tel-input']}
           value={this.state.value.toString()}
+          inputClassName={this.props.inputClassName}
           fieldId={this.props.fieldId}
           onPhoneNumberChange={this.validate}
         />
+
         {meta.touched && meta.error && (
-          <div className="error">{meta.error}</div>
+          <div className="error">ERROR: {meta.error}</div>
         )}
       </div>
     );

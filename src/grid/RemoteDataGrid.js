@@ -154,6 +154,7 @@ class RemoteDataGrid extends React.PureComponent {
     allowColumnResizing: true,
     detailTemplate: () => <div />,
     rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
+    cellComponent: () => null,
     onEdit: () => {},
     onDelete: () => {},
     onDeleteRows: () => {},
@@ -198,7 +199,8 @@ class RemoteDataGrid extends React.PureComponent {
       grouping: [],
       selection: [],
       filters: [],
-      searchTerm: ''
+      searchTerm: '',
+      actionsComponent: null
     };
 
     this.changeExpandedDetails = expandedRows =>
@@ -235,7 +237,7 @@ class RemoteDataGrid extends React.PureComponent {
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
-    this.tableCellTemplate = ({ row, column, style }) => {
+    this.cellComponent = ({ row, column, style }) => {
       const permissions = {
         allowadd: props.permissions.allowadd || false,
         allowedit: props.permissions.allowedit || false,
@@ -244,52 +246,54 @@ class RemoteDataGrid extends React.PureComponent {
       };
       if (column.name === 'actions') {
         return (
-          <TableCell>
-            <div
-              style={{
-                height: '100%',
-                width: '100%',
-                minWidth: 150
-              }}
-            >
-              {props.rowmenu ? (
-                props.rowmenu({
-                  row,
-                  column,
-                  classes: props.classes,
-                  ...permissions
-                })
-              ) : (
+          this.props.actionsComponent || (
+            <TableCell>
+              <div
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  minWidth: 150
+                }}
+              >
+                {props.rowmenu ? (
+                  props.rowmenu({
+                    row,
+                    column,
+                    classes: props.classes,
+                    ...permissions
+                  })
+                ) : (
+                  <IconButton
+                    classes={{ root: props.classes.iconButton }}
+                    onClick={() => this.props.onView(row)}
+                    title="View row"
+                    color="primary"
+                  >
+                    <ViewList className={props.classes.icon} />
+                  </IconButton>
+                )}
                 <IconButton
                   classes={{ root: props.classes.iconButton }}
-                  onClick={() => this.props.onView(row)}
-                  title="View row"
-                  color="primary"
+                  color="secondary"
+                  onClick={() => this.props.onEdit(row)}
+                  title="Edit row"
+                  disabled={!permissions.allowedit}
                 >
-                  <ViewList className={props.classes.icon} />
+                  <EditIcon className={props.classes.icon} />
                 </IconButton>
-              )}
-              <IconButton
-                classes={{ root: props.classes.iconButton }}
-                color="secondary"
-                onClick={() => this.props.onEdit(row)}
-                title="Edit row"
-                disabled={!permissions.allowedit}
-              >
-                <EditIcon className={props.classes.icon} />
-              </IconButton>
-              <IconButton
-                classes={{ root: props.classes.iconButton }}
-                color="primary"
-                style={{ color: red[500] }}
-                onClick={() => this.props.onDelete(row)}
-                title="Delete row"
-                disabled={!permissions.allowdelete}
-              >
-                <DeleteIcon className={props.classes.icon} />
-              </IconButton>
-            </div>
-          </TableCell>
+                <IconButton
+                  classes={{ root: props.classes.iconButton }}
+                  color="primary"
+                  style={{ color: red[500] }}
+                  onClick={() => this.props.onDelete(row)}
+                  title="Delete row"
+                  disabled={!permissions.allowdelete}
+                >
+                  <DeleteIcon className={props.classes.icon} />
+                </IconButton>
+              </div>
+            </TableCell>
+          )
         );
       } else if (column.name === 'counter') {
         let ind =
@@ -302,7 +306,7 @@ class RemoteDataGrid extends React.PureComponent {
           </TableCell>
         );
       } else {
-        return this.props.templates({ row, column, style });
+        return this.props.cellComponent({ row, column, style });
         // return <TableCell>col</TableCell>;
       }
     };
@@ -480,7 +484,7 @@ class RemoteDataGrid extends React.PureComponent {
 
           <Table
             rowComponent={rowComponent}
-            cellComponent={this.tableCellTemplate}
+            cellComponent={this.cellComponent}
             allowColumnReordering
           />
 
@@ -535,7 +539,7 @@ class RemoteDataGrid extends React.PureComponent {
               Are you sure to delete the following row?
             </DialogContentText>
             <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <Table cellComponent={this.tableCellTemplate} />
+              <Table cellComponent={this.cellComponent} />
               <TableHeaderRow />
             </Grid>
           </DialogContent>

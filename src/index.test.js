@@ -2,6 +2,7 @@ import { expect } from 'chai';
 
 import Ckeditor from '../dist/index.umd';
 
+
 describe('The DatePicker Component', () => {
   describe('component', () => {
     it('It should return a function', () => {

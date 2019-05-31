@@ -8,6 +8,8 @@ import Progress from 'antd/lib/progress';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import 'antd/lib/upload/style/index.css';
+
 import { resolve } from 'path';
 
 const styles = () => ({

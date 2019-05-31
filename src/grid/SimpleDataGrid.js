@@ -4,31 +4,52 @@ import {
   Table,
   TableHeaderRow,
   DragDropProvider,
-  TableColumnReordering,
+  TableColumnReordering
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles({
+  root: {
+    '& th': {
+      overflow: 'hidden',
+      paddingLeft: '10px',
+      paddingRight: '10px'
+    },
+    '& .td': {
+      overflow: 'hidden',
+      paddingLeft: '10px',
+      paddingRight: '10px'
+    }
+  }
+});
 
 export class SimpleDataGrid extends React.PureComponent {
   static defaultProps = {
-    templates: ({ row, column }) => (
+    cellComponent: ({ row, column }) => (
       <TableCell>{`${row[column.name]}`}</TableCell>
     ),
     columnExtensions: [],
+    columns: [],
+    rows: []
   };
 
   render() {
-    const { rows, columns, columnExtensions } = this.props;
+    const { rows, columns, columnExtensions, cellComponent } = this.props;
 
+    const classes = useStyles();
     return (
-      <Grid rows={rows} columns={columns || []}>
-        <DragDropProvider />
-        <Table
-          cellComponent={this.props.templates}
-          columnExtensions={columnExtensions}
-        />
-        <TableColumnReordering defaultOrder={columns.map(i => i.name)} />
-        <TableHeaderRow />
-      </Grid>
+      <Block className={classes.root}>
+        <Grid rows={rows} columns={columns || []}>
+          <DragDropProvider />
+          <Table
+            cellComponent={cellComponent}
+            columnExtensions={columnExtensions}
+          />
+          <TableColumnReordering defaultOrder={columns.map(i => i.name)} />
+          <TableHeaderRow />
+        </Grid>
+      </Block>
     );
   }
 }

@@ -7,7 +7,6 @@ import AsyncSelect from 'react-select/lib/Async';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import axios from 'axios';
 
 // Import React Scrit Libraray to load Google object
 import Script from 'react-load-script';
@@ -28,9 +27,7 @@ const SearchBar = inputProps => {
 
 class PlacesAutoComplete extends Component {
   static defaultProps = {
-    axiosinstance: () => axios.create({}),
-    latitude: '-1.292066',
-    longitude: '36.821946',
+    center: { lat: -1.292066, lng: 36.821946 },
     onChange: () => {},
     value: null,
     input: {
@@ -38,9 +35,7 @@ class PlacesAutoComplete extends Component {
       onChange: () => {}
     },
     placeholder: 'Search location...',
-    height: 31,
-    region: null,
-    API_KEY: ''
+    height: 31
   };
   constructor(props) {
     super(props);
@@ -49,6 +44,7 @@ class PlacesAutoComplete extends Component {
     this.state = {
       inputValue: '',
       value: null,
+      defaultOptions: [],
       defaultValue: null,
       options: []
     };
@@ -69,35 +65,28 @@ class PlacesAutoComplete extends Component {
         return {
           ...prevState,
           value,
-          defaultValue
+          defaultValue,
+          defaultOptions: prevState.options
         };
       }
       return {
         ...prevState,
         value,
         defaultValue,
-        options: [defaultValue]
+        defaultOptions: [defaultValue]
       };
     }
     return { ...prevState };
   }
 
-  componentDidUpdate(prevProps) {
-    if (!isEqual(prevProps.region, this.props.region)) {
-      this.nearBySearch(this.props.region);
-    }
-  }
-
   onChange = ({ value, item }) => {
-    const { onChange, input, axiosinstance, mapskey } = this.props;
-    const searchurl = `/mapsapi/maps/api/place/details/json?placeid=${value}&key=${
-      this.props.API_KEY
-    }`;
+    var request = {
+      placeId: value
+    };
 
-    axiosinstance()
-      .get(searchurl)
-      .then(({ data }) => {
-        const result = data.result || {};
+    this.placesService.getDetails(request, (place, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        const result = place || {};
         const address = result.geometry || {};
         const location = address.location || {};
 
@@ -111,67 +100,28 @@ class PlacesAutoComplete extends Component {
 
         this.props.onChange({ ...item, ...origin });
         this.props.input.onChange({ ...item, ...origin });
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
-
-  nearBySearch = region => {
-    const { options } = this.state;
-    if (!region) {
-      return;
-    }
-    if (!region.lat || !region.lng) {
-      return;
-    }
-    const params = {
-      location: `${region.lat},${region.lng}`,
-      type: ['road', 'building', 'hotel', 'store'],
-      key: this.props.API_KEY,
-      rankby: 'distance'
-    };
-
-    const searchurl = '/mapsapi/maps/api/place/nearbysearch/json';
-    return axios.get(searchurl, { params }).then(({ data }) => {
-      const result = data.results[0] || {};
-      const address = result.geometry || {};
-      const location = address.location || {};
-
-      const item = {
-        label: result.name,
-        item: { name: result.name, id: result.id, place_id: result.place_id },
-        value: result.place_id
-      };
-
-      this.setState({ options: [...options, item] });
-
-      const origin = {
-        latitude:
-          typeof location.lat === 'function' ? location.lat() : location.lat,
-        longitude:
-          typeof location.lng === 'function' ? location.lng() : location.lng,
-        place: result
-      };
-
-      this.props.onChange({ ...item.item, ...origin });
-      this.props.input.onChange({ ...item, ...origin });
+      }
     });
   };
 
+  handleScriptLoad = () => {
+    const { center } = this.props;
+    this.div = document.createElement('div');
+    const map = new google.maps.Map(this.div, { center });
+    this.mapservice = new google.maps.places.AutocompleteService();
+    this.placesService = new google.maps.places.PlacesService(map);
+  };
+
   loadOptions = (inputValue, callback) => {
-    const { axiosinstance, latitude, longitude, mapskey } = this.props;
-    const searchurl = `/mapsapi/maps/api/place/autocomplete/json?input=${inputValue}&types=geocode&location=${latitude},${longitude}&radius=1000&key=${
-      this.props.API_KEY
-    }`;
-
     if (inputValue) {
-      //use axios to query places
+      this.mapservice.getQueryPredictions(
+        { input: inputValue },
+        (predictions, status) => {
+          if (status != google.maps.places.PlacesServiceStatus.OK) {
+            return;
+          }
 
-      axiosinstance()
-        .get(searchurl)
-        .then(({ data }) => {
-          const places = (data.predictions || []).map(p => ({
+          const places = predictions.map(p => ({
             label: p.description,
             item: { name: p.description, id: p.id, place_id: p.place_id },
             value: p.place_id
@@ -179,10 +129,28 @@ class PlacesAutoComplete extends Component {
 
           this.setState({ options: places });
           return callback(places);
-        })
-        .catch(e => {
-          callback([]);
-        });
+        }
+      );
+    } else {
+      return callback([]);
+    }
+  };
+
+  renderMap = () => {
+    if (typeof google === 'object' && google.maps === 'object') {
+      if (!this.mapservice) {
+        this.handleScriptLoad();
+      }
+      return null;
+    } else {
+      return (
+        <Script
+          url={`https://maps.googleapis.com/maps/api/js?key=${
+            this.props.API_KEY
+          }&libraries=places`}
+          onLoad={this.handleScriptLoad}
+        />
+      );
     }
   };
 
@@ -235,7 +203,6 @@ class PlacesAutoComplete extends Component {
         return {
           ...provided,
           height,
-          borderColor: borderColor || provided.borderColor,
           backgroundColor: backgroundColor || '#FFF',
           borderWidth: 1,
           '&:hover': {
@@ -247,15 +214,24 @@ class PlacesAutoComplete extends Component {
     };
 
     return (
-      <AsyncSelect
-        styles={customStyles}
-        // cacheOptions
-        options={this.state.options}
-        loadOptions={this.loadOptions}
-        value={this.state.defaultValue}
-        onChange={this.onChange}
-        placeholder={this.props.placeholder}
-      />
+      <div>
+        <div
+          ref={node => {
+            this.mapRef = node;
+          }}
+        />
+        {this.renderMap()}
+
+        <AsyncSelect
+          styles={customStyles}
+          // cacheOptions
+          loadOptions={this.loadOptions}
+          defaultOptions={this.state.defaultOptions}
+          value={this.state.defaultValue}
+          onChange={this.onChange}
+          placeholder={this.props.placeholder}
+        />
+      </div>
     );
   }
 }
