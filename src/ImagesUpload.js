@@ -24,13 +24,7 @@ const getStyles = ({ cardStyles }) => {
       display: 'flex',
       position: 'relative',
       '& .ant-upload-list': {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
         display: 'flex',
-        overflowY: 'auto',
         flexDirection: 'row',
         justifyContent: 'flex-start',
         flexWrap: 'wrap'
@@ -41,7 +35,12 @@ const getStyles = ({ cardStyles }) => {
         display: 'flex',
         ...cardStyles
       },
-
+      '& .ant-upload-list-item.ant-upload-list-item-done img': {
+        width: '100%',
+        height: '100%',
+        ...cardStyles,
+        objectFit: 'cover'
+      },
       '& .ant-upload-select-picture-card i': {
         fontSize: 28,
         color: '#999'
@@ -60,10 +59,14 @@ const getStyles = ({ cardStyles }) => {
   };
 };
 
-const ImagesCard = ({ cardStyles, children }) => {
+const ImagesCard = ({ cardStyles, children, flex }) => {
   const classes = getStyles({ cardStyles }).useStyles();
 
-  return <Block className={classes.imagesList}>{children}</Block>;
+  return (
+    <Block flex={flex} className={classes.imagesList}>
+      {children}
+    </Block>
+  );
 };
 
 class ImagesUpload extends Component {
@@ -86,7 +89,8 @@ class ImagesUpload extends Component {
       height: 150
     },
     url: '/fileapi/upload/image',
-    example: null
+    example: null,
+    flex: false
   };
 
   constructor(props) {
