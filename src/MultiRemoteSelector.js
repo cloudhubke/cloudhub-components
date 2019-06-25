@@ -30,20 +30,19 @@ class MultiRemoteSelector extends Component {
       return {
         ...prevState
       };
-    } else {
-      if (Array.isArray(values)) {
-        const options = values.map(value => ({
-          item: value,
-          value: value._id || value.id,
-          label: value[displayField]
-        }));
-        return {
-          ...prevState,
-          options
-        };
-      }
-      return { ...prevState };
     }
+    if (Array.isArray(values)) {
+      const options = values.map(value => ({
+        item: value,
+        value: value.id,
+        label: value[displayField]
+      }));
+      return {
+        ...prevState,
+        options
+      };
+    }
+    return { ...prevState };
   }
 
   constructor(props) {
@@ -73,7 +72,7 @@ class MultiRemoteSelector extends Component {
 
           const options = array.map(item => ({
             label: item[displayField],
-            value: item._id || item.id,
+            value: item.id,
             item
           }));
           this.setState({
@@ -96,7 +95,7 @@ class MultiRemoteSelector extends Component {
 
         const options = array.map(item => ({
           label: item[displayField],
-          value: item._id || item.id,
+          value: item.id,
           item
         }));
 
@@ -149,11 +148,12 @@ class MultiRemoteSelector extends Component {
   handleInputChange = searchText => {
     this.setState({ searchText });
   };
+
   getDefaultValue = () => {
     const value = this.props.value || [];
     const options = this.state.options.filter(i => {
       if (isObject) {
-        const ids = Array.isArray(value) ? value.map(v => v._id || v.id) : [];
+        const ids = Array.isArray(value) ? value.map(v => v.id) : [];
         return ids.includes(i.value);
       }
       return value.includes[i];

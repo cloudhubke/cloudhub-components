@@ -306,7 +306,7 @@ class DataGridWithDetailView extends React.PureComponent {
     return (
       <Paper className="grid-container">
         {this.renderHeader()}
-        <Grid rows={data} columns={columns} getRowId={row => row._id || row.id}>
+        <Grid rows={data} columns={columns} getRowId={row =>  row.id}>
           <SelectionState
             selection={selection}
             onSelectionChange={this.changeSelection}

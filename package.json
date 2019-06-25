@@ -36,9 +36,10 @@
     "@devexpress/dx-react-grid-material-ui": "1.11.0",
     "antd": "3.19.1",
     "awesome-phonenumber": "2.10.0",
+    "hex-to-rgba": "2.0.0",
     "react-intl-tel-input": "7.0.1",
     "react-quill": "^1.2.3",
-    "react-select": "2.4.2"
+    "react-select": "3.0.4"
   },
   "devDependencies": {
     "@babel/cli": "7.2.0",
@@ -55,6 +56,7 @@
     "@babel/preset-react": "7.0.0",
     "@babel/register": "7.0.0",
     "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "10.0.1",
     "chai": "4.1.2",
     "css-loader": "0.28.8",
     "eslint": "5.16.0",
@@ -82,8 +84,8 @@
     "@material-ui/core": "^4.0.1",
     "@material-ui/icons": "^4.0.1",
     "axios": "^0.17.1",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "lodash": "4.17.10"
   },
   "config": {

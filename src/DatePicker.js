@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
 import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
+
+import 'antd/lib/input/style/index.css';
 import './datepicker.css';
 
 class AntDatePicker extends Component {
   static defaultProps = {
-    defaultValue: '',
     dateFormat: 'DD MMM, YYYY hh:mm a',
     showTime: false,
     timestamp: true,
     onChange: () => {},
+    value: null,
     input: {
-      onChange: () => {}
-    },
-    meta: {}
+      onChange: () => {},
+      value: null
+    }
   };
+
   componentDidMount() {}
+
   onDateChanged = date => {
     const { timestamp, dateFormat } = this.props;
     if (date) {
@@ -33,21 +37,28 @@ class AntDatePicker extends Component {
   };
 
   render() {
-    const { value } = this.props.input;
-    const { meta, classes, dateFormat } = this.props;
+    const {
+      timestamp,
+      input,
+      value,
+      onChange,
+      showTime,
+      dateFormat,
+      style,
+      ...rest
+    } = this.props;
+
+    const val = input.value || value;
 
     return (
-      <div>
-        <DatePicker
-          style={{ width: '100%' }}
-          defaultValue={value ? moment(value) : null}
-          format={dateFormat}
-          onChange={this.onDateChanged}
-          showTime={this.props.showTime}
-        />
-        {meta.touched &&
-          meta.error && <div className="error">{meta.error}</div>}
-      </div>
+      <DatePicker
+        style={{ ...style, width: '100%' }}
+        value={val ? moment(val) : null}
+        format={dateFormat}
+        onChange={this.onDateChanged}
+        showTime={showTime}
+        {...rest}
+      />
     );
   }
 }

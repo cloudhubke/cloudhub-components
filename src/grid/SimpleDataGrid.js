@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Grid,
   Table,
@@ -7,51 +7,141 @@ import {
   TableColumnReordering
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
+import Button from '@material-ui/core/Button';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogContent from '@material-ui/core/DialogContent';
+
 import { makeStyles } from '@material-ui/styles';
+import Block from '../components/Block';
+import './grid.css';
 
 const useStyles = makeStyles({
-  root: {
+  gridContainer: {
     '& th': {
       overflow: 'hidden',
       paddingLeft: '10px',
       paddingRight: '10px'
     },
-    '& .td': {
+    '& td': {
       overflow: 'hidden',
+      textOverflow: 'ellipsis',
       paddingLeft: '10px',
       paddingRight: '10px'
+    },
+    '& div::-webkit-scrollbar': {
+      width: '16px'
+    },
+    '& div::-webkit-scrollbar-track': {
+      background: 'grey',
+      borderTop: '7px solid white',
+      borderBottom: '7px solid white'
+    },
+    '& div::-webkit-scrollbar-thumb': {
+      background: 'grey',
+      borderTop: '4px solid white',
+      borderBottom: '4px solid white'
+    },
+    '& div::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: '#aaa'
     }
   }
 });
 
-export class SimpleDataGrid extends React.PureComponent {
-  static defaultProps = {
-    cellComponent: ({ row, column }) => (
-      <TableCell>{`${row[column.name]}`}</TableCell>
-    ),
-    columnExtensions: [],
-    columns: [],
-    rows: []
+const SimpleDataGrid = props => {
+  const { rows, columns, columnExtensions, cellComponent } = props;
+
+  const [deletingRows, setDeletingRows] = useState([]);
+
+  const classes = useStyles();
+  const renderHeader = () => {
+    props.header({});
   };
 
-  render() {
-    const { rows, columns, columnExtensions, cellComponent } = this.props;
+  const cancelDelete = () => {
+    setDeletingRows([]);
+  };
 
-    const classes = useStyles();
-    return (
-      <Block className={classes.root}>
-        <Grid rows={rows} columns={columns || []}>
-          <DragDropProvider />
-          <Table
-            cellComponent={cellComponent}
-            columnExtensions={columnExtensions}
-          />
-          <TableColumnReordering defaultOrder={columns.map(i => i.name)} />
-          <TableHeaderRow />
-        </Grid>
+  useEffect(() => {
+    if (props.deletingRows) {
+      setDeletingRows(props.deletingRows);
+    }
+  }, [props.deletingRows]);
+
+  return (
+    <Block style={{ position: 'relative' }}>
+      <Block flex={false}>{renderHeader()}</Block>
+      <Block className={classes.gridContainer}>
+        <Block
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0
+          }}
+        >
+          <Grid rows={rows} columns={columns || []}>
+            <DragDropProvider />
+            <Table
+              cellComponent={cellComponent}
+              columnExtensions={columnExtensions}
+            />
+            <TableColumnReordering defaultOrder={columns.map(i => i.name)} />
+            <TableHeaderRow />
+          </Grid>
+        </Block>
       </Block>
-    );
-  }
-}
+
+      <Dialog open={deletingRows.length > 0} onClose={cancelDelete}>
+        <DialogTitle>Deleting Record!</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {props.deletingWarningMessage
+              || 'Are you sure to delete the following record?'}
+          </DialogContentText>
+          <Block className={classes.gridContainer}>
+            <Grid
+              rows={deletingRows}
+              columns={props.columns.filter(
+                c => c.name.toLowerCase() !== 'actions'
+              )}
+            >
+              <Table cellComponent={cellComponent} />
+              <TableHeaderRow />
+            </Grid>
+          </Block>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.onCancelDelete} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              props.onDeleteRows(deletingRows);
+            }}
+            color="secondary"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Block>
+  );
+};
+
+SimpleDataGrid.defaultProps = {
+  cellComponent: ({ row, column }) => (
+    <TableCell>{`${row[column.name]}`}</TableCell>
+  ),
+  columnExtensions: [],
+  columns: [],
+  rows: [],
+  header: () => null,
+  onDeleteRows: () => {}
+};
 
 export default SimpleDataGrid;

@@ -1,19 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Dropdown from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import isObject from 'lodash/isObject';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
+import isString from 'lodash/isString';
+import { sizes } from 'theme';
 
-class Select extends Component {
+class Selector extends Component {
   static defaultProps = {
     options: [],
     placeholder: 'Select...',
-    onChange: () => {},
     displayField: '',
     returnkeys: [],
-    url: '',
     disabled: false,
-    menuPlacement: 'auto'
+    menuPlacement: 'auto',
+    creatable: false
   };
 
   constructor(props) {
@@ -31,11 +33,9 @@ class Select extends Component {
     const { value, displayField, options } = nextProps;
 
     if (!isEqual(value, prevState.value) || !isEqual(prevState.opts, options)) {
-      let state = {};
-
-      const getOptions = () => {
-        return options.map(item => {
-          if (!isObject(item)) {
+      const getOptions = () =>
+        options.map(item => {
+          if (isString(item)) {
             return {
               item,
               value: item,
@@ -45,30 +45,30 @@ class Select extends Component {
 
           return {
             item,
-            value: item._id || item.id,
+            value: item.id,
             label: item[displayField]
           };
         });
-      };
 
       if (!value || isEmpty(value)) {
         return {
           ...prevState,
-          options: getOptions()
+          options: getOptions(),
+          selectedValue: null
         };
       }
 
       const option = isObject(value)
         ? {
-            item: value,
-            value: value._id || value.id,
-            label: value[displayField]
-          }
+          item: value,
+          value: value.id,
+          label: value[displayField]
+        }
         : {
-            item: value,
-            label: value,
-            value
-          };
+          item: value,
+          label: value,
+          value
+        };
 
       if (options.length === 0) {
         return {
@@ -78,15 +78,14 @@ class Select extends Component {
           opts: options,
           value
         };
-      } else {
-        return {
-          ...prevState,
-          options: getOptions(),
-          selectedValue: option,
-          opts: options,
-          value
-        };
       }
+      return {
+        ...prevState,
+        options: getOptions(),
+        selectedValue: option,
+        opts: options,
+        value
+      };
     }
     return { ...prevState };
   }
@@ -99,7 +98,11 @@ class Select extends Component {
       }
       const objValue = { ...val.item };
 
-      if (returnkeys.length > 1) {
+      if (typeof returnkeys === 'string') {
+        return onChange({ simple: objValue[returnkeys], full: objValue });
+      }
+
+      if (returnkeys.length > 0) {
         const obj = {};
         returnkeys.forEach(key => {
           obj[key] = objValue[key];
@@ -107,35 +110,70 @@ class Select extends Component {
         return onChange({ simple: obj, full: objValue });
       }
       return onChange({ simple: objValue, full: objValue });
-    } else {
-      return onChange(val);
     }
+    return onChange(val);
   };
 
   render() {
-    const { meta, name, placeholder, disabled } = this.props;
+    const {
+      name,
+      options,
+
+      placeholder,
+      disabled,
+      creatable,
+      onCreate,
+      menuPlacement,
+      styles,
+
+      // unsused
+      onChange,
+      value,
+      type,
+      displayField,
+      render,
+      returnkeys,
+      children,
+
+      ...rest
+    } = this.props;
 
     return (
-      <div>
-        <Dropdown
-          style={{ height: 31 }}
-          placeholder={placeholder}
-          name={name}
-          value={this.state.selectedValue}
-          options={this.state.options}
-          onChange={this.logChange}
-          openOnFocus
-          isClearable
-          onBlurResetsInput={false}
-          disabled={disabled}
-          menuPlacement={this.props.menuPlacement || 'auto'}
-        />
-        {meta.touched && meta.error && (
-          <span className="error">{meta.error}</span>
+      <Fragment>
+        {creatable ? (
+          <CreatableSelect
+            placeholder={placeholder}
+            name={name}
+            value={this.state.selectedValue}
+            options={this.state.options}
+            onChange={this.logChange}
+            openOnFocus
+            isClearable
+            onBlurResetsInput={false}
+            disabled={disabled}
+            menuPlacement={menuPlacement || 'auto'}
+            styles={styles}
+            {...rest}
+          />
+        ) : (
+          <Dropdown
+            placeholder={placeholder}
+            name={name}
+            value={this.state.selectedValue}
+            options={this.state.options}
+            onChange={this.logChange}
+            openOnFocus
+            isClearable
+            onBlurResetsInput={false}
+            disabled={disabled}
+            menuPlacement={menuPlacement || 'auto'}
+            styles={styles}
+            {...rest}
+          />
         )}
-      </div>
+      </Fragment>
     );
   }
 }
 
-export default Select;
+export default Selector;

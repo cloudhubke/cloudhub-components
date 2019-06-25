@@ -34,11 +34,12 @@ import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Dialog from '@material-ui/core/Dialog';
-import Paper from '@material-ui/core/Paper';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import { red } from '@material-ui/core/colors';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -46,40 +47,39 @@ import ViewList from '@material-ui/icons/ViewList';
 
 import { withStyles } from '@material-ui/core/styles';
 import TableHeaderBar from './TableHeaderBar';
-import { red } from '@material-ui/core/colors';
+import Block from '../components/Block';
 import GridLoading from './GridLoading';
 import './grid.css';
 
 const styleSheet = theme => ({
-  commandButton: {
-    minWidth: '40px'
-  },
-  lookupEditCell: {
-    verticalAlign: 'middle',
-    paddingRight: theme.spacing.unit,
-    '& ~ $lookupEditCell': {
-      paddingLeft: theme.spacing.unit
+  gridContainer: {
+    '& th': {
+      overflow: 'hidden',
+      paddingLeft: '10px',
+      paddingRight: '10px'
+    },
+    '& td': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      paddingLeft: '10px',
+      paddingRight: '10px'
+    },
+    '& div::-webkit-scrollbar': {
+      width: '16px'
+    },
+    '& div::-webkit-scrollbar-track': {
+      background: 'grey',
+      borderTop: '7px solid white',
+      borderBottom: '7px solid white'
+    },
+    '& div::-webkit-scrollbar-thumb': {
+      background: 'grey',
+      borderTop: '4px solid white',
+      borderBottom: '4px solid white'
+    },
+    '& div::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: '#aaa'
     }
-  },
-  dialog: {
-    width: 'calc(100% - 16px)'
-  },
-  editDialog: {
-    minWidth: '800px',
-    height: '600px'
-  },
-  noDataCell: {
-    textAlign: 'center',
-    padding: '40px 0'
-  },
-  iconButton: {
-    border: 0,
-    height: 'auto',
-    width: 'auto',
-    padding: '2px'
-  },
-  icon: {
-    margin: 0
   },
 
   // ===================================================== Header ========================
@@ -125,20 +125,6 @@ const counterColumn = [{ name: 'counter', title: '#', width: 70 }];
 const staticColumns = [
   { name: 'actions', title: 'Actions', width: 140, align: 'right' }
 ];
-
-const NoDataCellBase = ({ loading, colSpan, classes }) => (
-  <TableCell className={classes.noDataCell} colSpan={colSpan}>
-    <big>{loading ? '' : 'No data'}</big>
-  </TableCell>
-);
-
-NoDataCellBase.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  colSpan: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired
-};
-
-// const NoDataCell = withStyles(styleSheet, { name: 'RemoteDataDemo' })(NoDataCellBase);
 
 class RemoteDataGrid extends React.PureComponent {
   static defaultProps = {
@@ -218,10 +204,9 @@ class RemoteDataGrid extends React.PureComponent {
     this.changeFilters = filters => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
-      let rows = this.state.rows;
+      let { rows } = this.state;
       if (added) {
-        const startingAddedId =
-          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
@@ -232,8 +217,7 @@ class RemoteDataGrid extends React.PureComponent {
       }
       if (changed) {
         rows = rows.map(row =>
-          changed[row.id] ? { ...row, ...changed[row.id] } : row
-        );
+          (changed[row.id] ? { ...row, ...changed[row.id] } : row));
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
@@ -295,9 +279,8 @@ class RemoteDataGrid extends React.PureComponent {
             </TableCell>
           )
         );
-      } else if (column.name === 'counter') {
-        let ind =
-          1 + this.props.data.items.findIndex(item => item._id === row._id);
+      } if (column.name === 'counter') {
+        const ind = 1 + this.props.data.items.findIndex(item => item.id === row.id);
         return (
           <TableCell>
             {this.state.currentPage === 0
@@ -305,10 +288,9 @@ class RemoteDataGrid extends React.PureComponent {
               : this.state.currentPage * this.state.pageSize + ind}
           </TableCell>
         );
-      } else {
-        return this.props.cellComponent({ row, column, style });
-        // return <TableCell>col</TableCell>;
       }
+      return this.props.cellComponent({ row, column, style });
+      // return <TableCell>col</TableCell>;
     };
 
     this.loadData = _.debounce(this.loadData, 500);
@@ -338,6 +320,7 @@ class RemoteDataGrid extends React.PureComponent {
       currentPage
     });
   }
+
   changePageSize(pageSize) {
     const { data } = this.props;
     const totalPages = Math.ceil(data.totalCount / pageSize);
@@ -358,15 +341,14 @@ class RemoteDataGrid extends React.PureComponent {
   queryString() {
     const { sorting, pageSize, currentPage } = this.state;
 
-    let queryString = {
+    const queryString = {
       limit: pageSize,
       skip: pageSize * currentPage
     };
 
     const columnSorting = sorting[0];
     if (columnSorting) {
-      const sortingDirectionString =
-        columnSorting.direction === 'desc' ? -1 : 1;
+      const sortingDirectionString = columnSorting.direction === 'desc' ? -1 : 1;
       queryString.sort = { [columnSorting.columnName]: sortingDirectionString };
     }
 
@@ -444,120 +426,139 @@ class RemoteDataGrid extends React.PureComponent {
     } = this.state;
 
     return (
-      <Paper className="grid-container">
-        {this.renderHeader()}
-        <Grid rows={data.items} columns={columns}>
-          <SelectionState
-            selection={selection}
-            onSelectionChange={this.changeSelection}
-          />
-          <SortingState
-            sorting={sorting}
-            onSortingChange={this.changeSorting}
-          />
-
-          <GroupingState
-            grouping={this.state.grouping}
-            onGroupingChange={this.changeGrouping}
-          />
-
-          <FilteringState
-            filters={this.state.filters}
-            onFiltersChange={this.changeFilters}
-          />
-
-          <PagingState
-            currentPage={currentPage}
-            onCurrentPageChange={this.changeCurrentPage}
-            pageSize={pageSize}
-            onPageSizeChange={this.changePageSize}
-          />
-          <CustomPaging totalCount={data.totalCount} />
-
-          <IntegratedGrouping />
-          <IntegratedFiltering />
-          <IntegratedSorting />
-
-          <IntegratedSelection />
-
-          <DragDropProvider />
-
-          <Table
-            rowComponent={rowComponent}
-            cellComponent={this.cellComponent}
-            allowColumnReordering
-          />
-
-          {allowColumnResizing && (
-            <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
-          )}
-
-          <TableColumnReordering
-            defaultOrder={columns.map(column => column.name)}
-          />
-          <TableHeaderRow
-            showSortingControls
-            allowDragging
-            allowResizing={allowColumnResizing}
-          />
-
-          <TableFilterRow
-            cellComponent={props => {
-              if (
-                props.column.name === 'actions' ||
-                props.column.name === 'counter'
-              ) {
-                return <TableCell />;
-              }
-              return <TableFilterRow.Cell {...props} />;
+      <Block style={{ position: 'relative' }}>
+        <Block flex={false}>{this.renderHeader()}</Block>
+        <Block className={classes.gridContainer}>
+          <Block
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0
             }}
-          />
-          <TableSelection showSelectAll />
-          <TableGroupRow />
+          >
+            <Grid rows={data.items} columns={columns}>
+              <SelectionState
+                selection={selection}
+                onSelectionChange={this.changeSelection}
+              />
+              <SortingState
+                sorting={sorting}
+                onSortingChange={this.changeSorting}
+              />
 
-          <Toolbar />
+              <GroupingState
+                grouping={this.state.grouping}
+                onGroupingChange={this.changeGrouping}
+              />
 
-          {hiddencolumns.length > 0 && (
-            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-          )}
-          {hiddencolumns.length > 0 && <ColumnChooser />}
+              <FilteringState
+                filters={this.state.filters}
+                onFiltersChange={this.changeFilters}
+              />
 
-          <GroupingPanel allowDragging />
-          <PagingPanel pageSizes={allowedPageSizes} />
-        </Grid>
+              <PagingState
+                currentPage={currentPage}
+                onCurrentPageChange={this.changeCurrentPage}
+                pageSize={pageSize}
+                onPageSizeChange={this.changePageSize}
+              />
+              <CustomPaging totalCount={data.totalCount} />
 
-        {loading && <GridLoading />}
+              <IntegratedGrouping />
+              <IntegratedFiltering />
+              <IntegratedSorting />
 
-        <Dialog
-          open={!!deletingRows.length}
-          onClose={this.cancelDelete}
-          classes={{ paper: classes.dialog }}
-        >
-          <DialogTitle>Delete Row</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure to delete the following row?
-            </DialogContentText>
-            <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <Table cellComponent={this.cellComponent} />
-              <TableHeaderRow />
+              <IntegratedSelection />
+
+              <DragDropProvider />
+
+              <Table
+                rowComponent={rowComponent}
+                cellComponent={this.cellComponent}
+                allowColumnReordering
+              />
+
+              {allowColumnResizing && (
+                <TableColumnResizing
+                  defaultColumnWidths={defaultColumnWidths}
+                />
+              )}
+
+              <TableColumnReordering
+                defaultOrder={columns.map(column => column.name)}
+              />
+              <TableHeaderRow
+                showSortingControls
+                allowDragging
+                allowResizing={allowColumnResizing}
+              />
+
+              <TableFilterRow
+                cellComponent={props => {
+                  if (
+                    props.column.name === 'actions'
+                    || props.column.name === 'counter'
+                  ) {
+                    return <TableCell />;
+                  }
+                  return <TableFilterRow.Cell {...props} />;
+                }}
+              />
+              <TableSelection showSelectAll />
+              <TableGroupRow />
+
+              <Toolbar />
+
+              {hiddencolumns.length > 0 && (
+                <TableColumnVisibility
+                  defaultHiddenColumnNames={hiddencolumns}
+                />
+              )}
+              {hiddencolumns.length > 0 && <ColumnChooser />}
+
+              <GroupingPanel allowDragging />
+              <PagingPanel pageSizes={allowedPageSizes} />
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.props.onCancelDelete} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                this.props.onDeleteRows(this.props.deleting);
-              }}
-              color="secondary"
+
+            {loading && <GridLoading />}
+
+            <Dialog
+              open={!!deletingRows.length}
+              onClose={this.cancelDelete}
+              classes={{ paper: classes.dialog }}
             >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Paper>
+              <DialogTitle>Delete Row</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Are you sure to delete the following row?
+                </DialogContentText>
+                <Grid
+                  rows={this.props.deletingRows}
+                  columns={this.props.columns}
+                >
+                  <Table cellComponent={this.cellComponent} />
+                  <TableHeaderRow />
+                </Grid>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.props.onCancelDelete} color="primary">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.props.onDeleteRows(this.props.deleting);
+                  }}
+                  color="secondary"
+                >
+                  Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Block>
+        </Block>
+      </Block>
     );
   }
 }

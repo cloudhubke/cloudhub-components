@@ -24,7 +24,7 @@ const CountrySelector = ({ input, meta, onSelectChange }) => (
     }}
     meta={meta}
     displayField="name"
-    returnkeys={['name', '_id']}
+    returnkeys={['name', 'id']}
     placeholder="Select Country"
   />
 );

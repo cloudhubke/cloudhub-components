@@ -1,30 +1,13 @@
 // Imports
 import React, { Component } from 'react';
-import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Input from 'antd/lib/input';
 import AsyncSelect from 'react-select/lib/Async';
 import debounce from 'lodash/debounce';
-import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import axios from 'axios';
+import hexToRgba from 'hex-to-rgba';
 
 // Import React Scrit Libraray to load Google object
-import Script from 'react-load-script';
-
-const SearchBar = inputProps => {
-  const { InputProps, classes, ref, ...other } = inputProps;
-
-  return (
-    <TextField
-      InputProps={{
-        inputRef: ref,
-        ...InputProps
-      }}
-      {...other}
-    />
-  );
-};
 
 class PlacesAutoComplete extends Component {
   static defaultProps = {
@@ -42,6 +25,7 @@ class PlacesAutoComplete extends Component {
     region: null,
     API_KEY: ''
   };
+
   constructor(props) {
     super(props);
 
@@ -90,6 +74,7 @@ class PlacesAutoComplete extends Component {
 
   onChange = ({ value, item }) => {
     const { onChange, input, axiosinstance, mapskey } = this.props;
+
     const searchurl = `/mapsapi/maps/api/place/details/json?placeid=${value}&key=${
       this.props.API_KEY
     }`;
@@ -133,6 +118,7 @@ class PlacesAutoComplete extends Component {
     };
 
     const searchurl = '/mapsapi/maps/api/place/nearbysearch/json';
+    // eslint-disable-next-line consistent-return
     return axios.get(searchurl, { params }).then(({ data }) => {
       const result = data.results[0] || {};
       const address = result.geometry || {};
@@ -166,7 +152,7 @@ class PlacesAutoComplete extends Component {
     }`;
 
     if (inputValue) {
-      //use axios to query places
+      // use axios to query places
 
       axiosinstance()
         .get(searchurl)
@@ -194,26 +180,28 @@ class PlacesAutoComplete extends Component {
       borderColorFocused
     } = this.props;
     const customStyles = {
-      menu: (provided, state) => {
-        return {
-          ...provided,
-          marginTop: -2,
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          backgroundColor: backgroundColor || '#FFF',
-          border: `1px solid ${borderColorFocused || '#2684FF'}`,
-          borderTopWidth: 0,
-          boxShadow: '0 1px 0 1px hsla(0, 0%, 0%, 0.1)'
-        };
-      },
+      menu: (provided, state) => ({
+        ...provided,
+        marginTop: -2,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        backgroundColor: backgroundColor || '#FFF',
+        border: `1.5px solid ${borderColorFocused || '#2684FF'}`,
+        borderTopWidth: 0,
+        boxShadow: `0 1px 0 1px ${hexToRgba(borderColor, 0.1)}`
+      }),
       option: (provided, state) => ({
-        ...provided
+        ...provided,
+        '&:hover': {
+          borderRightWidth: 1.5
+        }
       }),
       control: (provided, state) => {
         let style = {};
         if (state.isFocused) {
           style = {
             ...style,
+            boxShadow: `0 1px 0 1px ${hexToRgba(borderColor, 0.1)}`,
             borderColor: borderColorFocused || '#2684FF',
             '&:hover': {
               borderColor: borderColorFocused || '#2684FF'
@@ -227,7 +215,7 @@ class PlacesAutoComplete extends Component {
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
             boxShadow: '0 1px 0 1px hsla(0, 0%, 0%, 0.1)',
-            borderWidth: 1,
+            borderWidth: 1.5,
             borderColor: borderColorFocused || '#2684FF'
           };
         }

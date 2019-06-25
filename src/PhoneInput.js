@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import IntlTelInput from 'react-intl-tel-input';
-import 'react-intl-tel-input/dist/libphonenumber';
-
 import PhoneNumber from 'awesome-phonenumber';
 import 'react-intl-tel-input/dist/main.css';
 import './phoneinput.css';
@@ -10,8 +8,8 @@ const styles = {
   input: {
     background: 'red',
     height: 33,
-    padding: 2
-  }
+    padding: 2,
+  },
 };
 
 class PhoneInput extends Component {
@@ -23,14 +21,15 @@ class PhoneInput extends Component {
     fieldId: '',
     input: {
       value: '',
-      onChange: () => {}
+      onChange: () => {},
     },
-    inputClassName: 'phone-input'
+    inputClassName: 'phone-input',
+    meta: {},
   };
 
   state = {
     touched: false,
-    value: ''
+    value: '',
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -40,7 +39,7 @@ class PhoneInput extends Component {
     if (pn.isValid()) {
       return {
         ...prevState,
-        value
+        value,
       };
     }
     return { ...prevState };
@@ -48,7 +47,7 @@ class PhoneInput extends Component {
 
   validate = (isValid, phone, country) => {
     const {
-      input: { onChange }
+      input: { onChange },
     } = this.props;
 
     this.setState({ touched: true, value: phone });

@@ -244,4 +244,4 @@ export default [
   { name: 'Yemen', code: 'YE' },
   { name: 'Zambia', code: 'ZM' },
   { name: 'Zimbabwe', code: 'ZW' },
-].map(item => ({ name: item.name, _id: item.code }));
+].map(item => ({ name: item.name, id: item.code }));

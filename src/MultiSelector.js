@@ -31,26 +31,25 @@ class Select extends Component {
     const { value, displayField, options } = nextProps;
 
     if (!isEqual(value, prevState.value) || !isEqual(prevState.opts, options)) {
-      let state = {};
+      const state = {};
 
       const val = Array.isArray(value) ? value : [];
 
-      const selectedoptions = val.map(item => {
-        return isObject(item)
+      const selectedoptions = val.map(item =>
+        (isObject(item)
           ? {
-              item,
-              value: item._id || item.id,
-              label: item.label || item[displayField]
-            }
+            item,
+            value: item.id,
+            label: item.label || item[displayField]
+          }
           : {
-              item,
-              label: item,
-              value: item
-            };
-      });
+            item,
+            label: item,
+            value: item
+          }));
 
-      const getOptions = () => {
-        return options.map(item => {
+      const getOptions = () =>
+        options.map(item => {
           if (!isObject(item)) {
             return {
               item,
@@ -61,11 +60,10 @@ class Select extends Component {
 
           return {
             item,
-            value: item._id || item.id,
+            value: item.id,
             label: item[displayField]
           };
         });
-      };
 
       if (!value || isEmpty(value)) {
         return {
@@ -83,15 +81,14 @@ class Select extends Component {
           opts: options,
           value
         };
-      } else {
-        return {
-          ...prevState,
-          options: getOptions(),
-          selectedValue: selectedoptions,
-          opts: options,
-          value
-        };
       }
+      return {
+        ...prevState,
+        options: getOptions(),
+        selectedValue: selectedoptions,
+        opts: options,
+        value
+      };
     }
 
     return { ...prevState };
@@ -118,9 +115,8 @@ class Select extends Component {
       });
 
       return onChange(options);
-    } else {
-      return onChange(val || []);
     }
+    return onChange(val || []);
   };
 
   render() {

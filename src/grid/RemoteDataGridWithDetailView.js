@@ -301,7 +301,7 @@ class RemoteDataGrid extends React.PureComponent {
       }
       if (column.name === 'counter') {
         const ind =
-          1 + this.props.data.items.findIndex(item => item._id === row._id);
+          1 + this.props.data.items.findIndex(item => item.id === row.id);
         return (
           <TableCell>
             {this.state.currentPage === 0

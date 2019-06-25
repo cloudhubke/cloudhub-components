@@ -1,46 +1,71 @@
 import React, { Component, Fragment } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import Upload from 'antd/lib/upload';
-import Icon from 'antd/lib/icon';
+import Add from '@material-ui/icons/Add';
+
 import Modal from 'antd/lib/modal';
 import Progress from 'antd/lib/progress';
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Fab from '@material-ui/core/Fab';
 
 import 'antd/lib/upload/style/index.css';
+import 'antd/lib/modal/style/index.css';
 
 import { resolve } from 'path';
 
-const styles = () => ({
-  imagesList: {
-    display: 'flex',
-    position: 'relative',
-    '& .ant-upload-list': {
+import Block from './components/Block';
+import { colors } from './components/theme';
+
+const getStyles = ({ cardStyles }) => {
+  const useStyles = makeStyles({
+    imagesList: {
       display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      flexWrap: 'wrap'
-    },
-    '& .ant-upload.ant-upload-select, .ant-upload-list-picture-card .ant-upload-list-item': {
-      float: 'left',
-      width: 150,
-      height: 150,
-      margin: '0 8px 8px 0'
-    },
+      position: 'relative',
+      '& .ant-upload-list': {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        display: 'flex',
+        overflowY: 'auto',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        flexWrap: 'wrap'
+      },
+      '& .ant-upload.ant-upload-select, .ant-upload-list-picture-card .ant-upload-list-item': {
+        float: 'left',
+        margin: '4px 4px',
+        display: 'flex',
+        ...cardStyles
+      },
 
-    '& .ant-upload-select-picture-card i': {
-      fontSize: 28,
-      color: '#999'
-    },
+      '& .ant-upload-select-picture-card i': {
+        fontSize: 28,
+        color: '#999'
+      },
 
-    '& .ant-upload-select-picture-card .ant-upload-text': {
-      marginTop: 8,
-      fontSize: 12,
-      color: '#666'
+      '& .ant-upload-select-picture-card .ant-upload-text': {
+        marginTop: 8,
+        fontSize: 12,
+        color: '#666'
+      }
     }
-  }
-});
+  });
+
+  return {
+    useStyles
+  };
+};
+
+const ImagesCard = ({ cardStyles, children }) => {
+  const classes = getStyles({ cardStyles }).useStyles();
+
+  return <Block className={classes.imagesList}>{children}</Block>;
+};
+
 class ImagesUpload extends Component {
   static defaultProps = {
     preferredCountries: ['ke'],
@@ -55,7 +80,13 @@ class ImagesUpload extends Component {
     onChange: () => {},
     sizelimit: 0,
     width: 0,
-    height: 0
+    height: 0,
+    cardStyles: {
+      width: 150,
+      height: 150
+    },
+    url: '/fileapi/upload/image',
+    example: null
   };
 
   constructor(props) {
@@ -90,15 +121,14 @@ class ImagesUpload extends Component {
           url: item.url || ''
         }))
       };
-    } else {
-      return {
-        ...prevState,
-        isMounted: true,
-        previewVisible: false,
-        previewImage: '',
-        fileList: []
-      };
     }
+    return {
+      ...prevState,
+      isMounted: true,
+      previewVisible: false,
+      previewImage: '',
+      fileList: []
+    };
   }
 
   getFileList = () => {
@@ -108,12 +138,11 @@ class ImagesUpload extends Component {
         const fl = this.uploader.state.fileList;
 
         const flist = fl.map(file => {
-          let img = new Image();
+          const img = new Image();
           img.src = file.url || file.thumbUrl;
           img.onload = () => {
             const imageheight = img.height;
             const imagewidth = img.height;
-            console.log(imagewidth, imageheight);
             if (imageheight !== height || height !== imageheight) {
               this.setState({
                 error: `Your image dimensions are not correct. Expecting ${width} x ${height}`
@@ -176,8 +205,8 @@ class ImagesUpload extends Component {
         return {
           ...fl,
           uid:
-            (fl.fd || '').replace('images', '').replace(/\//g, '') ||
-            new Date().getTime(),
+            (fl.fd || '').replace('images', '').replace(/\//g, '')
+            || new Date().getTime(),
           status: 'done'
         };
       }
@@ -233,21 +262,53 @@ class ImagesUpload extends Component {
 
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
-    const { limit, classes } = this.props;
+    const { limit, url, example } = this.props;
 
     const { meta } = this.props;
     const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
+      <div
+        style={{
+          height: '100%',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-end'
+        }}
+      >
+        {example && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              right: 0,
+              left: 0,
+              overflow: 'hidden'
+            }}
+          >
+            <img
+              alt="example"
+              src={example}
+              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+            />
+          </div>
+        )}
+
+        <div style={{ color: '#FF0000', zIndex: 1 }}>
+          <Fab variant="extended" style={{ textTransform: 'none' }}>
+            <Add />
+            Upload
+          </Fab>
+        </div>
       </div>
     );
     return (
       <Fragment>
-        <div className={classes.imagesList}>
+        <ImagesCard {...this.props}>
           <Upload
             accept="image/*"
-            action="/fileapi/upload/image"
+            action={url}
             listType="picture-card"
             fileList={fileList}
             multiple={limit > 1}
@@ -287,13 +348,14 @@ class ImagesUpload extends Component {
               <CircularProgress />
             </div>
           )}
-        </div>
-        {meta.touched &&
-          meta.error && <div className="error">{meta.error}</div>}
+        </ImagesCard>
+        {meta.touched && meta.error && (
+          <div className="error">{meta.error}</div>
+        )}
         {this.state.error && <div className="error">{this.state.error}</div>}
       </Fragment>
     );
   }
 }
 
-export default withStyles(styles)(ImagesUpload);
+export default ImagesUpload;

@@ -7,8 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import PrintIcon from '@material-ui/icons/Print';
 import RefreshIcon from '@material-ui/icons/Cached';
-import Input from 'antd/lib/input';
 import _ from 'lodash';
+import Input from '../components/Input';
 
 const styles = {
   root: {

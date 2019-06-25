@@ -28,27 +28,26 @@ class RemoteSelector extends Component {
       return {
         ...prevState
       };
-    } else {
-      const option = {
-        item: value,
-        value: value._id || value.id,
-        label: value[displayField]
-      };
-
-      const options = prevState.options || [];
-      const ind = options.findIndex(i => i.value === option.value);
-      if (ind === -1) {
-        return {
-          ...prevState,
-          options: [option]
-        };
-      } else {
-        return {
-          ...prevState,
-          options: [option]
-        };
-      }
     }
+
+    const option = {
+      item: value,
+      value: value.id,
+      label: value[displayField]
+    };
+
+    const options = prevState.options || [];
+    const ind = options.findIndex(i => i.value === option.value);
+    if (ind === -1) {
+      return {
+        ...prevState,
+        options: [option]
+      };
+    }
+    return {
+      ...prevState,
+      options: [option]
+    };
   }
 
   constructor(props) {
@@ -77,7 +76,7 @@ class RemoteSelector extends Component {
           const array = data ? data.items || data : [];
           const options = array.map(item => ({
             label: item[displayField],
-            value: item._id || item.id,
+            value: item.id || item.id,
             item
           }));
           this.setState({
@@ -92,6 +91,7 @@ class RemoteSelector extends Component {
 
   loadOptions = (inputValue, callback) => {
     const { displayField, value, axiosinstance, url, params } = this.props;
+
     this.setState({ searchText: inputValue });
     axiosinstance()
       .get(url, { params: { ...params, filter: inputValue.trim() } })
@@ -100,7 +100,7 @@ class RemoteSelector extends Component {
 
         const options = array.map(item => ({
           label: item[displayField],
-          value: item._id || item.id,
+          value: item.id || item.id,
           item
         }));
 
@@ -124,36 +124,37 @@ class RemoteSelector extends Component {
 
     if (val) {
       this.setState({ selectedValue: val.value });
+      if (val.value) {
+        if (!isObject(this.state.options[0])) {
+          return onChange(val.item);
+        }
+        const objValue = { ...val.item };
+
+        if (returnkeys.length > 1) {
+          const obj = {};
+          returnkeys.forEach(key => {
+            obj[key] = objValue[key];
+          });
+          return onChange({ simple: obj, full: objValue });
+        }
+        return onChange(objValue);
+      }
     } else {
       this.setState({ selectedValue: null, searchText: '' });
     }
 
-    if (val) {
-      if (!isObject(this.state.options[0])) {
-        return onChange(val.item);
-      }
-      const objValue = { ...val.item };
-
-      if (returnkeys.length > 1) {
-        const obj = {};
-        returnkeys.forEach(key => {
-          obj[key] = objValue[key];
-        });
-        return onChange({ simple: obj, full: objValue });
-      }
-      return onChange(objValue);
-    }
     return onChange(val);
   };
 
   handleInputChange = searchText => {
     this.setState({ searchText });
   };
+
   getDefaultValue = () => {
     const value = this.props.value || {};
     const ind = this.state.options.findIndex(i => {
       if (isObject) {
-        return i.value === (value._id || value.id);
+        return i.value === value.id;
       }
       return i === value;
     });
@@ -161,28 +162,30 @@ class RemoteSelector extends Component {
   };
 
   render() {
-    const { meta, name, placeholder, disabled } = this.props;
+    const {
+      meta,
+      placeholder,
+      disabled,
+      onChange,
+      value,
+      ...rest
+    } = this.props;
 
     return (
-      <div>
-        <AsyncSelect
-          style={{ height: 31 }}
-          cacheOptions
-          isClearable
-          defaultOptions={this.state.defaultOptions}
-          value={this.getDefaultValue()}
-          loadOptions={this.loadOptions}
-          onChange={this.logChange}
-          placeholder={placeholder}
-          disabled={disabled}
-          onInputChange={this.handleInputChange}
-          onMenuOpen={this.onMenuOpen}
-          menuPlacement={this.props.menuPlacement || 'auto'}
-        />
-        {meta.touched && meta.error && (
-          <span className="error">{meta.error}</span>
-        )}
-      </div>
+      <AsyncSelect
+        cacheOptions
+        isClearable
+        defaultOptions={this.state.defaultOptions}
+        value={this.getDefaultValue()}
+        loadOptions={this.loadOptions}
+        onChange={this.logChange}
+        placeholder={placeholder}
+        disabled={disabled}
+        onInputChange={this.handleInputChange}
+        onMenuOpen={this.onMenuOpen}
+        menuPlacement={this.props.menuPlacement || 'auto'}
+        {...rest}
+      />
     );
   }
 }

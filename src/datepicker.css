@@ -1,4 +1,25 @@
+@import url('../node_modules/antd/lib/date-picker/style/index.css');
+
+.ant-fullcalendar {
+  font-family: inherit;
+}
 .ant-calendar-picker-container {
+  font-family: inherit;
   position: absolute;
   z-index: 10050;
+}
+.ant-calendar-picker {
+  font-family: inherit;
+}
+.ant-calendar-header .ant-calendar-next-year-btn {
+  font-family: inherit;
+}
+.ant-calendar-month-panel-header .ant-calendar-month-panel-next-year-btn {
+  font-family: inherit;
+}
+.ant-calendar-year-panel-header .ant-calendar-year-panel-next-year-btn {
+  font-family: inherit;
+}
+.ant-calendar-decade-panel-header .ant-calendar-decade-panel-next-year-btn {
+  font-family: inherit;
 }
