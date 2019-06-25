@@ -263,7 +263,6 @@ class ImagesUpload extends Component {
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const { limit, url, example } = this.props;
-
     const { meta } = this.props;
     const uploadButton = (
       <div
