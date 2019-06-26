@@ -1,22 +1,21 @@
 import React, { Component, Fragment } from 'react';
+import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
 import Upload from 'antd/lib/upload';
 import Add from '@material-ui/icons/Add';
 
 import Modal from 'antd/lib/modal';
-import Progress from 'antd/lib/progress';
 
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 
 import 'antd/lib/upload/style/index.css';
 import 'antd/lib/modal/style/index.css';
 
-import { resolve } from 'path';
-
 import Block from './components/Block';
-import { colors } from './components/theme';
+
+import resizer from './uploader/resizer';
 
 const getStyles = ({ cardStyles }) => {
   const useStyles = makeStyles({
@@ -73,17 +72,15 @@ class ImagesUpload extends Component {
   static defaultProps = {
     preferredCountries: ['ke'],
     defaultCountry: 'ke',
-    value: '',
+    value: null,
     limit: 1,
     input: {
       value: null,
       onChange: () => {}
     },
-    value: null,
     onChange: () => {},
-    sizelimit: 0,
-    width: 0,
-    height: 0,
+    maxWidth: 1024,
+    maxSize: 512,
     cardStyles: {
       width: 150,
       height: 150
@@ -135,63 +132,73 @@ class ImagesUpload extends Component {
     };
   }
 
-  getFileList = () => {
-    const { height, width } = this.props;
-    return new Promise((resolve, reject) => {
-      setTimeout(async () => {
-        const fl = this.uploader.state.fileList;
-
-        const flist = fl.map(file => {
-          const img = new Image();
-          img.src = file.url || file.thumbUrl;
-          img.onload = () => {
-            const imageheight = img.height;
-            const imagewidth = img.height;
-            if (imageheight !== height || height !== imageheight) {
-              this.setState({
-                error: `Your image dimensions are not correct. Expecting ${width} x ${height}`
-              });
-            }
-          };
-          return file;
-        });
-        const list = await Promise.all(flist);
-      }, 1000);
-    });
-  };
-
-  beforeUpload = (file, filelist) => {
-    const { sizelimit, width, height } = this.props;
+  beforeUpload = file => {
     const isImage = ['image/jpeg', 'image/png'].includes(file.type);
-
-    //  this.getFileList();
 
     if (!isImage) {
       this.setState({ error: 'You can only upload JPG/PNG file!' });
     }
-
-    let isSize = true;
-
-    if (sizelimit) {
-      isSize = file.size / 1024 / 1024 < sizelimit;
-      if (!isSize) {
-        this.setState(
-          { error: `Image must be smaller than ${sizelimit}MB!` },
-          () => {
-            setTimeout(() => {
-              this.removeFile(file);
-            }, 2000);
-          }
-        );
-      }
-    }
-
-    return isSize && isImage;
+    return isImage;
   };
 
-  handleSize(image) {
-    console.log(image.offsetWidth, image.offsetHeight);
-  }
+  customRequest = ({
+    action,
+    data,
+    file,
+    filename,
+    headers,
+    onError,
+    onProgress,
+    onSuccess,
+    withCredentials
+  }) => {
+    const { maxWidth, maxSize } = this.props;
+    // EXAMPLE: post form-data with 'axios'
+    const formData = new FormData();
+    if (data) {
+      Object.keys(data).map(key => {
+        formData.append(key, data[key]);
+      });
+    }
+    const uploadFile = async () => {
+      if (maxSize) {
+        if (file.size / 1024 > maxSize) {
+          // Get the resized file
+
+          const blob = await resizer(file, maxWidth);
+          formData.append(filename, blob, blob.name);
+        } else {
+          formData.append(filename, file);
+        }
+      } else {
+        formData.append(filename, file);
+      }
+
+      axios
+        .post(action, formData, {
+          withCredentials,
+          headers,
+          onUploadProgress: ({ total, loaded }) => {
+            onProgress(
+              { percent: Math.round((loaded / total) * 100).toFixed(2) },
+              file
+            );
+          }
+        })
+        .then(({ data: response }) => {
+          onSuccess(response, file);
+        })
+        .catch(onError);
+    };
+
+    uploadFile();
+
+    return {
+      abort() {
+        console.log('upload progress is aborted.');
+      }
+    };
+  };
 
   handleCancel = () => this.setState({ previewVisible: false });
 
@@ -319,6 +326,7 @@ class ImagesUpload extends Component {
             onPreview={this.handlePreview}
             onChange={this.handleChange}
             onRemove={this.handleRemove}
+            customRequest={this.customRequest}
             ref={node => {
               this.uploader = node;
             }}

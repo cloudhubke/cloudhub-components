@@ -1,7 +1,7 @@
 // Imports
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
 import axios from 'axios';

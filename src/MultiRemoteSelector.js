@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
+
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';

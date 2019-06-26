@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Input from 'antd/lib/input';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -37,6 +37,7 @@ class PlacesAutoComplete extends Component {
     placeholder: 'Search location...',
     height: 31
   };
+
   constructor(props) {
     super(props);
 
@@ -80,7 +81,7 @@ class PlacesAutoComplete extends Component {
   }
 
   onChange = ({ value, item }) => {
-    var request = {
+    const request = {
       placeId: value
     };
 
@@ -142,16 +143,15 @@ class PlacesAutoComplete extends Component {
         this.handleScriptLoad();
       }
       return null;
-    } else {
-      return (
+    }
+    return (
         <Script
           url={`https://maps.googleapis.com/maps/api/js?key=${
             this.props.API_KEY
           }&libraries=places`}
           onLoad={this.handleScriptLoad}
         />
-      );
-    }
+    );
   };
 
   render() {
@@ -162,18 +162,16 @@ class PlacesAutoComplete extends Component {
       borderColorFocused
     } = this.props;
     const customStyles = {
-      menu: (provided, state) => {
-        return {
-          ...provided,
-          marginTop: -2,
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          backgroundColor: backgroundColor || '#FFF',
-          border: `1px solid ${borderColorFocused || '#2684FF'}`,
-          borderTopWidth: 0,
-          boxShadow: '0 1px 0 1px hsla(0, 0%, 0%, 0.1)'
-        };
-      },
+      menu: (provided, state) => ({
+        ...provided,
+        marginTop: -2,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        backgroundColor: backgroundColor || '#FFF',
+        border: `1px solid ${borderColorFocused || '#2684FF'}`,
+        borderTopWidth: 0,
+        boxShadow: '0 1px 0 1px hsla(0, 0%, 0%, 0.1)'
+      }),
       option: (provided, state) => ({
         ...provided
       }),
