@@ -228,7 +228,7 @@ class RemoteDataGrid extends React.PureComponent {
         allowdelete: props.permissions.allowdelete || false,
         allowprint: props.permissions.allowprint || false
       };
-      if (column.name === 'actions') {
+      if (column.name === 'actions' && !this.props.actions) {
         return (
           this.props.actionsComponent || (
             <TableCell>
@@ -279,7 +279,8 @@ class RemoteDataGrid extends React.PureComponent {
             </TableCell>
           )
         );
-      } if (column.name === 'counter') {
+      }
+      if (column.name === 'counter') {
         const ind = 1 + this.props.data.items.findIndex(item => item.id === row.id);
         return (
           <TableCell>

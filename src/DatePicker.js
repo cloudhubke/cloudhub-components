@@ -13,6 +13,7 @@ class AntDatePicker extends Component {
     onChange: () => {},
     value: null,
     input: {
+      onBlur: () => {},
       onChange: () => {},
       value: null
     }
@@ -25,10 +26,12 @@ class AntDatePicker extends Component {
     if (date) {
       if (timestamp) {
         this.props.input.onChange(date.valueOf());
+        this.props.input.onBlur();
         this.props.onChange(date.valueOf());
       } else {
         this.props.input.onChange(date.format(dateFormat));
         this.props.onChange(date.format(dateFormat));
+        this.props.input.onBlur();
       }
     } else {
       this.props.input.onChange('');
@@ -57,6 +60,7 @@ class AntDatePicker extends Component {
         format={dateFormat}
         onChange={this.onDateChanged}
         showTime={showTime}
+        getCalendarContainer={trigger => trigger.parentNode}
         {...rest}
       />
     );

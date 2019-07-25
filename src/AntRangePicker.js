@@ -15,7 +15,9 @@ class AntRangePicker extends Component {
     },
     meta: {}
   };
+
   componentDidMount() {}
+
   onDateChanged = date => {
     if (date) {
       const dd = date.map(dd => dd.valueOf());
@@ -37,9 +39,11 @@ class AntRangePicker extends Component {
           format={dateFormat}
           placeholder={['Start Time', 'End Time']}
           onChange={this.onDateChanged}
+          getCalendarContainer={trigger => trigger.parentNode}
         />
-        {meta.touched &&
-          meta.error && <div className="error">{meta.error}</div>}
+        {meta.touched && meta.error && (
+          <div className="error">{meta.error}</div>
+        )}
       </div>
     );
   }

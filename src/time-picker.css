@@ -1,0 +1,5 @@
+.ant-time-picker-panel {
+  font-family: inherit;
+  position: absolute;
+  z-index: 99999;
+}

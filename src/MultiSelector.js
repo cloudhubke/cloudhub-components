@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Dropdown from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+
 import isObject from 'lodash/isObject';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -120,28 +122,64 @@ class Select extends Component {
   };
 
   render() {
-    const { meta, name, placeholder, disabled } = this.props;
+    const {
+      name,
+      options,
+
+      placeholder,
+      disabled,
+      creatable,
+      onCreate,
+      menuPlacement,
+      styles,
+
+      // unsused
+      onChange,
+      value,
+      type,
+      displayField,
+      render,
+      returnkeys,
+      children,
+      ...rest
+    } = this.props;
 
     return (
-      <div className="field">
-        <Dropdown
-          style={{ height: 31 }}
-          placeholder={placeholder}
-          name={name}
-          value={this.state.selectedValue}
-          options={this.state.options}
-          onChange={this.logChange}
-          isMulti
-          openOnFocus
-          isClearable
-          onBlurResetsInput={false}
-          disabled={disabled}
-          menuPlacement={this.props.menuPlacement || 'auto'}
-        />
-        {meta.touched && meta.error && (
-          <span className="error">{meta.error}</span>
+      <Fragment>
+        {creatable ? (
+          <CreatableSelect
+            placeholder={placeholder}
+            name={name}
+            value={this.state.selectedValue}
+            options={this.state.options}
+            onChange={this.logChange}
+            isMulti
+            openOnFocus
+            isClearable
+            onBlurResetsInput={false}
+            disabled={disabled}
+            menuPlacement={menuPlacement || 'auto'}
+            styles={styles}
+            {...rest}
+          />
+        ) : (
+          <Dropdown
+            placeholder={placeholder}
+            name={name}
+            value={this.state.selectedValue}
+            options={this.state.options}
+            onChange={this.logChange}
+            isMulti
+            openOnFocus
+            isClearable
+            onBlurResetsInput={false}
+            disabled={disabled}
+            menuPlacement={menuPlacement || 'auto'}
+            styles={styles}
+            {...rest}
+          />
         )}
-      </div>
+      </Fragment>
     );
   }
 }

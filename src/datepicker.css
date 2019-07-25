@@ -6,7 +6,7 @@
 .ant-calendar-picker-container {
   font-family: inherit;
   position: absolute;
-  z-index: 10050;
+  z-index: 99999;
 }
 .ant-calendar-picker {
   font-family: inherit;

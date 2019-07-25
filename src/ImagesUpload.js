@@ -1,21 +1,27 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
+import has from 'lodash/has';
+
 import Upload from 'antd/lib/upload';
 import Add from '@material-ui/icons/Add';
 
-import Modal from 'antd/lib/modal';
-
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
+
 import Fab from '@material-ui/core/Fab';
 
 import 'antd/lib/upload/style/index.css';
-import 'antd/lib/modal/style/index.css';
 
 import Block from './components/Block';
 
 import resizer from './uploader/resizer';
+
+const Transition = React.forwardRef((props, ref) => (
+  <Slide direction="up" ref={ref} {...props} />
+));
 
 const getStyles = ({ cardStyles }) => {
   const useStyles = makeStyles({
@@ -37,8 +43,13 @@ const getStyles = ({ cardStyles }) => {
       '& .ant-upload-list-item.ant-upload-list-item-done img': {
         width: '100%',
         height: '100%',
-        ...cardStyles,
-        objectFit: 'cover'
+        objectFit: 'cover',
+        ...cardStyles
+      },
+      '& .ant-upload-list-item.ant-upload-list-item-done .ant-upload-list-item-info': {
+        width: '100%',
+        height: '100%',
+        ...cardStyles
       },
       '& .ant-upload-select-picture-card i': {
         fontSize: 28,
@@ -224,10 +235,12 @@ class ImagesUpload extends Component {
       return item;
     });
 
+    const isuploading = files.filter(f => !has(f, 'Location')).length > 0;
+
     this.setState(
       {
         fileList: files,
-        isuploading: files.filter(f => !!f.percent).length > 0
+        isuploading
       },
       () => {
         if (this.props.limit === 1) {
@@ -333,14 +346,25 @@ class ImagesUpload extends Component {
           >
             {fileList.length >= limit ? null : uploadButton}
           </Upload>
-          <Modal
-            zIndex={10000}
-            visible={previewVisible}
+          <Dialog
+            TransitionComponent={Transition}
+            maxWidth="lg"
+            open={previewVisible}
             footer={null}
-            onCancel={this.handleCancel}
+            onClose={this.handleCancel}
+            style={{ maxHeight: 1000 }}
           >
-            <img alt="preview" style={{ width: '100%' }} src={previewImage} />
-          </Modal>
+            <div style={{ overflowX: 'auto' }}>
+              <img
+                alt="preview"
+                style={{
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
+                src={previewImage}
+              />
+            </div>
+          </Dialog>
 
           {this.state.isuploading && (
             <div
