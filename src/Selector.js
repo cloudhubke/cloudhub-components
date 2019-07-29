@@ -5,7 +5,6 @@ import isObject from 'lodash/isObject';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import isString from 'lodash/isString';
-import { sizes } from 'theme';
 
 class Selector extends Component {
   static defaultProps = {

@@ -3,6 +3,7 @@ import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
 
 import 'antd/lib/input/style/index.css';
+import 'antd/lib/date-picker/style/index.css';
 import './datepicker.css';
 
 class AntDatePicker extends Component {
