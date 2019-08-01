@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import  isEqual from 'lodash/isEqual';
+import  debounce from 'lodash/debounce';
 
 import {
   SelectionState,
@@ -294,7 +295,7 @@ class RemoteDataGrid extends React.PureComponent {
       // return <TableCell>col</TableCell>;
     };
 
-    this.loadData = _.debounce(this.loadData, 500);
+    this.loadData = debounce(this.loadData, 500);
   }
 
   componentDidMount() {
@@ -364,7 +365,7 @@ class RemoteDataGrid extends React.PureComponent {
     const { onQueryChange } = this.props;
     const queryString = this.queryString();
 
-    if (_.isEqual(queryString, this.lastQuery)) {
+    if (isEqual(queryString, this.lastQuery)) {
       this.setState({ loading: false });
       return;
     }

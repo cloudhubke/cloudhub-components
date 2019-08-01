@@ -197,7 +197,8 @@ class DataGridWithDetailView extends React.PureComponent {
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
-    this.tableCellTemplate = ({ row, column, style }) => {
+    
+    this.cellComponent = ({ row, column, style }) => {
       const permissions = {
         allowadd: props.permissions.allowadd || false,
         allowedit: props.permissions.allowedit || false,
@@ -252,7 +253,8 @@ class DataGridWithDetailView extends React.PureComponent {
           </TableCell>
         );
       } else {
-        return this.props.templates({ row, column, style });
+
+        return this.props.cellComponent({ row, column, style });
       }
     };
   }
@@ -342,10 +344,10 @@ class DataGridWithDetailView extends React.PureComponent {
           <DragDropProvider />
 
           <Table
-            rowComponent={rowComponent}
-            tableCellTemplate={this.tableCellTemplate}
-            allowColumnReordering
-          />
+          rowComponent={rowComponent}
+          cellComponent={this.cellComponent}
+          allowColumnReordering
+        />
 
           <TableHeaderRow allowSorting allowDragging />
 
