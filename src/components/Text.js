@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 // import withStyles from '@material-ui/core/styles/withStyles';
 
-import { colors, sizes } from './theme';
+import colors from './theme/Colors';
+import sizes from './theme/Sizes';
 
 class Text extends Component {
   constructor(props) {

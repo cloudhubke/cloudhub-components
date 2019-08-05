@@ -52,7 +52,7 @@ import Block from '../components/Block';
 import GridLoading from './GridLoading';
 import './grid.css';
 
-const styleSheet = theme => ({
+const styleSheet = () => ({
   gridContainer: {
     '& th': {
       overflow: 'hidden',

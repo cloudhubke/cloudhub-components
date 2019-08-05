@@ -47,7 +47,7 @@ import ViewList from '@material-ui/icons/ViewList';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import {sizes} from '../components/theme';
+import sizes from '../components/theme/Sizes';
 
 import TableHeaderBar from './TableHeaderBar';
 import './grid.css';

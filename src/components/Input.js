@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { sizes } from './theme';
+import sizes from './theme/Sizes';
 import Block from './Block';
 import Text from './Text';
 

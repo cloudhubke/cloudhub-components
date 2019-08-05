@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import Grow from '@material-ui/core/Grow';
 import withStyles from '@material-ui/core/styles/withStyles';
 import classNames from 'classnames';
-import { sizes, colors } from './theme';
+import colors from './theme/Colors';
+import sizes from './theme/Sizes';
 
 class Block extends Component {
   static defaultProps = {

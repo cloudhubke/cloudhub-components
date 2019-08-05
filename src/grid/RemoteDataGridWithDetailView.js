@@ -49,7 +49,7 @@ import ViewList from '@material-ui/icons/ViewList';
 import { red } from '@material-ui/core/colors';
 
 import { withStyles } from '@material-ui/core/styles';
-import { sizes } from '../components/theme';
+import sizes from '../components/theme/Sizes';
 
 import TableHeaderBar from './TableHeaderBar';
 

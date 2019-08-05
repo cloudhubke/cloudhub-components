@@ -1,7 +1,4 @@
-import sizes from './Sizes';
-import colors from './Colors';
-
-const hexToRgb = hexcolor => {
+const hexToRgba = hexcolor => {
   let input = hexcolor;
   input += '';
   input = input.replace('#', '');
@@ -25,4 +22,4 @@ const hexToRgb = hexcolor => {
   )}`;
 };
 
-export { sizes, colors, hexToRgb };
+export default hexToRgba;
