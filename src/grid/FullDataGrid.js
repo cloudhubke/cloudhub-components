@@ -45,17 +45,18 @@ import ViewList from '@material-ui/icons/ViewList';
 import { withStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 import TableHeaderBar from './TableHeaderBar';
+import { sizes } from '../components/theme';
 import './grid.css';
 
-const styleSheet = theme => ({
+const styleSheet = () => ({
   commandButton: {
     minWidth: '40px'
   },
   lookupEditCell: {
     verticalAlign: 'middle',
-    paddingRight: theme.spacing.unit,
+    paddingRight: sizes.padding,
     '& ~ $lookupEditCell': {
-      paddingLeft: theme.spacing.unit
+      paddingLeft: sizes.padding
     }
   },
   dialog: {
@@ -172,10 +173,9 @@ class FullDataGrid extends Component {
     this.changeFilters = filters => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
-      let rows = this.state.rows;
+      let { rows } = this.state;
       if (added) {
-        const startingAddedId =
-          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
@@ -186,8 +186,7 @@ class FullDataGrid extends Component {
       }
       if (changed) {
         rows = rows.map(row =>
-          changed[row.id] ? { ...row, ...changed[row.id] } : row
-        );
+          (changed[row.id] ? { ...row, ...changed[row.id] } : row));
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
@@ -360,8 +359,8 @@ class FullDataGrid extends Component {
           <TableFilterRow
             cellComponent={props => {
               if (
-                props.column.name === 'actions' ||
-                props.column.name === 'counter'
+                props.column.name === 'actions'
+                || props.column.name === 'counter'
               ) {
                 return <TableCell />;
               }

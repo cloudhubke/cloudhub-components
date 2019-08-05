@@ -46,18 +46,21 @@ import EditIcon from '@material-ui/icons/Edit';
 import ViewList from '@material-ui/icons/ViewList';
 
 import { withStyles } from '@material-ui/core/styles';
+
+import {sizes} from '../components/theme';
+
 import TableHeaderBar from './TableHeaderBar';
 import './grid.css';
 
-const styleSheet = theme => ({
+const styleSheet = () => ({
   commandButton: {
     minWidth: '40px'
   },
   lookupEditCell: {
     verticalAlign: 'middle',
-    paddingRight: theme.spacing.unit,
+    paddingRight: sizes.padding,
     '& ~ $lookupEditCell': {
-      paddingLeft: theme.spacing.unit
+      paddingLeft: sizes.padding
     }
   },
   dialog: {

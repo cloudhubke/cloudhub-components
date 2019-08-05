@@ -15,7 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Block from '../components/Block';
 import './grid.css';
 
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
   }
 });
 
-const SimpleDataGrid = props => {
+const SimpleDataGrid = ({ style, ...props }) => {
   const { rows, columns, columnExtensions, cellComponent } = props;
 
   const [deletingRows, setDeletingRows] = useState([]);
@@ -72,28 +72,18 @@ const SimpleDataGrid = props => {
   }, [props.deletingRows]);
 
   return (
-    <Block style={{ position: 'relative' }}>
+    <Block flex={false} style={{ position: 'relative', ...style }}>
       <Block flex={false}>{renderHeader()}</Block>
-      <Block className={classes.gridContainer}>
-        <Block
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0
-          }}
-        >
-          <Grid rows={rows} columns={columns || []}>
-            <DragDropProvider />
-            <Table
-              cellComponent={cellComponent}
-              columnExtensions={columnExtensions}
-            />
-            <TableColumnReordering defaultOrder={columns.map(i => i.name)} />
-            <TableHeaderRow />
-          </Grid>
-        </Block>
+      <Block flex={false} className={classes.gridContainer}>
+        <Grid rows={rows} columns={columns || []}>
+          <DragDropProvider />
+          <Table
+            cellComponent={cellComponent}
+            columnExtensions={columnExtensions}
+          />
+          <TableColumnReordering defaultOrder={columns.map(i => i.name)} />
+          <TableHeaderRow />
+        </Grid>
       </Block>
 
       <Dialog open={deletingRows.length > 0} onClose={cancelDelete}>

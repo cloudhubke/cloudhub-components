@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import  isEqual from 'lodash/isEqual';
-import  debounce from 'lodash/debounce';
+import isEqual from 'lodash/isEqual';
+import debounce from 'lodash/debounce';
 
 import {
   SelectionState,
@@ -49,19 +49,22 @@ import ViewList from '@material-ui/icons/ViewList';
 import { red } from '@material-ui/core/colors';
 
 import { withStyles } from '@material-ui/core/styles';
+import { sizes } from '../components/theme';
+
 import TableHeaderBar from './TableHeaderBar';
+
 import GridLoading from './GridLoading';
 import './grid.css';
 
-const styleSheet = theme => ({
+const styleSheet = () => ({
   commandButton: {
     minWidth: '40px'
   },
   lookupEditCell: {
     verticalAlign: 'middle',
-    paddingRight: theme.spacing.unit,
+    paddingRight: sizes.padding,
     '& ~ $lookupEditCell': {
-      paddingLeft: theme.spacing.unit
+      paddingLeft: sizes.padding
     }
   },
   dialog: {
@@ -224,10 +227,9 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
     this.changeFilters = filters => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
-      let rows = this.state.rows;
+      let { rows } = this.state;
       if (added) {
-        const startingAddedId =
-          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
@@ -238,9 +240,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       }
       if (changed) {
         rows = rows.map(row =>
-          changed[row.id] ? { ...row, ...changed[row.id] } : row
-        );
-        
+          (changed[row.id] ? { ...row, ...changed[row.id] } : row));
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
@@ -302,8 +302,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
         );
       }
       if (column.name === 'counter') {
-        const ind =
-          1 + this.props.data.items.findIndex(item => item.id === row.id);
+        const ind = 1 + this.props.data.items.findIndex(item => item.id === row.id);
         return (
           <TableCell>
             {this.state.currentPage === 0
@@ -370,8 +369,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
 
     const columnSorting = sorting[0];
     if (columnSorting) {
-      const sortingDirectionString =
-        columnSorting.direction === 'desc' ? -1 : 1;
+      const sortingDirectionString = columnSorting.direction === 'desc' ? -1 : 1;
       queryString.sort = { [columnSorting.columnName]: sortingDirectionString };
     }
 
@@ -512,8 +510,8 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
           <TableFilterRow
             cellComponent={props => {
               if (
-                props.column.name === 'actions' ||
-                props.column.name === 'counter'
+                props.column.name === 'actions'
+                || props.column.name === 'counter'
               ) {
                 return <TableCell />;
               }
