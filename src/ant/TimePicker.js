@@ -1,5 +1,5 @@
 import React from 'react';
-import { TimePicker as AntTimePicker } from 'antd';
+import AntTimePicker from 'antd/lib/time-picker';
 import moment from 'moment';
 
 import 'antd/lib/input/style/index.css';

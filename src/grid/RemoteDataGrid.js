@@ -384,7 +384,7 @@ class RemoteDataGrid extends React.PureComponent {
     };
     if (this.props.header) {
       return (
-        <div>
+        <Block>
           {this.props.header({
             ...this.props,
             ...this.state,
@@ -392,7 +392,7 @@ class RemoteDataGrid extends React.PureComponent {
             queryString: this.queryString(),
             onSearch: this.searchChange
           })}
-        </div>
+        </Block>
       );
     }
     return (

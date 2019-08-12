@@ -21,3 +21,7 @@
 .ant-calendar-decade-panel-header .ant-calendar-decade-panel-next-year-btn {
   font-family: inherit;
 }
+
+.ant-calendar-range {
+  width: 680px;
+}

@@ -52,9 +52,11 @@ import { withStyles } from '@material-ui/core/styles';
 import sizes from '../components/theme/Sizes';
 
 import TableHeaderBar from './TableHeaderBar';
-
+import Block from '../components/Block';
 import GridLoading from './GridLoading';
 import './grid.css';
+
+
 
 const styleSheet = () => ({
   commandButton: {
@@ -401,7 +403,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
     };
     if (this.props.header) {
       return (
-        <div>
+        <Block>
           {this.props.header({
             ...this.props,
             ...this.state,
@@ -409,7 +411,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
             queryString: this.queryString(),
             onSearch: this.searchChange
           })}
-        </div>
+        </Block>
       );
     }
     return (
@@ -446,8 +448,18 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
     } = this.state;
 
     return (
-      <Paper className="grid-container">
-        {this.renderHeader()}
+      <Block style={{ position: 'relative' }}>
+      <Block flex={false}>{this.renderHeader()}</Block>
+      <Block className={classes.gridContainer}>
+        <Block
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0
+          }}
+        >
 
         <Grid rows={data.items} columns={columns}>
           <SelectionState
@@ -557,8 +569,10 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
               Delete
             </Button>
           </DialogActions>
-        </Dialog>
-      </Paper>
+          </Dialog>
+          </Block>
+        </Block>
+      </Block>
     );
   }
 }

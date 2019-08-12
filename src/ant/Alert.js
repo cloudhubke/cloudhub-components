@@ -1,7 +1,6 @@
 import React from 'react';
 import AntAlert from 'antd/lib/alert';
 
-import './antd.css';
 import 'antd/lib/alert/style/index.css';
 
 const Alert = ({
