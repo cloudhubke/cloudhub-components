@@ -56,8 +56,6 @@ import Block from '../components/Block';
 import GridLoading from './GridLoading';
 import './grid.css';
 
-
-
 const styleSheet = () => ({
   commandButton: {
     minWidth: '40px'
@@ -449,127 +447,135 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
 
     return (
       <Block style={{ position: 'relative' }}>
-      <Block flex={false}>{this.renderHeader()}</Block>
-      <Block className={classes.gridContainer}>
-        <Block
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0
-          }}
-        >
-
-        <Grid rows={data.items} columns={columns}>
-          <SelectionState
-            selection={selection}
-            onSelectionChange={this.changeSelection}
-          />
-          <SortingState
-            sorting={sorting}
-            onSortingChange={this.changeSorting}
-          />
-
-          <GroupingState
-            grouping={this.state.grouping}
-            onGroupingChange={this.changeGrouping}
-          />
-
-          <FilteringState
-            filters={this.state.filters}
-            onFiltersChange={this.changeFilters}
-          />
-
-          <PagingState
-            currentPage={currentPage}
-            onCurrentPageChange={this.changeCurrentPage}
-            pageSize={pageSize}
-            onPageSizeChange={this.changePageSize}
-          />
-          <CustomPaging totalCount={data.totalCount} />
-
-          <IntegratedGrouping />
-          <IntegratedFiltering />
-          <IntegratedSorting />
-          <IntegratedSelection />
-
-          <DragDropProvider />
-
-          <Table
-            rowComponent={rowComponent}
-            cellComponent={this.cellComponent}
-            allowColumnReordering
-          />
-
-          {allowColumnResizing && (
-            <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
-          )}
-          <Toolbar />
-
-          <TableColumnReordering
-            defaultOrder={columns.map(column => column.name)}
-          />
-          <TableHeaderRow
-            showSortingControls
-            allowDragging
-            allowResizing={allowColumnResizing}
-          />
-
-          <RowDetailState />
-          <TableRowDetail contentComponent={this.props.detailTemplate} />
-
-          <TableFilterRow
-            cellComponent={props => {
-              if (
-                props.column.name === 'actions'
-                || props.column.name === 'counter'
-              ) {
-                return <TableCell />;
-              }
-              return <TableFilterRow.Cell {...props} />;
+        <Block flex={false}>{this.renderHeader()}</Block>
+        <Block className={classes.gridContainer}>
+          <Block
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0
             }}
-          />
-          <TableSelection showSelectAll />
-          <TableGroupRow />
+          >
+            <Grid rows={data.items} columns={columns}>
+              <SelectionState
+                selection={selection}
+                onSelectionChange={this.changeSelection}
+              />
+              <SortingState
+                sorting={sorting}
+                onSortingChange={this.changeSorting}
+              />
 
-          <GroupingPanel allowDragging />
-          <PagingPanel pageSizes={allowedPageSizes} />
-          {hiddencolumns.length > 0 && (
-            <TableColumnVisibility defaultHiddenColumnNames={hiddencolumns} />
-          )}
-          {hiddencolumns.length > 0 && <ColumnChooser />}
-        </Grid>
-        {loading && <GridLoading />}
-        <Dialog
-          open={!!deletingRows.length}
-          onClose={this.cancelDelete}
-          classes={{ paper: classes.dialog }}
-        >
-          <DialogTitle>Delete Row</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure to delete the following row?
-            </DialogContentText>
-            <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <Table cellComponent={this.tableCellTemplate} />
-              <TableHeaderRow />
+              <GroupingState
+                grouping={this.state.grouping}
+                onGroupingChange={this.changeGrouping}
+              />
+
+              <FilteringState
+                filters={this.state.filters}
+                onFiltersChange={this.changeFilters}
+              />
+
+              <PagingState
+                currentPage={currentPage}
+                onCurrentPageChange={this.changeCurrentPage}
+                pageSize={pageSize}
+                onPageSizeChange={this.changePageSize}
+              />
+              <CustomPaging totalCount={data.totalCount} />
+
+              <IntegratedGrouping />
+              <IntegratedFiltering />
+              <IntegratedSorting />
+              <IntegratedSelection />
+
+              <DragDropProvider />
+
+              <Table
+                rowComponent={rowComponent}
+                cellComponent={this.cellComponent}
+                allowColumnReordering
+              />
+
+              {allowColumnResizing && (
+                <TableColumnResizing
+                  defaultColumnWidths={defaultColumnWidths}
+                />
+              )}
+              <Toolbar />
+
+              <TableColumnReordering
+                defaultOrder={columns.map(column => column.name)}
+              />
+              <TableHeaderRow
+                showSortingControls
+                allowDragging
+                allowResizing={allowColumnResizing}
+              />
+
+              <RowDetailState />
+              <TableRowDetail contentComponent={this.props.detailTemplate} />
+
+              <TableFilterRow
+                cellComponent={props => {
+                  if (
+                    props.column.name === 'actions'
+                    || props.column.name === 'counter'
+                  ) {
+                    return <TableCell />;
+                  }
+                  return <TableFilterRow.Cell {...props} />;
+                }}
+              />
+              <TableSelection showSelectAll />
+              <TableGroupRow />
+
+              <GroupingPanel allowDragging />
+              <PagingPanel pageSizes={allowedPageSizes} />
+              {hiddencolumns.length > 0 && (
+                <TableColumnVisibility
+                  defaultHiddenColumnNames={hiddencolumns}
+                />
+              )}
+              {hiddencolumns.length > 0 && <ColumnChooser />}
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.props.onCancelDelete} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                this.props.onDeleteRows(this.props.deleting);
-              }}
-              color="secondary"
+            {loading && <GridLoading />}
+            <Dialog
+              open={!!deletingRows.length}
+              onClose={this.cancelDelete}
+              classes={{ paper: classes.dialog }}
             >
-              Delete
-            </Button>
-          </DialogActions>
-          </Dialog>
+              <DialogTitle>Delete Row</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Are you sure to delete the following row?
+                </DialogContentText>
+                <Grid
+                  rows={this.props.deletingRows}
+                  columns={this.props.columns.filter(
+                    c => c.name.toLowerCase() !== 'actions'
+                  )}
+                >
+                  <Table cellComponent={this.cellComponent} />
+                  <TableHeaderRow />
+                </Grid>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.props.onCancelDelete} color="primary">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.props.onDeleteRows(this.props.deleting);
+                  }}
+                  color="secondary"
+                >
+                  Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Block>
         </Block>
       </Block>

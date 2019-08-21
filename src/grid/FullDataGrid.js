@@ -388,8 +388,13 @@ class FullDataGrid extends Component {
             <DialogContentText>
               Are you sure to delete the following row?
             </DialogContentText>
-            <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <Table tableCellTemplate={this.tableCellTemplate} />
+            <Grid
+              rows={this.props.deletingRows}
+              columns={this.props.columns.filter(
+                c => c.name.toLowerCase() !== 'actions'
+              )}
+            >
+              <Table cellComponent={this.cellComponent} />
               <TableHeaderRow />
             </Grid>
           </DialogContent>

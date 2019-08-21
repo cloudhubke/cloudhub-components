@@ -181,10 +181,9 @@ class DataGridWithDetailView extends React.PureComponent {
     this.changeFilters = filters => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
-      let rows = this.state.rows;
+      let { rows } = this.state;
       if (added) {
-        const startingAddedId =
-          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
@@ -195,12 +194,11 @@ class DataGridWithDetailView extends React.PureComponent {
       }
       if (changed) {
         rows = rows.map(row =>
-          changed[row.id] ? { ...row, ...changed[row.id] } : row
-        );
+          (changed[row.id] ? { ...row, ...changed[row.id] } : row));
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
-    
+
     this.cellComponent = ({ row, column, style }) => {
       const permissions = {
         allowadd: props.permissions.allowadd || false,
@@ -255,10 +253,8 @@ class DataGridWithDetailView extends React.PureComponent {
             </div>
           </TableCell>
         );
-      } else {
-
-        return this.props.cellComponent({ row, column, style });
       }
+      return this.props.cellComponent({ row, column, style });
     };
   }
 
@@ -311,7 +307,7 @@ class DataGridWithDetailView extends React.PureComponent {
     return (
       <Paper className="grid-container">
         {this.renderHeader()}
-        <Grid rows={data} columns={columns} getRowId={row =>  row.id}>
+        <Grid rows={data} columns={columns} getRowId={row => row.id}>
           <SelectionState
             selection={selection}
             onSelectionChange={this.changeSelection}
@@ -347,10 +343,10 @@ class DataGridWithDetailView extends React.PureComponent {
           <DragDropProvider />
 
           <Table
-          rowComponent={rowComponent}
-          cellComponent={this.cellComponent}
-          allowColumnReordering
-        />
+            rowComponent={rowComponent}
+            cellComponent={this.cellComponent}
+            allowColumnReordering
+          />
 
           <TableHeaderRow allowSorting allowDragging />
 
@@ -387,8 +383,13 @@ class DataGridWithDetailView extends React.PureComponent {
             <DialogContentText>
               Are you sure to delete the following row?
             </DialogContentText>
-            <Grid rows={this.props.deletingRows} columns={this.props.columns}>
-              <TableView cellComponent={this.tableCellTemplate} />
+            <Grid
+              rows={this.props.deletingRows}
+              columns={this.props.columns.filter(
+                c => c.name.toLowerCase() !== 'actions'
+              )}
+            >
+              <Table cellComponent={this.cellComponent} />
               <TableHeaderRow />
             </Grid>
           </DialogContent>

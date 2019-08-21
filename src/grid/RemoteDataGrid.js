@@ -538,7 +538,9 @@ class RemoteDataGrid extends React.PureComponent {
                 </DialogContentText>
                 <Grid
                   rows={this.props.deletingRows}
-                  columns={this.props.columns}
+                  columns={this.props.columns.filter(
+                    c => c.name.toLowerCase() !== 'actions'
+                  )}
                 >
                   <Table cellComponent={this.cellComponent} />
                   <TableHeaderRow />
