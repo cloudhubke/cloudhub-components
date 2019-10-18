@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import Lens from '@material-ui/icons/Lens';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { colors } from 'theme';
+import { colors } from './theme';
 import Text from './Text';
 
 const ListSubMenu = ({ children, headerIcon, header, expanded, ...rest }) => {
@@ -20,11 +20,11 @@ const ListSubMenu = ({ children, headerIcon, header, expanded, ...rest }) => {
       <ListItem button onClick={() => setMenuExpand(!menuexpanded)}>
         <ListItemIcon style={{ color: colors.dark }}>{headerIcon}</ListItemIcon>
         <ListItemText
-          primary={
-            <Text body semibold dark>
+          primary={(
+<Text body semibold dark>
               {header}
             </Text>
-          }
+)}
         />
         {menuexpanded ? <ExpandLess /> : <ExpandMore />}
       </ListItem>

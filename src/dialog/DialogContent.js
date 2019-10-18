@@ -1,6 +1,7 @@
 import React from 'react';
-import { Block } from 'components';
-import { sizes } from 'theme';
+import Block from '../Block';
+
+import { sizes } from '../theme';
 
 const DialogContent = ({ children, dialog, style, ...props }) => {
   const dialogStyles = { ...style };

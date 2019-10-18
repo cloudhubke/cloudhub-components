@@ -1,5 +1,5 @@
 import React from 'react';
-import { sizes } from 'theme';
+import { sizes } from './theme';
 import Block from './Block';
 
 const FieldBlock = ({ children, style, ...rest }) => (

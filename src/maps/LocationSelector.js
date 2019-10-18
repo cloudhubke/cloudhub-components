@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Block, Text } from 'components';
-import { sizes, colors } from 'theme';
-import PlacesAutoComplete from 'cloudhub-react-components/dist/maps/PlacesAutoComplete';
-import { CONFIG } from 'store/store';
 import isEqual from 'lodash/isEqual';
+import Block from './Block';
+import Text from './Text';
+import PlacesAutoComplete from './dist/maps/PlacesAutoComplete';
+import { sizes, colors } from '../theme';
 import GoogleMapsComponent from './GoogleMapsComponent';
+import ThemeContext from '../theme/ThemeContext';
 
 class LocationSelector extends Component {
   static defaultProps = {
@@ -55,33 +56,37 @@ class LocationSelector extends Component {
     const { meta } = this.props;
     const hasError = meta.touched && meta.error;
     return (
-      <Block>
-        <Block>
-          <GoogleMapsComponent
-            center={this.state.center}
-            onRegionChange={region => this.setState({ region })}
-          />
-        </Block>
-        <Block
-          flex={false}
-          style={{ position: 'absolute', top: 10, left: 10, right: 65 }}
-        >
-          <PlacesAutoComplete
-            placeholder="Search your location..."
-            value={value}
-            libraries={['places']}
-            height={sizes.inputHeight}
-            API_KEY={CONFIG.GOOGLE_APIKEY}
-            borderColor={hasError ? colors.error : '#CCC'}
-            borderColorFocused="#333"
-            onChange={this.onChange}
-            region={this.state.region}
-          />
-          <Text small error>
-            {hasError && meta.error}
-          </Text>
-        </Block>
-      </Block>
+      <ThemeContext.Provider>
+        {({ CONFIG }) => (
+          <Block>
+            <Block>
+              <GoogleMapsComponent
+                center={this.state.center}
+                onRegionChange={region => this.setState({ region })}
+              />
+            </Block>
+            <Block
+              flex={false}
+              style={{ position: 'absolute', top: 10, left: 10, right: 65 }}
+            >
+              <PlacesAutoComplete
+                placeholder="Search your location..."
+                value={value}
+                libraries={['places']}
+                height={sizes.inputHeight}
+                API_KEY={CONFIG.GOOGLE_APIKEY}
+                borderColor={hasError ? colors.error : '#CCC'}
+                borderColorFocused="#333"
+                onChange={this.onChange}
+                region={this.state.region}
+              />
+              <Text small error>
+                {hasError && meta.error}
+              </Text>
+            </Block>
+          </Block>
+        )}
+      </ThemeContext.Provider>
     );
   }
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { Block } from 'components';
 import PropTypes from 'prop-types';
 
 import MuiPopper from '@material-ui/core/Popper';
@@ -8,8 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
 
 import { ClickAwayListener } from '@material-ui/core';
-import { sizes, colors } from 'theme';
 import { makeStyles } from '@material-ui/core/styles';
+import Block from '../Block';
+import { sizes, colors } from '../theme';
 
 const getStyles = ({ color }) => {
   const useStyles = makeStyles({

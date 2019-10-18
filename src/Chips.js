@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import isEqual from 'lodash/isEqual';
 import Chip from '@material-ui/core/Chip';
-import { sizes } from 'theme';
+import { sizes } from './theme';
 
 const useStyles = makeStyles(theme => ({
   root: {

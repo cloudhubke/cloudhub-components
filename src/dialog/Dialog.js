@@ -1,8 +1,8 @@
 import React from 'react';
-import { SlideComponent } from 'components';
 import MuiDialog from '@material-ui/core/Dialog';
 import { makeStyles } from '@material-ui/core/styles';
-import { colors } from '../../theme';
+import SlideComponent from '../SlideComponent';
+import { colors } from '../theme';
 
 const getAnimation = animation => {
   switch (animation) {

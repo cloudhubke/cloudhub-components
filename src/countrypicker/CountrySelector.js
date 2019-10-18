@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from './Selector';
+import Select from '../Selector';
 import countries from './countries';
 
 const CountrySelector = ({ input, meta, onSelectChange }) => (

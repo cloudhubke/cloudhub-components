@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import isPlainObject from 'lodash/isPlainObject';
 import CloudhubSelector from './Select';
-import { sizes } from 'theme';
+import { sizes } from '../theme';
 import Block from '../Block';
 import Text from '../Text';
 import getCustomStyles from './getCustomStyles';

@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
-import { colors, hexToRgb } from 'theme';
+import { colors, hexToRgb } from './theme';
 
 function Pagination({ ...props }) {
   const { classes, count, rowsPerPage, color, className } = props;
@@ -31,7 +31,7 @@ function Pagination({ ...props }) {
     currentPage > 0 ? currentPage - 1 : null,
     currentPage,
     totalpages > currentPage ? currentPage + 1 : null,
-    totalpages > 1 && currentPage === 0 ? currentPage + 2 : null
+    totalpages > 1 && currentPage === 0 ? currentPage + 2 : null,
   ];
 
   const handleButtoClick = page => {
@@ -51,12 +51,12 @@ function Pagination({ ...props }) {
 
   const firstpaginationLink = classNames({
     [classes.paginationLink]: true,
-    [classes.disabled]: currentPage === 0
+    [classes.disabled]: currentPage === 0,
   });
 
   const lastpaginationLink = classNames({
     [classes.paginationLink]: true,
-    [classes.disabled]: currentPage === lastPage
+    [classes.disabled]: currentPage === lastPage,
   });
 
   return (
@@ -72,7 +72,8 @@ function Pagination({ ...props }) {
       </li>
       <li>
         <Button
-          onClick={() => handleButtoClick(currentPage > 0 ? currentPage - 1 : 0)
+          onClick={() =>
+            handleButtoClick(currentPage > 0 ? currentPage - 1 : 0)
           }
           className={firstpaginationLink}
           disabled={currentPage === 0}
@@ -86,7 +87,7 @@ function Pagination({ ...props }) {
           const paginationLink = classNames({
             [classes.paginationLink]: true,
             [classes[color]]: page === currentPage,
-            [classes.disabled]: false
+            [classes.disabled]: false,
           });
           return (
             <li className={classes.paginationItem} key={index}>
@@ -124,13 +125,13 @@ function Pagination({ ...props }) {
 
 Pagination.defaultProps = {
   color: 'primary',
-  onChangePage: () => {}
+  onChangePage: () => {},
 };
 
 Pagination.propTypes = {
   classes: PropTypes.object.isRequired,
   color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
-  onChangePage: PropTypes.func
+  onChangePage: PropTypes.func,
 };
 
 const paginationStyle = {
@@ -138,14 +139,14 @@ const paginationStyle = {
     display: 'flex',
     paddingLeft: '0',
     listStyle: 'none',
-    borderRadius: '0.25rem'
+    borderRadius: '0.25rem',
   },
   paginationItem: {
-    display: 'inline'
+    display: 'inline',
   },
   paginationLink: {
     ':first-of-type': {
-      marginleft: '0'
+      marginleft: '0',
     },
     border: '0',
     borderRadius: '30px !important',
@@ -165,16 +166,16 @@ const paginationStyle = {
     textDecoration: 'none',
     boxSizing: 'border-box',
     '&,&:hover,&:focus': {
-      color: colors.grayColor[0]
+      color: colors.grayColor[0],
     },
     '&:hover,&:focus': {
       zIndex: '3',
       backgroundColor: colors.grayColor[2],
-      borderColor: colors.grayColor[6]
+      borderColor: colors.grayColor[6],
     },
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   primary: {
     '&,&:hover,&:focus': {
@@ -185,12 +186,12 @@ const paginationStyle = {
         colors.primary
       )}, 0.14), 0 1px 10px 0 rgba(${hexToRgb(
         colors.primary
-      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.primary)}, 0.2)`
+      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.primary)}, 0.2)`,
     },
     '&:hover,&:focus': {
       zIndex: '2',
-      cursor: 'default'
-    }
+      cursor: 'default',
+    },
   },
   info: {
     '&,&:hover,&:focus': {
@@ -201,12 +202,12 @@ const paginationStyle = {
         colors.infoColor[0]
       )}, 0.14), 0 1px 10px 0 rgba(${hexToRgb(
         colors.infoColor[0]
-      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.infoColor[0])}, 0.2)`
+      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.infoColor[0])}, 0.2)`,
     },
     '&:hover,&:focus': {
       zIndex: '2',
-      cursor: 'default'
-    }
+      cursor: 'default',
+    },
   },
   success: {
     '&,&:hover,&:focus': {
@@ -217,12 +218,12 @@ const paginationStyle = {
         colors.successColor[0]
       )}, 0.14), 0 1px 10px 0 rgba(${hexToRgb(
         colors.successColor[0]
-      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.successColor[0])}, 0.2)`
+      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.successColor[0])}, 0.2)`,
     },
     '&:hover,&:focus': {
       zIndex: '2',
-      cursor: 'default'
-    }
+      cursor: 'default',
+    },
   },
   warning: {
     '&,&:hover,&:focus': {
@@ -233,12 +234,12 @@ const paginationStyle = {
         colors.warningColor[0]
       )}, 0.14), 0 1px 10px 0 rgba(${hexToRgb(
         colors.warningColor[0]
-      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.warningColor[0])}, 0.2)`
+      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.warningColor[0])}, 0.2)`,
     },
     '&:hover,&:focus': {
       zIndex: '2',
-      cursor: 'default'
-    }
+      cursor: 'default',
+    },
   },
   danger: {
     '&,&:hover,&:focus': {
@@ -249,21 +250,21 @@ const paginationStyle = {
         colors.dangerColor[0]
       )}, 0.14), 0 1px 10px 0 rgba(${hexToRgb(
         colors.dangerColor[0]
-      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.dangerColor[0])}, 0.2)`
+      )}, 0.12), 0 2px 4px -1px rgba(${hexToRgb(colors.dangerColor[0])}, 0.2)`,
     },
     '&:hover,&:focus': {
       zIndex: '2',
-      cursor: 'default'
-    }
+      cursor: 'default',
+    },
   },
   disabled: {
     '&,&:hover,&:focus': {
       color: colors.grayColor[10],
       cursor: 'not-allowed',
       backgroundColor: colors.whiteColor,
-      borderColor: colors.grayColor[6]
-    }
-  }
+      borderColor: colors.grayColor[6],
+    },
+  },
 };
 
 export default withStyles(paginationStyle)(Pagination);

@@ -1,6 +1,6 @@
 import React from 'react';
 import MuiIconButton from '@material-ui/core/IconButton';
-import { colors } from '../theme';
+import { colors } from './theme';
 
 const IconButton = React.forwardRef((props, ref) => {
   const {

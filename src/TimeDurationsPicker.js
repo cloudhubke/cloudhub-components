@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
 import isEqual from 'lodash/isEqual';
-import { sizes, colors } from 'theme';
 import moment from 'moment';
-import { Chips } from 'components';
+import { sizes, colors } from './theme';
 
 import Popper from './dialog/Popper';
 import IconButton from './IconButton';
+import Chips from './Chips';
 import Block from './Block';
 import FieldBlock from './FieldBlock';
 import Button from './Button';

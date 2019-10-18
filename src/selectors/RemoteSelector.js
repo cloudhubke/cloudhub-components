@@ -1,7 +1,8 @@
 import React from 'react';
-import { Block, Text } from 'components';
 import isPlainObject from 'lodash/isPlainObject';
-import { sizes } from 'theme';
+import Block from '../Block';
+import Text from '../Text';
+import { sizes } from '../theme';
 import CloudhubRemoteSelector from './Selector';
 import getCustomStyles from './getCustomStyles';
 

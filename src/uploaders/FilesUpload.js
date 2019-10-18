@@ -5,36 +5,34 @@ import Icon from 'antd/lib/icon';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
-
-import Input from 'antd/lib/input';
-
 import { withStyles } from '@material-ui/core/styles';
-import Button from 'antd/lib/button';
+import Button from './Bbutton';
+import Input from '../Input';
 
 const styles = () => ({
   fileList: {
     '& span': {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
     '& .ant-upload-list': {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
     '& .ant-upload-list-item': {
       border: '1px solid #DDDDDD',
       fontSize: 16,
       borderRadius: 3,
-      height: 'auto'
+      height: 'auto',
     },
     '& .ant-upload-list-item-info span': {
       display: 'flex',
       flexDirection: 'row',
-      padding: '5px 5px 5px 5px'
+      padding: '5px 5px 5px 5px',
     },
     '& .anticon.anticon-paper-clip': {
       fontSize: 22,
-      position: 'relative'
+      position: 'relative',
     },
     '& .ant-upload-list-item .anticon-cross': {
       display: 'flex',
@@ -43,8 +41,8 @@ const styles = () => ({
       alignItems: 'center',
       justifyContent: 'center',
       top: 0,
-      bottom: 0
-    }
+      bottom: 0,
+    },
   },
   listItem: {
     width: '100%',
@@ -52,11 +50,11 @@ const styles = () => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   iconButton: {
-    marginLeft: 5
-  }
+    marginLeft: 5,
+  },
 });
 
 class FilesUpload extends Component {
@@ -66,16 +64,16 @@ class FilesUpload extends Component {
     url: '/fileapi/upload/file',
     input: {
       value: {},
-      onChange: () => {}
+      onChange: () => {},
     },
-    onChange: () => {}
+    onChange: () => {},
   };
 
   constructor(props) {
     super(props);
     this.state = {
       isMounted: true,
-      fileList: []
+      fileList: [],
     };
   }
 
@@ -89,21 +87,20 @@ class FilesUpload extends Component {
             uid: item.uid || index,
             name: item.name || 'xxx.png',
             status: 'done',
-            url: item.url || ''
-          }))
-        };
-      } else {
-        return {
-          ...prevState,
-          fileList: [nextProps.input.value].map((item, index) => ({
-            ...item,
-            uid: item.uid || index,
-            name: item.name || item.filename || 'xxx.png',
-            status: 'done',
-            url: item.url || item.fd || ''
-          }))
+            url: item.url || '',
+          })),
         };
       }
+      return {
+        ...prevState,
+        fileList: [nextProps.input.value].map((item, index) => ({
+          ...item,
+          uid: item.uid || index,
+          name: item.name || item.filename || 'xxx.png',
+          status: 'done',
+          url: item.url || item.fd || '',
+        })),
+      };
     }
     return { ...prevState };
   }
@@ -116,6 +113,7 @@ class FilesUpload extends Component {
       this.setState({ fileList: newfilelist });
     }, 100);
   }
+
   handleChange = ({ file, fileList }) => {
     const files = fileList.map((item, index) => {
       if (item.response) {
@@ -125,7 +123,7 @@ class FilesUpload extends Component {
           uid:
             (fl.fd || '').replace('files', '').replace(/\//g, '') ||
             new Date().getTime(),
-          status: 'done'
+          status: 'done',
         };
       }
       return item;
@@ -191,8 +189,7 @@ class FilesUpload extends Component {
             const fullfilelist = [...this.state.fileList, ...fileList];
             if (fullfilelist.length > limit) {
               this.setState({
-                uploaderror:
-                  'Files could not be uploaded. Limit of ' + limit + ' exceeded'
+                uploaderror: `Files could not be uploaded. Limit of ${limit} exceeded`,
               });
               this.removeUnUploadedFiles();
               return false;

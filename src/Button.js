@@ -1,7 +1,7 @@
 import React from 'react';
 import MuiButton from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { colors, sizes } from '../theme';
+import { colors, sizes } from './theme';
 
 let height = 48;
 
@@ -132,21 +132,21 @@ const Button = ({
   const buttonStyles = props.className
     ? {}
     : {
-      ...styles.button,
-      ...(large && { height: getHeight(64), padding: '0, 15px' }),
-      ...(medium && { height: getHeight(48), padding: '0, 15px' }),
-      ...(small && { height: getHeight(32), padding: '0, 15px' }),
-      ...(margin && { ...handleMargins() }),
-      ...(padding && { ...handlePaddings() }),
-      ...(!color && { color: colors.dark }),
-      ...(color && styles[color]), // predefined styles colors for backgroundColor
-      ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
-      ...(textColor && { color: textColor }), // custom backgroundColor
-      ...(outlined && { backgroundColor: 'transparent' }),
-      ...(rounded && { borderRadius: height / 2 }),
-      ...(disabled && { opacity: 0.7 }),
-      ...style,
-    };
+        ...styles.button,
+        ...(large && { height: getHeight(64), padding: '0, 15px' }),
+        ...(medium && { height: getHeight(48), padding: '0, 15px' }),
+        ...(small && { height: getHeight(32), padding: '0, 15px' }),
+        ...(margin && { ...handleMargins() }),
+        ...(padding && { ...handlePaddings() }),
+        ...(!color && { color: colors.dark }),
+        ...(color && styles[color]), // predefined styles colors for backgroundColor
+        ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
+        ...(textColor && { color: textColor }), // custom backgroundColor
+        ...(outlined && { backgroundColor: 'transparent' }),
+        ...(rounded && { borderRadius: height / 2 }),
+        ...(disabled && { opacity: 0.7 }),
+        ...style,
+      };
 
   return (
     <MuiButton

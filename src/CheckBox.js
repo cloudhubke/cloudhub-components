@@ -5,7 +5,7 @@ import CheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
 import Text from './Text';
 import Block from './Block';
 import Button from './Button';
-import { sizes, colors } from '../theme';
+import { sizes, colors } from './theme';
 
 const checkBoxStyles = {
   checkBox: {

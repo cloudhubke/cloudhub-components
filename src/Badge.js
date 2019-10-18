@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { sizes } from 'theme';
+import { sizes } from './theme';
 import Block from './Block';
 
 export default class Badge extends Component {
@@ -16,14 +16,14 @@ export default class Badge extends Component {
       ...{
         height: sizes.base || size,
         width: sizes.base || size,
-        borderRadius: size ? size / 2 : sizes.base / 2
+        borderRadius: size ? size / 2 : sizes.base / 2,
       },
       ...(size && {
         minWidth: size,
         minHeight: size,
-        borderRadius: size / 2
+        borderRadius: size / 2,
       }),
-      ...style
+      ...style,
     };
 
     return (

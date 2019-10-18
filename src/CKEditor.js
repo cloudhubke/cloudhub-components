@@ -1,12 +1,12 @@
 import React from 'react';
 import CKEditor5 from 'react-ckeditor5';
+import { makeStyles } from '@material-ui/core/styles';
 import Block from './Block';
 import Text from './Text';
-import { fonts, colors } from 'theme';
-
-import { makeStyles } from '@material-ui/core/styles';
+import { useFonts, colors } from './theme';
 
 const styles = ({ height }) => {
+  const { fonts } = useFonts();
   const useStyles = makeStyles({
     root: {
       '& .ck-editor__editable': {

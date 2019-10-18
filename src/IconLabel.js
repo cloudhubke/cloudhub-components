@@ -1,6 +1,6 @@
 // just copy this code from the driving repo :)
 import React from 'react';
-import { fonts, colors, sizes } from 'theme';
+import { useFonts, colors, sizes } from './theme';
 import Block from './Block';
 
 const IconLabel = ({
@@ -87,6 +87,99 @@ const IconLabel = ({
   icon,
   blockProps,
 }) => {
+  const { fonts } = useFonts();
+
+  const styles = {
+    // default style
+    text: {
+      color: 'inherit',
+    },
+    // variations
+    regular: {
+      fontWeight: 'normal',
+    },
+    bold: fonts.bold,
+
+    semibold: {
+      ...fonts.semibold,
+    },
+    medium: {
+      fontWeight: '500',
+    },
+    light: fonts.light,
+    normal: fonts.normal,
+    thin: {
+      fontWeight: 100,
+    },
+    // position
+    center: { textAlign: 'center' },
+    right: { textAlign: 'right' },
+    // colors
+    accent: { color: colors.accent },
+    primary: { color: colors.primary },
+    secondary: { color: colors.secondary },
+    tertiary: { color: colors.tertiary },
+    black: { color: colors.black },
+    white: { color: colors.white },
+    gray: { color: colors.gray },
+    gray2: { color: colors.gray2 },
+    dark: { color: colors.dark },
+    mistyWhite: { color: colors.mistyWhite },
+    milkyWhite: { color: colors.milkyWhite },
+    error: { color: colors.error },
+    clear: { color: colors.clear },
+    facebook: { color: colors.facebook },
+    transparent: { color: colors.transparent },
+    silver: { color: colors.silver },
+    steel: { color: colors.steel },
+    ricePaper: { color: colors.ricePaper },
+    frost: { color: colors.frost },
+    cloud: { color: colors.cloud },
+    windowTint: { color: colors.windowTint },
+    panther: { color: colors.panther },
+    charcoal: { color: colors.charcoal },
+    coal: { color: colors.coal },
+    bloodOrange: { color: colors.bloodOrange },
+    snow: { color: colors.snow },
+    ember: { color: colors.ember },
+    fire: { color: colors.fire },
+    drawer: { color: colors.drawer },
+    eggplant: { color: colors.eggplant },
+    twitterColor: { color: colors.twitterColor },
+    facebookColor: { color: colors.facebookColor },
+    googleColor: { color: colors.googleColor },
+    linkedinColor: { color: colors.linkedinColor },
+    pinterestColor: { color: colors.pinterestColor },
+    youtubeColor: { color: colors.youtubeColor },
+    tumblrColor: { color: colors.tumblrColor },
+    behanceColor: { color: colors.behanceColor },
+    dribbbleColor: { color: colors.dribbbleColor },
+    redditColor: { color: colors.redditColor },
+    instagramColor: { color: colors.instagramColor },
+    success: { color: colors.success },
+    info: { color: colors.info },
+    rose: { color: colors.rose },
+    warning: { color: colors.warning },
+    danger: { color: colors.danger },
+    // fonts
+    h1: fonts.h1,
+    h2: fonts.h2,
+    h3: fonts.h3,
+    h4: fonts.h4,
+    h5: fonts.h5,
+    h6: fonts.h6,
+    title: fonts.title,
+    subTitle: fonts.subTitle,
+
+    header: fonts.header,
+    subHeader: fonts.subHeader,
+
+    body: fonts.body,
+    caption: fonts.caption,
+    small: fonts.small,
+    button: fonts.button,
+  };
+
   const textStyles = {
     ...styles.text,
     ...(h1 && styles.h1),
@@ -195,111 +288,20 @@ const IconLabel = ({
   );
 
   const renderIcon = IconComponent =>
-    (IconComponent ? (
+    IconComponent ? (
       <IconComponent
         style={{
           marginRight: sizes.margin,
           ...textStyles,
         }}
       />
-    ) : null);
+    ) : null;
 
   return (
     <Block row middle flex={false} wrap {...blockProps}>
       {renderIcon(icon)} {renderText()}
     </Block>
   );
-};
-
-const styles = {
-  // default style
-  text: {
-    color: 'inherit',
-  },
-  // variations
-  regular: {
-    fontWeight: 'normal',
-  },
-  bold: fonts.bold,
-
-  semibold: {
-    ...fonts.semibold,
-  },
-  medium: {
-    fontWeight: '500',
-  },
-  light: fonts.light,
-  normal: fonts.normal,
-  thin: {
-    fontWeight: 100,
-  },
-  // position
-  center: { textAlign: 'center' },
-  right: { textAlign: 'right' },
-  // colors
-  accent: { color: colors.accent },
-  primary: { color: colors.primary },
-  secondary: { color: colors.secondary },
-  tertiary: { color: colors.tertiary },
-  black: { color: colors.black },
-  white: { color: colors.white },
-  gray: { color: colors.gray },
-  gray2: { color: colors.gray2 },
-  dark: { color: colors.dark },
-  mistyWhite: { color: colors.mistyWhite },
-  milkyWhite: { color: colors.milkyWhite },
-  error: { color: colors.error },
-  clear: { color: colors.clear },
-  facebook: { color: colors.facebook },
-  transparent: { color: colors.transparent },
-  silver: { color: colors.silver },
-  steel: { color: colors.steel },
-  ricePaper: { color: colors.ricePaper },
-  frost: { color: colors.frost },
-  cloud: { color: colors.cloud },
-  windowTint: { color: colors.windowTint },
-  panther: { color: colors.panther },
-  charcoal: { color: colors.charcoal },
-  coal: { color: colors.coal },
-  bloodOrange: { color: colors.bloodOrange },
-  snow: { color: colors.snow },
-  ember: { color: colors.ember },
-  fire: { color: colors.fire },
-  drawer: { color: colors.drawer },
-  eggplant: { color: colors.eggplant },
-  twitterColor: { color: colors.twitterColor },
-  facebookColor: { color: colors.facebookColor },
-  googleColor: { color: colors.googleColor },
-  linkedinColor: { color: colors.linkedinColor },
-  pinterestColor: { color: colors.pinterestColor },
-  youtubeColor: { color: colors.youtubeColor },
-  tumblrColor: { color: colors.tumblrColor },
-  behanceColor: { color: colors.behanceColor },
-  dribbbleColor: { color: colors.dribbbleColor },
-  redditColor: { color: colors.redditColor },
-  instagramColor: { color: colors.instagramColor },
-  success: { color: colors.success },
-  info: { color: colors.info },
-  rose: { color: colors.rose },
-  warning: { color: colors.warning },
-  danger: { color: colors.danger },
-  // fonts
-  h1: fonts.h1,
-  h2: fonts.h2,
-  h3: fonts.h3,
-  h4: fonts.h4,
-  h5: fonts.h5,
-  h6: fonts.h6,
-  title: fonts.title,
-  subTitle: fonts.subTitle,
-
-  header: fonts.header,
-  subHeader: fonts.subHeader,
-
-  body: fonts.body,
-  caption: fonts.caption,
-  small: fonts.small,
-  button: fonts.button,
 };
 
 IconLabel.defaultProps = {

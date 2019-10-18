@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import AntTimePicker from 'cloudhub-react-components/dist/ant/TimePicker';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
-import { sizes, fonts } from 'theme';
+import AntTimePicker from './ant/TimePicker';
+import { sizes, useFonts } from './theme';
 import Block from './Block';
 import Text from './Text';
 
 const getStyles = () => {
+  const { fonts } = useFonts();
   const useStyles = makeStyles({
     timePicker: {
       ...fonts.default,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { sizes, colors } from 'theme';
+import { sizes, colors } from './theme';
 import Block from './Block';
 
 export default class Card extends Component {
@@ -25,6 +25,6 @@ export const styles = {
   card: {
     borderRadius: sizes.border,
     padding: sizes.base + 4,
-    marginBottom: sizes.base
-  }
+    marginBottom: sizes.base,
+  },
 };

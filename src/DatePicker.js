@@ -1,11 +1,12 @@
 import React from 'react';
-import AntDatePicker from 'cloudhub-react-components/dist/ant/DatePicker';
 import { makeStyles } from '@material-ui/core/styles';
-import { sizes, fonts } from 'theme';
+import AntDatePicker from './ant/DatePicker';
+import { sizes, useFonts } from './theme';
 import Block from './Block';
 import Text from './Text';
 
 const getStyles = () => {
+  const { fonts } = useFonts();
   const useStyles = makeStyles({
     datePicker: {
       ...fonts.default,

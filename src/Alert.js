@@ -1,6 +1,6 @@
 import React from 'react';
-import AntAlert from 'cloudhub-react-components/dist/ant/Alert';
-import { sizes } from 'theme';
+import AntAlert from './ant/Alert';
+import { sizes } from './theme';
 import Block from './Block';
 
 const Alert = props => (

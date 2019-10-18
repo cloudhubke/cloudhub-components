@@ -1,6 +1,6 @@
 import React from 'react';
 import MuiContainer from '@material-ui/core/Container';
-import { colors } from 'theme';
+import { colors } from './theme';
 
 const Container = ({
   children,

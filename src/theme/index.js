@@ -1,4 +1,4 @@
-import fonts from './Fonts';
+import useFonts from './useFonts';
 import sizes from './Sizes';
 import colors from './Colors';
 import Images from './Images';
@@ -27,4 +27,4 @@ const hexToRgb = hexcolor => {
   )}`;
 };
 
-export { sizes, fonts, colors, Images, hexToRgb };
+export { sizes, useFonts, colors, Images, hexToRgb };

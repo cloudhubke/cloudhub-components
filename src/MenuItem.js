@@ -6,8 +6,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import { Block } from 'components';
-import { colors, sizes } from 'theme';
+import Block from './Block';
+import { colors, sizes } from './theme';
 
 const getStyles = ({ selected }) => {
   const useStyles = makeStyles({

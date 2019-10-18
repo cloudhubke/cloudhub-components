@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
-import { sizes, colors } from 'theme';
-import { Chips } from 'components';
-import Popper from '../components/dialog/Popper';
+import { sizes, colors } from './theme';
+import Popper from './dialog/Popper';
 import IconButton from './IconButton';
+import Chips from './Chips';
 import Block from './Block';
 import FieldBlock from './FieldBlock';
 import Button from './Button';
@@ -51,8 +51,8 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
           onClose={() => setPopperOpen(false)}
           paperStyle={{ overflow: 'visible' }}
           disableClickAwayClose
-          anchorComponent={
-            <IconButton
+          anchorComponent={(
+<IconButton
               aria-describedby={id}
               onClick={() => setPopperOpen(true)}
             >
@@ -60,7 +60,7 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
                 style={{ fontSize: 32, color: colors.gray }}
               />
             </IconButton>
-          }
+)}
         >
           <Block style={{ width: 400 }}>
             <Form

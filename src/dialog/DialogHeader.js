@@ -1,8 +1,10 @@
 import React from 'react';
-import { Block, IconButton } from 'components';
 import Close from '@material-ui/icons/Close';
+import Block from '../Block';
+import IconButton from '../IconButton';
 
-import { sizes } from 'theme';
+
+import { sizes } from '../theme';
 
 const DialogHeader = ({
   children,

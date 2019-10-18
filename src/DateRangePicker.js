@@ -1,11 +1,12 @@
 import React from 'react';
-import AntRangePicker from 'cloudhub-react-components/dist/ant/DateFilter';
 import { makeStyles } from '@material-ui/core/styles';
-import { sizes, fonts } from 'theme';
+import AntRangePicker from './ant/DateFilter';
+import { sizes, useFonts } from './theme';
 import Block from './Block';
 import Text from './Text';
 
 const getStyles = () => {
+  const { fonts } = useFonts();
   const useStyles = makeStyles({
     datePicker: {
       fontSize: '9px',

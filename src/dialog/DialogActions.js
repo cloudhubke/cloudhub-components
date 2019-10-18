@@ -1,6 +1,6 @@
 import React from 'react';
-import { Block } from 'components';
-import { sizes } from 'theme';
+import Block from '../Block';
+import { sizes } from '../theme';
 
 const DialogActions = ({ children, ...props }) => (
   <Block

@@ -1,5 +1,5 @@
 import React from 'react';
-import { colors, sizes } from 'theme';
+import { colors, sizes } from './theme';
 import Block from './Block';
 
 import Container from './Container';

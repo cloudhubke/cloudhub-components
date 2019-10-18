@@ -1,12 +1,12 @@
 // just copy this code from the driving repo :)
 
 import React, { Component } from 'react';
-import { sizes, colors } from 'theme';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import classNames from 'classnames';
+import { sizes, colors } from './theme';
 
 class Block extends Component {
   static defaultProps = {

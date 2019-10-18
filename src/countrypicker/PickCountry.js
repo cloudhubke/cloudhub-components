@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Block, Text } from 'components';
+import Block from '../Block';
+import Text from '../Text';
 import CountryPicker from './CountryPicker';
 
 const styles = () => ({
@@ -19,6 +20,7 @@ class PickCountry extends Component {
     super(props);
     this.state = {};
   }
+
   render() {
     const { classes, showCode } = this.props;
     return (

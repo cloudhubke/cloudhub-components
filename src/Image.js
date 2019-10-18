@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { hexToRgb, colors } from 'theme';
+import { hexToRgb, colors } from './theme';
 
 const useStyles = makeStyles({
   imgFluid: {
@@ -15,7 +15,9 @@ const useStyles = makeStyles({
     borderRadius: '50% !important',
   },
   imgRaised: {
-    boxShadow: `0 5px 15px -8px rgba(${hexToRgb(colors.blackColor)}, 0.24), 0 8px 10px -5px rgba(${hexToRgb(colors.blackColor)}, 0.2)`,
+    boxShadow: `0 5px 15px -8px rgba(${hexToRgb(
+      colors.blackColor
+    )}, 0.24), 0 8px 10px -5px rgba(${hexToRgb(colors.blackColor)}, 0.2)`,
   },
   imgGallery: {
     width: '100%',

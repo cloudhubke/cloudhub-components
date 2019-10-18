@@ -15,8 +15,7 @@ import Fab from '@material-ui/core/Fab';
 
 import 'antd/lib/upload/style/index.css';
 
-import Block from './components/Block';
-
+import Block from '../../Block';
 import resizer from './resizer';
 
 const Transition = React.forwardRef((props, ref) => (

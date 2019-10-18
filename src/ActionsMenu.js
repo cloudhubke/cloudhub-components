@@ -11,6 +11,7 @@ class MenuListComposition extends Component {
   static defaultProps = {
     anchorComponent: null,
   };
+
   state = {
     open: false,
   };

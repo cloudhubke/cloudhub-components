@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ThemeContext from './ThemeContext';
 
-const ThemeProvider = ({ fonts, children, ...props }) => {
-  return (
-    <ThemeContext.Provider value={{ fonts, ...props }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
+const ThemeProvider = ({ values, children, ...props }) => (
+  <ThemeContext.Provider
+    value={{
+      fonts: { ...props.fonts, ...(values.fonts || {}) },
+      CONFIG: values.CONFIG || {},
+    }}
+  >
+    {children}
+  </ThemeContext.Provider>
+);
 
 ThemeProvider.defaultProps = {
   fonts: {

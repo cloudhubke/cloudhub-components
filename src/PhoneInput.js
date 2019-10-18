@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { sizes, colors } from 'theme';
 import PhoneNumber from 'awesome-phonenumber';
+import { sizes, colors } from './theme';
 
 import PickCountry from './countrypicker/PickCountry';
 
@@ -35,6 +35,7 @@ class PhoneInput extends Component {
     }
     return { ...prevState };
   };
+
   onPhoneChanged = phone => {
     const pn = new PhoneNumber(phone, this.state.cca2);
     if (pn.isValid()) {
@@ -64,6 +65,7 @@ class PhoneInput extends Component {
   };
 
   handleShowCountries = () => {};
+
   render() {
     const { classes, input, meta, readOnly, marginRight, ...rest } = this.props;
     const { phone, placeholder } = this.state;

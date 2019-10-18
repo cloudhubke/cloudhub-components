@@ -3,7 +3,7 @@ import Text from './Text';
 import Block from './Block';
 import Button from './Button';
 
-import { sizes, fonts } from '../theme';
+import { sizes } from './theme';
 
 const FieldLabel = ({
   label,
@@ -58,7 +58,7 @@ FieldLabel.defaultProps = {
   label: 'Label',
   height: sizes.inputHeight,
   onClick: () => {},
-  textStyles: { ...fonts.header, color: 'inherit' },
+  textStyles: { color: 'inherit' },
   disabled: true,
 };
 
