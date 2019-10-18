@@ -1,5 +1,5 @@
 {
-  "name": "cloudhub-react-components",
+  "name": "cloudhub-components",
   "version": "0.0.0-development",
   "description": "Various components to use in react projects",
   "main": "dist/index.js",
@@ -14,12 +14,12 @@
     "test:single": "mocha src/index.test.js --require babel-core/register",
     "prebuild": "rimraf dist",
     "build": "npm-run-all --parallel build:*",
-    "build:main": "babel  --source-maps --copy-files --out-dir dist --ignore *.test.js src",
+    "build:main": "npx babel --config-file ./babel.json  --source-maps --copy-files --out-dir dist --ignore *.test.js src",
     "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaithoben/cloudhub-react-components.git"
+    "url": "https://github.com/gaithoben/cloudhub-components.git"
   },
   "keywords": [
     "cloudhub"
@@ -27,16 +27,21 @@
   "author": "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaithoben/cloudhub-react-components/issues"
+    "url": "https://github.com/gaithoben/cloudhub-components/issues"
   },
-  "homepage": "https://github.com/gaithoben/cloudhub-react-components#readme",
+  "homepage": "https://github.com/gaithoben/cloudhub-components#readme",
   "dependencies": {
     "@devexpress/dx-react-core": "1.11.0",
     "@devexpress/dx-react-grid": "1.11.0",
     "@devexpress/dx-react-grid-material-ui": "1.11.0",
+    "@material-ui/core": "4.5.1",
+    "@material-ui/icons": "4.5.1",
+    "@reach/window-size": "0.3.0",
+    "@react-google-maps/api": "1.7.7",
     "antd": "3.21.2",
     "awesome-phonenumber": "2.10.0",
     "hex-to-rgba": "2.0.0",
+    "node-emoji": "1.10.0",
     "react-intl-tel-input": "7.0.1",
     "react-quill": "^1.2.3",
     "react-select": "3.0.4",
@@ -93,23 +98,5 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "modules": "commonjs"
-        }
-      ],
-      "@babel/preset-react",
-      "@babel/flow"
-    ],
-    "plugins": [
-      "@babel/plugin-syntax-dynamic-import",
-      "@babel/plugin-syntax-import-meta",
-      "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-json-strings"
-    ]
   }
 }

@@ -14,7 +14,7 @@ import {
   IntegratedGrouping,
   IntegratedSorting,
   IntegratedSelection,
-  CustomPaging
+  CustomPaging,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -31,7 +31,7 @@ import {
   Toolbar,
   TableColumnVisibility,
   ColumnChooser,
-  TableRowDetail
+  TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -49,34 +49,34 @@ import ViewList from '@material-ui/icons/ViewList';
 import { red } from '@material-ui/core/colors';
 
 import { withStyles } from '@material-ui/core/styles';
-import sizes from '../components/theme/Sizes';
+import sizes from '../theme/Sizes';
 
 import TableHeaderBar from './TableHeaderBar';
-import Block from '../components/Block';
+import Block from '../Block';
 import GridLoading from './GridLoading';
 import './grid.css';
 
 const styleSheet = () => ({
   commandButton: {
-    minWidth: '40px'
+    minWidth: '40px',
   },
   lookupEditCell: {
     verticalAlign: 'middle',
     paddingRight: sizes.padding,
     '& ~ $lookupEditCell': {
-      paddingLeft: sizes.padding
-    }
+      paddingLeft: sizes.padding,
+    },
   },
   dialog: {
-    width: 'calc(100% - 16px)'
+    width: 'calc(100% - 16px)',
   },
   editDialog: {
     minWidth: '800px',
-    height: '600px'
+    height: '600px',
   },
   noDataCell: {
     textAlign: 'center',
-    padding: '40px 0'
+    padding: '40px 0',
   },
   iconButton: {
     border: 0,
@@ -85,18 +85,18 @@ const styleSheet = () => ({
     opacity: 0.4,
     padding: '2px',
     '&:hover': {
-      opacity: 0.8
-    }
+      opacity: 0.8,
+    },
   },
   icon: {
-    margin: 0
+    margin: 0,
   },
 
   // ===================================================== Header ========================
 
   headerBar: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   header: {
     display: 'flex',
@@ -104,7 +104,7 @@ const styleSheet = () => ({
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   headerInputs: {
     display: 'flex',
@@ -112,22 +112,22 @@ const styleSheet = () => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
     fontSize: 12,
-    marginLeft: 5
+    marginLeft: 5,
   },
   filterBar: {
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
-  filterField: { width: 200, marginLeft: 10 }
+  filterField: { width: 200, marginLeft: 10 },
 });
 const counterColumn = [{ name: 'counter', title: '#' }];
 const staticColumns = [{ name: 'actions', title: '', align: 'left' }];
@@ -140,7 +140,7 @@ const NoDataCellBase = ({ loading, colSpan, classes }) => (
 NoDataCellBase.propTypes = {
   loading: PropTypes.bool.isRequired,
   colSpan: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 // const NoDataCell = withStyles(styleSheet, { name: 'RemoteDataDemo' })(NoDataCellBase);
@@ -154,7 +154,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
     hiddencolumns: [],
     data: {
       items: [],
-      totalCount: 0
+      totalCount: 0,
     },
     detailTemplate: ({ row, column }) => (
       <TableCell>{row[column.name] || ''}</TableCell>
@@ -179,9 +179,9 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       allowadd: true,
       allowedit: true,
       allowdelete: true,
-      allowprint: true
+      allowprint: true,
     },
-    rowmenu: null
+    rowmenu: null,
   };
 
   constructor(props) {
@@ -192,7 +192,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       defaultColumnWidths: [
         { columnName: 'counter', width: 70 },
         { columnName: 'actions', width: 150 },
-        ...this.props.columnWidths
+        ...this.props.columnWidths,
       ],
       sorting: [],
       addedRows: [],
@@ -208,8 +208,8 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       searchTerm: '',
       data: {
         items: [],
-        totalCount: 0
-      }
+        totalCount: 0,
+      },
     };
 
     this.changeExpandedDetails = expandedRows =>
@@ -229,13 +229,13 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
       if (added) {
-        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId =          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
             id: startingAddedId + index,
-            ...row
-          }))
+            ...row,
+          })),
         ];
       }
       if (changed) {
@@ -249,7 +249,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
         allowadd: props.permissions.allowadd || false,
         allowedit: props.permissions.allowedit || false,
         allowdelete: props.permissions.allowdelete || false,
-        allowprint: props.permissions.allowprint || false
+        allowprint: props.permissions.allowprint || false,
       };
       if (column.name === 'actions') {
         return (
@@ -258,7 +258,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
               style={{
                 height: '100%',
                 width: '100%',
-                minWidth: 150
+                minWidth: 150,
               }}
             >
               {props.rowmenu ? (
@@ -266,7 +266,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
                   row,
                   column,
                   classes: props.classes,
-                  ...permissions
+                  ...permissions,
                 })
               ) : (
                 <IconButton
@@ -302,7 +302,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
         );
       }
       if (column.name === 'counter') {
-        const ind = 1 + this.props.data.items.findIndex(item => item.id === row.id);
+        const ind =          1 + this.props.data.items.findIndex(item => item.id === row.id);
         return (
           <TableCell>
             {this.state.currentPage === 0
@@ -320,7 +320,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
   componentDidMount() {
     this.loadData();
     this.setState({
-      loading: true
+      loading: true,
     });
   }
 
@@ -331,14 +331,14 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
   changeSorting(sorting) {
     this.setState({
       loading: true,
-      sorting
+      sorting,
     });
   }
 
   changeCurrentPage(currentPage) {
     this.setState({
       loading: true,
-      currentPage
+      currentPage,
     });
   }
 
@@ -350,7 +350,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
     this.setState({
       loading: true,
       pageSize,
-      currentPage
+      currentPage,
     });
   }
 
@@ -364,12 +364,12 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
 
     const queryString = {
       limit: pageSize,
-      skip: pageSize * currentPage
+      skip: pageSize * currentPage,
     };
 
     const columnSorting = sorting[0];
     if (columnSorting) {
-      const sortingDirectionString = columnSorting.direction === 'desc' ? -1 : 1;
+      const sortingDirectionString =        columnSorting.direction === 'desc' ? -1 : 1;
       queryString.sort = { [columnSorting.columnName]: sortingDirectionString };
     }
 
@@ -397,7 +397,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       allowadd: this.props.permissions.allowadd || false,
       allowedit: this.props.permissions.allowedit || false,
       allowdelete: this.props.permissions.allowdelete || false,
-      allowprint: this.props.permissions.allowprint || false
+      allowprint: this.props.permissions.allowprint || false,
     };
     if (this.props.header) {
       return (
@@ -407,7 +407,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
             ...this.state,
             ...permissions,
             queryString: this.queryString(),
-            onSearch: this.searchChange
+            onSearch: this.searchChange,
           })}
         </Block>
       );
@@ -431,7 +431,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       deletingRows,
       hiddencolumns,
       allowColumnResizing,
-      rowComponent
+      rowComponent,
     } = this.props;
 
     const {
@@ -442,7 +442,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       pageSize,
       allowedPageSizes,
       defaultColumnWidths,
-      loading
+      loading,
     } = this.state;
 
     return (
@@ -455,7 +455,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
               top: 0,
               right: 0,
               left: 0,
-              bottom: 0
+              bottom: 0,
             }}
           >
             <Grid rows={data.items} columns={columns}>
@@ -583,7 +583,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
   }
 }
 RemoteDataGridWithDetailView.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styleSheet)(RemoteDataGridWithDetailView);

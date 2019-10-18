@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   SortingState,
@@ -11,7 +11,7 @@ import {
   IntegratedPaging,
   IntegratedSorting,
   IntegratedSelection,
-  RowDetailState
+  RowDetailState,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -26,7 +26,7 @@ import {
   Toolbar,
   TableColumnVisibility,
   ColumnChooser,
-  TableFilterRow
+  TableFilterRow,
 } from '@devexpress/dx-react-grid-material-ui';
 
 import Paper from '@material-ui/core/Paper';
@@ -47,35 +47,35 @@ import ViewList from '@material-ui/icons/ViewList';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import sizes from '../components/theme/Sizes';
+import sizes from '../theme/Sizes';
 
 import TableHeaderBar from './TableHeaderBar';
 import './grid.css';
 
 const styleSheet = () => ({
   commandButton: {
-    minWidth: '40px'
+    minWidth: '40px',
   },
   lookupEditCell: {
     verticalAlign: 'middle',
     paddingRight: sizes.padding,
     '& ~ $lookupEditCell': {
-      paddingLeft: sizes.padding
-    }
+      paddingLeft: sizes.padding,
+    },
   },
   dialog: {
-    width: 'calc(100% - 16px)'
+    width: 'calc(100% - 16px)',
   },
   editDialog: {
     minWidth: '800px',
-    height: '600px'
+    height: '600px',
   },
 
   // ===================================================== Header ========================
 
   headerBar: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   header: {
     display: 'flex',
@@ -83,7 +83,7 @@ const styleSheet = () => ({
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   headerInputs: {
     display: 'flex',
@@ -91,22 +91,22 @@ const styleSheet = () => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
     fontSize: 12,
-    marginLeft: 5
+    marginLeft: 5,
   },
   filterBar: {
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
-  filterField: { width: 200, marginLeft: 10 }
+  filterField: { width: 200, marginLeft: 10 },
 });
 
 const staticColumns = [{ name: 'actions', title: 'Actions' }];
@@ -140,9 +140,9 @@ class DataGridWithDetailView extends React.PureComponent {
       allowadd: true,
       allowedit: true,
       allowdelete: true,
-      allowprint: true
+      allowprint: true,
     },
-    rowmenu: null
+    rowmenu: null,
   };
 
   constructor(props) {
@@ -153,7 +153,7 @@ class DataGridWithDetailView extends React.PureComponent {
       defaultColumnWidths: [
         { columnName: 'counter', width: 70 },
         { columnName: 'actions', width: 150 },
-        ...this.props.columnWidths
+        ...this.props.columnWidths,
       ],
       sorting: [],
       addedRows: [],
@@ -163,7 +163,7 @@ class DataGridWithDetailView extends React.PureComponent {
       allowedPageSizes: [5, 10, 0],
       grouping: [],
       selection: [],
-      filters: []
+      filters: [],
     };
 
     this.changeExpandedDetails = expandedRows =>
@@ -183,18 +183,20 @@ class DataGridWithDetailView extends React.PureComponent {
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
       if (added) {
-        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId =
+          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
             id: startingAddedId + index,
-            ...row
-          }))
+            ...row,
+          })),
         ];
       }
       if (changed) {
         rows = rows.map(row =>
-          (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+          changed[row.id] ? { ...row, ...changed[row.id] } : row
+        );
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
@@ -204,7 +206,7 @@ class DataGridWithDetailView extends React.PureComponent {
         allowadd: props.permissions.allowadd || false,
         allowedit: props.permissions.allowedit || false,
         allowdelete: props.permissions.allowdelete || false,
-        allowprint: props.permissions.allowprint || false
+        allowprint: props.permissions.allowprint || false,
       };
       if (column.name === 'actions') {
         return (
@@ -213,7 +215,7 @@ class DataGridWithDetailView extends React.PureComponent {
               style={{
                 height: '100%',
                 width: '100%',
-                minWidth: 150
+                minWidth: 150,
               }}
             >
               {props.rowmenu ? (
@@ -221,7 +223,7 @@ class DataGridWithDetailView extends React.PureComponent {
                   row,
                   column,
                   classes: props.classes,
-                  ...permissions
+                  ...permissions,
                 })
               ) : (
                 <IconButton
@@ -263,7 +265,7 @@ class DataGridWithDetailView extends React.PureComponent {
       allowadd: this.props.permissions.allowadd || false,
       allowedit: this.props.permissions.allowedit || false,
       allowdelete: this.props.permissions.allowdelete || false,
-      allowprint: this.props.permissions.allowprint || false
+      allowprint: this.props.permissions.allowprint || false,
     };
     if (this.props.header) {
       return (
@@ -271,7 +273,7 @@ class DataGridWithDetailView extends React.PureComponent {
           {this.props.header({
             ...this.state,
             ...permissions,
-            ...this.props
+            ...this.props,
           })}
         </div>
       );
@@ -293,7 +295,7 @@ class DataGridWithDetailView extends React.PureComponent {
       classes,
       deletingRows,
       hiddencolumns,
-      rowComponent
+      rowComponent,
     } = this.props;
     const {
       columns,
@@ -301,7 +303,7 @@ class DataGridWithDetailView extends React.PureComponent {
       sorting,
       currentPage,
       pageSize,
-      allowedPageSizes
+      allowedPageSizes,
     } = this.state;
 
     return (
@@ -413,7 +415,7 @@ class DataGridWithDetailView extends React.PureComponent {
 }
 
 DataGridWithDetailView.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styleSheet)(DataGridWithDetailView);

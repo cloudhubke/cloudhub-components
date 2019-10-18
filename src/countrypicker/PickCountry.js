@@ -27,7 +27,10 @@ class PickCountry extends Component {
           closeable
           filterable
           onChange={({ cca2, callingCode }) => {
-            this.props.onCallingCodeChanged({ cca2, callingCode });
+            this.props.onCallingCodeChanged({
+              cca2: cca2 || 'KE',
+              callingCode: callingCode || '254',
+            });
           }}
           cca2={this.props.cca2}
           translation="eng"

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   SelectionState,
@@ -10,7 +10,7 @@ import {
   IntegratedGrouping,
   IntegratedPaging,
   IntegratedSorting,
-  IntegratedSelection
+  IntegratedSelection,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -26,7 +26,7 @@ import {
   TableColumnReordering,
   TableFilterRow,
   TableColumnVisibility,
-  ColumnChooser
+  ColumnChooser,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -45,33 +45,33 @@ import ViewList from '@material-ui/icons/ViewList';
 import { withStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 import TableHeaderBar from './TableHeaderBar';
-import sizes from '../components/theme/Sizes';
+import sizes from '../theme/Sizes';
 import './grid.css';
 
 const styleSheet = () => ({
   commandButton: {
-    minWidth: '40px'
+    minWidth: '40px',
   },
   lookupEditCell: {
     verticalAlign: 'middle',
     paddingRight: sizes.padding,
     '& ~ $lookupEditCell': {
-      paddingLeft: sizes.padding
-    }
+      paddingLeft: sizes.padding,
+    },
   },
   dialog: {
-    width: 'calc(100% - 16px)'
+    width: 'calc(100% - 16px)',
   },
   editDialog: {
     minWidth: '800px',
-    height: '600px'
+    height: '600px',
   },
 
   // ===================================================== Header ========================
 
   headerBar: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   header: {
     display: 'flex',
@@ -79,7 +79,7 @@ const styleSheet = () => ({
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   headerInputs: {
     display: 'flex',
@@ -87,22 +87,22 @@ const styleSheet = () => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
     fontSize: 12,
-    marginLeft: 5
+    marginLeft: 5,
   },
   filterBar: {
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
-  filterField: { width: 200, marginLeft: 10 }
+  filterField: { width: 200, marginLeft: 10 },
 });
 
 const staticColumns = [{ name: 'actions', title: 'Actions', width: 200 }];
@@ -135,9 +135,9 @@ class FullDataGrid extends Component {
       allowadd: true,
       allowedit: true,
       allowdelete: true,
-      allowprint: true
+      allowprint: true,
     },
-    rowmenu: null
+    rowmenu: null,
   };
 
   constructor(props) {
@@ -148,7 +148,7 @@ class FullDataGrid extends Component {
       defaultColumnWidths: [
         { columnName: 'counter', width: 70 },
         { columnName: 'actions', width: 150 },
-        ...this.props.columnWidths
+        ...this.props.columnWidths,
       ],
       sorting: [],
       addedRows: [],
@@ -158,7 +158,7 @@ class FullDataGrid extends Component {
       allowedPageSizes: [5, 10, 20],
       grouping: [],
       selection: [],
-      filters: []
+      filters: [],
     };
 
     this.changeSorting = sorting => this.setState({ sorting });
@@ -175,13 +175,13 @@ class FullDataGrid extends Component {
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
       if (added) {
-        const startingAddedId = rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId =          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
             id: startingAddedId + index,
-            ...row
-          }))
+            ...row,
+          })),
         ];
       }
       if (changed) {
@@ -196,7 +196,7 @@ class FullDataGrid extends Component {
         allowadd: props.permissions.allowadd || false,
         allowedit: props.permissions.allowedit || false,
         allowdelete: props.permissions.allowdelete || false,
-        allowprint: props.permissions.allowprint || false
+        allowprint: props.permissions.allowprint || false,
       };
       if (column.name === 'actions') {
         return (
@@ -205,7 +205,7 @@ class FullDataGrid extends Component {
               style={{
                 height: '100%',
                 width: '100%',
-                minWidth: 150
+                minWidth: 150,
               }}
             >
               {props.rowmenu ? (
@@ -213,7 +213,7 @@ class FullDataGrid extends Component {
                   row,
                   column,
                   classes: props.classes,
-                  ...permissions
+                  ...permissions,
                 })
               ) : (
                 <IconButton
@@ -255,7 +255,7 @@ class FullDataGrid extends Component {
       allowadd: this.props.permissions.allowadd || false,
       allowedit: this.props.permissions.allowedit || false,
       allowdelete: this.props.permissions.allowdelete || false,
-      allowprint: this.props.permissions.allowprint || false
+      allowprint: this.props.permissions.allowprint || false,
     };
     if (this.props.header) {
       return (
@@ -263,7 +263,7 @@ class FullDataGrid extends Component {
           {this.props.header({
             ...this.state,
             ...permissions,
-            ...this.props
+            ...this.props,
           })}
         </div>
       );
@@ -286,7 +286,7 @@ class FullDataGrid extends Component {
       deletingRows,
       allowColumnResizing,
       hiddencolumns,
-      rowComponent
+      rowComponent,
     } = this.props;
     const {
       columns,
@@ -295,7 +295,7 @@ class FullDataGrid extends Component {
       currentPage,
       pageSize,
       allowedPageSizes,
-      defaultColumnWidths
+      defaultColumnWidths,
     } = this.state;
 
     return (
@@ -418,7 +418,7 @@ class FullDataGrid extends Component {
 }
 
 FullDataGrid.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styleSheet)(FullDataGrid);

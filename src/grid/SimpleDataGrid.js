@@ -4,7 +4,7 @@ import {
   Table,
   TableHeaderRow,
   DragDropProvider,
-  TableColumnReordering
+  TableColumnReordering,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -16,7 +16,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Block from '../components/Block';
+import Block from '../Block';
 import './grid.css';
 
 const useStyles = makeStyles({
@@ -24,31 +24,31 @@ const useStyles = makeStyles({
     '& th': {
       overflow: 'hidden',
       paddingLeft: '10px',
-      paddingRight: '10px'
+      paddingRight: '10px',
     },
     '& td': {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       paddingLeft: '10px',
-      paddingRight: '10px'
+      paddingRight: '10px',
     },
     '& div::-webkit-scrollbar': {
-      width: '16px'
+      width: '16px',
     },
     '& div::-webkit-scrollbar-track': {
       background: 'grey',
       borderTop: '7px solid white',
-      borderBottom: '7px solid white'
+      borderBottom: '7px solid white',
     },
     '& div::-webkit-scrollbar-thumb': {
       background: 'grey',
       borderTop: '4px solid white',
-      borderBottom: '4px solid white'
+      borderBottom: '4px solid white',
     },
     '& div::-webkit-scrollbar-thumb:hover': {
-      backgroundColor: '#aaa'
-    }
-  }
+      backgroundColor: '#aaa',
+    },
+  },
 });
 
 const SimpleDataGrid = ({ style, ...props }) => {
@@ -90,8 +90,8 @@ const SimpleDataGrid = ({ style, ...props }) => {
         <DialogTitle>Deleting Record!</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {props.deletingWarningMessage
-              || 'Are you sure to delete the following record?'}
+            {props.deletingWarningMessage ||
+              'Are you sure to delete the following record?'}
           </DialogContentText>
           <Block className={classes.gridContainer}>
             <Grid
@@ -131,7 +131,7 @@ SimpleDataGrid.defaultProps = {
   columns: [],
   rows: [],
   header: () => null,
-  onDeleteRows: () => {}
+  onDeleteRows: () => {},
 };
 
 export default SimpleDataGrid;

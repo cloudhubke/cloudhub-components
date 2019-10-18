@@ -7,8 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import PrintIcon from '@material-ui/icons/Print';
 import RefreshIcon from '@material-ui/icons/Cached';
-import _ from 'lodash';
-import Input from '../components/Input';
+import debounce from 'lodash/debounce';
+import Input from '../Input';
 
 const styles = {
   root: {
@@ -17,7 +17,7 @@ const styles = {
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   inputs: {
     display: 'flex',
@@ -25,13 +25,13 @@ const styles = {
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   buttonStyle: {
     fontWeight: 500,
     textTransform: 'capitalize',
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 };
 
 class TableHeaderBar extends Component {
@@ -45,16 +45,16 @@ class TableHeaderBar extends Component {
       allowadd: false,
       allowedit: false,
       allowdelete: false,
-      allowprint: false
-    }
+      allowprint: false,
+    },
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      value: 0
+      value: 0,
     };
-    this.onSearch = _.debounce(this.onSearch, 500);
+    this.onSearch = debounce(this.onSearch, 500);
   }
 
   onSearch = text => {

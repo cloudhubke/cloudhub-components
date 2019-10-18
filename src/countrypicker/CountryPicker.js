@@ -11,7 +11,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import cca2List from './data/cca2.json';
-import Menu from '@material-ui/icons/Menu';
 
 import EmojiComponent from './Emoji';
 
@@ -45,8 +44,6 @@ const setCountries = flagType => {
 };
 
 setCountries('emoji');
-
-const Text = props => <span style={styles.text}>{props.children}</span>;
 
 const styles = {
   popover: {
