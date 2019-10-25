@@ -2,7 +2,7 @@ import React from 'react';
 import Close from '@material-ui/icons/Close';
 import Block from '../Block';
 import IconButton from '../IconButton';
-
+import Text from '../Text';
 
 import { sizes } from '../theme';
 
@@ -23,12 +23,16 @@ const DialogHeader = ({
     row
     {...props}
   >
-    <Block>{children}</Block>
+    <Block>
+      {typeof children === 'string' ? <Text header>{children}</Text> : children}
+    </Block>
     {showCancel && (
       <Block flex={false}>
         <IconButton
           style={{ marginRight: -sizes.margin }}
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+          }}
           {...cancelButtonProps}
         >
           <Close {...iconProps} />

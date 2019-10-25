@@ -39,7 +39,7 @@ const RemoteSelector = ({
       }
     }
     return () => null;
-  }, [options.length, value.length, value]);
+  }, [options, value]);
 
   useEffect(() => {
     if (!searchText) {

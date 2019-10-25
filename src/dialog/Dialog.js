@@ -38,7 +38,6 @@ const Dialog = ({
   fullScreen,
   open,
   animation,
-  onClose,
   children,
   title,
   ...props
@@ -50,16 +49,32 @@ const Dialog = ({
     fullScreen,
   };
 
+  const closeDialog = () => {
+    props.onClose();
+  };
+
+  const fn = child => {
+    if (child.props.onClose && typeof child.props.onClose === 'function') {
+      return React.cloneElement(child, {
+        ...child.props,
+        onClose: closeDialog,
+      });
+    }
+
+    return child;
+  };
+  const childitems = React.Children.map(children, fn);
+
   return (
     <MuiDialog
       open={open}
-      onClose={onClose}
+      onClose={props.onClose}
       {...dialogprops}
       {...getAnimation(animation)}
       classes={{ paper: classes.paper }}
       {...props}
     >
-      {children}
+      {childitems}
     </MuiDialog>
   );
 };

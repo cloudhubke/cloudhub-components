@@ -38,7 +38,6 @@ const composeValidators = (...validators) => value =>
 
 const Field = ({
   required,
-  type,
   number,
   minValue,
   maxValue,

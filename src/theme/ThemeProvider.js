@@ -13,6 +13,7 @@ const ThemeProvider = ({ values, children, ...props }) => (
 );
 
 ThemeProvider.defaultProps = {
+  values: {},
   fonts: {
     normalFontFamily: 'clanpro-book',
     thinFontFamily: 'clanpro-book',

@@ -5,10 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { sizes } from './theme';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: 'transparent',
   },
 
   nested: {
@@ -21,12 +21,12 @@ const ListMenu = ({ children, header, ...rest }) => {
 
   const subheader = header
     ? {
-        subheader: (
+      subheader: (
           <ListSubheader component="div" id="nested-list-subheader">
             {header}
           </ListSubheader>
-        ),
-      }
+      ),
+    }
     : {};
 
   return (
@@ -35,6 +35,7 @@ const ListMenu = ({ children, header, ...rest }) => {
       aria-labelledby="nested-list-subheader"
       {...subheader}
       className={classes.root}
+      {...rest}
     >
       {children}
     </List>
