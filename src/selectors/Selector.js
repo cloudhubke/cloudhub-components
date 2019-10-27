@@ -9,18 +9,21 @@ import debounce from 'lodash/debounce';
 import axios from 'axios';
 
 const RemoteSelector = ({
-  input,
   value,
   onChange,
+  onSelectChange,
   axiosinstance,
   returnkeys,
   valueField,
+  displayField,
+  labelExtractor,
+  keyExtractor,
+  valueExtractor,
   menuPlacement,
   disabled,
   placeholder,
   url,
   params,
-  displayField,
   isMulti,
   creatable,
   otheroptions,
@@ -56,59 +59,31 @@ const RemoteSelector = ({
     if (isMulti) {
       if (Array.isArray(value)) {
         setSelectedValue(
-          [...value].map(item => {
-            if (isObject(item)) {
-              return {
-                label: item[displayField],
-                value: item[valueField] || item[displayField],
-                item,
-              };
-            }
-            return {
-              label: item,
-              value: item,
-              item,
-            };
-          })
+          [...value].map(item => ({
+            value: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? keyExtractor(item) : item || '',
+            item,
+          }))
         );
       } else {
         setSelectedValue(
-          [value].map(item => {
-            if (isObject(item)) {
-              return {
-                label: item[displayField],
-                value: item[valueField] || item[displayField],
-                item,
-              };
-            }
-            return {
-              label: item,
-              value: item,
-              item,
-            };
-          })
+          [value].map(item => ({
+            value: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? keyExtractor(item) : item || '',
+            item,
+          }))
         );
       }
     } else if (value) {
-      if (isObject(value)) {
-        setSelectedValue({
-          label: value[displayField],
-          value: value[valueField],
-          item: value,
-        });
-      } else {
-        setSelectedValue({
-          label: value,
-          value,
-          item: value,
-        });
-      }
+      setSelectedValue({
+        value: isObject(value) ? keyExtractor(value) : value || '',
+        label: isObject(value) ? keyExtractor(value) : value || '',
+        item: value,
+      });
     }
-  }, [value, isMulti, valueField, displayField]);
+  }, [value, isMulti]);
 
   const logChange = val => {
-    const keys = isString(returnkeys) ? [returnkeys] : returnkeys;
-
     setSelectedValue(val);
     if (!val || isEmpty(val)) {
       return onChange(val);
@@ -120,19 +95,15 @@ const RemoteSelector = ({
             return item.item;
           }
           const objValue = { ...item.item };
-
-          if (keys.length > 1) {
-            const obj = {};
-            keys.forEach(key => {
-              obj[key] = objValue[key];
-            });
-            return { ...obj };
-          }
-          return { objValue };
+          return valueExtractor(objValue);
         });
-        return onChange(options);
+        onChange(options);
+        onSelectChange(val || []);
+        return true;
       }
-      return onChange(val || []);
+      onChange(val || []);
+      onSelectChange(val || []);
+      return true;
     }
     if (val && val.value) {
       if (!isObject(val.item)) {
@@ -140,17 +111,9 @@ const RemoteSelector = ({
       }
       const objValue = { ...val.item };
 
-      if (keys.length > 1) {
-        const obj = {};
-        keys.forEach(key => {
-          obj[key] = objValue[key];
-        });
-        return onChange({
-          simple: isString(returnkeys) ? obj[returnkeys] : obj,
-          full: objValue,
-        });
-      }
-      return onChange(objValue);
+      onChange(valueExtractor(objValue));
+      onSelectChange(objValue);
+      return true;
     }
   };
 
@@ -162,12 +125,8 @@ const RemoteSelector = ({
           const array = data ? data.items || data : [];
 
           const options = [...array, ...otheroptions].map(item => ({
-            label: item[displayField],
-            value:
-              item[valueField]
-              || item[displayField]
-              || item[valueField]
-              || item[displayField],
+            value: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? keyExtractor(item) : item || '',
             item,
           }));
 
@@ -185,8 +144,8 @@ const RemoteSelector = ({
         const array = data ? data.items || data : [];
 
         const options = [...array, ...otheroptions].map(item => ({
-          label: item[displayField],
-          value: item[valueField] || item[displayField],
+          value: isObject(item) ? keyExtractor(item) : item || '',
+          label: isObject(item) ? keyExtractor(item) : item || '',
           item,
         }));
 
@@ -207,7 +166,7 @@ const RemoteSelector = ({
   };
 
   return (
-    <>
+    <React.Fragment>
       {creatable ? (
         <AsyncCreatableSelect
           cacheOptions
@@ -243,7 +202,7 @@ const RemoteSelector = ({
           {...props}
         />
       )}
-    </>
+    </React.Fragment>
   );
 };
 
@@ -255,14 +214,16 @@ RemoteSelector.defaultProps = {
   options: [],
   otheroptions: [],
   onChange: () => {},
-  displayField: '',
+  onSelectChange: () => {},
   returnkeys: [],
   url: '',
   placeholder: 'Select...',
   selectUp: false,
   disabled: false,
   menuPlacement: 'auto',
-  valueField: ['id', '_id'],
+  valueExtractor: item => item,
+  labelExtractor: item => item,
+  keyExtractor: item => item,
 };
 
 export default RemoteSelector;

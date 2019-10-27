@@ -7,16 +7,7 @@ import Text from '../Text';
 import getCustomStyles from './getCustomStyles';
 
 const StaticListSelector = props => {
-  const {
-    options,
-    value,
-    input,
-    meta,
-    onChange,
-    onSelectChange,
-    isMulti,
-    ...rest
-  } = props;
+  const { options, input, meta, isMulti, ...rest } = props;
 
   const error = meta.error && meta.touched;
   const customStyles = getCustomStyles({ error, isMulti });
@@ -25,24 +16,13 @@ const StaticListSelector = props => {
     <Block style={{ marginRight: sizes.margin }}>
       <CloudhubSelector
         options={options || []}
-        value={input.value || value}
+        value={input.value}
         onChange={val => {
-          if (isPlainObject(val)) {
-            const { simple, full } = val;
-            input.onChange(simple);
-            onChange(simple);
-            if (onSelectChange) {
-              onSelectChange(full);
-            }
-            input.onBlur();
-          } else {
-            input.onChange(val);
-            onChange(val);
-            if (onSelectChange) {
-              onSelectChange(val);
-            }
-            input.onBlur();
-          }
+          console.log('====================================');
+          console.log('CHAN', val);
+          console.log('====================================');
+          input.onChange(val);
+          input.onBlur();
         }}
         isMulti={isMulti}
         styles={customStyles}
@@ -61,13 +41,13 @@ StaticListSelector.defaultProps = {
     onChange: () => {},
     onBlur: () => {},
   },
-  value: null,
-  onChange: () => {},
   meta: {},
   options: [],
-  displayField: '',
   returnkeys: [],
   menuPlacement: 'auto',
+  labelExtractor: item => item,
+  keyExtractor: item => item,
+  valueExtractor: item => item,
 };
 
 export default StaticListSelector;

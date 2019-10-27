@@ -10,15 +10,17 @@ const Select = ({
   options,
   value,
   onChange,
+  onSelectChange,
   axiosinstance,
   returnkeys,
-  valueField,
   menuPlacement,
   disabled,
   placeholder,
   url,
   params,
-  displayField,
+  keyExtractor,
+  valueExtractor,
+  labelExtractor,
   isMulti,
   creatable,
   ...props
@@ -29,23 +31,14 @@ const Select = ({
   useEffect(() => {
     if (Array.isArray(options)) {
       setOpts(
-        [...options].map(item => {
-          if (isObject(item)) {
-            return {
-              label: item[displayField],
-              value: item[valueField] || item[displayField],
-              item,
-            };
-          }
-          return {
-            label: item,
-            value: item,
-            item,
-          };
-        })
+        [...options].map(item => ({
+          value: isObject(item) ? keyExtractor(item) : item || '',
+          label: isObject(item) ? labelExtractor(item) : item || '',
+          item,
+        }))
       );
     }
-  }, [options, displayField, valueField]);
+  }, [options]);
 
   useEffect(() => {
     if (!value) {
@@ -55,60 +48,33 @@ const Select = ({
     if (isMulti) {
       if (Array.isArray(value)) {
         setSelectedValue(
-          [...value].map(item => {
-            if (isObject(item)) {
-              return {
-                label: item[displayField],
-                value: item[valueField] || item[displayField],
-                item,
-              };
-            }
-            return {
-              label: item,
-              value: item,
-              item,
-            };
-          })
+          [...value].map(item => ({
+            value: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? keyExtractor(item) : item || '',
+            item,
+          }))
         );
       } else {
         setSelectedValue(
-          [value].map(item => {
-            if (isObject(item)) {
-              return {
-                label: item[displayField],
-                value: item[valueField] || item[displayField],
-                item,
-              };
-            }
-            return {
-              label: item,
-              value: item,
-              item,
-            };
-          })
+          [value].map(item => ({
+            value: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? keyExtractor(item) : item || '',
+            item,
+          }))
         );
       }
     } else if (value) {
-      if (isObject(value)) {
-        setSelectedValue({
-          label: value[displayField],
-          value: value[valueField],
-          item: value,
-        });
-      } else {
-        setSelectedValue({
-          label: value,
-          value,
-          item: value,
-        });
-      }
+      setSelectedValue({
+        value: isObject(value) ? keyExtractor(value) : value || '',
+        label: isObject(value) ? keyExtractor(value) : value || '',
+        item: value,
+      });
     }
-  }, [value, valueField, displayField, isMulti]);
+  }, [value, isMulti]);
 
   const logChange = val => {
-    const keys = isString(returnkeys) ? [returnkeys] : returnkeys;
-
     setSelectedValue(val);
+
     if (!val || isEmpty(val)) {
       return onChange(val);
     }
@@ -119,19 +85,15 @@ const Select = ({
             return item.item;
           }
           const objValue = { ...item.item };
-
-          if (keys.length > 1) {
-            const obj = {};
-            keys.forEach(key => {
-              obj[key] = objValue[key];
-            });
-            return { ...obj };
-          }
-          return { objValue };
+          return valueExtractor(objValue);
         });
-        return onChange(options);
+        onChange(options);
+        onSelectChange(val || []);
+        return true;
       }
-      return onChange(val || []);
+      onChange(val || []);
+      onSelectChange(val || []);
+      return true;
     }
     if (val && val.value) {
       if (!isObject(val.item)) {
@@ -139,22 +101,14 @@ const Select = ({
       }
       const objValue = { ...val.item };
 
-      if (!isEmpty(keys)) {
-        const obj = {};
-        keys.forEach(key => {
-          obj[key] = objValue[key];
-        });
-        return onChange({
-          simple: isString(returnkeys) ? obj[returnkeys] : obj,
-          full: objValue,
-        });
-      }
-      return onChange(objValue);
+      onChange(valueExtractor(objValue));
+      onSelectChange(objValue);
+      return true;
     }
   };
 
   return (
-    <>
+    <React.Fragment>
       {creatable ? (
         <CreatableSelect
           openOnFocus
@@ -184,7 +138,7 @@ const Select = ({
           {...props}
         />
       )}
-    </>
+    </React.Fragment>
   );
 };
 
@@ -194,14 +148,16 @@ Select.defaultProps = {
   value: null,
   options: [],
   onChange: () => {},
-  displayField: '',
+  onSelectChange: () => {},
   returnkeys: [],
   url: '',
   placeholder: 'Select...',
   selectUp: false,
   disabled: false,
   menuPlacement: 'auto',
-  valueField: 'id',
+  labelExtractor: item => item,
+  valueExtractor: item => item,
+  keyExtractor: item => item,
 };
 
 export default Select;

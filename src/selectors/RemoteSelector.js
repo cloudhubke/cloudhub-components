@@ -6,14 +6,7 @@ import { sizes } from '../theme';
 import CloudhubRemoteSelector from './Selector';
 import getCustomStyles from './getCustomStyles';
 
-const RemoteSelector = ({
-  input,
-  onChange,
-  meta,
-  onSelectChange,
-  isMulti,
-  ...rest
-}) => {
+const RemoteSelector = ({ input, onChange, meta, isMulti, ...rest }) => {
   const error = meta.error && meta.touched;
   const customStyles = getCustomStyles({ error, isMulti });
 
@@ -22,22 +15,8 @@ const RemoteSelector = ({
       <CloudhubRemoteSelector
         value={input.value}
         onChange={val => {
-          if (isPlainObject(val)) {
-            const { simple, full } = val;
-            input.onChange(simple);
-            onChange(simple);
-            if (onSelectChange) {
-              onSelectChange(full);
-            }
-            input.onBlur();
-          } else {
-            input.onChange(val);
-            onChange(val);
-            if (onSelectChange) {
-              onSelectChange(val);
-            }
-            input.onBlur();
-          }
+          input.onChange(val);
+          input.onBlur();
         }}
         meta={meta}
         isMulti={isMulti}
