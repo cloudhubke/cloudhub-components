@@ -13,11 +13,24 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { colors } from './theme';
 import Text from './Text';
 
-const ListSubMenu = ({ children, headerIcon, header, expanded, ...rest }) => {
+const ListSubMenu = ({
+  children,
+  headerIcon,
+  header,
+  expanded,
+  expandedStyles = {},
+  style = {},
+  ...rest
+}) => {
   const [menuexpanded, setMenuExpand] = useState(expanded);
   return (
     <Fragment>
-      <ListItem button onClick={() => setMenuExpand(!menuexpanded)}>
+      <ListItem
+        button
+        onClick={() => setMenuExpand(!menuexpanded)}
+        style={{ ...(menuexpanded && expandedStyles), style }}
+        {...rest}
+      >
         <ListItemIcon style={{ color: colors.dark }}>{headerIcon}</ListItemIcon>
         <ListItemText
           primary={(

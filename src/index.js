@@ -47,3 +47,8 @@ export { default as SlideComponent } from './SlideComponent';
 
 export { default as Form } from './form/Form';
 export { default as Field } from './form/Field';
+export { default as FormFields } from './form/FormFields';
+
+// toastr
+
+export { toastr } from 'react-redux-toastr';
