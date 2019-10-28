@@ -31,7 +31,7 @@ class PhoneInput extends Component {
 
         if (pn.isValid()) {
           phone = pn.getNumber();
-          return { phone, text: phone, cca2: pn.getRegionCode() };
+          return { phone, cca2: pn.getRegionCode() };
         }
       }
       return {};
@@ -57,17 +57,6 @@ class PhoneInput extends Component {
     return newstate;
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.props.focused && !prevProps.focused) {
-  //     this._mobilenumberInput.focus();
-  //   }
-  // }
-
-  componentDidMount() {
-    const phone = this.props.input.value || this.props.value;
-    this.onPhoneChange(phone);
-  }
-
   onCallingCodeChanged = ({ cca2, callingCode }) => {
     const placeholder = PhoneNumber.getExample(
       cca2 || 'KE',
@@ -83,7 +72,6 @@ class PhoneInput extends Component {
   };
 
   onPhoneChange = phone => {
-    this.setState({ text: phone });
     if (phone) {
       const pn = new PhoneNumber(phone, this.state.cca2);
 
@@ -97,6 +85,7 @@ class PhoneInput extends Component {
         this.props.input.onBlur();
       }
     }
+    this.setState({ phone });
   };
 
   render() {
@@ -109,7 +98,7 @@ class PhoneInput extends Component {
       disabled,
       style,
     } = this.props;
-    const { text, placeholder } = this.state;
+    const { phone, placeholder } = this.state;
 
     const inputStyles = {
       backgroundColor: colors.white,
@@ -156,8 +145,11 @@ class PhoneInput extends Component {
           style={inputStyles}
           error={Boolean(meta.touched && meta.error)}
           disabled={disabled}
-          value={text}
-          onChange={e => this.onPhoneChange(e.target.value)}
+          value={phone}
+          onChange={e => {
+            e.preventDefault();
+            this.onPhoneChange(e.target.value);
+          }}
         />
         <Text small error style={{ height: 10 }}>
           {meta.touched && meta.error && meta.error}
