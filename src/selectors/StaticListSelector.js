@@ -7,10 +7,37 @@ import Text from '../Text';
 import getCustomStyles from './getCustomStyles';
 
 const StaticListSelector = props => {
-  const { options, input, meta, isMulti, ...rest } = props;
+  const {
+    options,
+    input,
+    meta,
+    isMulti,
+    displayField,
+    returnkeys,
+    ...rest
+  } = props;
 
   const error = meta.error && meta.touched;
   const customStyles = getCustomStyles({ error, isMulti });
+
+  let labelExtractor = item => item.id;
+  let valueExtractor = item => item.id;
+
+  if (displayField) {
+    labelExtractor = item => item[displayField];
+  }
+
+  if (returnkeys) {
+    if (Array.isArray(returnkeys)) {
+      valueExtractor = item => {
+        const obj = {};
+        returnkeys.forEach(k => {
+          obj[k] = item[k];
+        });
+        return obj;
+      };
+    }
+  }
 
   return (
     <Block style={{ marginRight: sizes.margin }}>
@@ -18,14 +45,13 @@ const StaticListSelector = props => {
         options={options || []}
         value={input.value}
         onChange={val => {
-          console.log('====================================');
-          console.log('CHAN', val);
-          console.log('====================================');
           input.onChange(val);
           input.onBlur();
         }}
         isMulti={isMulti}
         styles={customStyles}
+        labelExtractor={labelExtractor}
+        valueExtractor={valueExtractor}
         {...rest}
       />
       <Text small error style={{ height: 10 }}>

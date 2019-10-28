@@ -6,9 +6,36 @@ import { sizes } from '../theme';
 import CloudhubRemoteSelector from './Selector';
 import getCustomStyles from './getCustomStyles';
 
-const RemoteSelector = ({ input, onChange, meta, isMulti, ...rest }) => {
+const RemoteSelector = ({
+  input,
+  onChange,
+  meta,
+  isMulti,
+  displayField,
+  returnkeys,
+  ...rest
+}) => {
   const error = meta.error && meta.touched;
   const customStyles = getCustomStyles({ error, isMulti });
+
+  let labelExtractor = item => item.id;
+  let valueExtractor = item => item.id;
+
+  if (displayField) {
+    labelExtractor = item => item[displayField];
+  }
+
+  if (returnkeys) {
+    if (Array.isArray(returnkeys)) {
+      valueExtractor = item => {
+        const obj = {};
+        returnkeys.forEach(k => {
+          obj[k] = item[k];
+        });
+        return obj;
+      };
+    }
+  }
 
   return (
     <Block style={{ marginRight: sizes.margin }}>
@@ -22,8 +49,8 @@ const RemoteSelector = ({ input, onChange, meta, isMulti, ...rest }) => {
         isMulti={isMulti}
         styles={customStyles}
         keyExtractor={item => item.id}
-        labelExtractor={item => item.id}
-        valueExtractor={item => ({ ...item })}
+        labelExtractor={labelExtractor}
+        valueExtractor={valueExtractor}
         {...rest}
       />
       <Text small error style={{ height: 10 }}>
