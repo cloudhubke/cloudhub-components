@@ -61,7 +61,7 @@ const RemoteSelector = ({
         setSelectedValue(
           [...value].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? labelExtractor(item) : item || '',
             item,
           }))
         );
@@ -69,7 +69,7 @@ const RemoteSelector = ({
         setSelectedValue(
           [value].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? labelExtractor(item) : item || '',
             item,
           }))
         );
@@ -77,7 +77,7 @@ const RemoteSelector = ({
     } else if (value) {
       setSelectedValue({
         value: isObject(value) ? keyExtractor(value) : value || '',
-        label: isObject(value) ? keyExtractor(value) : value || '',
+        label: isObject(value) ? labelExtractor(value) : value || '',
         item: value,
       });
     }
@@ -126,7 +126,7 @@ const RemoteSelector = ({
 
           const options = [...array, ...otheroptions].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? keyExtractor(item) : item || '',
+            label: isObject(item) ? labelExtractor(item) : item || '',
             item,
           }));
 
@@ -145,7 +145,7 @@ const RemoteSelector = ({
 
         const options = [...array, ...otheroptions].map(item => ({
           value: isObject(item) ? keyExtractor(item) : item || '',
-          label: isObject(item) ? keyExtractor(item) : item || '',
+          label: isObject(item) ? labelExtractor(item) : item || '',
           item,
         }));
 

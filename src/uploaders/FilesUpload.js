@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
 import { withStyles } from '@material-ui/core/styles';
-import Button from './Bbutton';
+import Button from '../Button';
 import Input from '../Input';
 
 const styles = () => ({

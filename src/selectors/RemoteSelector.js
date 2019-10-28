@@ -21,6 +21,9 @@ const RemoteSelector = ({ input, onChange, meta, isMulti, ...rest }) => {
         meta={meta}
         isMulti={isMulti}
         styles={customStyles}
+        keyExtractor={item => item.id}
+        labelExtractor={item => item.id}
+        valueExtractor={item => ({ ...item })}
         {...rest}
       />
       <Text small error style={{ height: 10 }}>

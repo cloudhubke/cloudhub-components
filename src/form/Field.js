@@ -73,7 +73,17 @@ const Field = ({
 
   return (
     <FieldBlock row={row} style={style} flex={flex}>
-      {row ? <FieldBlock>{label}</FieldBlock> : <label>{label}</label>}
+      {row ? (
+        <FieldBlock>
+          {required ? '*' : ''}
+          {label}
+        </FieldBlock>
+      ) : (
+        <label>
+          {required ? '*' : ''}
+          {label}
+        </label>
+      )}
       <FinalFormField validate={composeValidators(...validators)} {...props} />
     </FieldBlock>
   );
