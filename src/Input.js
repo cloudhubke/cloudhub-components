@@ -49,7 +49,6 @@ class Input extends Component {
     } = this.props;
 
     const inputStyles = {
-      ...{},
       backgroundColor: colors.white,
       height: sizes.inputHeight,
       marginRight: marginRight || 0,

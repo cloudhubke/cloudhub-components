@@ -1,31 +1,15 @@
 import React from 'react';
-import Select from '../Selector';
+import { StaticListSelector } from '../selectors';
 import countries from './countries';
 
-const CountrySelector = ({ input, meta, onSelectChange }) => (
-  <Select
+const CountrySelector = ({ ...props }) => (
+  <StaticListSelector
     options={countries}
-    value={input.value}
-    onChange={val => {
-      if (val) {
-        const { simple, full } = val;
-        input.onChange(simple);
-        if (onSelectChange) {
-          onSelectChange(full);
-        }
-        input.onBlur();
-      } else {
-        input.onChange(val);
-        if (onSelectChange) {
-          onSelectChange(val);
-        }
-        input.onBlur();
-      }
-    }}
-    meta={meta}
-    displayField="name"
-    returnkeys={['name', 'id']}
+    labelExtractor={item => item.name}
+    keyExtractor={item => item.name}
+    valueExtractor={item => item.name}
     placeholder="Select Country"
+    {...props}
   />
 );
 

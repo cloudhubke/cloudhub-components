@@ -50,6 +50,8 @@ export { default as Field } from './form/Field';
 export { default as FormFields } from './form/FormFields';
 export { default as Fieldset } from './form/Fieldset';
 
+export { default as CountrySelector } from './countrypicker/CountrySelector';
+
 // toastr
 
 export { toastr } from 'react-redux-toastr';

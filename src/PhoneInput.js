@@ -14,67 +14,108 @@ class PhoneInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cca2: 'KE',
-      callingCode: '254',
+      cca2: props.cca2 || 'KE',
+      callingCode: props.callingCode || '254',
       placeholder: 'Enter your mobile number',
       phone: '',
+      text: '',
     };
-
-    this._mobilenumberInput = React.createRef();
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { value } = nextProps.input;
-    let phone = '';
-    if (value) {
-      const pn = new PhoneNumber(value);
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let phone = nextProps.input.value || nextProps.value;
+
+    function getPhone() {
+      if (phone) {
+        const pn = new PhoneNumber(phone);
+
+        if (pn.isValid()) {
+          phone = pn.getNumber();
+          return { phone, text: phone, cca2: pn.getRegionCode() };
+        }
+      }
+      return {};
+    }
+
+    function getPlaceHolder() {
+      if (!nextProps.placeholder) {
+        const placeholder = PhoneNumber.getExample(
+          prevState.cca2 || 'KE',
+          'mobile'
+        ).getNumber('national');
+        return { placeholder };
+      }
+
+      return {};
+    }
+
+    const newstate = {
+      ...prevState,
+      ...getPhone(),
+      ...getPlaceHolder(),
+    };
+    return newstate;
+  }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.props.focused && !prevProps.focused) {
+  //     this._mobilenumberInput.focus();
+  //   }
+  // }
+
+  componentDidMount() {
+    const phone = this.props.input.value || this.props.value;
+    this.onPhoneChange(phone);
+  }
+
+  onCallingCodeChanged = ({ cca2, callingCode }) => {
+    const placeholder = PhoneNumber.getExample(
+      cca2 || 'KE',
+      'mobile'
+    ).getNumber('national');
+
+    this.setState({
+      callingCode: callingCode || '254',
+      cca2: cca2 || 'KE',
+      placeholder,
+    });
+    this._mobilenumberInput.focus();
+  };
+
+  onPhoneChange = phone => {
+    this.setState({ text: phone });
+    if (phone) {
+      const pn = new PhoneNumber(phone, this.state.cca2);
+
       if (pn.isValid()) {
-        phone = pn.getNumber('national');
-        return { ...prevState, phone, cca2: pn.getRegionCode() };
+        this.props.onPhoneChanged({ text: phone, phone: pn.getNumber() });
+        this.props.input.onChange(pn.getNumber());
+        this.props.input.onBlur();
+      } else {
+        this.props.onPhoneChanged({ text: phone, phone: '' });
+        this.props.input.onChange('');
+        this.props.input.onBlur();
       }
     }
-    return { ...prevState };
   };
-
-  onPhoneChanged = phone => {
-    const pn = new PhoneNumber(phone, this.state.cca2);
-    if (pn.isValid()) {
-      this.props.input.onChange(pn.getNumber());
-    } else {
-      this.props.input.onChange('');
-    }
-    this.setState({ phone });
-  };
-
-  onCallingCodeChanged = ({ callingCode, cca2 }) => {
-    try {
-      const placeholder = PhoneNumber.getExample(
-        cca2 || 'KE',
-        'mobile'
-      ).getNumber('national');
-
-      this.setState({
-        callingCode: callingCode || '254',
-        cca2: cca2 || 'KE',
-        placeholder: placeholder || '0712123456',
-      });
-      this._mobilenumberInput.current.focus();
-    } catch (error) {
-      // error
-    }
-  };
-
-  handleShowCountries = () => {};
 
   render() {
-    const { classes, input, meta, readOnly, marginRight, ...rest } = this.props;
-    const { phone, placeholder } = this.state;
+    const {
+      classes,
+      meta,
+      readOnly,
+      marginRight,
+      showCode,
+      disabled,
+      style,
+    } = this.props;
+    const { text, placeholder } = this.state;
 
     const inputStyles = {
-      ...{},
       backgroundColor: colors.white,
       height: sizes.inputHeight,
       marginRight: marginRight || 0,
+      ...style,
     };
 
     return (
@@ -107,17 +148,16 @@ class PhoneInput extends Component {
                   callingCode={this.state.callingCode}
                   cca2={this.state.cca2}
                   size={24}
-                  showCode
+                  showCode={showCode}
                 />
               </InputAdornment>
             ),
           }}
           style={inputStyles}
-          {...input}
-          onChange={e => this.onPhoneChanged(e.target.value)}
-          value={phone}
           error={Boolean(meta.touched && meta.error)}
-          {...rest}
+          disabled={disabled}
+          value={text}
+          onChange={e => this.onPhoneChange(e.target.value)}
         />
         <Text small error style={{ height: 10 }}>
           {meta.touched && meta.error && meta.error}
@@ -139,7 +179,7 @@ const styles = () => ({
   },
   cssOutlinedInput: {
     '&$cssFocused $notchedOutline': {
-      borderColor: 'red',
+      borderColor: colors.primary,
     },
     height: sizes.inputHeight,
   },
@@ -156,7 +196,9 @@ PhoneInput.defaultProps = {
     onChange: () => {},
     value: '',
   },
+  onPhoneChanged: () => {},
   marginRight: sizes.margin,
+  showCode: false,
 };
 
 export default withStyles(styles)(PhoneInput);
