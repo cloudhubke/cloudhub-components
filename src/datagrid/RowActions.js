@@ -23,8 +23,8 @@ const RowActions = ({ row, column, permissions, ...props }) => {
           minWidth: 150,
         }}
       >
-        {props.rowmenu ? (
-          props.rowmenu({
+        {props.actionsMenu ? (
+          props.actionsMenu({
             row,
             column,
             ...permissions,

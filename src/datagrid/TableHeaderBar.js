@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 
 import AddIcon from '@material-ui/icons/Add';
 import PrintIcon from '@material-ui/icons/Print';
 import RefreshIcon from '@material-ui/icons/Cached';
-import debounce from 'lodash/debounce';
+
 import Input from '../Input';
+import Button from '../Button';
+import { useDebounce } from '../customhooks';
+import Block from '../Block';
+import Text from '../Text';
+import { sizes } from '../theme';
 
 const styles = {
   root: {
@@ -34,69 +36,66 @@ const styles = {
   },
 };
 
-class TableHeaderBar extends Component {
-  static defaultProps = {
-    title: '',
-    onAdd: () => {},
-    onRefresh: () => {},
-    onSearchChange: () => {},
-    onPrint: () => {},
-    permissions: {
-      allowadd: false,
-      allowedit: false,
-      allowdelete: false,
-      allowprint: false,
-    },
-  };
+const TableHeaderBar = ({
+  permissions,
+  title,
+  onAdd,
+  onRefresh,
+  onSearchChange,
+  onPrint,
+  ...props
+}) => {
+  const [text, setText] = React.useState('');
+  const debouncedText = useDebounce(text, 500);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 0,
-    };
-    this.onSearch = debounce(this.onSearch, 500);
-  }
+  React.useEffect(() => {
+    onSearchChange(debouncedText);
+  }, [debouncedText]);
 
-  onSearch = text => {
-    this.props.onSearchChange(text);
-  };
+  const { allowprint, allowadd } = permissions;
 
-  render() {
-    const { classes, allowprint, allowadd } = this.props;
+  return (
+    <Block row paper middle padding={sizes.padding} wrap>
+      <Block>
+        <Text h6>{title}</Text>
+      </Block>
+      <Block flex={false} row wrap>
+        <Input
+          style={{ flex: 1, minWidth: 200 }}
+          icon="search"
+          placeholder="Search..."
+          onChange={e => setText(e.target.value)}
+        />
+        <Button onClick={onAdd} style={styles.buttonStyle} disabled={!allowadd}>
+          <AddIcon /> Add
+        </Button>
+        <Button onClick={onRefresh} style={styles.buttonStyle}>
+          <RefreshIcon /> Refresh
+        </Button>
+        <Button
+          onClick={onPrint}
+          style={styles.buttonStyle}
+          disabled={!allowprint}
+        >
+          <PrintIcon /> Print
+        </Button>
+      </Block>
+    </Block>
+  );
+};
 
-    return (
-      <Paper className={classes.root}>
-        <Typography variant="h6" gutterBottom>
-          {this.props.title}
-        </Typography>
-        <div className={classes.inputs}>
-          <Input
-            style={{ flex: 1, minWidth: 200 }}
-            icon="search"
-            placeholder="Search..."
-            onChange={e => this.onSearch(e.target.value)}
-          />
-          <Button
-            onClick={this.props.onAdd}
-            style={styles.buttonStyle}
-            disabled={!allowadd}
-          >
-            <AddIcon /> Add
-          </Button>
-          <Button onClick={this.props.onRefresh} style={styles.buttonStyle}>
-            <RefreshIcon /> Refresh
-          </Button>
-          <Button
-            onClick={this.props.onPrint}
-            style={styles.buttonStyle}
-            disabled={!allowprint}
-          >
-            <PrintIcon /> Print
-          </Button>
-        </div>
-      </Paper>
-    );
-  }
-}
+TableHeaderBar.defaultProps = {
+  title: '',
+  onAdd: () => {},
+  onRefresh: () => {},
+  onSearchChange: () => {},
+  onPrint: () => {},
+  permissions: {
+    allowadd: true,
+    allowedit: true,
+    allowdelete: true,
+    allowprint: true,
+  },
+};
 
 export default withStyles(styles)(TableHeaderBar);

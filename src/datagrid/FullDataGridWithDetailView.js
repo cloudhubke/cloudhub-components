@@ -1,15 +1,16 @@
 import React from 'react';
 import {
-  SelectionState,
-  PagingState,
   SortingState,
-  GroupingState,
+  SelectionState,
   FilteringState,
+  PagingState,
+  GroupingState,
   IntegratedFiltering,
   IntegratedGrouping,
   IntegratedPaging,
   IntegratedSorting,
   IntegratedSelection,
+  RowDetailState,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -26,6 +27,7 @@ import {
   TableFilterRow,
   TableColumnVisibility,
   ColumnChooser,
+  TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -105,7 +107,7 @@ const styleSheet = () => ({
 
 const staticColumns = [{ name: 'actions', title: 'Actions', width: 200 }];
 
-const FullDataGrid = React.forwardRef(
+const FullDataGridWithDetailView = React.forwardRef(
   ({ keyExtractor, permissions, ...props }, ref) => {
     const [columns] = React.useState([...props.columns, ...staticColumns]);
     const [defaultColumnWidths] = React.useState([
@@ -228,6 +230,9 @@ const FullDataGrid = React.forwardRef(
             allowResizing={allowColumnResizing}
           />
 
+          <RowDetailState />
+          <TableRowDetail contentComponent={props.detailTemplate} />
+
           <TableFilterRow
             cellComponent={props => {
               if (
@@ -290,7 +295,7 @@ const FullDataGrid = React.forwardRef(
   }
 );
 
-FullDataGrid.defaultProps = {
+FullDataGridWithDetailView.defaultProps = {
   title: 'Table title',
   editTitle: 'Edit Record',
   columns: [],
@@ -320,4 +325,4 @@ FullDataGrid.defaultProps = {
   actionsMenu: null,
 };
 
-export default withStyles(styleSheet)(FullDataGrid);
+export default withStyles(styleSheet)(FullDataGridWithDetailView);

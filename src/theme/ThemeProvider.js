@@ -1,11 +1,17 @@
 import React from 'react';
 import ThemeContext from './ThemeContext';
+import sizes from './Sizes';
+import colors from './Colors';
+import fonts from './Fonts';
 
-const ThemeProvider = ({ values, children, ...props }) => (
+const ThemeProvider = ({ children, ...props }) => (
   <ThemeContext.Provider
     value={{
-      fonts: { ...props.fonts, ...(values.fonts || {}) },
-      CONFIG: values.CONFIG || {},
+      fonts: { ...fonts, ...props.fonts },
+      colors: { ...colors, ...props.colors },
+      sizes: { ...sizes, ...props.sizes },
+      CONFIG: props.CONFIG || {},
+      ...props,
     }}
   >
     {children}
@@ -13,13 +19,9 @@ const ThemeProvider = ({ values, children, ...props }) => (
 );
 
 ThemeProvider.defaultProps = {
-  values: {},
-  fonts: {
-    normalFontFamily: 'clanpro-book',
-    thinFontFamily: 'clanpro-book',
-    boldFontFamily: 'clanpro-book',
-    semiBoldFontFamily: 'clanpro-book',
-  },
+  fonts: {},
+  colors: {},
+  sizes: {},
 };
 
 export default ThemeProvider;
