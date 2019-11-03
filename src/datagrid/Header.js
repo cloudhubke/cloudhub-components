@@ -18,7 +18,7 @@ const Header = ({ header, permissions, onSearch, queryString, ...props }) => {
   return (
     <Block flex={false}>
       <TableHeaderBar
-        {...permissions}
+        permissions={permissions}
         title={props.title}
         onSearchChange={onSearch}
         onAdd={props.onAdd}

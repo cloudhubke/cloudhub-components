@@ -124,7 +124,15 @@ const staticColumns = [
 
 const RemoteDataGrid = React.forwardRef(
   (
-    { permissions, keyExtractor, dataExtractor, countExtractor, ...props },
+    {
+      permissions,
+      keyExtractor,
+      dataExtractor,
+      countExtractor,
+      limit = 20,
+      params,
+      ...props
+    },
     ref
   ) => {
     const [columns] = React.useState([
@@ -143,8 +151,8 @@ const RemoteDataGrid = React.forwardRef(
     const [sorting, setSorting] = React.useState([]);
 
     const [currentPage, setCurrrentPage] = React.useState(0);
-    const [pageSize, setPageSize] = React.useState(20);
-    const [allowedPageSizes] = React.useState([20, 50, 200, 500]);
+    const [pageSize, setPageSize] = React.useState(limit);
+    const [allowedPageSizes] = React.useState([limit, 20, 50, 200, 500]);
     const [loading, setLoading] = React.useState(false);
     const [grouping, setGrouping] = React.useState([]);
     const [selection, setSelection] = React.useState([]);
@@ -185,7 +193,7 @@ const RemoteDataGrid = React.forwardRef(
       try {
         setLoading(true);
         const { data } = await props.axiosinstance().get(`${props.url}`, {
-          params: { ...queryparams },
+          params: { ...params, ...queryparams },
         });
 
         setData(dataExtractor(data));

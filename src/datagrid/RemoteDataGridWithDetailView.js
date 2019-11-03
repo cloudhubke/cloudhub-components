@@ -125,7 +125,14 @@ const staticColumns = [
 
 const RemoteDataGridWithDetailView = React.forwardRef(
   (
-    { permissions, keyExtractor, dataExtractor, countExtractor, ...props },
+    {
+      permissions,
+      keyExtractor,
+      dataExtractor,
+      countExtractor,
+      params,
+      ...props
+    },
     ref
   ) => {
     const [columns] = React.useState([
@@ -189,7 +196,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       try {
         setLoading(true);
         const { data } = await props.axiosinstance().get(`${props.url}`, {
-          params: { ...queryparams },
+          params: { ...params, ...queryparams },
         });
 
         setData(dataExtractor(data));

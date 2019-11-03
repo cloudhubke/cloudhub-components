@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaithoben/cloudhub-components.git"
+    "url": "https://github.com/cloudhubke/cloudhub-components.git"
   },
   "keywords": [
     "cloudhub"
@@ -27,9 +27,9 @@
   "author": "Bernard Gaitho <gaithoben@gmail.com> (http://github.com/gaithoben)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaithoben/cloudhub-components/issues"
+    "url": "https://github.com/cloudhubke/cloudhub-components/issues"
   },
-  "homepage": "https://github.com/gaithoben/cloudhub-components#readme",
+  "homepage": "https://github.com/cloudhubke/cloudhub-components#readme",
   "dependencies": {
     "@devexpress/dx-react-core": "^1.11.0",
     "@devexpress/dx-react-grid": "^1.11.0",
