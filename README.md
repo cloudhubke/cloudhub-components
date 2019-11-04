@@ -1,4 +1,4 @@
-# kenya
+# Cloudhub React Components
 
 [![travis build](https://img.shields.io/travis/gaithoben/kenya.svg?style=flat-square)](https://travis-ci.org/gaithoben/kenya)
 [![version](https://img.shields.io/npm/v/kenya.svg?style=flat-square)](http://npm.im/kenya)
