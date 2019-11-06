@@ -2,6 +2,14 @@ import React, { useEffect } from 'react';
 
 const hasWindow = typeof window !== 'undefined';
 
+let isMobile = false;
+
+if (global.navigator) {
+  isMobile = navigator.userAgent.match(
+    /(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i
+  );
+}
+
 const useMetrics = () => {
   const [width, setWidth] = React.useState(hasWindow && window.innerWidth);
   const [height, setHeight] = React.useState(hasWindow && window.innerHeight);
@@ -18,7 +26,7 @@ const useMetrics = () => {
     };
   });
 
-  return { height, width };
+  return { height, width, isMobile };
 };
 
 export default useMetrics;

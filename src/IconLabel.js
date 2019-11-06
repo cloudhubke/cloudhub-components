@@ -1,7 +1,7 @@
 // just copy this code from the driving repo :)
 import React from 'react';
-import { useFonts, colors, sizes } from './theme';
 import Block from './Block';
+import ThemeProvider from './theme/ThemeProvider';
 
 const IconLabel = ({
   h1,
@@ -87,7 +87,7 @@ const IconLabel = ({
   icon,
   blockProps,
 }) => {
-  const { fonts } = useFonts();
+  const { fonts, colors, sizes } = React.useContext(ThemeProvider);
 
   const styles = {
     // default style

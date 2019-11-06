@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AntDatePicker from './ant/DatePicker';
-import { sizes, useFonts } from './theme';
+
 import Block from './Block';
 import Text from './Text';
+import ThemeProvider from './theme/ThemeProvider';
 
-const getStyles = () => {
-  const { fonts } = useFonts();
+const getStyles = ({ fonts, sizes }) => {
   const useStyles = makeStyles({
     datePicker: {
       ...fonts.default,
@@ -23,7 +23,8 @@ const getStyles = () => {
 };
 
 const DatePicker = ({ meta, ...props }) => {
-  const classes = getStyles().useStyles();
+  const { fonts, sizes, colors } = React.useContext(ThemeProvider);
+  const classes = getStyles({ fonts, sizes, colors }).useStyles();
   return (
     <Block style={{ marginRight: sizes.margin }}>
       <AntDatePicker

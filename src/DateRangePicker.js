@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AntRangePicker from './ant/DateFilter';
-import { sizes, useFonts } from './theme';
+
 import Block from './Block';
 import Text from './Text';
+import ThemeProvider from './theme/ThemeProvider';
 
-const getStyles = () => {
-  const { fonts } = useFonts();
+const getStyles = ({ fonts, sizes }) => {
   const useStyles = makeStyles({
     datePicker: {
       fontSize: '9px',
@@ -31,7 +31,8 @@ const getStyles = () => {
 };
 
 const DateRangePicker = ({ meta, ...props }) => {
-  const classes = getStyles().useStyles();
+  const { fonts, sizes } = React.useContext(ThemeProvider);
+  const classes = getStyles({ fonts, sizes }).useStyles();
   return (
     <Block style={{ marginRight: sizes.margin }}>
       <AntRangePicker

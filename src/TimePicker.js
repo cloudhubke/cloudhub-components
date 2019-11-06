@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import AntTimePicker from './ant/TimePicker';
-import { sizes, useFonts } from './theme';
 import Block from './Block';
 import Text from './Text';
+import ThemeProvider from './theme/ThemeProvider';
 
-const getStyles = () => {
-  const { fonts } = useFonts();
+const getStyles = ({ fonts, sizes }) => {
   const useStyles = makeStyles({
     timePicker: {
       ...fonts.default,
@@ -47,11 +46,12 @@ const getStyles = () => {
 };
 
 const TimePicker = ({ meta, value, input, onChange, ...props }) => {
+  const { fonts, sizes } = React.useContext(ThemeProvider);
   const passedvalue = input.value || value;
 
   const [time, setTime] = useState(null);
 
-  const classes = getStyles().useStyles();
+  const classes = getStyles({ fonts }).useStyles();
 
   const onTimeChange = time => {
     setTime(time);
