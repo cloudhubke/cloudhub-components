@@ -2,7 +2,7 @@
 import React from 'react';
 // import withStyles from '@material-ui/core/styles/withStyles';
 
-import { useFonts, colors } from './theme';
+import ThemeContext from './theme/ThemeContext';
 
 const Text = ({
   h1,
@@ -89,7 +89,7 @@ const Text = ({
   cropped,
   ...props
 }) => {
-  const { fonts } = useFonts();
+  const { fonts, colors, sizes } = React.useContext(ThemeContext);
 
   const styles = {
     // default style
