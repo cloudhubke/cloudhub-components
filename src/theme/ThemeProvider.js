@@ -7,9 +7,9 @@ import fonts from './Fonts';
 const ThemeProvider = ({ children, ...props }) => (
   <ThemeContext.Provider
     value={{
-      fonts: { ...fonts, ...props.fonts },
-      colors: { ...colors, ...props.colors },
-      sizes: { ...sizes, ...props.sizes },
+      fonts: { ...props.fonts },
+      colors: { ...props.colors },
+      sizes: { ...props.sizes },
       CONFIG: props.CONFIG || {},
       ...props,
     }}
@@ -19,9 +19,9 @@ const ThemeProvider = ({ children, ...props }) => (
 );
 
 ThemeProvider.defaultProps = {
-  fonts: {},
-  colors: {},
-  sizes: {},
+  fonts,
+  colors,
+  sizes,
 };
 
 export default ThemeProvider;
