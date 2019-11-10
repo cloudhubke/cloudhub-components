@@ -8,13 +8,9 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import classNames from 'classnames';
 import { sizes, colors } from './theme';
 
-class Block extends Component {
-  static defaultProps = {
-    visible: true,
-  };
-
-  handleMargins() {
-    const { margin } = this.props;
+const Block = React.forwardRef((props, ref) => {
+  const handleMargins = () => {
+    const { margin } = props;
     if (typeof margin === 'number') {
       return {
         marginTop: margin,
@@ -58,10 +54,10 @@ class Block extends Component {
       }
     }
     return null;
-  }
+  };
 
-  handlePaddings() {
-    const { padding } = this.props;
+  const handlePaddings = () => {
+    const { padding } = props;
     if (typeof padding === 'number') {
       return {
         paddingTop: padding,
@@ -105,104 +101,104 @@ class Block extends Component {
       }
     }
     return null;
-  }
+  };
 
-  render() {
-    const {
-      classes,
-      absolute,
-      flex,
-      row,
-      column,
-      wrap,
-      center,
-      middle,
-      left,
-      right,
-      top,
-      bottom,
-      margin,
-      padding,
-      card,
-      shadow,
-      shadowhover,
-      elevation,
-      color,
-      space,
-      style,
-      animated,
-      paper,
-      visible,
-      children,
-      ...props
-    } = this.props;
+  const {
+    classes,
+    absolute,
+    flex,
+    row,
+    column,
+    wrap,
+    center,
+    middle,
+    left,
+    right,
+    top,
+    bottom,
+    margin,
+    padding,
+    card,
+    shadow,
+    shadowhover,
+    elevation,
+    color,
+    space,
+    style,
+    animated,
+    paper,
+    visible,
+    children,
+    ...rest
+  } = props;
 
-    const blockStyles = {
-      ...(flex === false
-        ? { display: 'flex', position: 'relative', flexDirection: 'column' }
-        : { ...styles.block }), // reset / disable flex
-      ...(row && styles.row),
-      ...(absolute && {
-        position: 'absolute',
-        right: 0,
-        left: 0,
-        top: 0,
-        bottom: 0,
-      }),
-      ...(column && styles.column),
-      ...(wrap && { flexWrap: 'wrap' }),
-      ...(center && (row ? { justifyContent: 'center' } : styles.center)),
-      ...(middle && (row ? { alignItems: 'center' } : styles.middle)),
-      ...(left && (row ? { justifyContent: 'flex-start' } : styles.left)),
-      ...(right && (row ? { justifyContent: 'flex-end' } : styles.right)),
-      ...(top && (row ? { alignItems: 'flex-start' } : styles.top)),
-      ...(bottom && (row ? { alignItems: 'flex-end' } : styles.bottom)),
-      ...(margin && { ...this.handleMargins() }),
-      ...(padding && { ...this.handlePaddings() }),
-      ...(card && styles.card),
-      ...(shadow && styles.shadow),
-      ...(shadowhover && styles.shadowhover),
-      ...(elevation && { elevation }),
-      ...(space && { justifyContent: `space-${space}` }),
-      ...(color && styles[color]), // predefined styles colors for backgroundColor
-      ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
-      ...style, // rewrite predefined styles
-    };
+  const blockStyles = {
+    ...(flex === false
+      ? { display: 'flex', position: 'relative', flexDirection: 'column' }
+      : { ...styles.block }), // reset / disable flex
+    ...(row && styles.row),
+    ...(absolute && {
+      position: 'absolute',
+      right: 0,
+      left: 0,
+      top: 0,
+      bottom: 0,
+    }),
+    ...(column && styles.column),
+    ...(wrap && { flexWrap: 'wrap' }),
+    ...(center && (row ? { justifyContent: 'center' } : styles.center)),
+    ...(middle && (row ? { alignItems: 'center' } : styles.middle)),
+    ...(left && (row ? { justifyContent: 'flex-start' } : styles.left)),
+    ...(right && (row ? { justifyContent: 'flex-end' } : styles.right)),
+    ...(top && (row ? { alignItems: 'flex-start' } : styles.top)),
+    ...(bottom && (row ? { alignItems: 'flex-end' } : styles.bottom)),
+    ...(margin && { ...handleMargins() }),
+    ...(padding && { ...handlePaddings() }),
+    ...(card && styles.card),
+    ...(shadow && styles.shadow),
+    ...(shadowhover && styles.shadowhover),
+    ...(elevation && { elevation }),
+    ...(space && { justifyContent: `space-${space}` }),
+    ...(color && styles[color]), // predefined styles colors for backgroundColor
+    ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
+    ...style, // rewrite predefined styles
+  };
 
-    if (animated) {
-      return (
-        <Grow in={visible}>
-          <div style={blockStyles} {...props}>
-            {children}
-          </div>
-        </Grow>
-      );
-    }
-
-    if (paper) {
-      return (
-        <Paper
-          className={classNames({ [classes.shadowhover]: shadowhover })}
-          elevation={elevation >= 0 ? elevation : 1}
-          style={blockStyles}
-          {...props}
-        >
-          {children}
-        </Paper>
-      );
-    }
-
+  if (animated) {
     return (
-      <div
-        className={classNames({ [classes.shadowhover]: shadowhover })}
-        style={blockStyles}
-        {...props}
-      >
-        {children}
-      </div>
+      <Grow in={visible}>
+        <div ref={ref} style={blockStyles} {...rest}>
+          {children}
+        </div>
+      </Grow>
     );
   }
-}
+
+  if (paper) {
+    return (
+      <Paper
+        ref={ref}
+        className={classNames({ [classes.shadowhover]: shadowhover })}
+        elevation={elevation >= 0 ? elevation : 1}
+        style={blockStyles}
+        {...rest}
+      >
+        {children}
+      </Paper>
+    );
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={classNames({ [classes.shadowhover]: shadowhover })}
+      style={blockStyles}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+});
 
 export const styles = {
   block: {
@@ -303,4 +299,9 @@ const classStyles = () => ({
     },
   },
 });
+
+Block.defaultProps = {
+  visible: true,
+};
+
 export default withStyles(classStyles)(Block);

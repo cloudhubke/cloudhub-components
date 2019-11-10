@@ -1,4 +1,4 @@
-import { useId } from '@reach/auto-id';
+export { useId } from '@reach/auto-id';
 export { default as useDebounce } from './useDebounce';
 export { default as useInterval } from './useInterval';
 export { default as useMetrics } from './useMetrics';
