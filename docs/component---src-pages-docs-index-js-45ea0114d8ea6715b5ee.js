@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{"0Lf/":function(n,t,o){"use strict";o.r(t),o.d(t,"default",(function(){return e}));o("q1tI");function e(){return"undefined"!=typeof window&&(window.location="/docs/getting-started/react"),null}}}]);
+//# sourceMappingURL=component---src-pages-docs-index-js-45ea0114d8ea6715b5ee.js.map
