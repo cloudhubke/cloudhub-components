@@ -88,6 +88,7 @@ class ImagesUpload extends Component {
       value: null,
       onChange: () => {},
     },
+    meta: {},
     onChange: () => {},
     maxWidth: 1024,
     maxSize: 512,
@@ -226,8 +227,8 @@ class ImagesUpload extends Component {
         return {
           ...fl,
           uid:
-            (fl.fd || '').replace('images', '').replace(/\//g, '') ||
-            new Date().getTime(),
+            (fl.fd || '').replace('images', '').replace(/\//g, '')
+            || new Date().getTime(),
           status: 'done',
         };
       }
