@@ -5,7 +5,7 @@ const hasWindow = typeof window !== 'undefined';
 const useMetrics = () => {
   const [width, setWidth] = React.useState(hasWindow && window.innerWidth);
   const [height, setHeight] = React.useState(hasWindow && window.innerHeight);
-
+  const [maxWidth, setMaxWidth] = React.useState('lg');
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
@@ -16,6 +16,24 @@ const useMetrics = () => {
       setIsMobile(isMobile);
     }
   }, []);
+
+  React.useEffect(() => {
+    const getMaxWidth = () => {
+      if (width < 600 || isMobile) {
+        return 'sm';
+      }
+      if (width < 960) {
+        return 'md';
+      }
+      if (width < 1280) {
+        return 'lg';
+      }
+
+      return 'lg';
+    };
+
+    setMaxWidth(getMaxWidth());
+  }, [width]);
 
   useEffect(() => {
     const resize = () => {
@@ -29,7 +47,7 @@ const useMetrics = () => {
     };
   });
 
-  return { height, width, isMobile };
+  return { height, width, maxWidth, isMobile };
 };
 
 export default useMetrics;

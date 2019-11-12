@@ -1,6 +1,7 @@
 import React from 'react';
 import MuiContainer from '@material-ui/core/Container';
 import { colors } from './theme';
+import { useMetrics } from './customhooks';
 
 const Container = ({
   children,
@@ -20,6 +21,8 @@ const Container = ({
   wrap,
   ...otherprops
 }) => {
+  const { maxWidth } = useMetrics();
+
   const handleMargins = () => {
     const { margin } = otherprops;
     if (typeof margin === 'number') {
@@ -135,7 +138,7 @@ const Container = ({
   };
 
   return (
-    <MuiContainer style={containerStyles} {...otherprops}>
+    <MuiContainer style={containerStyles} maxWidth={maxWidth} {...otherprops}>
       {children}
     </MuiContainer>
   );
