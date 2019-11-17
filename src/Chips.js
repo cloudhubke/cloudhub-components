@@ -9,26 +9,32 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    padding: sizes.pa,
+    padding: sizes.pa
   },
   chip: {
-    margin: sizes.margin,
-  },
+    margin: sizes.margin
+  }
 }));
 
-const Chips = ({ extractKey, extractLabel, data, icon }) => {
+const Chips = ({ onChange, extractKey, extractLabel, data, icon }) => {
   const classes = useStyles();
-  const [chipData, setChipData] = React.useState([]);
+  const [chipData, setChipData] = React.useState(data);
 
   const handleDelete = index => () => {
-    setChipData(chips => chips.filter((chip, i) => i !== index));
+    setChipData(data => data.filter((chip, i) => i !== index));
   };
 
   useEffect(() => {
     if (!isEqual(data, chipData)) {
       setChipData(data || []);
     }
-  }, [data, chipData]);
+  }, [data]);
+
+  useEffect(() => {
+    if (!isEqual(data, chipData)) {
+      onChange(data || []);
+    }
+  }, [chipData, data]);
 
   return (
     <div className={classes.root}>
@@ -48,6 +54,7 @@ const Chips = ({ extractKey, extractLabel, data, icon }) => {
 Chips.defaultProps = {
   extractLabel: () => null,
   extractKey: () => null,
+  onChange: () => null
 };
 
 export default Chips;
