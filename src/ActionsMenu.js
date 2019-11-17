@@ -1,91 +1,64 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Block from './Block';
+import IconButton from './IconButton';
 
-class MenuListComposition extends Component {
-  static defaultProps = {
-    anchorComponent: null,
-  };
+const ActionsMenu = ({ children, anchorComponent }) => {
+  const anchorEl = React.useRef();
+  let anchorcomp;
+  const [open, setOpen] = React.useState(false);
 
-  state = {
-    open: false,
-  };
-
-  handleClick = () => {
-    this.setState(state => ({
-      open: !state.open,
-    }));
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  render() {
-    const { classes } = this.props;
-    const { open } = this.state;
-
-    return (
-      <div>
-        <div
-          ref={node => {
-            this.anchorEl = node;
-          }}
-        >
-          {this.props.anchorComponent || (
-            <IconButton
-              aria-label="Actions"
-              aria-owns={open ? 'long-menu' : undefined}
-              aria-haspopup="true"
-              onClick={this.handleClick}
-            >
-              <MoreVertIcon />
-            </IconButton>
-          )}
-        </div>
-
-        <Popper
-          open={open}
-          anchorEl={this.anchorEl}
-          transition
-          placement="bottom"
-          disablePortal={false}
-          modifiers={{
-            flip: {
-              enabled: true,
-            },
-            preventOverflow: {
-              enabled: false,
-              boundariesElement: 'scrollParent',
-            },
-          }}
-          className={classes.actionsMenu}
-        >
-          <Paper>
-            <ClickAwayListener onClickAway={this.handleClose}>
-              {this.props.children}
-            </ClickAwayListener>
-          </Paper>
-        </Popper>
-      </div>
-    );
+  if (anchorComponent) {
+    anchorcomp = React.cloneElement(anchorComponent, {
+      ...anchorComponent.props,
+      onClick: () => setOpen(!open)
+    });
   }
-}
 
-const styles = () => ({
-  root: {
-    position: 'relative',
-    zIndex: 0,
-    backgroundColor: 'yellow',
-  },
-  actionsMenu: {
-    zIndex: 1,
-  },
-});
+  return (
+    <Block flex={false} row>
+      <div ref={anchorEl}>
+        {anchorcomp || (
+          <IconButton
+            aria-label="Actions"
+            aria-owns={open ? 'long-menu' : undefined}
+            aria-haspopup="true"
+            onClick={() => setOpen(true)}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        )}
+      </div>
 
-export default withStyles(styles)(MenuListComposition);
+      <Popper
+        open={open}
+        anchorEl={anchorEl.current}
+        transition
+        placement="bottom"
+        disablePortal={false}
+        modifiers={{
+          flip: {
+            enabled: true
+          },
+          preventOverflow: {
+            enabled: false,
+            boundariesElement: 'scrollParent'
+          }
+        }}
+        style={{ zIndex: 1 }}
+      >
+        <Paper>
+          <ClickAwayListener onClickAway={() => setOpen(false)}>
+            <Block flex={false}>{children}</Block>
+          </ClickAwayListener>
+        </Paper>
+      </Popper>
+    </Block>
+  );
+};
+
+export default ActionsMenu;

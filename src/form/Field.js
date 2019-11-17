@@ -2,11 +2,15 @@ import React from 'react';
 import { Field as FinalFormField } from 'react-final-form';
 
 import FieldBlock from '../FieldBlock';
+import Input from '../Input';
 
 const requiredField = value => (value ? undefined : 'Required');
 
 const mustBeNumber = value => {
   const n = Number(value);
+  if (n === 0) {
+    return undefined;
+  }
   const isValid = Boolean(n);
   return !isValid ? 'Must be a number' : undefined;
 };
@@ -41,7 +45,7 @@ const maxFieldLength = max => value => {
 const composeValidators = (...validators) => value =>
   validators.reduce((error, validator) => error || validator(value), undefined);
 
-const Field = ({
+const FormField = ({
   required,
   number,
   minValue,
@@ -51,21 +55,24 @@ const Field = ({
   label,
   row,
   flex,
+  component,
   style,
   ...props
 }) => {
   let validators = [];
+  const fieldprops = {};
 
   if (required) {
     validators = [...validators, requiredField];
   }
   if (number) {
     validators = [...validators, mustBeNumber];
+    fieldprops.type = 'number';
   }
-  if (minValue) {
+  if (minValue || minValue === 0) {
     validators = [...validators, minFieldValue(minValue)];
   }
-  if (maxValue) {
+  if (maxValue || maxValue === 0) {
     validators = [...validators, maxFieldValue(maxValue)];
   }
 
@@ -80,18 +87,19 @@ const Field = ({
     <FieldBlock row={row} style={style} flex={flex}>
       {row ? (
         <FieldBlock>
-          {required ? '*' : ''}
-          {label}
+          {`${required && label ? '*' : ''}${label || ''}`}
         </FieldBlock>
       ) : (
-        <label>
-          {required ? '*' : ''}
-          {label}
-        </label>
+        <label>{`${required && label ? '*' : ''}${label || ''}`}</label>
       )}
-      <FinalFormField validate={composeValidators(...validators)} {...props} />
+      <FinalFormField
+        validate={composeValidators(...validators)}
+        component={component}
+        {...fieldprops}
+        {...props}
+      />
     </FieldBlock>
   );
 };
 
-export default Field;
+export default FormField;

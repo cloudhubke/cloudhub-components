@@ -1,23 +1,23 @@
 import React from 'react';
 import {
   ThemeProvider as MuiThemeProvider,
-  createMuiTheme,
+  createMuiTheme
 } from '@material-ui/core/styles';
 import ThemeContext from './ThemeContext';
-import sizes from './Sizes';
-import colors from './Colors';
-import fonts from './Fonts';
+import localsizes from './Sizes';
+import localcolors from './Colors';
+import localfonts from './Fonts';
 
-const ThemeProvider = ({ children, ...props }) => {
-  const fonts = { ...props.fonts };
-  const colors = { ...props.colors };
-  const sizes = { ...props.sizes };
+const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
+  const newfonts = { ...localfonts, ...fonts };
+  const newcolors = { ...localcolors, ...colors };
+  const newsizes = { ...localsizes, ...sizes };
 
   const theme = createMuiTheme({
     palette: {
       primary: fonts.primary,
       secondary: fonts.secondary,
-      error: fonts.danger,
+      error: fonts.danger
     },
     typography: {
       // Use the system font instead of the default Roboto font.
@@ -35,7 +35,7 @@ const ThemeProvider = ({ children, ...props }) => {
         'sans-serif',
         '"Apple Color Emoji"',
         '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
+        '"Segoe UI Symbol"'
       ].join(','),
       zIndex: {
         mobileStepper: 1000,
@@ -43,32 +43,26 @@ const ThemeProvider = ({ children, ...props }) => {
         drawer: 1200,
         modal: 1300,
         snackbar: 1400,
-        tooltip: 1800,
-      },
-    },
+        tooltip: 1800
+      }
+    }
   });
 
   return (
     <MuiThemeProvider theme={theme}>
       <ThemeContext.Provider
         value={{
-          fonts,
-          colors,
-          sizes,
+          fonts: newfonts,
+          colors: newcolors,
+          sizes: newsizes,
           CONFIG: props.CONFIG || {},
-          ...props,
+          ...props
         }}
       >
         {children}
       </ThemeContext.Provider>
     </MuiThemeProvider>
   );
-};
-
-ThemeProvider.defaultProps = {
-  fonts,
-  colors,
-  sizes,
 };
 
 export default ThemeProvider;

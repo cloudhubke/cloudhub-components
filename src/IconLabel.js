@@ -1,7 +1,7 @@
 // just copy this code from the driving repo :)
 import React from 'react';
 import Block from './Block';
-import ThemeProvider from './theme/ThemeProvider';
+import ThemeContext from './theme/ThemeContext';
 
 const IconLabel = ({
   h1,
@@ -85,31 +85,31 @@ const IconLabel = ({
   style,
   children,
   icon,
-  blockProps,
+  blockProps
 }) => {
-  const { fonts, colors, sizes } = React.useContext(ThemeProvider);
+  const { fonts, colors, sizes } = React.useContext(ThemeContext);
 
   const styles = {
     // default style
     text: {
-      color: 'inherit',
+      color: 'inherit'
     },
     // variations
     regular: {
-      fontWeight: 'normal',
+      fontWeight: 'normal'
     },
     bold: fonts.bold,
 
     semibold: {
-      ...fonts.semibold,
+      ...fonts.semibold
     },
     medium: {
-      fontWeight: '500',
+      fontWeight: '500'
     },
     light: fonts.light,
     normal: fonts.normal,
     thin: {
-      fontWeight: 100,
+      fontWeight: 100
     },
     // position
     center: { textAlign: 'center' },
@@ -177,7 +177,7 @@ const IconLabel = ({
     body: fonts.body,
     caption: fonts.caption,
     small: fonts.small,
-    button: fonts.button,
+    button: fonts.button
   };
 
   const textStyles = {
@@ -202,7 +202,7 @@ const IconLabel = ({
     ...(noWrap && {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      textOverflow: 'ellipsis',
+      textOverflow: 'ellipsis'
     }),
     ...(fullWidth && { minWidth: '100%' }),
     ...(spacing && { letterSpacing: spacing }),
@@ -265,7 +265,7 @@ const IconLabel = ({
     ...(rose && styles.rose),
     ...(warning && styles.warning),
     ...(danger && styles.danger),
-    ...style, // rewrite predefined styles
+    ...style // rewrite predefined styles
   };
 
   const renderText = () => (
@@ -273,13 +273,13 @@ const IconLabel = ({
       style={{
         ...textStyles,
         display: 'inline-block',
-        lineHeight: '0.75em',
+        lineHeight: '0.75em'
       }}
     >
       <span
         style={{
           position: 'relative',
-          bottom: '-0.13em',
+          bottom: '-0.13em'
         }}
       >
         {children}
@@ -288,14 +288,14 @@ const IconLabel = ({
   );
 
   const renderIcon = IconComponent =>
-    IconComponent ? (
+    (IconComponent ? (
       <IconComponent
         style={{
           marginRight: sizes.margin,
-          ...textStyles,
+          ...textStyles
         }}
       />
-    ) : null;
+    ) : null);
 
   return (
     <Block row middle flex={false} wrap {...blockProps}>
@@ -305,7 +305,7 @@ const IconLabel = ({
 };
 
 IconLabel.defaultProps = {
-  icon: null,
+  icon: null
 };
 
 export default IconLabel;

@@ -31,13 +31,21 @@ const ListSubMenu = ({
         style={{ ...(menuexpanded && expandedStyles), style }}
         {...rest}
       >
-        <ListItemIcon style={{ color: colors.dark }}>{headerIcon}</ListItemIcon>
+        {headerIcon && (
+          <ListItemIcon style={{ color: colors.dark }}>
+            {headerIcon}
+          </ListItemIcon>
+        )}
         <ListItemText
-          primary={(
-<Text body semibold dark>
-              {header}
-            </Text>
-)}
+          primary={
+            typeof header === 'string' ? (
+              <Text body semibold dark>
+                {header}
+              </Text>
+            ) : (
+              header
+            )
+          }
         />
         {menuexpanded ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
@@ -54,7 +62,7 @@ const ListSubMenu = ({
 ListSubMenu.defaultProps = {
   headerIcon: <Lens />,
   header: '',
-  open: false,
+  open: false
 };
 
 export default ListSubMenu;

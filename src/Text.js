@@ -29,6 +29,10 @@ const Text = ({
   medium,
   weight,
   light,
+  thin,
+  italic,
+  underline,
+  strikethrough,
   center,
   right,
   spacing, // letter-spacing
@@ -94,25 +98,28 @@ const Text = ({
   const styles = {
     // default style
     text: {
-      color: 'inherit',
+      color: 'inherit'
     },
     // variations
     regular: {
-      fontWeight: 'normal',
+      fontWeight: 'normal'
     },
     bold: fonts.bold,
 
     semibold: {
-      ...fonts.semibold,
+      ...fonts.semibold
     },
     medium: {
-      fontWeight: '500',
+      fontWeight: '500'
     },
     light: fonts.light,
     normal: fonts.normal,
     thin: {
-      fontWeight: 100,
+      fontWeight: 100
     },
+    italic: fonts.italic,
+    underline: fonts.underline,
+    strikethrough: fonts.strikethrough,
     // position
     center: { textAlign: 'center' },
     right: { textAlign: 'right' },
@@ -179,7 +186,7 @@ const Text = ({
     body: fonts.body,
     caption: fonts.caption,
     small: fonts.small,
-    button: fonts.button,
+    button: fonts.button
   };
 
   const textStyles = {
@@ -204,7 +211,7 @@ const Text = ({
     ...(noWrap && {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      textOverflow: 'ellipsis',
+      textOverflow: 'ellipsis'
     }),
     ...(fullWidth && { minWidth: '100%' }),
     ...(spacing && { letterSpacing: spacing }),
@@ -214,6 +221,10 @@ const Text = ({
     ...(semibold && styles.semibold),
     ...(medium && styles.medium),
     ...(light && styles.light),
+    ...(thin && styles.thin),
+    ...(italic && styles.italic),
+    ...(underline && styles.underline),
+    ...(strikethrough && styles.strikethrough),
     ...(normal && styles.normal),
     ...(center && styles.center),
     ...(right && styles.right),
@@ -267,7 +278,7 @@ const Text = ({
     ...(rose && styles.rose),
     ...(warning && styles.warning),
     ...(danger && styles.danger),
-    ...style, // rewrite predefined styles
+    ...style // rewrite predefined styles
   };
 
   if (cropped) {
@@ -276,13 +287,13 @@ const Text = ({
         style={{
           ...textStyles,
           display: 'inline-block',
-          lineHeight: '0.75em',
+          lineHeight: '0.75em'
         }}
       >
         <span
           style={{
             position: 'relative',
-            bottom: '-0.13em',
+            bottom: '-0.13em'
           }}
         >
           {children}

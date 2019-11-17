@@ -3,14 +3,14 @@ import Block from '../Block';
 import TableHeaderBar from './TableHeaderBar';
 
 const Header = ({ header, permissions, onSearch, queryString, ...props }) => {
-  if (props.header) {
+  if (header) {
     return (
-      <Block>
-        {props.header({
+      <Block flex={false}>
+        {header({
           ...props,
           ...permissions,
           queryString,
-          onSearch,
+          onSearch
         })}
       </Block>
     );

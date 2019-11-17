@@ -14,29 +14,31 @@ export default class Badge extends Component {
 
     const badgeStyles = {
       ...{
-        height: sizes.base || size,
-        width: sizes.base || size,
-        borderRadius: size ? size / 2 : sizes.base / 2,
+        borderRadius: '50%',
+        height: 'auto',
+        width: 'auto'
       },
       ...(size && {
         minWidth: size,
-        minHeight: size,
-        borderRadius: size / 2,
+        minHeight: size
       }),
-      ...style,
+      ...style
     };
 
     return (
-      <Block
-        flex={false}
-        middle
-        center
-        color={color}
-        style={badgeStyles}
-        {...props}
-      >
-        {children}
-      </Block>
+      <span>
+        <Block
+          flex={false}
+          row
+          middle
+          center
+          color={color}
+          style={badgeStyles}
+          {...props}
+        >
+          {children}
+        </Block>
+      </span>
     );
   }
 }

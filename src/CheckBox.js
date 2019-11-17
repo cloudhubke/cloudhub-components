@@ -12,8 +12,8 @@ const checkBoxStyles = {
     textTransform: 'none',
     display: 'flex',
     justifyContent: 'flex-start',
-    color: colors.dark,
-  },
+    color: colors.dark
+  }
 };
 
 class checkbox extends Component {
@@ -21,18 +21,18 @@ class checkbox extends Component {
     input: {
       value: null,
       onChange: () => {},
-      onBlur: () => {},
+      onBlur: () => {}
     },
     meta: {},
     value: null,
     onChange: () => {},
-    height: sizes.inputHeight,
+    height: sizes.inputHeight
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      checkvalue: false,
+      checkvalue: false
     };
   }
 
@@ -42,7 +42,7 @@ class checkbox extends Component {
       this.props.onChange(!checkvalue);
       this.props.input.onBlur();
       return {
-        checkvalue: !checkvalue,
+        checkvalue: !checkvalue
       };
     });
   };
@@ -51,7 +51,7 @@ class checkbox extends Component {
     const checkvalue = nextProps.input.value || nextProps.value;
     return {
       ...prevState,
-      checkvalue,
+      checkvalue
     };
   }
 
@@ -59,7 +59,7 @@ class checkbox extends Component {
     const { label, height, meta, disabled } = this.props;
     const { checkvalue } = this.state;
     return (
-      <Block style={{ marginRight: sizes.margin }}>
+      <Block row flex={false} style={{ marginRight: sizes.margin }}>
         <Button
           fullWidth
           onClick={this.onCheck}
@@ -73,7 +73,7 @@ class checkbox extends Component {
                 height,
                 width: height,
                 color: green[500],
-                marginRight: sizes.margin,
+                marginRight: sizes.margin
               }}
             />
           ) : (
@@ -81,7 +81,7 @@ class checkbox extends Component {
               style={{
                 height,
                 width: height,
-                marginRight: sizes.margin,
+                marginRight: sizes.margin
               }}
             />
           )}
