@@ -9,6 +9,7 @@ import ThemeContext from './theme/ThemeContext';
 const styles = ({ height, fonts, colors }) => {
   const useStyles = makeStyles({
     root: {
+      // .ck.ck-editor__main>.ck-editor__editable
       '& .ck-editor__editable': {
         height,
         maxHeight: 800,
