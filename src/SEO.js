@@ -8,20 +8,20 @@ const seoImages = {
     'manifested1.png',
     'manifested2.png',
     'manifested3.png',
-    'manifested4.png',
+    'manifested4.png'
   ],
   twitter: [
     'manifested1.png',
     'manifested2.png',
     'manifested3.png',
-    'manifested4.png',
+    'manifested4.png'
   ],
   google: [
     'manifested1.png',
     'manifested2.png',
     'manifested3.png',
-    'manifested4.png',
-  ],
+    'manifested4.png'
+  ]
 };
 
 const seoImageURL = file =>
@@ -38,7 +38,7 @@ const getMetaTags = ({
   updated,
   category,
   tags,
-  twitter,
+  twitter
 }) => {
   const metaTags = [
     { itemprop: 'name', content: title },
@@ -47,24 +47,28 @@ const getMetaTags = ({
     { name: 'description', content: description },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:site', content: '@ManifestedP' },
-    { name: 'twitter:title', content: `${title} | Manifested Publishers` },
+    { name: 'twitter:title', content: `${title}` },
     { name: 'twitter:description', content: description },
-    { name: 'twitter:creator', content: twitter || '@ManifestedP' },
+    { name: 'twitter:creator', content: twitter },
     {
       name: 'twitter:image:src',
-      content: seoImageURL(sample(seoImages.twitter)),
+      content: seoImageURL(sample(seoImages.twitter))
     },
-    { name: 'og:title', content: `${title} | Manifested Publishers` },
+    { name: 'og:title', content: `${title}` },
     { name: 'og:type', content: contentType },
     { name: 'og:url', content: url },
     { name: 'og:image', content: seoImageURL(sample(seoImages.openGraph)) },
     { name: 'og:description', content: description },
-    { name: 'og:site_name', content: 'Manifested Publishers' },
-    { name: 'fb:app_id', content: '1668751170097512' },
+    { name: 'og:site_name', content: title },
+    { name: 'fb:app_id', content: '1668751170097512' }
   ];
 
-  if (published) metaTags.push({ name: 'article:published_time', content: published });
-  if (updated) metaTags.push({ name: 'article:modified_time', content: updated });
+  if (published) {
+    metaTags.push({ name: 'article:published_time', content: published });
+  }
+  if (updated) {
+    metaTags.push({ name: 'article:modified_time', content: updated });
+  }
   if (category) metaTags.push({ name: 'article:section', content: category });
   if (tags) metaTags.push({ name: 'article:tag', content: tags });
 
@@ -81,13 +85,13 @@ const SEO = ({
   updated,
   category,
   tags,
-  twitter,
+  twitter
 }) => (
   <Helmet
     htmlAttributes={{
       lang: 'en',
       itemscope: undefined,
-      itemtype: `http://schema.org/${schema}`,
+      itemtype: `http://schema.org/${schema}`
     }}
     title={`Manifested Publishers: ${title}`}
     link={[{ rel: 'canonical', href: seoURL(path) }]}
@@ -100,7 +104,7 @@ const SEO = ({
       updated,
       category,
       tags,
-      twitter,
+      twitter
     })}
   />
 );
@@ -130,9 +134,9 @@ SEO.defaultProps = {
     'Papers',
     'Past Papers',
     'Revision',
-    'Online Lectures',
+    'Online Lectures'
   ],
-  twitter: 'ManifestedP',
+  twitter: 'ManifestedP'
 };
 
 SEO.propTypes = {
@@ -145,7 +149,7 @@ SEO.propTypes = {
   updated: PropTypes.string,
   category: PropTypes.string,
   tags: PropTypes.array,
-  twitter: PropTypes.string,
+  twitter: PropTypes.string
 };
 
 export default SEO;
