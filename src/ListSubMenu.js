@@ -47,7 +47,11 @@ const ListSubMenu = ({
             )
           }
         />
-        {menuexpanded ? <ExpandLess /> : <ExpandMore />}
+        {menuexpanded ? (
+          <ExpandLess style={{ fontSize: 24 }} />
+        ) : (
+          <ExpandMore style={{ fontSize: 24 }} />
+        )}
       </ListItem>
       <Collapse in={menuexpanded} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
