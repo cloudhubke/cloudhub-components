@@ -20,6 +20,7 @@ const ListSubMenu = ({
   expanded,
   expandedStyles = {},
   style = {},
+  showHeaderIcon,
   ...rest
 }) => {
   const [menuexpanded, setMenuExpand] = useState(expanded);
@@ -47,9 +48,11 @@ const ListSubMenu = ({
             )
           }
         />
-        {menuexpanded ? (
+        {showHeaderIcon && menuexpanded && (
           <ExpandLess style={{ fontSize: 24 }} />
-        ) : (
+        )}
+
+        {showHeaderIcon && !menuexpanded && (
           <ExpandMore style={{ fontSize: 24 }} />
         )}
       </ListItem>
@@ -66,7 +69,8 @@ const ListSubMenu = ({
 ListSubMenu.defaultProps = {
   headerIcon: <Lens />,
   header: '',
-  open: false
+  open: false,
+  showHeaderIcon: true
 };
 
 export default ListSubMenu;
