@@ -12,7 +12,7 @@ import {
   IntegratedGrouping,
   IntegratedSorting,
   IntegratedSelection,
-  CustomPaging,
+  CustomPaging
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -28,7 +28,7 @@ import {
   TableColumnReordering,
   Toolbar,
   TableColumnVisibility,
-  ColumnChooser,
+  ColumnChooser
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -52,37 +52,37 @@ const styleSheet = () => ({
     '& th': {
       overflow: 'hidden',
       paddingLeft: '10px',
-      paddingRight: '10px',
+      paddingRight: '10px'
     },
     '& td': {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       paddingLeft: '10px',
-      paddingRight: '10px',
+      paddingRight: '10px'
     },
     '& div::-webkit-scrollbar': {
-      width: '16px',
+      width: '16px'
     },
     '& div::-webkit-scrollbar-track': {
       background: 'grey',
       borderTop: '7px solid white',
-      borderBottom: '7px solid white',
+      borderBottom: '7px solid white'
     },
     '& div::-webkit-scrollbar-thumb': {
       background: 'grey',
       borderTop: '4px solid white',
-      borderBottom: '4px solid white',
+      borderBottom: '4px solid white'
     },
     '& div::-webkit-scrollbar-thumb:hover': {
-      backgroundColor: '#aaa',
-    },
+      backgroundColor: '#aaa'
+    }
   },
 
   // ===================================================== Header ========================
 
   headerBar: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   header: {
     display: 'flex',
@@ -90,7 +90,7 @@ const styleSheet = () => ({
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   headerInputs: {
     display: 'flex',
@@ -98,28 +98,28 @@ const styleSheet = () => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10,
+    marginLeft: 10
   },
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
     fontSize: 12,
-    marginLeft: 5,
+    marginLeft: 5
   },
   filterBar: {
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
-  filterField: { width: 200, marginLeft: 10 },
+  filterField: { width: 200, marginLeft: 10 }
 });
 
 const counterColumn = [{ name: 'counter', title: '#', width: 70 }];
 
 const staticColumns = [
-  { name: 'actions', title: 'Actions', width: 140, align: 'right' },
+  { name: 'actions', title: 'Actions', width: 140, align: 'right' }
 ];
 
 const RemoteDataGrid = React.forwardRef(
@@ -138,12 +138,12 @@ const RemoteDataGrid = React.forwardRef(
     const [columns] = React.useState([
       ...counterColumn,
       ...props.columns,
-      ...staticColumns,
+      ...staticColumns
     ]);
     const [defaultColumnWidths] = React.useState([
       { columnName: 'counter', width: 70 },
       { columnName: 'actions', width: 150 },
-      ...props.columnWidths,
+      ...props.columnWidths
     ]);
     const [data, setData] = React.useState([]);
     const [totalCount, setTotalCount] = React.useState(0);
@@ -169,15 +169,14 @@ const RemoteDataGrid = React.forwardRef(
     const getQueryParams = () => {
       const queryparams = {
         limit: pageSize,
-        skip: pageSize * currentPage,
+        skip: pageSize * currentPage
       };
 
       const columnSorting = sorting[0];
       if (columnSorting) {
-        const sortingDirectionString =
-          columnSorting.direction === 'desc' ? -1 : 1;
+        const sortingDirectionString =          columnSorting.direction === 'desc' ? -1 : 1;
         queryparams.sort = {
-          [columnSorting.columnName]: sortingDirectionString,
+          [columnSorting.columnName]: sortingDirectionString
         };
       }
 
@@ -193,7 +192,7 @@ const RemoteDataGrid = React.forwardRef(
       try {
         setLoading(true);
         const { data } = await props.axiosinstance().get(`${props.url}`, {
-          params: { ...params, ...queryparams },
+          params: { ...params, ...queryparams }
         });
 
         setData(dataExtractor(data));
@@ -237,7 +236,7 @@ const RemoteDataGrid = React.forwardRef(
       onDeleteSuccess: deletedRows => {
         const deleted = [...deletedRows].map(r => keyExtractor(r));
         setData(data.filter(r => !includes(deleted, keyExtractor(r))));
-      },
+      }
     }));
 
     const cellComponent = ({ row, column, style }) => {
@@ -288,7 +287,7 @@ const RemoteDataGrid = React.forwardRef(
               top: 0,
               right: 0,
               left: 0,
-              bottom: 0,
+              bottom: 0
             }}
           >
             <Grid rows={data} columns={columns}>
@@ -351,8 +350,8 @@ const RemoteDataGrid = React.forwardRef(
               <TableFilterRow
                 cellComponent={props => {
                   if (
-                    props.column.name === 'actions' ||
-                    props.column.name === 'counter'
+                    props.column.name === 'actions'
+                    || props.column.name === 'counter'
                   ) {
                     return <TableCell />;
                   }
@@ -419,6 +418,12 @@ const RemoteDataGrid = React.forwardRef(
   }
 );
 
+const cellComponent = ({ row, column }) => (
+    <TableCell>
+      {`${typeof row[column.name] === 'undefined' ? '' : row[column.name]}`}
+    </TableCell>
+  );
+
 RemoteDataGrid.defaultProps = {
   title: 'Table title',
   editTitle: 'Edit Record',
@@ -428,7 +433,7 @@ RemoteDataGrid.defaultProps = {
   allowColumnResizing: true,
   detailTemplate: () => <div />,
   rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
-  cellComponent: () => null,
+  cellComponent,
   actionsComponent: () => null,
   onEdit: () => {},
   onDeleteRows: () => {},
@@ -440,15 +445,15 @@ RemoteDataGrid.defaultProps = {
   url: '/',
   axiosinstance: () => axios.create({}),
   keyExtractor: row => row.id,
-  dataExtractor: data => data.items,
+  dataExtractor: data => data.items || data,
   countExtractor: data => data.totalCount,
   permissions: {
     allowadd: true,
     allowedit: true,
     allowdelete: true,
-    allowprint: true,
+    allowprint: true
   },
-  actionsMenu: null,
+  actionsMenu: null
 };
 
 export default withStyles(styleSheet)(RemoteDataGrid);

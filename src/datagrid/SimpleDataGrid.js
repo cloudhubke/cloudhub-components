@@ -4,7 +4,7 @@ import {
   Table,
   TableHeaderRow,
   DragDropProvider,
-  TableColumnReordering,
+  TableColumnReordering
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -24,31 +24,31 @@ const useStyles = makeStyles({
     '& th': {
       overflow: 'hidden',
       paddingLeft: '10px',
-      paddingRight: '10px',
+      paddingRight: '10px'
     },
     '& td': {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       paddingLeft: '10px',
-      paddingRight: '10px',
+      paddingRight: '10px'
     },
     '& div::-webkit-scrollbar': {
-      width: '16px',
+      width: '16px'
     },
     '& div::-webkit-scrollbar-track': {
       background: 'grey',
       borderTop: '7px solid white',
-      borderBottom: '7px solid white',
+      borderBottom: '7px solid white'
     },
     '& div::-webkit-scrollbar-thumb': {
       background: 'grey',
       borderTop: '4px solid white',
-      borderBottom: '4px solid white',
+      borderBottom: '4px solid white'
     },
     '& div::-webkit-scrollbar-thumb:hover': {
-      backgroundColor: '#aaa',
-    },
-  },
+      backgroundColor: '#aaa'
+    }
+  }
 });
 
 const SimpleDataGrid = ({ style, ...props }) => {
@@ -90,8 +90,8 @@ const SimpleDataGrid = ({ style, ...props }) => {
         <DialogTitle>Deleting Record!</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {props.deletingWarningMessage ||
-              'Are you sure to delete the following record?'}
+            {props.deletingWarningMessage
+              || 'Are you sure to delete the following record?'}
           </DialogContentText>
           <Block className={classes.gridContainer}>
             <Grid
@@ -123,15 +123,19 @@ const SimpleDataGrid = ({ style, ...props }) => {
   );
 };
 
+const cellComponent = ({ row, column }) => (
+  <TableCell>
+    {`${typeof row[column.name] === 'undefined' ? '' : row[column.name]}`}
+  </TableCell>
+);
+
 SimpleDataGrid.defaultProps = {
-  cellComponent: ({ row, column }) => (
-    <TableCell>{`${row[column.name]}`}</TableCell>
-  ),
+  cellComponent,
   columnExtensions: [],
   columns: [],
   rows: [],
   header: () => null,
-  onDeleteRows: () => {},
+  onDeleteRows: () => {}
 };
 
 export default SimpleDataGrid;

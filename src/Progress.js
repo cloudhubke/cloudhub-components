@@ -1,33 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+
 import LinearProgress from '@material-ui/core/LinearProgress';
-import lightGreen from '@material-ui/core/colors/lightGreen';
+import { makeStyles } from '@material-ui/styles';
+import ThemeContext from './theme/ThemeContext';
 
-const lgreen = lightGreen[500];
+function Progress() {
+  const { colors } = React.useContext(ThemeContext);
 
-const styles = {
-  root: {
-    width: '100%',
-    marginTop: 30
-  },
-  lgreen: {
-    backgroundColor: lgreen,
-    color: lgreen
-  }
-};
+  const classes = makeStyles({
+    root: {
+      width: '100%',
+      marginTop: 30
+    },
+    primary: {
+      backgroundColor: colors.secondary,
+      color: colors.primary
+    }
+  })();
 
-function Progress(props) {
-  const { classes } = props;
   return (
     <div className={classes.root}>
-      <LinearProgress classes={{ colorPrimary: classes.lgreen }} />
+      <LinearProgress classes={{ colorPrimary: classes.primary }} />
     </div>
   );
 }
 
-Progress.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(Progress);
+export default Progress;

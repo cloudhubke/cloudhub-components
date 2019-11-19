@@ -425,6 +425,12 @@ const RemoteDataGridWithDetailView = React.forwardRef(
   }
 );
 
+const cellComponent = ({ row, column }) => (
+  <TableCell>
+    {`${typeof row[column.name] === 'undefined' ? '' : row[column.name]}`}
+  </TableCell>
+);
+
 RemoteDataGridWithDetailView.defaultProps = {
   title: 'Table title',
   editTitle: 'Edit Record',
@@ -434,7 +440,7 @@ RemoteDataGridWithDetailView.defaultProps = {
   allowColumnResizing: true,
   detailTemplate: () => <div />,
   rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
-  cellComponent: () => null,
+  cellComponent,
   actionsComponent: () => null,
   onEdit: () => {},
   onDeleteRows: () => {},
@@ -446,7 +452,7 @@ RemoteDataGridWithDetailView.defaultProps = {
   url: '/',
   axiosinstance: () => axios.create({}),
   keyExtractor: row => row.id,
-  dataExtractor: data => data.items,
+  dataExtractor: data => data.items || data,
   countExtractor: data => data.totalCount,
   permissions: {
     allowadd: true,

@@ -7,12 +7,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Block from './Block';
 
-const SearchInput = props => {
-  const { classes, input } = props;
+const SearchInput = ({ classes, input, ...props }) => {
   let isMobile = false;
 
   if (global.navigator) {
-    isMobile = navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
+    isMobile = navigator.userAgent.match(
+      /(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i
+    );
   }
 
   return (
@@ -33,6 +34,7 @@ const SearchInput = props => {
           onFocus={props.onFocus}
           onBlur={props.onLostFocus}
           {...input}
+          {...props}
         />
         <IconButton className={classes.iconButton} aria-label="Search">
           <SearchIcon />
@@ -47,26 +49,26 @@ const styles = () => ({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    width: '100%',
+    width: '100%'
   },
   input: {
     marginLeft: 8,
-    flex: 1,
+    flex: 1
   },
   iconButton: {
-    padding: 10,
+    padding: 10
   },
   divider: {
     width: 1,
     height: 28,
-    margin: 4,
-  },
+    margin: 4
+  }
 });
 
 SearchInput.defaultProps = {
   onMenuClick: () => {},
   onFocus: () => {},
-  onLostFocus: () => {},
+  onLostFocus: () => {}
 };
 
 export default withStyles(styles)(SearchInput);

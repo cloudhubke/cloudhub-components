@@ -12,7 +12,7 @@ const FieldLabel = ({
   height,
   buttonProps,
   textStyles,
-  disabled,
+  disabled
 }) => {
   const styles = {
     button: {
@@ -22,15 +22,15 @@ const FieldLabel = ({
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      height,
-    },
+      height
+    }
   };
 
   const renderIcon = IconComponent => (
     <IconComponent
       style={{
         marginRight: sizes.margin,
-        ...textStyles,
+        ...textStyles
       }}
     />
   );
@@ -59,7 +59,7 @@ FieldLabel.defaultProps = {
   height: sizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
-  disabled: true,
+  disabled: true
 };
 
 export default FieldLabel;

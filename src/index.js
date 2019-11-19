@@ -50,4 +50,8 @@ export { default as Field } from './form/Field';
 export { default as FormFields } from './form/FormFields';
 export { default as Fieldset } from './form/Fieldset';
 
+// Others
+export { default as Pagination } from './Pagination';
+export { default as Progress } from './Progress';
+
 export { default as CountrySelector } from './countrypicker/CountrySelector';

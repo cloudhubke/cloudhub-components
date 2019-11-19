@@ -51,7 +51,7 @@ const TimePicker = ({ meta, value, input, onChange, ...props }) => {
 
   const [time, setTime] = useState(null);
 
-  const classes = getStyles({ fonts }).useStyles();
+  const classes = getStyles({ fonts, sizes }).useStyles();
 
   const onTimeChange = time => {
     setTime(time);
