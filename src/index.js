@@ -42,6 +42,8 @@ export { default as MenuItem } from './MenuItem';
 
 export { default as Dialog } from './dialog/Dialog';
 export { default as SlideComponent } from './SlideComponent';
+export { default as PleaseWait } from './PleaseWait';
+export { default as SEO } from './SEO';
 
 // Forms
 
