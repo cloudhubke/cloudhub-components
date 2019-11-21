@@ -95,6 +95,7 @@ const FormField = ({
       <FinalFormField
         validate={composeValidators(...validators)}
         component={component}
+        label={null}
         {...fieldprops}
         {...props}
       />

@@ -2,19 +2,20 @@ import React from 'react';
 import { sizes } from './theme';
 import Block from './Block';
 
-const FieldBlock = ({ children, style, ...rest }) => (
+const FieldBlock = ({ children, style, label, ...rest }) => (
   <Block
     flex={false}
     style={{
       marginTop: 2.5,
       minWidth: 250,
       minHeight: sizes.inputHeight + 13,
-      ...style,
+      ...style
     }}
     middle
     wrap
     {...rest}
   >
+    {label && <label>{label}</label>}
     {children}
   </Block>
 );
