@@ -43,7 +43,6 @@ const ToastContainer = ({ constainerStyle, ...props }) => {
       className={classes.toastcontainer}
       toastClassName={classes.toast}
       hideProgressBar
-      style={{ width: 500 }}
       {...props}
     />
   );
