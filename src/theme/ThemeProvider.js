@@ -7,6 +7,7 @@ import ThemeContext from './ThemeContext';
 import localsizes from './Sizes';
 import localcolors from './Colors';
 import localfonts from './Fonts';
+import toast, { ToastContainer } from '../toastr';
 
 const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const newfonts = { ...localfonts, ...fonts };
@@ -60,6 +61,7 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
         }}
       >
         {children}
+        <ToastContainer />
       </ThemeContext.Provider>
     </MuiThemeProvider>
   );
