@@ -27,7 +27,7 @@ const ToastContainer = ({ constainerStyle, ...props }) => {
         background: colors.warning
       },
       '& .Toastify__toast--error': {
-        background: colors.error
+        background: colors.danger
       }
     },
     toast: {
