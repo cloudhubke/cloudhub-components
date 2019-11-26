@@ -55,5 +55,8 @@ export { default as Fieldset } from './form/Fieldset';
 // Others
 export { default as Pagination } from './Pagination';
 export { default as Progress } from './Progress';
+export { toast as toastr } from './toastr';
+
+export { toast, ToastContainer } from './toastr';
 
 export { default as CountrySelector } from './countrypicker/CountrySelector';
