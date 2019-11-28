@@ -39,6 +39,8 @@ export { default as ListSubMenu } from './ListSubMenu';
 export { default as ListMenuItem } from './ListMenuItem';
 
 export { default as MenuItem } from './MenuItem';
+export { default as Tab } from './Tab';
+export { default as Tabs } from './Tabs';
 
 export { default as Dialog } from './dialog/Dialog';
 export { default as SlideComponent } from './SlideComponent';
