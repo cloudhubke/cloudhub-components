@@ -7,7 +7,7 @@ import {
 import Close from '@material-ui/icons/Close';
 
 import './toastr.css';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import colors from '../theme/Colors';
 
 const ToastContainer = ({ constainerStyle, ...props }) => {

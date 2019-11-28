@@ -16,9 +16,16 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
 
   const theme = createMuiTheme({
     palette: {
-      primary: newcolors.primary,
-      secondary: newcolors.secondary,
-      error: newcolors.danger
+      primary: {
+        main: newcolors.primary
+      },
+      secondary: {
+        main: newcolors.secondary
+      },
+
+      error: {
+        main: newcolors.danger
+      }
     },
     typography: {
       // Use the system font instead of the default Roboto font.
