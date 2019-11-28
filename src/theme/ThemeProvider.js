@@ -16,9 +16,9 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
 
   const theme = createMuiTheme({
     palette: {
-      primary: newfonts.primary,
-      secondary: newfonts.secondary,
-      error: newfonts.danger
+      primary: newcolors.primary,
+      secondary: newcolors.secondary,
+      error: newcolors.danger
     },
     typography: {
       // Use the system font instead of the default Roboto font.
@@ -26,7 +26,7 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
       fontSize: 16,
       htmlFontSize: 16,
       fontFamily: [
-        newfonts.normal.fontFamily,
+        newfonts.body.fontFamily,
         '-apple-system',
         'BlinkMacSystemFont',
         '"Segoe UI"',
