@@ -1,9 +1,11 @@
 import React from 'react';
 import { Field as FinalFormField } from 'react-final-form';
+import isEmpty from 'lodash/isEmpty';
 
 import FieldBlock from '../FieldBlock';
 import Input from '../Input';
 
+const notEmptyField = value => (isEmpty(value) ? undefined : 'Required');
 const requiredField = value => (value ? undefined : 'Required');
 
 const mustBeNumber = value => {
@@ -47,6 +49,7 @@ const composeValidators = (...validators) => value =>
 
 const FormField = ({
   required,
+  notEmpty,
   number,
   minValue,
   maxValue,
@@ -62,6 +65,9 @@ const FormField = ({
   let validators = [];
   const fieldprops = {};
 
+  if (notEmpty) {
+    validators = [...validators, notEmptyField];
+  }
   if (required) {
     validators = [...validators, requiredField];
   }
