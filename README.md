@@ -8,7 +8,7 @@
   cloudhub-components
 </h1>
 
-Various components to use in react projects
+Various components to use in reactjs projects
 
 [![travis build](https://img.shields.io/travis/gaithoben/kenya.svg?style=flat-square)](https://travis-ci.org/gaithoben/kenya)
 [![version](https://img.shields.io/npm/v/kenya.svg?style=flat-square)](http://npm.im/kenya)
