@@ -7,9 +7,9 @@ const style = {
   grid: {
     position: 'relative',
     width: '100%',
-    minHeight: '1px',
+    minHeight: '1px'
     /* flexBasis: "auto" */
-  },
+  }
 };
 
 function GridItem({ ...props }) {

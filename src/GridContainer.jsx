@@ -12,7 +12,9 @@ const style = {
     paddingRight: sizes.base,
     paddingLeft: sizes.base,
     width: '100%',
-  },
+    margin: 0,
+    padding: 0
+  }
 };
 
 function GridContainer({ ...props }) {
@@ -26,13 +28,13 @@ function GridContainer({ ...props }) {
 
 GridContainer.defaultProps = {
   className: '',
-  children: null,
+  children: null
 };
 
 GridContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.node,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default withStyles(style)(GridContainer);
