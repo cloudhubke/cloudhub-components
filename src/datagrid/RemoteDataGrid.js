@@ -161,10 +161,14 @@ const RemoteDataGrid = React.forwardRef(
     const [searchTerm, setSearchTerm] = React.useState('');
     const [deletingRows, setDeletingRows] = React.useState([]);
 
-    const changeSelection = selection => {
-      setSelection(selection);
-      props.onChangeSelection(selection);
+    const changeSelection = indexes => {
+      setSelection(indexes);
     };
+
+    React.useEffect(() => {
+      const selectedrows = data.filter((r, i) => [...selection].includes(i));
+      props.onChangeSelection(selectedrows);
+    }, [selection]);
 
     const getQueryParams = () => {
       const queryparams = {
@@ -419,10 +423,10 @@ const RemoteDataGrid = React.forwardRef(
 );
 
 const cellComponent = ({ row, column }) => (
-    <TableCell>
-      {`${typeof row[column.name] === 'undefined' ? '' : row[column.name]}`}
-    </TableCell>
-  );
+  <TableCell>
+    {`${typeof row[column.name] === 'undefined' ? '' : row[column.name]}`}
+  </TableCell>
+);
 
 RemoteDataGrid.defaultProps = {
   title: 'Table title',
