@@ -7,7 +7,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Block from './Block';
 
-const SearchInput = ({ classes, input, ...props }) => {
+const SearchInput = ({
+  classes,
+  leftComponent,
+  rightComponent,
+  input,
+  ...props
+}) => {
+  const [text, setText] = React.useState('');
   let isMobile = false;
 
   if (global.navigator) {
@@ -16,29 +23,52 @@ const SearchInput = ({ classes, input, ...props }) => {
     );
   }
 
+  const onSubmit = () => {
+    props.onSubmit(text);
+  };
+
+  let rC;
+
+  if (rightComponent) {
+    rC = React.cloneElement(rightComponent, {
+      ...rightComponent.props,
+      onClick: () => {
+        onSubmit();
+      }
+    });
+  }
+
   return (
     <Block>
       <Paper className={classes.root} elevation={1}>
-        {isMobile && (
-          <IconButton
-            className={classes.iconButton}
-            aria-label="Menu"
-            onClick={props.onMenuClick}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
+        {isMobile
+          && (leftComponent || (
+            <IconButton
+              className={classes.iconButton}
+              aria-label="Menu"
+              onClick={props.onMenuClick}
+            >
+              <MenuIcon />
+            </IconButton>
+          ))}
         <InputBase
           className={classes.input}
           placeholder={props.placeholder || 'Search for anything'}
           onFocus={props.onFocus}
           onBlur={props.onLostFocus}
+          onChange={e => setText(e.target.value)}
           {...input}
           {...props}
         />
-        <IconButton className={classes.iconButton} aria-label="Search">
-          <SearchIcon />
-        </IconButton>
+        {rC || (
+          <IconButton
+            className={classes.iconButton}
+            aria-label="Search"
+            onClick={onSubmit}
+          >
+            <SearchIcon />
+          </IconButton>
+        )}
       </Paper>
     </Block>
   );
@@ -68,7 +98,8 @@ const styles = () => ({
 SearchInput.defaultProps = {
   onMenuClick: () => {},
   onFocus: () => {},
-  onLostFocus: () => {}
+  onLostFocus: () => {},
+  onSubmit: () => {}
 };
 
 export default withStyles(styles)(SearchInput);
