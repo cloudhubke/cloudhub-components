@@ -34,7 +34,7 @@ const Select = ({
         [...options].map(item => ({
           value: isObject(item) ? keyExtractor(item) : item || '',
           label: isObject(item) ? labelExtractor(item) : item || '',
-          item,
+          item
         }))
       );
     }
@@ -50,24 +50,24 @@ const Select = ({
         setSelectedValue(
           [...value].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? keyExtractor(item) : item || '',
-            item,
+            label: isObject(item) ? labelExtractor(item) : item || '',
+            item
           }))
         );
       } else {
         setSelectedValue(
           [value].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? keyExtractor(item) : item || '',
-            item,
+            label: isObject(item) ? labelExtractor(item) : item || '',
+            item
           }))
         );
       }
     } else if (value) {
       setSelectedValue({
         value: isObject(value) ? keyExtractor(value) : value || '',
-        label: isObject(value) ? keyExtractor(value) : value || '',
-        item: value,
+        label: isObject(value) ? labelExtractor(value) : value || '',
+        item: value
       });
     }
   }, [value, isMulti]);
@@ -157,7 +157,7 @@ Select.defaultProps = {
   menuPlacement: 'auto',
   labelExtractor: item => item,
   valueExtractor: item => item,
-  keyExtractor: item => item,
+  keyExtractor: item => item
 };
 
 export default Select;

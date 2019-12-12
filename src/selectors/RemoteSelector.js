@@ -48,7 +48,6 @@ const RemoteSelector = ({
         meta={meta}
         isMulti={isMulti}
         styles={customStyles}
-        keyExtractor={item => item.id}
         labelExtractor={labelExtractor}
         valueExtractor={valueExtractor}
         {...rest}
@@ -64,11 +63,12 @@ RemoteSelector.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
-    onBlur: () => {},
+    onBlur: () => {}
   },
   onChange: () => {},
   onSelectChange: () => {},
   meta: {},
+  keyExtractor: item => (isPlainObject(item) ? item.id : item)
 };
 
 export default RemoteSelector;

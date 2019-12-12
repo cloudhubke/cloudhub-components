@@ -30,6 +30,10 @@ const FormFields = ({ input, value, onChange, onSubmit, render }) => {
     }
   });
 
+  console.log('====================================');
+  console.log('VAL: ', values);
+  console.log('====================================');
+
   return (
     <React.Fragment>
       <Form
@@ -46,9 +50,9 @@ FormFields.defaultProps = {
   input: {
     onChange: () => {},
     onBlur: () => {},
-    value: {},
+    value: {}
   },
-  onSubmit: () => {},
+  onSubmit: () => {}
 };
 
 export default FormFields;
