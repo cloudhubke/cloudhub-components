@@ -10,8 +10,16 @@ const styles = ({ height, fonts, colors }) => {
   const useStyles = makeStyles({
     root: {
       // .ck.ck-editor__main>.ck-editor__editable
-      '& .ck-editor__editable': {
+      '& .ck.ck-editor': {
+        width: '100%'
+      },
+      '& .ck.ck-editor__main': {
         height,
+        ...fonts.body,
+        color: colors.dark
+      },
+      '& .ck.ck-editor__main>.ck-editor__editable': {
+        height: '100%',
         maxHeight: 800,
         ...fonts.body,
         color: colors.dark
