@@ -12,7 +12,10 @@ const FieldLabel = ({
   height,
   buttonProps,
   textStyles,
-  disabled
+  containterStyles,
+  children,
+  disabled,
+  ...props
 }) => {
   const styles = {
     button: {
@@ -36,18 +39,21 @@ const FieldLabel = ({
   );
 
   return (
-    <Block style={{ marginRight: sizes.margin }}>
+    <Block style={{ marginRight: sizes.margin, ...containterStyles }}>
       <Button
         onClick={onClick}
         style={styles.button}
         disabled={disabled}
-        {...buttonProps}
+        {...props}
       >
         {renderIcon(icon)}
 
-        <Text cropped style={{ ...textStyles }}>
-          {label}
-        </Text>
+        {label && (
+          <Text cropped style={{ ...textStyles }}>
+            {label}
+          </Text>
+        )}
+        {children}
       </Button>
       <Text small error style={{ height: 10 }} />
     </Block>
@@ -59,6 +65,7 @@ FieldLabel.defaultProps = {
   height: sizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
+  containterStyles: {},
   disabled: true
 };
 
