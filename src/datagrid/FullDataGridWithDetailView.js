@@ -142,14 +142,7 @@ const FullDataGridWithDetailView = React.forwardRef(
         );
       }
       if (column.name === 'counter') {
-        return (
-          <CounterComponent
-            data={data}
-            row={row}
-            pageSize={pageSize}
-            currentPage={currentPage}
-          />
-        );
+        return <TableCell>{`${row.counter}`}</TableCell>;
       }
       return props.cellComponent({ row, column, style });
       // return <TableCell>col</TableCell>;
@@ -175,7 +168,10 @@ const FullDataGridWithDetailView = React.forwardRef(
           onSearch={text => setSearchTerm(text)}
           {...props}
         />
-        <Grid rows={data} columns={columns}>
+        <Grid
+          rows={data.map((d, i) => ({ ...d, counter: i + 1 }))}
+          columns={columns}
+        >
           <SelectionState
             selection={selection}
             onSelectionChange={selection => setSelection(selection)}

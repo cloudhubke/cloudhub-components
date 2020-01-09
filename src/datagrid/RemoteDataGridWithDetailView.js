@@ -52,14 +52,14 @@ const styleSheet = () => ({
   gridContainer: {
     '& th': {
       overflow: 'hidden',
-      paddingLeft: '10px',
-      paddingRight: '10px'
+      paddingLeft: '5px',
+      paddingRight: '5px'
     },
     '& td': {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      paddingLeft: '10px',
-      paddingRight: '10px'
+      paddingLeft: '5px',
+      paddingRight: '5px'
     },
     '& div::-webkit-scrollbar': {
       width: '16px'
@@ -199,11 +199,11 @@ const RemoteDataGridWithDetailView = React.forwardRef(
           params: { ...params, ...queryparams }
         });
 
-        setData(dataExtractor(data));
+        setData(dataExtractor(data).map((d, i) => ({ ...d, counter: i + 1 })));
         setTotalCount(countExtractor(data));
         setLoading(false);
       } catch (error) {
-        console.log('error', error);
+        setLoading(false);
       }
     };
 
@@ -223,12 +223,12 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       onSave: row => {
         const ind = data.findIndex(d => keyExtractor(d) === keyExtractor(row));
         if (ind === -1) {
-          setData([row, ...data]);
+          setData([row, ...data].map((d, i) => ({ ...d, counter: i + 1 })));
         } else {
           setData(
-            [...data].map(r => {
+            [...data].map((r, i) => {
               if (keyExtractor(r) === keyExtractor(row)) {
-                return row;
+                return { ...row, counter: i + 1 };
               }
               return r;
             })
@@ -260,15 +260,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
         );
       }
       if (column.name === 'counter') {
-        return (
-          <CounterComponent
-            data={data}
-            totalCount={totalCount}
-            row={row}
-            pageSize={pageSize}
-            currentPage={currentPage}
-          />
-        );
+        return <TableCell>{`${row.counter}`}</TableCell>;
       }
       return props.cellComponent({ row, column, style });
       // return <TableCell>col</TableCell>;
