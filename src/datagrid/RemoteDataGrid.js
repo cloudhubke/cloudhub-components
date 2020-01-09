@@ -178,7 +178,8 @@ const RemoteDataGrid = React.forwardRef(
 
       const columnSorting = sorting[0];
       if (columnSorting) {
-        const sortingDirectionString =          columnSorting.direction === 'desc' ? -1 : 1;
+        const sortingDirectionString =
+          columnSorting.direction === 'desc' ? -1 : 1;
         queryparams.sort = {
           [columnSorting.columnName]: sortingDirectionString
         };
@@ -212,7 +213,8 @@ const RemoteDataGrid = React.forwardRef(
     }, [sorting, currentPage, searchTerm]);
 
     const changePageSize = pageSize => {
-      const totalPages = Math.ceil(data.totalCount / pageSize);
+      const count = data.totalCount || 0;
+      const totalPages = count === 0 ? 1 : Math.ceil(count / pageSize);
       const currentPage = Math.min(currentPage, totalPages - 1);
       setPageSize(pageSize);
       setCurrrentPage(currentPage);
@@ -354,8 +356,8 @@ const RemoteDataGrid = React.forwardRef(
               <TableFilterRow
                 cellComponent={props => {
                   if (
-                    props.column.name === 'actions'
-                    || props.column.name === 'counter'
+                    props.column.name === 'actions' ||
+                    props.column.name === 'counter'
                   ) {
                     return <TableCell />;
                   }
