@@ -53,6 +53,7 @@ export { default as Form } from './form/Form';
 export { default as Field } from './form/Field';
 export { default as FormFields } from './form/FormFields';
 export { default as Fieldset } from './form/Fieldset';
+export { default as FormSpy } from './form/FormSpy';
 
 // Others
 export { default as Pagination } from './Pagination';
