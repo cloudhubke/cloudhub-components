@@ -30,6 +30,7 @@ export { default as Button } from './Button';
 export { default as CheckBox } from './CheckBox';
 export { default as Chips } from './Chips';
 export { default as FieldLabel } from './FieldLabel';
+export { default as FieldButton } from './FieldButton';
 
 export { default as IconButton } from './IconButton';
 export { default as ActionsMenu } from './ActionsMenu';

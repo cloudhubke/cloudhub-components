@@ -1,18 +1,16 @@
 import React from 'react';
-import Text from './Text';
-import Block from './Block';
-import Button from './Button';
+import { sizes } from 'theme';
+import { Text, Button, Block } from 'cloudhub-components';
 
-import { sizes } from './theme';
-
-const FieldLabel = ({
+const FieldButton = ({
   label,
   icon,
   onClick,
   height,
+  buttonProps,
   style,
   textStyles,
-  disabled,
+  containterStyles,
   children,
   ...props
 }) => {
@@ -20,10 +18,6 @@ const FieldLabel = ({
     button: {
       textTransform: 'none',
       padding: 0,
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
       height,
       ...style
     }
@@ -44,33 +38,34 @@ const FieldLabel = ({
   };
 
   return (
-    <Block style={{ marginRight: sizes.margin }}>
-      <Button
-        onClick={onClick}
-        style={styles.button}
-        disabled={disabled}
-        {...props}
-      >
+    <Block
+      flex={false}
+      style={{
+        marginRight: sizes.margin,
+        ...containterStyles
+      }}
+    >
+      <Button onClick={onClick} style={styles.button} {...props}>
         {renderIcon(icon)}
 
         {label && (
-          <Text cropped style={{ ...textStyles }}>
+          <Text cropped center style={{ ...textStyles }}>
             {label}
           </Text>
         )}
         {children}
       </Button>
-      <Text small error style={{ height: 10 }} />
+      <div style={{ height: 10 }} />
     </Block>
   );
 };
 
-FieldLabel.defaultProps = {
-  label: 'Label',
+FieldButton.defaultProps = {
+  label: '',
   height: sizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
-  disabled: true
+  containterStyles: {}
 };
 
-export default FieldLabel;
+export default FieldButton;

@@ -19,6 +19,14 @@ const Button = ({
   textColor,
   style,
   disabled,
+
+  primary,
+  secondary,
+  tertiary,
+  success,
+  danger,
+  info,
+
   ...props
 }) => {
   const handleMargins = () => {
@@ -130,21 +138,29 @@ const Button = ({
   const buttonStyles = props.className
     ? {}
     : {
-      ...styles.button,
-      ...(large && { height: getHeight(64), padding: '0, 15px' }),
-      ...(medium && { height: getHeight(48), padding: '0, 15px' }),
-      ...(small && { height: getHeight(32), padding: '0, 15px' }),
-      ...(margin && { ...handleMargins() }),
-      ...(padding && { ...handlePaddings() }),
-      ...(!color && { color: colors.dark }),
-      ...(color && styles[color]), // predefined styles colors for backgroundColor
-      ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
-      ...(textColor && { color: textColor }), // custom backgroundColor
-      ...(outlined && { backgroundColor: 'transparent' }),
-      ...(rounded && { borderRadius: height / 2 }),
-      ...(disabled && { opacity: 0.7 }),
-      ...style
-    };
+        ...styles.button,
+        ...(large && { height: getHeight(64), padding: '0, 15px' }),
+        ...(medium && { height: getHeight(48), padding: '0, 15px' }),
+        ...(small && { height: getHeight(32), padding: '0, 15px' }),
+        ...(margin && { ...handleMargins() }),
+        ...(padding && { ...handlePaddings() }),
+        ...(!color && { color: colors.dark }),
+        ...(color && styles[color]), // predefined styles colors for backgroundColor
+
+        ...(primary && styles[primary]),
+        ...(secondary && styles[secondary]),
+        ...(tertiary && styles[tertiary]),
+        ...(info && styles[info]),
+        ...(success && styles[success]),
+        ...(danger && styles[danger]),
+
+        ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
+        ...(textColor && { color: textColor }), // custom backgroundColor
+        ...(outlined && { backgroundColor: 'transparent' }),
+        ...(rounded && { borderRadius: height / 2 }),
+        ...(disabled && { opacity: 0.7 }),
+        ...style
+      };
 
   return (
     <MuiButton

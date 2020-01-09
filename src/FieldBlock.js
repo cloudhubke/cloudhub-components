@@ -11,7 +11,7 @@ const FieldBlock = ({ children, style, label, ...rest }) => (
       minHeight: sizes.inputHeight + 13,
       ...style
     }}
-    middle
+    bottom
     wrap
     {...rest}
   >
