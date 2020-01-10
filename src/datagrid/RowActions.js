@@ -13,6 +13,10 @@ import { colors } from '../theme';
 const RowActions = ({ row, column, permissions, ...props }) => {
   const [] = useState(0);
 
+  const newrow = { ...row };
+
+  delete row.counter;
+
   return (
     <TableCell>
       <Block
@@ -20,14 +24,14 @@ const RowActions = ({ row, column, permissions, ...props }) => {
         style={{
           height: '100%',
           width: '100%',
-          minWidth: 150,
+          minWidth: 150
         }}
       >
         {props.actionsMenu ? (
           props.actionsMenu({
             row,
             column,
-            ...permissions,
+            ...permissions
           })
         ) : (
           <IconButton

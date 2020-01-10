@@ -245,6 +245,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
     }));
 
     const cellComponent = ({ row, column, style }) => {
+      delete row.counter;
       if (column.name === 'actions' && !props.actions) {
         return (
           props.actionsComponent({ row, column }) || (

@@ -127,6 +127,8 @@ const FullDataGridWithDetailView = React.forwardRef(
     const [deletingRows, setDeletingRows] = React.useState([]);
 
     const cellComponent = ({ row, column, style }) => {
+      delete row.counter;
+
       if (column.name === 'actions' && !props.actions) {
         return (
           props.actionsComponent({ row, column }) || (
