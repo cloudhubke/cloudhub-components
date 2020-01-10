@@ -44,6 +44,15 @@ const maxFieldLength = max => value => {
   return undefined;
 };
 
+const validateEmail = value => {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const valid = re.test(email);
+  if (!valid) {
+    return `Should be a valid email address`;
+  }
+  return undefined;
+};
+
 const composeValidators = (...validators) => value =>
   validators.reduce((error, validator) => error || validator(value), undefined);
 
@@ -51,6 +60,7 @@ const FormField = ({
   required,
   notEmpty,
   number,
+  email,
   minValue,
   maxValue,
   minLength,
@@ -71,6 +81,10 @@ const FormField = ({
   if (required) {
     validators = [...validators, requiredField];
   }
+  if (email) {
+    validators = [...validators, validateEmail];
+  }
+
   if (number) {
     validators = [...validators, mustBeNumber];
     fieldprops.type = 'number';
