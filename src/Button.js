@@ -179,6 +179,8 @@ const styles = {
     textTransform: 'none',
     paddingTop: 0,
     paddingBottom: 0,
+    paddingLeft: sizes.padding,
+    paddingRight: sizes.padding,
     color: colors.white,
     height: sizes.inputHeight
     // padding: '10px 15px 10px 15px',
