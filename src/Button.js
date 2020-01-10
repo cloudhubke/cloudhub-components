@@ -183,7 +183,6 @@ const styles = {
     paddingRight: sizes.padding,
     color: colors.white,
     height: sizes.inputHeight
-    // padding: '10px 15px 10px 15px',
   },
   accent: { backgroundColor: colors.accent, borderColor: colors.accent },
   primary: { backgroundColor: colors.primary, borderColor: colors.primary },

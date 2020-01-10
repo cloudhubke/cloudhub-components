@@ -44,7 +44,6 @@ import GridLoading from './GridLoading';
 import { useDebounce } from '../customhooks';
 import './grid.css';
 import RowActions from './RowActions';
-import CounterComponent from './CounterComponent';
 import Header from './Header';
 
 const styleSheet = () => ({
@@ -207,7 +206,6 @@ const RemoteDataGrid = React.forwardRef(
         setLoading(false);
       }
     };
-
     React.useEffect(() => {
       loadData();
     }, [sorting, currentPage, searchTerm]);
