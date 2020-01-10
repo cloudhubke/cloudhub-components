@@ -13,8 +13,6 @@ import { colors } from '../theme';
 const RowActions = ({ row, column, permissions, ...props }) => {
   const [] = useState(0);
 
-  const newrow = { ...row };
-
   delete row.counter;
 
   return (
