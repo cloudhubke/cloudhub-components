@@ -19,6 +19,7 @@ const RemoteSelector = ({
   labelExtractor,
   keyExtractor,
   valueExtractor,
+  filterKey = 'filter',
   menuPlacement,
   disabled,
   placeholder,
@@ -121,7 +122,7 @@ const RemoteSelector = ({
     if (!loaded) {
       setLoaded(true);
       axiosinstance()
-        .get(url, { params: { ...params, filter: '' } })
+        .get(url, { params: { ...params, [filterKey]: '' } })
         .then(({ data }) => {
           const array = data ? data.items || data : [];
 
@@ -139,7 +140,7 @@ const RemoteSelector = ({
 
   const fetchOptions = (inputValue, callback) => {
     axiosinstance()
-      .get(url, { params: { ...params, filter: inputValue.trim() } })
+      .get(url, { params: { ...params, [filterKey]: inputValue.trim() } })
       .then(({ data }) => {
         const array = data ? data.items || data : [];
 
