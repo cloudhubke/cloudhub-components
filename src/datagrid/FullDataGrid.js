@@ -124,10 +124,11 @@ const FullDataGrid = React.forwardRef(
     const [searchTerm, setSearchTerm] = React.useState('');
     const [deletingRows, setDeletingRows] = React.useState([]);
 
-    const cellComponent = ({ row, column, style }) => {
-      delete row.counter;
+    const cellComponent = ({ row: r, column, style }) => {
+      const row = { ...r };
 
       if (column.name === 'actions' && !props.actions) {
+        delete row.counter;
         return (
           props.actionsComponent({ row, column }) || (
             <RowActions

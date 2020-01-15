@@ -244,9 +244,11 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       }
     }));
 
-    const cellComponent = ({ row, column, style }) => {
-      delete row.counter;
+    const cellComponent = ({ row: r, column, style }) => {
+      const row = { ...r };
+
       if (column.name === 'actions' && !props.actions) {
+        delete row.counter;
         return (
           props.actionsComponent({ row, column }) || (
             <RowActions
@@ -266,7 +268,6 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       return props.cellComponent({ row, column, style });
       // return <TableCell>col</TableCell>;
     };
-
     const { classes, allowColumnResizing, hiddencolumns, rowComponent } = props;
 
     return (

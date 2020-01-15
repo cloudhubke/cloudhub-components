@@ -1,6 +1,9 @@
 import React from 'react';
-import { sizes } from 'theme';
-import { Text, Button, Block } from 'cloudhub-components';
+import Button from './Button';
+import Text from './Text';
+import Block from './Block';
+import { sizes as libsizes } from './theme';
+import ThemeContext from './theme/ThemeContext';
 
 const FieldButton = ({
   label,
@@ -14,10 +17,10 @@ const FieldButton = ({
   children,
   ...props
 }) => {
+  const { sizes } = React.useContext(ThemeContext);
   const styles = {
     button: {
       textTransform: 'none',
-      padding: 0,
       height,
       ...style
     }
@@ -62,7 +65,7 @@ const FieldButton = ({
 
 FieldButton.defaultProps = {
   label: '',
-  height: sizes.inputHeight,
+  height: libsizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
   containterStyles: {}

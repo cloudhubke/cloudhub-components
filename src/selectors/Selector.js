@@ -62,7 +62,7 @@ const RemoteSelector = ({
           [...value].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item,
+            item
           }))
         );
       } else {
@@ -70,7 +70,7 @@ const RemoteSelector = ({
           [value].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item,
+            item
           }))
         );
       }
@@ -78,7 +78,7 @@ const RemoteSelector = ({
       setSelectedValue({
         value: isObject(value) ? keyExtractor(value) : value || '',
         label: isObject(value) ? labelExtractor(value) : value || '',
-        item: value,
+        item: value
       });
     }
   }, [value, isMulti]);
@@ -119,6 +119,7 @@ const RemoteSelector = ({
 
   const onMenuOpen = () => {
     if (!loaded) {
+      setLoaded(true);
       axiosinstance()
         .get(url, { params: { ...params, filter: '' } })
         .then(({ data }) => {
@@ -127,12 +128,11 @@ const RemoteSelector = ({
           const options = [...array, ...otheroptions].map(item => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item,
+            item
           }));
 
           setFirstOptions(options);
           setOptions(options);
-          setLoaded(true);
         });
     }
   };
@@ -146,7 +146,7 @@ const RemoteSelector = ({
         const options = [...array, ...otheroptions].map(item => ({
           value: isObject(item) ? keyExtractor(item) : item || '',
           label: isObject(item) ? labelExtractor(item) : item || '',
-          item,
+          item
         }));
 
         if (firstoptions.length === 0) {
@@ -223,7 +223,7 @@ RemoteSelector.defaultProps = {
   menuPlacement: 'auto',
   valueExtractor: item => item,
   labelExtractor: item => item,
-  keyExtractor: item => item,
+  keyExtractor: item => item
 };
 
 export default RemoteSelector;
