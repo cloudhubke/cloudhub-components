@@ -7,10 +7,31 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Block from './Block';
 import IconButton from './IconButton';
 
-const ActionsMenu = ({ children, anchorComponent }) => {
+const ActionsMenu = ({
+  children,
+  placement = 'bottom',
+  isOpen = false,
+  onClose = () => null,
+  onOpen = () => null,
+  anchorComponent
+}) => {
   const anchorEl = React.useRef();
   let anchorcomp;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(isOpen);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setOpen(isOpen);
+    });
+  }, [isOpen]);
+
+  React.useEffect(() => {
+    if (!open) {
+      onClose();
+    } else {
+      onOpen();
+    }
+  }, [open]);
 
   if (anchorComponent) {
     anchorcomp = React.cloneElement(anchorComponent, {
@@ -38,7 +59,7 @@ const ActionsMenu = ({ children, anchorComponent }) => {
         open={open}
         anchorEl={anchorEl.current}
         transition
-        placement="bottom"
+        placement={placement}
         disablePortal={false}
         modifiers={{
           flip: {
@@ -49,7 +70,7 @@ const ActionsMenu = ({ children, anchorComponent }) => {
             boundariesElement: 'scrollParent'
           }
         }}
-        style={{ zIndex: 1 }}
+        style={{ zIndex: 99 }}
       >
         <Paper>
           <ClickAwayListener onClickAway={() => setOpen(false)}>

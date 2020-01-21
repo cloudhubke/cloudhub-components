@@ -56,6 +56,8 @@ const validateEmail = value => {
 const composeValidators = (...validators) => value =>
   validators.reduce((error, validator) => error || validator(value), undefined);
 
+const Component = props => {};
+
 const FormField = ({
   required,
   notEmpty,
@@ -68,7 +70,7 @@ const FormField = ({
   label,
   row,
   flex,
-  component,
+  component: Component,
   style,
   ...props
 }) => {
@@ -104,6 +106,10 @@ const FormField = ({
     validators = [...validators, maxFieldLength(maxLength)];
   }
 
+  const renderComponent = fldprops => {
+    return <Component {...fldprops} {...props} />;
+  };
+
   return (
     <FieldBlock row={row} style={style} flex={flex}>
       {row ? (
@@ -115,7 +121,7 @@ const FormField = ({
       )}
       <FinalFormField
         validate={composeValidators(...validators)}
-        component={component}
+        component={renderComponent}
         label={null}
         {...fieldprops}
         {...props}

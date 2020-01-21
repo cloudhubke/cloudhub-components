@@ -118,7 +118,7 @@ const Select = ({
           defaultOptions={options}
           onChange={logChange}
           placeholder={placeholder}
-          disabled={disabled}
+          isDisabled={disabled}
           menuPlacement={menuPlacement || 'auto'}
           isMulti={isMulti}
           {...props}
@@ -132,7 +132,7 @@ const Select = ({
           defaultOptions={options}
           onChange={logChange}
           placeholder={placeholder}
-          disabled={disabled}
+          isDisabled={disabled}
           menuPlacement={menuPlacement || 'auto'}
           isMulti={isMulti}
           {...props}

@@ -27,6 +27,7 @@ const RemoteSelector = ({
   params,
   isMulti,
   creatable,
+  debounceTime = 1000,
   otheroptions,
   ...props
 }) => {
@@ -160,7 +161,7 @@ const RemoteSelector = ({
       });
   };
 
-  const debouncedFetch = useRef(debounce(fetchOptions, 500)).current;
+  const debouncedFetch = useRef(debounce(fetchOptions, debounceTime)).current;
 
   const handleInputChange = searchText => {
     setSearchText(searchText);
@@ -177,7 +178,7 @@ const RemoteSelector = ({
           loadOptions={debouncedFetch}
           onChange={logChange}
           placeholder={placeholder}
-          disabled={disabled}
+          isDisabled={disabled}
           onInputChange={handleInputChange}
           onMenuOpen={onMenuOpen}
           menuPlacement={menuPlacement || 'auto'}
@@ -194,7 +195,7 @@ const RemoteSelector = ({
           loadOptions={debouncedFetch}
           onChange={logChange}
           placeholder={placeholder}
-          disabled={disabled}
+          isDisabled={disabled}
           onInputChange={handleInputChange}
           onMenuOpen={onMenuOpen}
           menuPlacement={menuPlacement || 'auto'}
