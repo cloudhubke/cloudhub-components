@@ -8,7 +8,7 @@ const getAnimation = animation => {
   switch (animation) {
     case 'slide':
       return {
-        TransitionComponent: SlideComponent,
+        TransitionComponent: SlideComponent
       };
 
     default:
@@ -21,12 +21,12 @@ const getStyles = ({ minHeight, height, fullScreen, style }) => {
     paper: {
       ...(!fullScreen && { minHeight, height }),
       backgroundColor: colors.milkyWhite,
-      ...style,
-    },
+      ...style
+    }
   });
 
   return {
-    useStyles,
+    useStyles
   };
 };
 
@@ -46,7 +46,7 @@ const Dialog = ({
 
   const dialogprops = {
     ...(!fullScreen && { maxWidth }),
-    fullScreen,
+    fullScreen
   };
 
   const closeDialog = () => {
@@ -57,7 +57,7 @@ const Dialog = ({
     if (child.props.onClose && typeof child.props.onClose === 'function') {
       return React.cloneElement(child, {
         ...child.props,
-        onClose: closeDialog,
+        onClose: closeDialog
       });
     }
 
@@ -89,6 +89,7 @@ Dialog.defaultProps = {
   minHeight: 500,
   tabs: null,
   actions: null,
+  disableBackdropClick: true
 };
 
 export default Dialog;
