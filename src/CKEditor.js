@@ -15,12 +15,13 @@ const styles = ({ height, fonts, colors }) => {
       },
       '& .ck.ck-editor__main': {
         height,
+        width: '100%',
         ...fonts.body,
         color: colors.dark
       },
       '& .ck.ck-editor__main>.ck-editor__editable': {
-        height: '100%',
-        maxHeight: 800,
+        width: '100%',
+        height,
         ...fonts.body,
         color: colors.dark
       }
@@ -31,25 +32,26 @@ const styles = ({ height, fonts, colors }) => {
     useStyles
   };
 };
-const CKEditor = props => {
-  const { meta, ...rest } = props;
+const CKEditor = ({ meta, height, containterStyle, ...rest }) => {
   const { fonts, colors } = React.useContext(ThemeContext);
 
-  const classes = styles({ height: props.height, colors, fonts }).useStyles();
+  const classes = styles({ height: height, colors, fonts }).useStyles();
 
   return (
-    <Block className={classes.root}>
-      <CKEditor5 {...rest} />
-      {props.meta.touched && props.meta.error && (
-        <Text error>{props.meta.error}</Text>
-      )}
+    <Block>
+      <Block style={{ position: 'relative', ...containterStyle }}>
+        <Block absolute className={classes.root}>
+          <CKEditor5 {...rest} />
+        </Block>
+      </Block>
+      <div>{meta.touched && meta.error && <Text error>{meta.error}</Text>}</div>
     </Block>
   );
 };
 
 CKEditor.defaultProps = {
   meta: {},
-  height: 400
+  height: '100%'
 };
 
 export default CKEditor;

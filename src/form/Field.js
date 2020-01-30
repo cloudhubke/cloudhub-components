@@ -67,8 +67,9 @@ const FormField = ({
   maxLength,
   label,
   row,
-  flex,
+  flex = false,
   component,
+  wrap = true,
   style,
   ...props
 }) => {
@@ -108,8 +109,8 @@ const FormField = ({
   //   return <Component {...fldprops} {...props} />;
   // };
 
-  return (
-    <FieldBlock row={row} style={style} flex={flex}>
+  return wrap ? (
+    <FieldBlock row={row} style={{ width: '100%', ...style }} flex={flex}>
       {row ? (
         <FieldBlock>
           {`${required && label ? '*' : ''}${label || ''}`}
@@ -117,14 +118,15 @@ const FormField = ({
       ) : (
         <label>{`${required && label ? '*' : ''}${label || ''}`}</label>
       )}
-      <FinalFormField
-        validate={composeValidators(...validators)}
-        component={component}
-        label={null}
-        {...fieldprops}
-        {...props}
-      />
     </FieldBlock>
+  ) : (
+    <FinalFormField
+      validate={composeValidators(...validators)}
+      component={component}
+      label={null}
+      {...fieldprops}
+      {...props}
+    />
   );
 };
 
