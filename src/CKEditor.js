@@ -9,19 +9,16 @@ import ThemeContext from './theme/ThemeContext';
 const styles = ({ height, fonts, colors }) => {
   const useStyles = makeStyles({
     root: {
-      // .ck.ck-editor__main>.ck-editor__editable
       '& .ck.ck-editor': {
         width: '100%'
       },
       '& .ck.ck-editor__main': {
-        height,
-        width: '100%',
+        height: '100%',
         ...fonts.body,
         color: colors.dark
       },
       '& .ck.ck-editor__main>.ck-editor__editable': {
-        width: '100%',
-        height,
+        height: 'calc(100% - 55px)',
         ...fonts.body,
         color: colors.dark
       }
