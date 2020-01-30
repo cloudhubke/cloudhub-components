@@ -88,8 +88,7 @@ Dialog.defaultProps = {
   height: 'auto',
   minHeight: 500,
   tabs: null,
-  actions: null,
-  disableBackdropClick: true
+  actions: null
 };
 
 export default Dialog;
