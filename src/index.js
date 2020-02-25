@@ -56,6 +56,8 @@ export { default as FormFields } from './form/FormFields';
 export { default as Fieldset } from './form/Fieldset';
 export { default as FormSpy } from './form/FormSpy';
 
+export { default as SwipeableViews } from './SwipeableViews';
+
 // Others
 export { default as Pagination } from './Pagination';
 export { default as Progress } from './Progress';

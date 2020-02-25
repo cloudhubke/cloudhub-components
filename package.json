@@ -53,6 +53,7 @@
     "react-helmet": "5.2.1",
     "react-intl-tel-input": "^7.0.1",
     "react-select": "^3.0.4",
+    "react-swipeable-views": "0.13.9",
     "react-toastify": "5.4.1"
   },
   "devDependencies": {

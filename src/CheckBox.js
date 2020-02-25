@@ -16,53 +16,37 @@ const checkBoxStyles = {
   }
 };
 
-class checkbox extends Component {
-  static defaultProps = {
-    input: {
-      value: null,
-      onChange: () => {},
-      onBlur: () => {}
-    },
-    meta: {},
-    value: null,
-    onChange: () => {},
-    height: sizes.inputHeight
+const CheckBox = ({
+  value,
+  onChange,
+  input,
+  label,
+  tag,
+  height,
+  meta,
+  disabled
+}) => {
+  const val = input.value || value;
+
+  const [checkvalue, setCheckValue] = React.useState(Boolean(val));
+
+  const onCheck = () => {
+    input.onChange(!checkvalue);
+    input.onBlur();
+
+    onChange(!checkvalue);
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      checkvalue: false
-    };
-  }
+  React.useEffect(() => {
+    setCheckValue(Boolean(val));
+  }, [val]);
 
-  onCheck = () => {
-    this.setState(({ checkvalue }) => {
-      this.props.input.onChange(!checkvalue);
-      this.props.onChange(!checkvalue);
-      this.props.input.onBlur();
-      return {
-        checkvalue: !checkvalue
-      };
-    });
-  };
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const checkvalue = nextProps.input.value || nextProps.value;
-    return {
-      ...prevState,
-      checkvalue
-    };
-  }
-
-  render() {
-    const { label, height, meta, disabled } = this.props;
-    const { checkvalue } = this.state;
-    return (
-      <Block row flex={false} style={{ marginRight: sizes.margin }}>
+  return (
+    <Block>
+      <Block row style={{ marginRight: sizes.margin }}>
         <Button
           fullWidth
-          onClick={this.onCheck}
+          onClick={onCheck}
           style={checkBoxStyles.checkBox}
           padding={[0, sizes.padding, 0, 0]}
           disabled={disabled}
@@ -85,14 +69,26 @@ class checkbox extends Component {
               }}
             />
           )}
-          <Text>{label}</Text>
+          <Text>{label || tag}</Text>
         </Button>
         <Text small error style={{ height: 10 }}>
           {meta.touched && meta.error && meta.error}
         </Text>
       </Block>
-    );
-  }
-}
+    </Block>
+  );
+};
 
-export default checkbox;
+CheckBox.defaultProps = {
+  input: {
+    value: null,
+    onChange: () => {},
+    onBlur: () => {}
+  },
+  meta: {},
+  value: null,
+  onChange: () => {},
+  height: sizes.inputHeight
+};
+
+export default CheckBox;

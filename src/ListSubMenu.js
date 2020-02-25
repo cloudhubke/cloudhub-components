@@ -37,17 +37,7 @@ const ListSubMenu = ({
             {headerIcon}
           </ListItemIcon>
         )}
-        <ListItemText
-          primary={
-            typeof header === 'string' ? (
-              <Text body semibold dark>
-                {header}
-              </Text>
-            ) : (
-              header
-            )
-          }
-        />
+        <ListItemText primary={header} />
         {showHeaderIcon && menuexpanded && (
           <ExpandLess style={{ fontSize: 24 }} />
         )}
