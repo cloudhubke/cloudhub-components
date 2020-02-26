@@ -20,20 +20,20 @@ const DialogContent = ({ children, dialog, style, ...props }) => {
             left: 0,
             right: 0,
             overflowX: 'hidden',
-            overflowY: 'auto',
+            overflowY: 'auto'
           }}
           {...props}
         >
-          <Block flex={false}>{children}</Block>
+          {children}
         </Block>
       ) : (
-        <Block flex={false}>{children}</Block>
+        { children }
       )}
     </Block>
   );
 };
 DialogContent.defaultProps = {
-  dialog: true,
+  dialog: true
 };
 
 export default DialogContent;
