@@ -108,7 +108,8 @@ const S3Uploader = ({
                     headers: {
                       'Content-Type': qs.parse(signedUrl)['Content-Type'],
                       Expires: qs.parse(signedUrl).Expires,
-                      'x-amz-acl': qs.parse(signedUrl)['x-amz-acl'],
+                      'x-amz-acl':
+                        qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
                     },
                     onUploadProgress: progressEvent => {
                       onprogress(progressEvent, signedUrl);
