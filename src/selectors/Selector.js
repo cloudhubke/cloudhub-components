@@ -109,6 +109,7 @@ const RemoteSelector = ({
     }
     if (val && val.value) {
       if (!isObject(val.item)) {
+        onSelectChange(val.item);
         return onChange(val.item);
       }
       const objValue = { ...val.item };
