@@ -68,7 +68,7 @@ const FormField = ({
   maxLength,
   label,
   row,
-  flex = true,
+  flex = false,
   component,
   wrap = true,
   style,
