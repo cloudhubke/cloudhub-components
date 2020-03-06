@@ -207,7 +207,8 @@ class RemoteDataGrid extends React.PureComponent {
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
       if (added) {
-        const startingAddedId =          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId =
+          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
@@ -218,7 +219,8 @@ class RemoteDataGrid extends React.PureComponent {
       }
       if (changed) {
         rows = rows.map(row =>
-          (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+          changed[row.id] ? { ...row, ...changed[row.id] } : row
+        );
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
@@ -282,7 +284,8 @@ class RemoteDataGrid extends React.PureComponent {
         );
       }
       if (column.name === 'counter') {
-        const ind =          1 + this.props.data.items.findIndex(item => item.id === row.id);
+        const ind =
+          1 + this.props.data.items.findIndex(item => item.id === row.id);
         return (
           <TableCell>
             {this.state.currentPage === 0
@@ -325,8 +328,8 @@ class RemoteDataGrid extends React.PureComponent {
 
   changePageSize(pageSize) {
     const { data } = this.props;
-    const totalPages = Math.ceil(data.totalCount / pageSize);
-    const currentPage = Math.min(this.state.currentPage, totalPages - 1);
+    const totalPages = Math.ceil((totalCount || data.length) / pageSize);
+    const currentPage = Math.min(currentPage || 1, totalPages - 1);
 
     this.setState({
       loading: true,
@@ -350,7 +353,8 @@ class RemoteDataGrid extends React.PureComponent {
 
     const columnSorting = sorting[0];
     if (columnSorting) {
-      const sortingDirectionString =        columnSorting.direction === 'desc' ? -1 : 1;
+      const sortingDirectionString =
+        columnSorting.direction === 'desc' ? -1 : 1;
       queryString.sort = { [columnSorting.columnName]: sortingDirectionString };
     }
 
@@ -500,8 +504,8 @@ class RemoteDataGrid extends React.PureComponent {
               <TableFilterRow
                 cellComponent={props => {
                   if (
-                    props.column.name === 'actions'
-                    || props.column.name === 'counter'
+                    props.column.name === 'actions' ||
+                    props.column.name === 'counter'
                   ) {
                     return <TableCell />;
                   }
