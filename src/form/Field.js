@@ -56,6 +56,7 @@ const validateEmail = value => {
 const composeValidators = (...validators) => value =>
   validators.reduce((error, validator) => error || validator(value), undefined);
 
+//Component
 const FormField = ({
   required,
   notEmpty,
