@@ -99,7 +99,7 @@ const S3Uploader = ({
       const uploads = [...(files || [])].map(
         file =>
           signedUrls
-            .map(({ signedUrl, filername }) => {
+            .map(({ signedUrl, filename }) => {
               if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
                 return {
                   signedUrl,

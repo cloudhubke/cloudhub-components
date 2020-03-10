@@ -328,7 +328,7 @@ class RemoteDataGrid extends React.PureComponent {
 
   changePageSize(pageSize) {
     const { data } = this.props;
-    const count = totalCount || data.length;
+    const count = this.state.totalCount || data.length;
     const totalPages = Math.ceil(count / pageSize);
     const currentPage = Math.min(this.state.currentPage || 1, totalPages - 1);
 
