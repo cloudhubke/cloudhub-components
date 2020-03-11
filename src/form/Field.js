@@ -102,6 +102,7 @@ const FormField = ({
     validators = [...validators, maxFieldValue(max)];
   }
 
+  // Duplicate
   if (minValue || minValue === 0) {
     validators = [...validators, minFieldValue(minValue)];
   }
