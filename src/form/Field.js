@@ -62,6 +62,8 @@ const FormField = ({
   notEmpty,
   number,
   email,
+  min,
+  max,
   minValue,
   maxValue,
   minLength,
@@ -92,6 +94,14 @@ const FormField = ({
     validators = [...validators, mustBeNumber];
     fieldprops.type = 'number';
   }
+
+  if (min || min === 0) {
+    validators = [...validators, minFieldValue(min)];
+  }
+  if (max || max === 0) {
+    validators = [...validators, maxFieldValue(max)];
+  }
+
   if (minValue || minValue === 0) {
     validators = [...validators, minFieldValue(minValue)];
   }
