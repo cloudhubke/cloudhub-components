@@ -13,7 +13,7 @@ import {
   IntegratedSorting,
   IntegratedSelection,
   CustomPaging,
-  RowDetailState
+  RowDetailState,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -30,7 +30,7 @@ import {
   Toolbar,
   TableColumnVisibility,
   ColumnChooser,
-  TableRowDetail
+  TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -53,37 +53,37 @@ const styleSheet = () => ({
     '& th': {
       overflow: 'hidden',
       paddingLeft: '5px',
-      paddingRight: '5px'
+      paddingRight: '5px',
     },
     '& td': {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       paddingLeft: '5px',
-      paddingRight: '5px'
+      paddingRight: '5px',
     },
     '& div::-webkit-scrollbar': {
-      width: '16px'
+      width: '16px',
     },
     '& div::-webkit-scrollbar-track': {
       background: 'grey',
       borderTop: '7px solid white',
-      borderBottom: '7px solid white'
+      borderBottom: '7px solid white',
     },
     '& div::-webkit-scrollbar-thumb': {
       background: 'grey',
       borderTop: '4px solid white',
-      borderBottom: '4px solid white'
+      borderBottom: '4px solid white',
     },
     '& div::-webkit-scrollbar-thumb:hover': {
-      backgroundColor: '#aaa'
-    }
+      backgroundColor: '#aaa',
+    },
   },
 
   // ===================================================== Header ========================
 
   headerBar: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   header: {
     display: 'flex',
@@ -91,7 +91,7 @@ const styleSheet = () => ({
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   headerInputs: {
     display: 'flex',
@@ -99,28 +99,28 @@ const styleSheet = () => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
     fontSize: 12,
-    marginLeft: 5
+    marginLeft: 5,
   },
   filterBar: {
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
-  filterField: { width: 200, marginLeft: 10 }
+  filterField: { width: 200, marginLeft: 10 },
 });
 
 const counterColumn = [{ name: 'counter', title: '#', width: 70 }];
 
 const staticColumns = [
-  { name: 'actions', title: 'Actions', width: 140, align: 'right' }
+  { name: 'actions', title: 'Actions', width: 140, align: 'right' },
 ];
 
 const RemoteDataGridWithDetailView = React.forwardRef(
@@ -138,12 +138,12 @@ const RemoteDataGridWithDetailView = React.forwardRef(
     const [columns] = React.useState([
       ...counterColumn,
       ...props.columns,
-      ...staticColumns
+      ...staticColumns,
     ]);
     const [defaultColumnWidths] = React.useState([
       { columnName: 'counter', width: 70 },
       { columnName: 'actions', width: 150 },
-      ...props.columnWidths
+      ...props.columnWidths,
     ]);
     const [data, setData] = React.useState([]);
     const [totalCount, setTotalCount] = React.useState(0);
@@ -172,7 +172,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
     const getQueryParams = () => {
       const queryparams = {
         limit: pageSize,
-        skip: pageSize * currentPage
+        skip: pageSize * currentPage,
       };
 
       const columnSorting = sorting[0];
@@ -180,7 +180,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
         const sortingDirectionString =
           columnSorting.direction === 'desc' ? -1 : 1;
         queryparams.sort = {
-          [columnSorting.columnName]: sortingDirectionString
+          [columnSorting.columnName]: sortingDirectionString,
         };
       }
 
@@ -196,7 +196,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       try {
         setLoading(true);
         const { data } = await props.axiosinstance().get(`${props.url}`, {
-          params: { ...params, ...queryparams }
+          params: { ...params, ...queryparams },
         });
 
         setData(dataExtractor(data).map((d, i) => ({ ...d, counter: i + 1 })));
@@ -212,9 +212,9 @@ const RemoteDataGridWithDetailView = React.forwardRef(
     }, [sorting, currentPage, searchTerm]);
 
     const changePageSize = pageSize => {
-      const count = data.totalCount || 0;
+      const count = data.totalCount || totalCount || 0;
       const totalPages = count === 0 ? 1 : Math.ceil(count / pageSize);
-      const currentPage = Math.min(currentPage, totalPages - 1);
+      const currentPage = Math.min(currentPage || 1, totalPages - 1);
       setPageSize(pageSize);
       setCurrrentPage(currentPage);
     };
@@ -241,7 +241,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       onDeleteSuccess: deletedRows => {
         const deleted = [...deletedRows].map(r => keyExtractor(r));
         setData(data.filter(r => !includes(deleted, keyExtractor(r))));
-      }
+      },
     }));
 
     const cellComponent = ({ row: r, column, style }) => {
@@ -286,7 +286,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
               top: 0,
               right: 0,
               left: 0,
-              bottom: 0
+              bottom: 0,
             }}
           >
             <Grid rows={data} columns={columns}>
@@ -454,9 +454,9 @@ RemoteDataGridWithDetailView.defaultProps = {
     allowadd: true,
     allowedit: true,
     allowdelete: true,
-    allowprint: true
+    allowprint: true,
   },
-  actionsMenu: null
+  actionsMenu: null,
 };
 
 export default withStyles(styleSheet)(RemoteDataGridWithDetailView);
