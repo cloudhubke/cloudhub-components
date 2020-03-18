@@ -24,7 +24,6 @@ const Container = ({
   const { maxWidth } = useMetrics();
 
   const handleMargins = () => {
-    const { margin } = otherprops;
     if (typeof margin === 'number') {
       return {
         marginTop: margin,
@@ -71,7 +70,6 @@ const Container = ({
   };
 
   const handlePaddings = () => {
-    const { padding } = otherprops;
     if (typeof padding === 'number') {
       return {
         paddingTop: padding,
