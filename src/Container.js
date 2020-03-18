@@ -127,8 +127,12 @@ const Container = ({
     ...(right && (row ? { justifyContent: 'flex-end' } : styles.right)),
     ...(top && (row ? { alignItems: 'flex-start' } : styles.top)),
     ...(bottom && (row ? { alignItems: 'flex-end' } : styles.bottom)),
-    ...(margin && { ...handleMargins() }),
-    ...(padding && { ...handlePaddings() }),
+    ...(margin === 0
+      ? { ...handleMargins() }
+      : margin && { ...handleMargins() }),
+    ...(padding === 0
+      ? { ...handlePaddings() }
+      : padding && { ...handlePaddings() }),
 
     ...(color && styles[color]), // predefined styles colors for backgroundColor
     ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
