@@ -27,6 +27,7 @@ export { default as GridContainer } from './GridContainer';
 export { default as Container } from './Container';
 export { default as GridItem } from './GridItem';
 export { default as Button } from './Button';
+export { default as HoverButton } from './HoverButton';
 export { default as CheckBox } from './CheckBox';
 export { default as Chips } from './Chips';
 export { default as FieldLabel } from './FieldLabel';
@@ -64,5 +65,9 @@ export { default as Progress } from './Progress';
 export { toast as toastr } from './toastr';
 
 export { toast, ToastContainer } from './toastr';
+
+//Media
+
+export { default as VideoThumbnail } from './VideoThumbnail';
 
 export { default as CountrySelector } from './countrypicker/CountrySelector';
