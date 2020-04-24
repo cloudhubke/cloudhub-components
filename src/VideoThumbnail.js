@@ -30,6 +30,7 @@ const VideoThumbnail = ({
   posted,
   views,
   outlineicon,
+  style,
   ...props
 }) => {
   const thumbWidth = () => {
@@ -135,9 +136,10 @@ const VideoThumbnail = ({
         width: divWidth(),
         marginTop: sizes.doubleBaseMargin,
         cursor: 'pointer',
-        ...(props.style || {}),
+        ...(style || {}),
       }}
       flex={flex}
+      {...props}
     >
       <Block
         flex={false}
