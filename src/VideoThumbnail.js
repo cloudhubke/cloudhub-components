@@ -138,7 +138,7 @@ const VideoThumbnail = ({
         cursor: 'pointer',
         ...(style || {}),
       }}
-      flex={flex}
+      flex={list ? flex : false}
       {...props}
     >
       <Block
