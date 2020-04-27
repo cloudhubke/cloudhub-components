@@ -48,7 +48,7 @@ export { default as Dialog } from './dialog/Dialog';
 export { default as SlideComponent } from './SlideComponent';
 export { default as PleaseWait } from './PleaseWait';
 export { default as SEO } from './SEO';
-
+export { default as SpeechBubble } from './SpeechBubble';
 // Forms
 
 export { default as Form } from './form/Form';
@@ -66,7 +66,7 @@ export { toast as toastr } from './toastr';
 
 export { toast, ToastContainer } from './toastr';
 
-//Media
+// Media
 
 export { default as VideoThumbnail } from './VideoThumbnail';
 
