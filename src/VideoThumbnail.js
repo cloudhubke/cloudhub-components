@@ -59,19 +59,18 @@ const VideoThumbnail = ({
             return baseHeight + padding[0] * 2 + 2 * (borderWidth || 1);
           }
           case 2: {
-            const baseHeight = thumbWidth();
             return baseHeight + padding[0] * 2 + 2 * (borderWidth || 1);
           }
           case 4: {
-            const baseHeight = thumbWidth();
             return (
               baseHeight + padding[0] + padding[2] + 2 * (borderWidth || 1)
             );
           }
+          default:
+            return thumbHeight();
         }
       }
     }
-    return thumbHeight();
   };
 
   const divWidth = () => {
@@ -89,6 +88,8 @@ const VideoThumbnail = ({
           case 4: {
             return baseWidth + padding[1] + padding[3] + 2 * (borderWidth || 1);
           }
+          default:
+            return thumbWidth();
         }
       }
     }
