@@ -120,7 +120,7 @@ const VideoThumbnail = ({
         return `${length > 3599 ? `${(length / 3600).toFixed(0)}:` : ''}${(
           (length % 3600) /
           60
-        ).toFixed(0)}:${length % 60}`;
+        ).toFixed(0)}:${(length % 60).toFixed(0)}`;
       }
     }
     return '';

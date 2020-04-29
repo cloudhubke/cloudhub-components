@@ -39,7 +39,7 @@ export { default as ActionsMenu } from './ActionsMenu';
 export { default as ListMenu } from './ListMenu';
 export { default as ListSubMenu } from './ListSubMenu';
 export { default as ListMenuItem } from './ListMenuItem';
-
+export { default as BulletListItem } from './BulletListItem';
 export { default as MenuItem } from './MenuItem';
 export { default as Tab } from './Tab';
 export { default as Tabs } from './Tabs';
