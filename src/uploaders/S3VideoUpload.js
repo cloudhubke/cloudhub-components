@@ -6,12 +6,21 @@ import React from 'react';
 import qs from 'qs';
 import { List, ListItem, ListItemSecondaryAction } from '@material-ui/core';
 import {
-  AttachFile,
+  VideoLibrarySharp,
   Delete,
   AddPhotoAlternate,
   Close,
 } from '@material-ui/icons';
-import { Block, Text, toastr, IconButton, VideoThumbnail, Button } from '..';
+import {
+  Block,
+  Text,
+  toastr,
+  IconButton,
+  VideoThumbnail,
+  Button,
+  Dialog,
+} from '..';
+import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import { colors, sizes, Images } from '../theme';
 import AntProgress from '../ant/AntProgress';
 
@@ -26,14 +35,84 @@ const S3Uploader = ({
   limit,
   maxSize,
   thumbMaxSize,
+  thumbdirname,
   accept,
+  acceptThumb,
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
   const [addingThumbnail, setaddingThumbnail] = React.useState(null);
+  const [confirmdelete, setconfirmdelete] = React.useState(false);
+  const [deleting, setdeleting] = React.useState(null);
 
   React.useEffect(() => {
     onChange(fileList);
   }, [fileList, onChange]);
+
+  React.useEffect(() => {
+    if (addingThumbnail && addingThumbnail.status === 'done') {
+      setfileList((urls) => {
+        if (urls.length > 0) {
+          const progressArray = urls.map((obj) => {
+            if (obj.uid === addingThumbnail.video) {
+              const newobj = {
+                ...obj,
+                status: 'done',
+                thumbnail: addingThumbnail.Location,
+                thumbfd: addingThumbnail.fd,
+              };
+              setaddingThumbnail(null);
+              return { ...newobj };
+            }
+            return obj;
+          });
+          return progressArray;
+        }
+        return urls;
+      });
+    }
+  }, [addingThumbnail]);
+
+  React.useEffect(() => {
+    if (deleting && confirmdelete) {
+      const fileArr = fileList
+        .map(({ Location, fd, thumbfd }) => {
+          if (Location === deleting) {
+            if (thumbfd) {
+              return [fd, thumbfd];
+            }
+            return fd;
+          }
+          return null;
+        })
+        .flat()
+        .filter(Boolean);
+      signaxiosinstance()
+        .post(deleteurl, { files: fileArr })
+        .then(({ data }) => {
+          toastr.success(data.message);
+          setfileList((files) => {
+            if (files.length > 0) {
+              const progressArray = files
+                .map((obj) => {
+                  if (obj.Location === deleting) {
+                    return null;
+                  }
+                  return obj;
+                })
+                .filter(Boolean);
+              return progressArray;
+            }
+          });
+          setconfirmdelete(false);
+          setdeleting(null);
+        })
+        .catch((error) => {
+          const response = error.response || {};
+          const data = response.data || {};
+          toastr.error(data.message || data);
+        });
+    }
+  }, [confirmdelete, deleting]);
 
   const onprogress = (progressEvent, url) => {
     setfileList((urls) => {
@@ -52,6 +131,19 @@ const S3Uploader = ({
       return urls;
     });
   };
+
+  const onthumbprogress = (progressEvent, url) => {
+    setaddingThumbnail((thumb) => {
+      if (thumb.signedUrl === url) {
+        return {
+          ...thumb,
+          progress: (progressEvent.loaded * 100) / progressEvent.total,
+        };
+      }
+      return thumb;
+    });
+  };
+
   const onUploadFinish = (url) => {
     setfileList((urls) => {
       if (urls.length > 0) {
@@ -69,6 +161,11 @@ const S3Uploader = ({
       return urls;
     });
   };
+
+  const onThumbFinish = (url) => {
+    setaddingThumbnail((thumb) => ({ ...thumb, status: 'done' }));
+  };
+
   const handleFiles = async (event) => {
     const { files } = event.target;
     if (limit && files.length + fileList.length > limit) {
@@ -199,7 +296,7 @@ const S3Uploader = ({
                           qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
                       },
                       onUploadProgress: (progressEvent) => {
-                        onprogress(progressEvent, signedUrl);
+                        onthumbprogress(progressEvent, signedUrl);
                       },
                     },
                   };
@@ -212,11 +309,11 @@ const S3Uploader = ({
           uploadaxiosinstance
             .put(signedUrl, file, options)
             .then(() => {
-              onUploadFinish(signedUrl);
+              onThumbFinish(signedUrl);
               toastr.success('Thumbnail added successfully');
             })
             .catch((error) => {
-              onUploadError(signedUrl);
+              setaddingThumbnail(null);
               toastr.error(
                 `${
                   error.response
@@ -257,47 +354,15 @@ const S3Uploader = ({
     });
   };
 
-  const onDelete = (uid) => {
-    // eslint-disable-next-line no-alert
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this file?'
-    );
-    if (confirmDelete) {
-      const file = fileList
-        .map((file) => (file.uid === uid ? file : null))
-        .filter(Boolean)[0];
-      signaxiosinstance()
-        .post(deleteurl, file)
-        .then(({ data }) => {
-          toastr.success(data.message);
-          setfileList((files) => {
-            if (files.length > 0) {
-              const progressArray = files
-                .map((obj) => {
-                  if (obj.uid === uid) {
-                    return null;
-                  }
-                  return obj;
-                })
-                .filter(Boolean);
-
-              return progressArray;
-            }
-          });
-        })
-        .catch((error) => {
-          const response = error.response || {};
-          const data = response.data || {};
-          toastr.error(data.message || data);
-        });
-    }
+  const onDelete = (Location) => {
+    setdeleting(Location);
   };
   const getSignedUrl = async (files, video) => {
     const urls = await signaxiosinstance()
       .post(signurl, {
         files,
         ACL: ACL || 'public-read',
-        dirname: dirname || video ? 'video/' : 'thumbnail',
+        dirname: video ? dirname || 'video/' : thumbdirname || 'thumbnail/',
       })
       .then(({ data }) => {
         const signedUrls = video
@@ -323,22 +388,24 @@ const S3Uploader = ({
         } else {
           setaddingThumbnail(({ video }) => ({ ...signedUrls[0], video }));
         }
+
         return signedUrls;
       })
-      .catch(() => {
+      .catch((error) => {
         toastr.error(
           'There was an error uploading file. Please try again later'
         );
       });
     return urls;
   };
+
   return (
     <Block paper padding={20}>
       <input
         type="file"
         id="videoElem"
         multiple={limit && limit > 1}
-        accept={accept}
+        accept={accept || 'video/*'}
         style={{
           position: 'absolute',
           width: 1,
@@ -350,7 +417,7 @@ const S3Uploader = ({
       />
       <label htmlFor="videoElem" style={{ cursor: 'pointer' }}>
         <Block middle center>
-          <AttachFile />
+          <VideoLibrarySharp />
           <Text caption>upload</Text>
         </Block>
       </label>
@@ -383,7 +450,7 @@ const S3Uploader = ({
                         <input
                           type="file"
                           id="thumbElem"
-                          accept={accept}
+                          accept={acceptThumb || 'image/*'}
                           style={{
                             position: 'absolute',
                             width: 1,
@@ -399,7 +466,11 @@ const S3Uploader = ({
                         {!addingThumbnail && (
                           <label
                             htmlFor="thumbElem"
-                            style={{ cursor: 'pointer' }}
+                            style={{
+                              cursor: 'pointer',
+                              marginTop: 'auto',
+                              marginBottom: 'auto',
+                            }}
                           >
                             <Block
                               margin={[0, sizes.doubleBaseMargin]}
@@ -422,6 +493,11 @@ const S3Uploader = ({
                             percent={addingThumbnail.progress}
                             width={40}
                             strokeColor={colors.blue}
+                            style={{
+                              marginTop: 'auto',
+                              marginBottom: 'auto',
+                              marginLeft: sizes.doubleBaseMargin,
+                            }}
                           />
                         )}
                       </React.Fragment>
@@ -445,17 +521,52 @@ const S3Uploader = ({
               <ListItemSecondaryAction>
                 {status === 'done' ? (
                   <Delete
-                    style={{ color: colors.error }}
+                    style={{ color: colors.error, cursor: 'pointer' }}
                     onClick={() => onDelete(Location)}
                   />
                 ) : (
-                  <Close style={{ color: colors.error }} />
+                  <Close
+                    style={{ color: colors.error, cursor: 'pointer' }}
+                    onClick={() => onDelete(Location)}
+                  />
                 )}
               </ListItemSecondaryAction>
             </ListItem>
           )
         )}
       </List>
+      <Dialog
+        maxWidth="sm"
+        open={deleting !== null}
+        onClose={() => setdeleting(null)}
+        onConfirm={() => setconfirmdelete(true)}
+        minHeight={200}
+      >
+        <DialogHeader onClose={() => setdeleting(null)} />
+        <DialogContent>
+          <Text>Sure you want to remove video?</Text>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            contained
+            color={colors.error}
+            onClick={() => {
+              setdeleting(null);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            contained
+            color={colors.success}
+            onClick={() => {
+              setconfirmdelete(true);
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Block>
   );
 };

@@ -4,19 +4,16 @@
 /* eslint-disable function-paren-newline */
 import React from 'react';
 import qs from 'qs';
-import { Block, Text, toastr, IconButton } from 'cloudhub-components';
+import { Block, Text, toastr, IconButton, Dialog } from '..';
+import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import {
   List,
   ListItem,
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-} from 'cloudhub-components/dist/mui/core';
-import {
-  AttachFile,
-  Attachment,
-  Close,
-} from 'cloudhub-components/dist/mui/icons';
+} from '@material-ui/core';
+import { AttachFile, Attachment, Close } from '@material-ui/icons';
 
 const S3Uploader = ({
   dirname,
@@ -31,15 +28,47 @@ const S3Uploader = ({
   accept,
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
+  const [confirmdelete, setconfirmdelete] = React.useState(false);
+  const [deleting, setdeleting] = React.useState(null);
 
   React.useEffect(() => {
     onChange(fileList);
   }, [fileList, onChange]);
 
+  React.useEffect(() => {
+    if (deleting && confirmdelete) {
+      signaxiosinstance()
+        .post(deleteurl, { files: [fd] })
+        .then(({ data }) => {
+          toastr.success(data.message);
+          setfileList((files) => {
+            if (files.length > 0) {
+              const progressArray = files
+                .map((obj) => {
+                  if (obj.Location === deleting) {
+                    return null;
+                  }
+                  return obj;
+                })
+                .filter(Boolean);
+              return progressArray;
+            }
+          });
+          setdeleting(null);
+          setconfirmdelete(false);
+        })
+        .catch((error) => {
+          const response = error.response || {};
+          const data = response.data || {};
+          toastr.error(data.message || data);
+        });
+    }
+  }, [confirmdelete, deleting]);
+
   const onprogress = (progressEvent, url) => {
-    setfileList(urls => {
+    setfileList((urls) => {
       if (urls.length > 0) {
-        const progressArray = urls.map(obj => {
+        const progressArray = urls.map((obj) => {
           if (obj.signedUrl === url) {
             const progress = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
@@ -53,10 +82,10 @@ const S3Uploader = ({
       return urls;
     });
   };
-  const onUploadFinish = url => {
-    setfileList(urls => {
+  const onUploadFinish = (url) => {
+    setfileList((urls) => {
       if (urls.length > 0) {
-        const progressArray = urls.map(obj => {
+        const progressArray = urls.map((obj) => {
           if (obj.signedUrl === url) {
             const newobj = { ...obj, status: 'done' };
             delete newobj.signedUrl;
@@ -70,7 +99,7 @@ const S3Uploader = ({
       return urls;
     });
   };
-  const handleFiles = async event => {
+  const handleFiles = async (event) => {
     const { files } = event.target;
     if (limit && files.length + fileList.length > limit) {
       return toastr.error(`Only a maximum of ${limit} files allowed`);
@@ -88,16 +117,16 @@ const S3Uploader = ({
         );
       }
     }
-    const fileArray = [...(files || [])].map(file => ({
+    const fileArray = [...(files || [])].map((file) => ({
       name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
       type: file.type,
       size: file.size,
     }));
 
     if (fileArray.length > 0) {
-      const signedUrls = await getSignedUrl(fileArray).then(urls => urls);
+      const signedUrls = await getSignedUrl(fileArray).then((urls) => urls);
       const uploads = [...(files || [])].map(
-        file =>
+        (file) =>
           signedUrls
             .map(({ signedUrl, filename }) => {
               if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
@@ -111,7 +140,7 @@ const S3Uploader = ({
                       'x-amz-acl':
                         qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
                     },
-                    onUploadProgress: progressEvent => {
+                    onUploadProgress: (progressEvent) => {
                       onprogress(progressEvent, signedUrl);
                     },
                   },
@@ -128,7 +157,7 @@ const S3Uploader = ({
             onUploadFinish(signedUrl);
             toastr.success('One file uploaded successfully');
           })
-          .catch(error => {
+          .catch((error) => {
             onUploadError(signedUrl);
             toastr.error(
               `${
@@ -142,15 +171,16 @@ const S3Uploader = ({
     }
   };
 
-  const onUploadError = url => {
-    setfileList(files => {
+  const onUploadError = (url) => {
+    setfileList((files) => {
       if (files.length > 0) {
         const progressArray = files
-          .map(obj => {
+          .map((obj) => {
             if (obj.signedUrl === url) {
               toastr.error(
-                `File ${obj.filename ||
-                  obj.name} upload failed. please try again later`
+                `File ${
+                  obj.filename || obj.name
+                } upload failed. please try again later`
               );
               return null;
             }
@@ -164,42 +194,11 @@ const S3Uploader = ({
     });
   };
 
-  const onDelete = uid => {
-    // eslint-disable-next-line no-alert
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this file?'
-    );
-    if (confirmDelete) {
-      const file = fileList
-        .map(file => (file.uid === uid ? file : null))
-        .filter(Boolean)[0];
-      signaxiosinstance()
-        .post(deleteurl, file)
-        .then(({ data }) => {
-          toastr.success(data.message);
-          setfileList(files => {
-            if (files.length > 0) {
-              const progressArray = files
-                .map(obj => {
-                  if (obj.uid === uid) {
-                    return null;
-                  }
-                  return obj;
-                })
-                .filter(Boolean);
-
-              return progressArray;
-            }
-          });
-        })
-        .catch(error => {
-          const response = error.response || {};
-          const data = response.data || {};
-          toastr.error(data.message || data);
-        });
-    }
+  const onDelete = (fd) => {
+    setdeleting(fd);
   };
-  const getSignedUrl = async files => {
+
+  const getSignedUrl = async (files) => {
     const urls = await signaxiosinstance()
       .post(signurl, {
         files,
@@ -207,11 +206,11 @@ const S3Uploader = ({
         dirname: dirname || 'files/',
       })
       .then(({ data }) => {
-        const signedUrls = data.signedUrls.map(obj => ({
+        const signedUrls = data.signedUrls.map((obj) => ({
           ...obj,
           progress: 0,
         }));
-        setfileList(files => [...files, ...signedUrls]);
+        setfileList((files) => [...files, ...signedUrls]);
         return signedUrls;
       })
       .catch(() => {
@@ -244,7 +243,7 @@ const S3Uploader = ({
         </Block>
       </label>
       <List>
-        {fileList.map(({ uid, filename, progress, status }) => (
+        {fileList.map(({ uid, fd, filename, progress, status }) => (
           <ListItem key={uid} dense divider>
             <ListItemIcon>
               <Attachment edge="start" />
@@ -263,7 +262,7 @@ const S3Uploader = ({
                 </Text>
               )}
               {status === 'done' && (
-                <IconButton edge="end" onClick={() => onDelete(uid)}>
+                <IconButton edge="end" onClick={() => onDelete(fd)}>
                   <Close />
                 </IconButton>
               )}
@@ -271,6 +270,38 @@ const S3Uploader = ({
           </ListItem>
         ))}
       </List>
+      <Dialog
+        maxWidth="sm"
+        open={deleting !== null}
+        onClose={() => setdeleting(null)}
+        onConfirm={() => setconfirmdelete(true)}
+        minHeight={200}
+      >
+        <DialogHeader onClose={() => setdeleting(null)} />
+        <DialogContent>
+          <Text>Sure you want to remove video?</Text>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            contained
+            color={colors.error}
+            onClick={() => {
+              setdeleting(null);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            contained
+            color={colors.success}
+            onClick={() => {
+              setconfirmdelete(true);
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Block>
   );
 };
