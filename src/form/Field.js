@@ -5,10 +5,19 @@ import isEmpty from 'lodash/isEmpty';
 import FieldBlock from '../FieldBlock';
 import Input from '../Input';
 
-const notEmptyField = value => (isEmpty(value) ? undefined : 'Required');
-const requiredField = value => (value ? undefined : 'Required');
+const notEmptyField = (value) => (isEmpty(value) ? undefined : 'Required');
+const requiredField = (value) => (value ? undefined : 'Required');
 
-const mustBeNumber = value => {
+function mustBeAlphabet(value) {
+  var letters = /^[A-Za-z]+$/;
+  if (`${value}`.match(letters)) {
+    return undefined;
+  } else {
+    return 'Alphabets only';
+  }
+}
+
+const mustBeNumber = (value) => {
   const n = Number(value);
   if (n === 0) {
     return undefined;
@@ -17,34 +26,34 @@ const mustBeNumber = value => {
   return !isValid ? 'Must be a number' : undefined;
 };
 
-const minFieldValue = min => value => {
+const minFieldValue = (min) => (value) => {
   if (Number(value) < Number(min)) {
     return `Min is ${min}`;
   }
   return undefined;
 };
 
-const maxFieldValue = max => value => {
+const maxFieldValue = (max) => (value) => {
   if (Number(value) > Number(max)) {
     return `Max is ${max}`;
   }
   return undefined;
 };
 
-const minFieldLength = min => value => {
+const minFieldLength = (min) => (value) => {
   if (`${value}`.length < Number(min) || !value) {
     return `Should be more than ${min} characters`;
   }
   return undefined;
 };
-const maxFieldLength = max => value => {
+const maxFieldLength = (max) => (value) => {
   if (`${value}`.length > Number(max) || !value) {
     return `Should be less than ${max} characters`;
   }
   return undefined;
 };
 
-const validateEmail = value => {
+const validateEmail = (value) => {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const valid = re.test(value);
   if (value && !valid) {
@@ -53,14 +62,15 @@ const validateEmail = value => {
   return undefined;
 };
 
-const composeValidators = (...validators) => value =>
+const composeValidators = (...validators) => (value) =>
   validators.reduce((error, validator) => error || validator(value), undefined);
 
 //Component
 const FormField = ({
   required,
   notEmpty,
-  number,
+  alphabets,
+  text
   email,
   min,
   max,
@@ -88,6 +98,10 @@ const FormField = ({
   if (email) {
     validators = [...validators, validateEmail];
     fieldprops.type = 'email';
+  }
+
+  if (alphabets) {
+    validators = [...validators, mustBeAlphabet];
   }
 
   if (number) {
