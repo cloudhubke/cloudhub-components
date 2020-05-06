@@ -4,17 +4,11 @@
 /* eslint-disable function-paren-newline */
 import React from 'react';
 import qs from 'qs';
-import { Block, Text, toastr, IconButton, Dialog } from '..';
+import { Block, Text, toastr, IconButton, Dialog, Button } from '..';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
-} from '@material-ui/core';
-import { AttachFile, Attachment, Close } from '@material-ui/icons';
-
+import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
+import AntProgress from '../ant/AntProgress';
+import { colors, sizes, Images } from '../theme';
 const S3Uploader = ({
   dirname,
   ACL,
@@ -26,26 +20,24 @@ const S3Uploader = ({
   limit,
   maxSize,
   accept,
+  previewWidth,
+  previewHeight,
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
 
   React.useEffect(() => {
-    onChange(fileList);
-  }, [fileList, onChange]);
-
-  React.useEffect(() => {
     if (deleting && confirmdelete) {
       signaxiosinstance()
-        .post(deleteurl, { files: [fd] })
+        .post(deleteurl, { files: [deleting] })
         .then(({ data }) => {
           toastr.success(data.message);
           setfileList((files) => {
             if (files.length > 0) {
               const progressArray = files
                 .map((obj) => {
-                  if (obj.Location === deleting) {
+                  if (obj.fd === deleting) {
                     return null;
                   }
                   return obj;
@@ -64,6 +56,10 @@ const S3Uploader = ({
         });
     }
   }, [confirmdelete, deleting]);
+
+  React.useEffect(() => {
+    onChange(fileList);
+  }, [fileList, onChange]);
 
   const onprogress = (progressEvent, url) => {
     setfileList((urls) => {
@@ -203,7 +199,7 @@ const S3Uploader = ({
       .post(signurl, {
         files,
         ACL: ACL || 'public-read',
-        dirname: dirname || 'files/',
+        dirname: dirname || 'images/',
       })
       .then(({ data }) => {
         const signedUrls = data.signedUrls.map((obj) => ({
@@ -226,7 +222,7 @@ const S3Uploader = ({
         type="file"
         id="fileElem"
         multiple={limit && limit > 1}
-        accept={accept}
+        accept={accept || 'image/*'}
         style={{
           position: 'absolute',
           width: 1,
@@ -238,38 +234,53 @@ const S3Uploader = ({
       />
       <label htmlFor="fileElem" style={{ cursor: 'pointer' }}>
         <Block middle center>
-          <AttachFile />
+          <AddAPhotoSharp />
           <Text caption>upload</Text>
         </Block>
       </label>
-      <List>
-        {fileList.map(({ uid, fd, filename, progress, status }) => (
-          <ListItem key={uid} dense divider>
-            <ListItemIcon>
-              <Attachment edge="start" />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Text subHeader underline>
+      <Block row wrap>
+        {fileList.map(({ Location, fd, uid, filename, progress, status }) => (
+          <Block
+            middle
+            bottom={status === 'done'}
+            center={status !== 'done'}
+            flex={false}
+            style={{
+              backgroundImage: `url(${
+                status === 'done' ? Location : Images.logo
+              })`,
+              backgroundSize: 'cover',
+              width: previewWidth || 100,
+              height: previewHeight || 100,
+            }}
+            padding={sizes.padding}
+          >
+            {status === 'done' ? (
+              <React.Fragment>
+                <Cancel
+                  onClick={() => onDelete(fd)}
+                  style={{
+                    color: colors.danger,
+                    marginLeft: 'auto',
+                    marginBottom: 'auto',
+                    cursor: 'pointer',
+                  }}
+                />
+                <Text caption style={{ backgroundColor: colors.milkyWhite }}>
                   {filename}
                 </Text>
-              }
-            />
-            <ListItemSecondaryAction>
-              {progress < 100 && (
-                <Text small edge="end">
-                  ...uploading <Text subHeader>{`${progress}%`}</Text>
-                </Text>
-              )}
-              {status === 'done' && (
-                <IconButton edge="end" onClick={() => onDelete(fd)}>
-                  <Close />
-                </IconButton>
-              )}
-            </ListItemSecondaryAction>
-          </ListItem>
+              </React.Fragment>
+            ) : (
+              <AntProgress
+                type="circle"
+                percent={progress}
+                width={60}
+                strokeColor={colors.success}
+              />
+            )}
+          </Block>
         ))}
-      </List>
+      </Block>
       <Dialog
         maxWidth="sm"
         open={deleting !== null}

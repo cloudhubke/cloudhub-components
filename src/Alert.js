@@ -3,8 +3,8 @@ import AntAlert from './ant/Alert';
 import { sizes } from './theme';
 import Block from './Block';
 
-const Alert = props => (
-  <Block margin={sizes.margin}>
+const Alert = (props) => (
+  <Block margin={sizes.margin} flex={props.flex}>
     <AntAlert {...props} />
   </Block>
 );

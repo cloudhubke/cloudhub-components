@@ -39,6 +39,7 @@ const Text = ({
   height, // line-height
   noWrap,
   fullWidth,
+  link,
   // colors
   color,
   accent,
@@ -94,28 +95,29 @@ const Text = ({
   ...props
 }) => {
   const { fonts, colors, sizes } = React.useContext(ThemeContext);
+  const [hovered, sethovered] = React.useState(false);
 
   const styles = {
     // default style
     text: {
-      color: 'inherit'
+      color: 'inherit',
     },
     // variations
     regular: {
-      fontWeight: 'normal'
+      fontWeight: 'normal',
     },
     bold: fonts.bold,
 
     semibold: {
-      ...fonts.semibold
+      ...fonts.semibold,
     },
     medium: {
-      fontWeight: '500'
+      fontWeight: '500',
     },
     light: fonts.light,
     normal: fonts.normal,
     thin: {
-      fontWeight: 100
+      fontWeight: 100,
     },
     italic: fonts.italic,
     underline: fonts.underline,
@@ -186,7 +188,7 @@ const Text = ({
     body: fonts.body,
     caption: fonts.caption,
     small: fonts.small,
-    button: fonts.button
+    button: fonts.button,
   };
 
   const textStyles = {
@@ -211,7 +213,7 @@ const Text = ({
     ...(noWrap && {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
     }),
     ...(fullWidth && { minWidth: '100%' }),
     ...(spacing && { letterSpacing: spacing }),
@@ -230,6 +232,7 @@ const Text = ({
     ...(right && styles.right),
     ...(color && styles[color]),
     ...(color && !styles[color] && { color }),
+    ...(link && hovered && { ...styles.underline, cursor: 'pointer' }),
     // color shortcuts
     ...(accent && styles.accent),
     ...(primary && styles.primary),
@@ -278,22 +281,24 @@ const Text = ({
     ...(rose && styles.rose),
     ...(warning && styles.warning),
     ...(danger && styles.danger),
-    ...style // rewrite predefined styles
+    ...style, // rewrite predefined styles
   };
 
   if (cropped) {
     return (
       <span
+        onMouseEnter={() => sethovered(true)}
+        onMouseLeave={() => sethovered(false)}
         style={{
           ...textStyles,
           display: 'inline-block',
-          lineHeight: '0.75em'
+          lineHeight: '0.75em',
         }}
       >
         <span
           style={{
             position: 'relative',
-            bottom: '-0.13em'
+            bottom: '-0.13em',
           }}
         >
           {children}
@@ -303,7 +308,12 @@ const Text = ({
   }
 
   return (
-    <span style={textStyles} {...props}>
+    <span
+      onMouseEnter={() => sethovered(true)}
+      onMouseLeave={() => sethovered(false)}
+      style={textStyles}
+      {...props}
+    >
       {children}
     </span>
   );
