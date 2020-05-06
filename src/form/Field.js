@@ -70,6 +70,7 @@ const FormField = ({
   required,
   notEmpty,
   alphabets,
+  number,
   email,
   min,
   max,
