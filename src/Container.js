@@ -24,7 +24,6 @@ const Container = ({
   const { maxWidth } = useMetrics();
 
   const handleMargins = () => {
-    const { margin } = otherprops;
     if (typeof margin === 'number') {
       return {
         marginTop: margin,
@@ -71,7 +70,6 @@ const Container = ({
   };
 
   const handlePaddings = () => {
-    const { padding } = otherprops;
     if (typeof padding === 'number') {
       return {
         paddingTop: padding,
@@ -129,8 +127,12 @@ const Container = ({
     ...(right && (row ? { justifyContent: 'flex-end' } : styles.right)),
     ...(top && (row ? { alignItems: 'flex-start' } : styles.top)),
     ...(bottom && (row ? { alignItems: 'flex-end' } : styles.bottom)),
-    ...(margin && { ...handleMargins() }),
-    ...(padding && { ...handlePaddings() }),
+    ...(margin === 0
+      ? { ...handleMargins() }
+      : margin && { ...handleMargins() }),
+    ...(padding === 0
+      ? { ...handlePaddings() }
+      : padding && { ...handlePaddings() }),
 
     ...(color && styles[color]), // predefined styles colors for backgroundColor
     ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
