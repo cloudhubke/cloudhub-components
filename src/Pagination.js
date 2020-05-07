@@ -19,8 +19,8 @@ function Pagination({ ...props }) {
   const [currentPage, setPage] = useState(0);
 
   useEffect(() => {
-    setPage(props.currentPage);
-  }, [props.currentPage]);
+    setPage(currentPage);
+  }, [currentPage]);
 
   const totalpages = Math.ceil(count / rowsPerPage) - 1;
   const firstPage = 0;
@@ -34,7 +34,7 @@ function Pagination({ ...props }) {
     totalpages > 1 && currentPage === 0 ? currentPage + 2 : null,
   ];
 
-  const handleButtoClick = page => {
+  const handleButtoClick = (page) => {
     if (Number(page) || page === 0) {
       setPage(page);
       props.onChangePage(page);
@@ -82,7 +82,7 @@ function Pagination({ ...props }) {
         </Button>
       </li>
       {pages
-        .filter(p => p !== null)
+        .filter((p) => p !== null)
         .map((page, index) => {
           const paginationLink = classNames({
             [classes.paginationLink]: true,

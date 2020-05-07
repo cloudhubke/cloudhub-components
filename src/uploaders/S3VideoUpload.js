@@ -38,6 +38,7 @@ const S3Uploader = ({
   thumbdirname,
   accept,
   acceptThumb,
+  input: { name },
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
   const [addingThumbnail, setaddingThumbnail] = React.useState(null);
@@ -403,7 +404,7 @@ const S3Uploader = ({
     <Block paper padding={20}>
       <input
         type="file"
-        id="videoElem"
+        id={`videoElem${name}`}
         multiple={limit && limit > 1}
         accept={accept || 'video/*'}
         style={{
@@ -415,7 +416,7 @@ const S3Uploader = ({
         }}
         onChange={handleFiles}
       />
-      <label htmlFor="videoElem" style={{ cursor: 'pointer' }}>
+      <label htmlFor={`videoElem${name}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
           <VideoLibrarySharp />
           <Text caption>upload</Text>
@@ -449,7 +450,7 @@ const S3Uploader = ({
                       <React.Fragment>
                         <input
                           type="file"
-                          id="thumbElem"
+                          id={`thumbElem${name}`}
                           accept={acceptThumb || 'image/*'}
                           style={{
                             position: 'absolute',
@@ -465,7 +466,7 @@ const S3Uploader = ({
                         />
                         {!addingThumbnail && (
                           <label
-                            htmlFor="thumbElem"
+                            htmlFor={`thumbElem${name}`}
                             style={{
                               cursor: 'pointer',
                               marginTop: 'auto',

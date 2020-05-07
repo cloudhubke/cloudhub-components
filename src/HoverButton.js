@@ -1,7 +1,7 @@
 import React from 'react';
 import Block from './Block';
 import Text from './Text';
-import { sizes, colors, hexToRgb } from 'theme';
+import { sizes, colors, hexToRgb } from './theme';
 
 const HoverButton = ({
   text,
@@ -59,6 +59,7 @@ const HoverButton = ({
               ...(style || {}),
             }
       }
+      {...props}
     >
       {prefix ? prefix : null}
       {text ? (

@@ -26,6 +26,7 @@ const S3Uploader = ({
   limit,
   maxSize,
   accept,
+  input: { name },
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
@@ -224,7 +225,7 @@ const S3Uploader = ({
     <Block paper padding={20}>
       <input
         type="file"
-        id="fileElem"
+        id={`fileElem${name}`}
         multiple={limit && limit > 1}
         accept={accept}
         style={{
@@ -236,7 +237,7 @@ const S3Uploader = ({
         }}
         onChange={handleFiles}
       />
-      <label htmlFor="fileElem" style={{ cursor: 'pointer' }}>
+      <label htmlFor={`fileElem${name}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
           <AttachFile />
           <Text caption>upload</Text>
