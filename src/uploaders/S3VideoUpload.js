@@ -4,6 +4,7 @@
 /* eslint-disable function-paren-newline */
 import React from 'react';
 import qs from 'qs';
+import uniq from 'uid';
 import { List, ListItem, ListItemSecondaryAction } from '@material-ui/core';
 import {
   VideoLibrarySharp,
@@ -11,15 +12,7 @@ import {
   AddPhotoAlternate,
   Close,
 } from '@material-ui/icons';
-import {
-  Block,
-  Text,
-  toastr,
-  IconButton,
-  VideoThumbnail,
-  Button,
-  Dialog,
-} from '..';
+import { Block, Text, toastr, VideoThumbnail, Button, Dialog } from '..';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import { colors, sizes, Images } from '../theme';
 import AntProgress from '../ant/AntProgress';
@@ -38,12 +31,13 @@ const S3Uploader = ({
   thumbdirname,
   accept,
   acceptThumb,
-  input: { name },
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
   const [addingThumbnail, setaddingThumbnail] = React.useState(null);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
+
+  const elemId = uniq(5);
 
   React.useEffect(() => {
     onChange(fileList);
@@ -404,7 +398,7 @@ const S3Uploader = ({
     <Block paper padding={20}>
       <input
         type="file"
-        id={`videoElem${name}`}
+        id={`videoElem${elemId}`}
         multiple={limit && limit > 1}
         accept={accept || 'video/*'}
         style={{
@@ -416,7 +410,7 @@ const S3Uploader = ({
         }}
         onChange={handleFiles}
       />
-      <label htmlFor={`videoElem${name}`} style={{ cursor: 'pointer' }}>
+      <label htmlFor={`videoElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
           <VideoLibrarySharp />
           <Text caption>upload</Text>
@@ -450,7 +444,7 @@ const S3Uploader = ({
                       <React.Fragment>
                         <input
                           type="file"
-                          id={`thumbElem${name}`}
+                          id={`thumbElem${elemId}`}
                           accept={acceptThumb || 'image/*'}
                           style={{
                             position: 'absolute',
@@ -466,7 +460,7 @@ const S3Uploader = ({
                         />
                         {!addingThumbnail && (
                           <label
-                            htmlFor={`thumbElem${name}`}
+                            htmlFor={`thumbElem${elemId}`}
                             style={{
                               cursor: 'pointer',
                               marginTop: 'auto',

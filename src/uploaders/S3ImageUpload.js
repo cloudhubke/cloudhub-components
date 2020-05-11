@@ -4,11 +4,13 @@
 /* eslint-disable function-paren-newline */
 import React from 'react';
 import qs from 'qs';
-import { Block, Text, toastr, IconButton, Dialog, Button } from '..';
-import { DialogHeader, DialogContent, DialogActions } from '../dialog';
+import uniq from 'uid';
 import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
+import { Block, Text, toastr, Dialog, Button } from '..';
+import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
 import { colors, sizes, Images } from '../theme';
+
 const S3Uploader = ({
   dirname,
   ACL,
@@ -22,11 +24,12 @@ const S3Uploader = ({
   accept,
   previewWidth,
   previewHeight,
-  input: { name },
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
+
+  const elemId = uniq(5);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -221,7 +224,7 @@ const S3Uploader = ({
     <Block paper padding={20}>
       <input
         type="file"
-        id={`fileElem${name}`}
+        id={`fileElem${elemId}`}
         multiple={limit && limit > 1}
         accept={accept || 'image/*'}
         style={{
@@ -233,14 +236,14 @@ const S3Uploader = ({
         }}
         onChange={handleFiles}
       />
-      <label htmlFor={`fileElem${name}`} style={{ cursor: 'pointer' }}>
+      <label htmlFor={`fileElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
           <AddAPhotoSharp />
           <Text caption>upload</Text>
         </Block>
       </label>
       <Block row wrap>
-        {fileList.map(({ Location, fd, uid, filename, progress, status }) => (
+        {fileList.map(({ Location, fd, filename, progress, status }) => (
           <Block
             middle
             bottom={status === 'done'}

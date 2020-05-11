@@ -4,8 +4,8 @@
 /* eslint-disable function-paren-newline */
 import React from 'react';
 import qs from 'qs';
+import uniq from 'uid';
 import { Block, Text, toastr, IconButton, Dialog } from '..';
-import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import {
   List,
   ListItem,
@@ -14,6 +14,7 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { AttachFile, Attachment, Close } from '@material-ui/icons';
+import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 
 const S3Uploader = ({
   dirname,
@@ -26,12 +27,12 @@ const S3Uploader = ({
   limit,
   maxSize,
   accept,
-  input: { name },
 }) => {
   const [fileList, setfileList] = React.useState(value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
 
+  const elemId = uniq(5);
   React.useEffect(() => {
     onChange(fileList);
   }, [fileList, onChange]);
@@ -225,7 +226,7 @@ const S3Uploader = ({
     <Block paper padding={20}>
       <input
         type="file"
-        id={`fileElem${name}`}
+        id={`fileElem${elemId}`}
         multiple={limit && limit > 1}
         accept={accept}
         style={{
@@ -237,7 +238,7 @@ const S3Uploader = ({
         }}
         onChange={handleFiles}
       />
-      <label htmlFor={`fileElem${name}`} style={{ cursor: 'pointer' }}>
+      <label htmlFor={`fileElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
           <AttachFile />
           <Text caption>upload</Text>

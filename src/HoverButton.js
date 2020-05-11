@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChevronRight } from '@material-ui/icons';
 import Block from './Block';
 import Text from './Text';
 import { sizes, colors, hexToRgb } from './theme';
@@ -77,7 +78,16 @@ const HoverButton = ({
           </Text>{' '}
         </Block>
       ) : null}
-      {suffix ? suffix : null}
+      {suffix ? (
+        suffix
+      ) : (
+        <ChevronRight
+          style={{
+            color: hover ? textHoverColor : textColor,
+            marginLeft: flex ? 'auto' : sizes.doubleBaseMargin,
+          }}
+        />
+      )}
     </Block>
   );
 };
