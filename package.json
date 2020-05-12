@@ -57,7 +57,8 @@
     "react-intl-tel-input": "^7.0.1",
     "react-select": "^3.0.4",
     "react-swipeable-views": "0.13.9",
-    "react-toastify": "5.4.1"
+    "react-toastify": "5.4.1",
+    "uid": "1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.2.0",

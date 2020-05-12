@@ -16,6 +16,7 @@ const BulletListItem = ({
   hearts,
   margin,
   padding,
+  style,
   ...props
 }) => {
   const bulletSymbol = () => {
@@ -118,7 +119,15 @@ const BulletListItem = ({
     );
   };
   return (
-    <Block row middle margin={margin} padding={padding} color={color}>
+    <Block
+      row
+      middle
+      margin={margin}
+      padding={padding}
+      color={color}
+      props={props}
+      style={style}
+    >
       {bulletSymbol()}
       {props.children}
     </Block>
