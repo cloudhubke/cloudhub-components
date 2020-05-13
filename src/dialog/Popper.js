@@ -16,7 +16,7 @@ const getStyles = ({ color }) => {
     paper: {
       maxWidth: 400,
       overflow: 'auto',
-      padding: sizes.padding
+      padding: sizes.padding,
     },
 
     popper: {
@@ -29,8 +29,8 @@ const getStyles = ({ color }) => {
         height: '1em',
         '&::before': {
           borderWidth: '0 1em 1em 1em',
-          borderColor: `transparent transparent ${color} transparent`
-        }
+          borderColor: `transparent transparent ${color} transparent`,
+        },
       },
       '&[x-placement*="top"] $arrow': {
         bottom: 0,
@@ -40,8 +40,8 @@ const getStyles = ({ color }) => {
         height: '1em',
         '&::before': {
           borderWidth: '1em 1em 0 1em',
-          borderColor: `${color} transparent transparent transparent`
-        }
+          borderColor: `${color} transparent transparent transparent`,
+        },
       },
       '&[x-placement*="right"] $arrow': {
         left: 0,
@@ -50,8 +50,8 @@ const getStyles = ({ color }) => {
         width: '1em',
         '&::before': {
           borderWidth: '1em 1em 1em 0',
-          borderColor: `transparent ${color} transparent transparent`
-        }
+          borderColor: `transparent ${color} transparent transparent`,
+        },
       },
       '&[x-placement*="left"] $arrow': {
         right: 0,
@@ -60,9 +60,9 @@ const getStyles = ({ color }) => {
         width: '1em',
         '&::before': {
           borderWidth: '1em 0 1em 1em',
-          borderColor: `transparent transparent transparent ${color}`
-        }
-      }
+          borderColor: `transparent transparent transparent ${color}`,
+        },
+      },
     },
     arrow: {
       position: 'absolute',
@@ -75,14 +75,14 @@ const getStyles = ({ color }) => {
         display: 'block',
         width: 0,
         height: 0,
-        borderStyle: 'solid'
-      }
-    }
+        borderStyle: 'solid',
+      },
+    },
   });
   return { useStyles };
 };
 
-const Popper = props => {
+const Popper = (props) => {
   const anchorRef = React.useRef(null);
   const {
     arrow,
@@ -98,6 +98,7 @@ const Popper = props => {
     disableClickAwayClose,
     overflow,
     paperStyle,
+    transitionDelay = 1000,
     ...rest
   } = props;
 
@@ -111,7 +112,7 @@ const Popper = props => {
 
   const paperstyles = {
     ...(color ? { backgroundColor: color } : {}),
-    ...paperStyle
+    ...paperStyle,
   };
 
   const [arrowRef, setArrowRef] = useState(null);
@@ -132,29 +133,29 @@ const Popper = props => {
         className={classes.popper}
         modifiers={{
           flip: {
-            enabled: flip
+            enabled: flip,
           },
           arrow: {
             enabled: arrow,
-            element: arrowRef
+            element: arrowRef,
           },
           preventOverflow: {
             enabled: preventOverflow !== 'disabled',
             boundariesElement:
-              preventOverflow === 'disabled' ? 'scrollParent' : preventOverflow
-          }
+              preventOverflow === 'disabled' ? 'scrollParent' : preventOverflow,
+          },
         }}
         transition
         elevation={5}
       >
         {({ TransitionProps }) => (
           <ClickAwayListener onClickAway={closePopper}>
-            <Fade {...TransitionProps} timeout={1000}>
+            <Fade {...TransitionProps} timeout={transitionDelay}>
               <div>
                 {arrow ? (
                   <div
                     className={classes.arrow}
-                    ref={node => setArrowRef(node)}
+                    ref={(node) => setArrowRef(node)}
                   />
                 ) : null}
                 <Paper className={classes.paper} style={paperstyles}>
@@ -179,7 +180,7 @@ Popper.propTypes = {
   anchorComponent: PropTypes.element,
   color: PropTypes.string,
   disableClickAwayClose: PropTypes.bool,
-  paperStyle: PropTypes.object
+  paperStyle: PropTypes.object,
 };
 
 Popper.defaultProps = {
@@ -192,6 +193,6 @@ Popper.defaultProps = {
   anchorComponent: null,
   color: colors.white,
   disableClickAwayClose: false,
-  paperStyle: {}
+  paperStyle: {},
 };
 export default Popper;
