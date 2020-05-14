@@ -22,7 +22,9 @@ const S3Uploader = ({
   ACL,
   signaxiosinstance,
   uploadaxiosinstance,
-  input: { onChange, value },
+  input,
+  value,
+  onChange,
   signurl,
   deleteurl,
   limit,
@@ -30,14 +32,19 @@ const S3Uploader = ({
   accept,
 }) => {
   const { colors } = React.useContext(ThemeContext);
-  const [fileList, setfileList] = React.useState(value || []);
+  const [fileList, setfileList] = React.useState(input.value || value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
 
   const elemId = uniq(5);
 
   React.useEffect(() => {
-    onChange(fileList || []);
+    if (typeof input.onChange === 'function') {
+      input.onChange(fileList || []);
+    }
+    if (typeof onChange === 'function') {
+      onChange(fileList || []);
+    }
   }, [fileList, onChange]);
 
   React.useEffect(() => {
@@ -313,5 +320,9 @@ const S3Uploader = ({
 
 S3Uploader.defaultProps = {
   onChange: () => {},
+  input: {
+    value: null,
+    onChange: () => {},
+  },
 };
 export default S3Uploader;
