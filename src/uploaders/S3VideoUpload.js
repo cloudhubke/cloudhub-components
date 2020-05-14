@@ -14,7 +14,8 @@ import {
 } from '@material-ui/icons';
 import { Block, Text, toastr, VideoThumbnail, Button, Dialog } from '..';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
-import { colors, sizes, Images } from '../theme';
+import ThemeContext from '../theme/ThemeContext';
+
 import AntProgress from '../ant/AntProgress';
 
 const S3Uploader = ({
@@ -32,6 +33,7 @@ const S3Uploader = ({
   accept,
   acceptThumb,
 }) => {
+  const { sizes, colors, Images } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(value || []);
   const [addingThumbnail, setaddingThumbnail] = React.useState(null);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
@@ -40,7 +42,7 @@ const S3Uploader = ({
   const elemId = uniq(5);
 
   React.useEffect(() => {
-    onChange(fileList);
+    onChange(fileList || []);
   }, [fileList, onChange]);
 
   React.useEffect(() => {

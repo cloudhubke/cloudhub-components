@@ -9,7 +9,7 @@ import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
 import { Block, Text, toastr, Dialog, Button } from '..';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
-import { colors, sizes, Images } from '../theme';
+import ThemeContext from '../theme/ThemeContext';
 
 const S3Uploader = ({
   dirname,
@@ -25,6 +25,7 @@ const S3Uploader = ({
   previewWidth,
   previewHeight,
 }) => {
+  const { sizes, colors, Images } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
@@ -62,7 +63,7 @@ const S3Uploader = ({
   }, [confirmdelete, deleting]);
 
   React.useEffect(() => {
-    onChange(fileList);
+    onChange(fileList || []);
   }, [fileList, onChange]);
 
   const onprogress = (progressEvent, url) => {
