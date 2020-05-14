@@ -5,7 +5,7 @@
 import React from 'react';
 import qs from 'qs';
 import uniq from 'uid';
-import { Block, Text, toastr, IconButton, Dialog } from '..';
+import { Block, Text, toastr, IconButton, Dialog, Button } from '..';
 import {
   List,
   ListItem,
@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import { AttachFile, Attachment, Close } from '@material-ui/icons';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
+import ThemeContext from '../theme/ThemeContext';
 
 const S3Uploader = ({
   dirname,
@@ -28,19 +29,21 @@ const S3Uploader = ({
   maxSize,
   accept,
 }) => {
+  const { colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
 
   const elemId = uniq(5);
+
   React.useEffect(() => {
-    onChange(fileList);
+    onChange(fileList || []);
   }, [fileList, onChange]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
       signaxiosinstance()
-        .post(deleteurl, { files: [fd] })
+        .post(deleteurl, { files: [deleting] })
         .then(({ data }) => {
           toastr.success(data.message);
           setfileList((files) => {
