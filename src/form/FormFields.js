@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'react-final-form';
 
-const createDecorator = callback => form => {
+const createDecorator = (callback) => (form) => {
   const unsubscribe = form.subscribe(
     ({ values }) => {
       callback(values);
@@ -15,7 +15,7 @@ const FormFields = ({ input, value, onChange, onSubmit, render }) => {
   const [values, setValues] = React.useState(input.value || value);
 
   const listener = React.useRef(
-    createDecorator(values => {
+    createDecorator((values) => {
       setValues(values);
     })
   );
@@ -29,10 +29,6 @@ const FormFields = ({ input, value, onChange, onSubmit, render }) => {
       onChange(values);
     }
   });
-
-  console.log('====================================');
-  console.log('VAL: ', values);
-  console.log('====================================');
 
   return (
     <React.Fragment>
@@ -50,9 +46,9 @@ FormFields.defaultProps = {
   input: {
     onChange: () => {},
     onBlur: () => {},
-    value: {}
+    value: {},
   },
-  onSubmit: () => {}
+  onSubmit: () => {},
 };
 
 export default FormFields;

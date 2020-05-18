@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import isPlainObject from 'lodash/isPlainObject';
 import CloudhubSelector from './Select';
-import { sizes } from '../theme';
 import Block from '../Block';
 import Text from '../Text';
 import getCustomStyles from './getCustomStyles';
+import ThemeContext from '../theme/ThemeContext';
 
-const StaticListSelector = props => {
+const StaticListSelector = (props) => {
   const {
     options,
     input,
@@ -19,22 +19,23 @@ const StaticListSelector = props => {
   } = props;
 
   const error = meta.error && meta.touched;
-  const customStyles = getCustomStyles({ error, isMulti });
+  const { sizes, colors } = React.useContext(ThemeContext);
+  const customStyles = getCustomStyles({ error, isMulti, sizes, colors });
 
   const val = input.value || value;
 
-  let labelExtractor = item => item;
-  let valueExtractor = item => item;
+  let labelExtractor = (item) => item;
+  let valueExtractor = (item) => item;
 
   if (displayField) {
-    labelExtractor = item => item[displayField];
+    labelExtractor = (item) => item[displayField];
   }
 
   if (returnkeys) {
     if (Array.isArray(returnkeys)) {
-      valueExtractor = item => {
+      valueExtractor = (item) => {
         const obj = {};
-        returnkeys.forEach(k => {
+        returnkeys.forEach((k) => {
           obj[k] = item[k];
         });
         return obj;
@@ -47,7 +48,7 @@ const StaticListSelector = props => {
       <CloudhubSelector
         options={options || []}
         value={val}
-        onChange={val => {
+        onChange={(val) => {
           input.onChange(val);
           input.onBlur();
         }}
@@ -68,15 +69,15 @@ StaticListSelector.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
-    onBlur: () => {}
+    onBlur: () => {},
   },
   meta: {},
   options: [],
   returnkeys: [],
   menuPlacement: 'auto',
-  labelExtractor: item => item,
-  keyExtractor: item => (isPlainObject(item) ? item.id : item),
-  valueExtractor: item => item
+  labelExtractor: (item) => item,
+  keyExtractor: (item) => (isPlainObject(item) ? item.id : item),
+  valueExtractor: (item) => item,
 };
 
 export default StaticListSelector;

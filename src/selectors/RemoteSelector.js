@@ -2,9 +2,9 @@ import React from 'react';
 import isPlainObject from 'lodash/isPlainObject';
 import Block from '../Block';
 import Text from '../Text';
-import { sizes } from '../theme';
 import CloudhubRemoteSelector from './Selector';
 import getCustomStyles from './getCustomStyles';
+import ThemeContext from '../theme/ThemeContext';
 
 const RemoteSelector = ({
   input,
@@ -16,20 +16,21 @@ const RemoteSelector = ({
   ...rest
 }) => {
   const error = meta.error && meta.touched;
-  const customStyles = getCustomStyles({ error, isMulti });
+  const { sizes, colors } = React.useContext(ThemeContext);
+  const customStyles = getCustomStyles({ error, isMulti, sizes, colors });
 
-  let labelExtractor = item => item.id;
-  let valueExtractor = item => item.id;
+  let labelExtractor = (item) => item.id;
+  let valueExtractor = (item) => item.id;
 
   if (displayField) {
-    labelExtractor = item => item[displayField];
+    labelExtractor = (item) => item[displayField];
   }
 
   if (returnkeys) {
     if (Array.isArray(returnkeys)) {
-      valueExtractor = item => {
+      valueExtractor = (item) => {
         const obj = {};
-        returnkeys.forEach(k => {
+        returnkeys.forEach((k) => {
           obj[k] = item[k];
         });
         return obj;
@@ -41,7 +42,7 @@ const RemoteSelector = ({
     <Block style={{ marginRight: sizes.margin }}>
       <CloudhubRemoteSelector
         value={input.value}
-        onChange={val => {
+        onChange={(val) => {
           input.onChange(val);
           input.onBlur();
         }}
@@ -63,12 +64,12 @@ RemoteSelector.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
-    onBlur: () => {}
+    onBlur: () => {},
   },
   onChange: () => {},
   onSelectChange: () => {},
   meta: {},
-  keyExtractor: item => (isPlainObject(item) ? item.id : item)
+  keyExtractor: (item) => (isPlainObject(item) ? item.id : item),
 };
 
 export default RemoteSelector;

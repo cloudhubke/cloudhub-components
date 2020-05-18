@@ -1,7 +1,6 @@
 import hexToRgba from 'hex-to-rgba';
-import { colors, sizes } from '../theme';
 
-const getCustomStyles = ({ error, isMulti }) => {
+const getCustomStyles = ({ error, isMulti, sizes, colors }) => {
   const borderColor = error ? colors.error : colors.gray;
   const customStyles = {
     menu: (provided, state) => ({
