@@ -35,13 +35,22 @@ const S3Uploader = ({
   accept,
   acceptThumb,
 }) => {
-  const { sizes, colors, Images } = React.useContext(ThemeContext);
+  const { sizes, colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(input.value || value || []);
   const [addingThumbnail, setaddingThumbnail] = React.useState(null);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
 
   const elemId = uniq(5);
+
+  React.useEffect(() => {
+    if (input && input.value) {
+      setfileList(input.value);
+    }
+    if (value) {
+      setfileList(value);
+    }
+  }, [input, value]);
 
   React.useEffect(() => {
     if (typeof input.onChange === 'function') {
@@ -429,6 +438,7 @@ const S3Uploader = ({
         {fileList.map(
           ({
             uid,
+            fd,
             filename,
             progress,
             status,
@@ -436,7 +446,7 @@ const S3Uploader = ({
             Location,
             thumbnail,
           }) => (
-            <ListItem dense key={uid}>
+            <ListItem dense key={fd}>
               <Block row paper>
                 {status === 'done' && (
                   <React.Fragment>
@@ -446,7 +456,7 @@ const S3Uploader = ({
                       length={length}
                       list
                       flex={false}
-                      thumbnail={thumbnail || Images.logo}
+                      thumbnail={thumbnail}
                     />
 
                     {!thumbnail && (

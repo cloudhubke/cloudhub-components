@@ -27,12 +27,21 @@ const S3Uploader = ({
   previewWidth,
   previewHeight,
 }) => {
-  const { sizes, colors, Images } = React.useContext(ThemeContext);
+  const { sizes, colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(input.value || value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
 
   const elemId = uniq(5);
+
+  React.useEffect(() => {
+    if (input && input.value) {
+      setfileList(input.value);
+    }
+    if (value) {
+      setfileList(value);
+    }
+  }, [input, value]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -253,14 +262,13 @@ const S3Uploader = ({
       <Block row wrap>
         {fileList.map(({ Location, fd, filename, progress, status }) => (
           <Block
+            key={fd}
             middle
             bottom={status === 'done'}
             center={status !== 'done'}
             flex={false}
             style={{
-              backgroundImage: `url(${
-                status === 'done' ? Location : Images.logo
-              })`,
+              backgroundImage: `url(${status === 'done' ? Location : ''})`,
               backgroundSize: 'cover',
               width: previewWidth || 100,
               height: previewHeight || 100,
