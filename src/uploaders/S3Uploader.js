@@ -39,6 +39,15 @@ const S3Uploader = ({
   const elemId = uniq(5);
 
   React.useEffect(() => {
+    if (input && input.value) {
+      setfileList(input.value);
+    }
+    if (value) {
+      setfileList(value);
+    }
+  }, [input, value]);
+
+  React.useEffect(() => {
     if (typeof input.onChange === 'function') {
       input.onChange(fileList || []);
     }
@@ -256,7 +265,7 @@ const S3Uploader = ({
       </label>
       <List>
         {fileList.map(({ uid, fd, filename, progress, status }) => (
-          <ListItem key={uid} dense divider>
+          <ListItem key={fd} dense divider>
             <ListItemIcon>
               <Attachment edge="start" />
             </ListItemIcon>
