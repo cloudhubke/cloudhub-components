@@ -370,6 +370,7 @@ const S3Uploader = ({
   const onDelete = (Location) => {
     setdeleting(Location);
   };
+
   const getSignedUrl = async (files, video) => {
     const urls = await signaxiosinstance()
       .post(signurl, {
