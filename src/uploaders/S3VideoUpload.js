@@ -50,6 +50,7 @@ const S3Uploader = ({
   tolerance,
   maxLength,
   minLength,
+  setuploading,
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(input.value || value || []);
@@ -78,7 +79,21 @@ const S3Uploader = ({
     if (typeof onChange === 'function') {
       onChange(fileList || []);
     }
-  }, [fileList, onChange]);
+    const uploading = fileList.map(({ status }) => {
+      if (status === 'done') return 'done';
+      return 'uploading';
+    });
+    if (
+      uploading.indexOf('uploading') !== -1 ||
+      (addingThumbnail &&
+        addingThumbnail.video &&
+        addingThumbnail.status !== 'done')
+    ) {
+      setuploading(true);
+    } else {
+      setuploading(false);
+    }
+  }, [fileList, addingThumbnail, onChange]);
 
   React.useEffect(() => {
     if (addingThumbnail && addingThumbnail.status === 'done') {

@@ -31,6 +31,7 @@ const S3Uploader = ({
   minWidth,
   aspectratio,
   tolerance,
+  setuploading,
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(input.value || value || []);
@@ -86,6 +87,15 @@ const S3Uploader = ({
     }
     if (typeof onChange === 'function') {
       onChange(fileList || []);
+    }
+    const uploading = fileList.map(({ status }) => {
+      if (status === 'done') return 'done';
+      return 'uploading';
+    });
+    if (uploading.indexOf('uploading') !== -1) {
+      setuploading(true);
+    } else {
+      setuploading(false);
     }
   }, [fileList, onChange]);
 
