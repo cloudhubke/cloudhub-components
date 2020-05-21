@@ -264,7 +264,7 @@ const S3Uploader = ({
         </Block>
       </label>
       <List>
-        {fileList.map(({ uid, fd, filename, progress, status }) => (
+        {fileList.map(({ fd, filename, progress, status }) => (
           <ListItem key={fd} dense divider>
             <ListItemIcon>
               <Attachment edge="start" />

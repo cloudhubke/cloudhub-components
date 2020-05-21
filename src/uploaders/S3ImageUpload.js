@@ -227,6 +227,7 @@ const S3Uploader = ({
           );
         }
       };
+      return null;
     });
 
     const fetchUrls = setInterval(async () => {
