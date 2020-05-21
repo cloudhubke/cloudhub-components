@@ -30,6 +30,7 @@ const S3Uploader = ({
   maxWidth,
   minWidth,
   aspectratio,
+  tolerance,
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(input.value || value || []);
@@ -161,7 +162,22 @@ const S3Uploader = ({
         }
         if (
           aspectratio &&
+          !tolerance &&
           (img.width / img.height).toFixed(2) !== aspectratio.toFixed(2)
+        ) {
+          toastr.error(
+            `Image  ${file.name} aspect ratio is ${(
+              img.width / img.height
+            ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
+          );
+          setuploaderror(true);
+          return null;
+        }
+
+        if (
+          aspectratio &&
+          tolerance &&
+          Math.abs(img.width / img.height - aspectratio) > tolerance
         ) {
           toastr.error(
             `Image  ${file.name} aspect ratio is ${(

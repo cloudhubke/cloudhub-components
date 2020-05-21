@@ -47,6 +47,7 @@ const S3Uploader = ({
   acceptThumb,
   maxWidth,
   aspectratio,
+  tolerance,
   maxLength,
   minLength,
 }) => {
@@ -231,8 +232,21 @@ const S3Uploader = ({
         }
         if (
           aspectratio &&
+          !tolerance &&
           (video.videoWidth / video.videoHeight).toFixed(2) !==
             aspectratio.toFixed(2)
+        ) {
+          toastr.error(
+            `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
+          );
+          setuploaderror(true);
+          return null;
+        }
+        if (
+          aspectratio &&
+          tolerance &&
+          Math.abs(video.videoWidth / video.videoHeight - aspectratio) >
+            tolerance
         ) {
           toastr.error(
             `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
@@ -356,12 +370,14 @@ const S3Uploader = ({
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = () => {
+        const tol = tolerance || 0.1;
         if (
           thumb &&
           thumb.videoHeight &&
           thumb.videoWidth &&
-          (img.width / img.height).toFixed(2) !==
-            (thumb.videoWidth / thumb.videoHeight).toFixed(2)
+          Math.abs(
+            img.width / img.height - thumb.videoWidth / thumb.videoHeight
+          ) > tol
         ) {
           setthumberror(true);
         } else {
