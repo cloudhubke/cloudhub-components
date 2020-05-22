@@ -22,6 +22,7 @@ const HoverButton = ({
   bold,
   padding,
   margin,
+  children,
   ...props
 }) => {
   const [hover, sethover] = React.useState(false);
@@ -29,6 +30,15 @@ const HoverButton = ({
 
   const buttonhovercolor = hoverColor || `rgb(${hexToRgb(colors.dark)}, 0.5)`;
   const buttoncolor = color || colors.milkyWhite;
+
+  const fn = (child) =>
+    React.cloneElement(child, {
+      ...child.props,
+      color: hover
+        ? textHoverColor || colors.milkyWhite
+        : textColor || colors.dark,
+    });
+  const childitems = React.Children.map(children, fn);
 
   return (
     <Block
@@ -82,7 +92,9 @@ const HoverButton = ({
             {text}
           </Text>{' '}
         </Block>
-      ) : null}
+      ) : (
+        childitems
+      )}
       {suffix || (
         <ChevronRight
           style={{
