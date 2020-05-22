@@ -30,6 +30,7 @@ const S3Uploader = ({
   limit,
   maxSize,
   accept,
+  setuploading,
 }) => {
   const { colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(input.value || value || []);
@@ -39,11 +40,29 @@ const S3Uploader = ({
   const elemId = uniq(5);
 
   React.useEffect(() => {
+    if (input && input.value) {
+      setfileList(input.value);
+    }
+    if (value) {
+      setfileList(value);
+    }
+  }, [input, value]);
+
+  React.useEffect(() => {
     if (typeof input.onChange === 'function') {
       input.onChange(fileList || []);
     }
     if (typeof onChange === 'function') {
       onChange(fileList || []);
+    }
+    const uploading = fileList.map(({ status }) => {
+      if (status === 'done') return 'done';
+      return 'uploading';
+    });
+    if (uploading.indexOf('uploading') !== -1) {
+      setuploading(true);
+    } else {
+      setuploading(false);
     }
   }, [fileList, onChange]);
 
@@ -255,8 +274,8 @@ const S3Uploader = ({
         </Block>
       </label>
       <List>
-        {fileList.map(({ uid, fd, filename, progress, status }) => (
-          <ListItem key={uid} dense divider>
+        {fileList.map(({ fd, filename, progress, status }) => (
+          <ListItem key={fd} dense divider>
             <ListItemIcon>
               <Attachment edge="start" />
             </ListItemIcon>

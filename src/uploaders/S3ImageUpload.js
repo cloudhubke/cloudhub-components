@@ -6,7 +6,8 @@ import React from 'react';
 import qs from 'qs';
 import uniq from 'uid';
 import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
-import { Block, Text, toastr, Dialog, Button } from '..';
+import { Block, Text, toastr, Dialog, Button, Form, Field, Input } from '..';
+import { Tooltip } from '@material-ui/core';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
 import ThemeContext from '../theme/ThemeContext';
@@ -26,13 +27,29 @@ const S3Uploader = ({
   accept,
   previewWidth,
   previewHeight,
+  maxWidth,
+  minWidth,
+  aspectratio,
+  tolerance,
+  setuploading,
 }) => {
-  const { sizes, colors, Images } = React.useContext(ThemeContext);
+  const { sizes, colors } = React.useContext(ThemeContext);
   const [fileList, setfileList] = React.useState(input.value || value || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
+  const [uploaderror, setuploaderror] = React.useState(false);
+  const [addinginfo, setaddinginfo] = React.useState(null);
 
   const elemId = uniq(5);
+
+  React.useEffect(() => {
+    if (input && input.value) {
+      setfileList(input.value);
+    }
+    if (value) {
+      setfileList(value);
+    }
+  }, [input, value]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -71,6 +88,15 @@ const S3Uploader = ({
     if (typeof onChange === 'function') {
       onChange(fileList || []);
     }
+    const uploading = fileList.map(({ status }) => {
+      if (status === 'done') return 'done';
+      return 'uploading';
+    });
+    if (uploading.indexOf('uploading') !== -1) {
+      setuploading(true);
+    } else {
+      setuploading(false);
+    }
   }, [fileList, onChange]);
 
   const onprogress = (progressEvent, url) => {
@@ -90,6 +116,7 @@ const S3Uploader = ({
       return urls;
     });
   };
+
   const onUploadFinish = (url) => {
     setfileList((urls) => {
       if (urls.length > 0) {
@@ -107,76 +134,191 @@ const S3Uploader = ({
       return urls;
     });
   };
+
+  const addImageInfo = (vals) => {
+    const fileobj = { ...addinginfo, ...vals };
+    setfileList((files) => {
+      if (files.length > 0) {
+        const progressArray = files.map((obj) => {
+          if (obj.fd === fileobj.fd) {
+            return fileobj;
+          }
+          return obj;
+        });
+        return progressArray;
+      }
+    });
+    setaddinginfo(null);
+  };
+
   const handleFiles = async (event) => {
+    setuploaderror(false);
     const { files } = event.target;
     if (limit && files.length + fileList.length > limit) {
       return toastr.error(`Only a maximum of ${limit} files allowed`);
     }
-    if (maxSize && maxSize > 0) {
-      const sizelimit = Number(maxSize * 1024 * 1024);
-      const inds = [...(files || [])]
-        .map((file, index) => (file.size > sizelimit ? index + 1 : null))
-        .filter(Boolean);
-      if (inds.length > 0) {
-        return toastr.error(
-          `File "${
-            files[inds[0] - 1].name
-          }" exceeds ${maxSize}MB. Please try again with a smaller file`
-        );
-      }
-    }
-    const fileArray = [...(files || [])].map((file) => ({
-      name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
-      type: file.type,
-      size: file.size,
-    }));
+    const fileArray = [];
+    const filesArray = [];
+    await [...(files || [])].map((file) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = () => {
+        if (minWidth && img.width < minWidth) {
+          toastr.error(
+            `Image ${file.name} has a width smaller than the required ${minWidth}px`
+          );
+          setuploaderror(true);
+          return null;
+        }
+        if (
+          aspectratio &&
+          !tolerance &&
+          (img.width / img.height).toFixed(2) !== aspectratio.toFixed(2)
+        ) {
+          toastr.error(
+            `Image  ${file.name} aspect ratio is ${(
+              img.width / img.height
+            ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
+          );
+          setuploaderror(true);
+          return null;
+        }
 
-    if (fileArray.length > 0) {
-      const signedUrls = await getSignedUrl(fileArray).then((urls) => urls);
-      const uploads = [...(files || [])].map(
-        (file) =>
-          signedUrls
-            .map(({ signedUrl, filename }) => {
-              if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
-                return {
-                  signedUrl,
-                  file,
-                  options: {
-                    headers: {
-                      'Content-Type': qs.parse(signedUrl)['Content-Type'],
-                      Expires: qs.parse(signedUrl).Expires,
-                      'x-amz-acl':
-                        qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
-                    },
-                    onUploadProgress: (progressEvent) => {
-                      onprogress(progressEvent, signedUrl);
-                    },
-                  },
-                };
+        if (
+          aspectratio &&
+          tolerance &&
+          Math.abs(img.width / img.height - aspectratio) > tolerance
+        ) {
+          toastr.error(
+            `Image  ${file.name} aspect ratio is ${(
+              img.width / img.height
+            ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
+          );
+          setuploaderror(true);
+          return null;
+        }
+
+        if (!uploaderror) {
+          const elem = document.createElement('canvas');
+          elem.width = maxWidth || img.width;
+          elem.height = maxWidth
+            ? Math.floor((maxWidth * img.height) / img.width)
+            : img.height;
+          const ctx = elem.getContext('2d');
+          // img.width and img.height will contain the original dimensions
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            maxWidth || img.width,
+            maxWidth
+              ? Math.floor((maxWidth * img.height) / img.width)
+              : img.height
+          );
+          ctx.canvas.toBlob(
+            (blob) => {
+              const newfile = new File(
+                [blob],
+                file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                {
+                  type: file.type,
+                  lastModified: Date.now(),
+                }
+              );
+              if (maxSize && maxSize > 0) {
+                const sizelimit = Number(maxSize * 1024);
+                if (file.size > sizelimit) {
+                  toastr.error(
+                    `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
+                  );
+                  setuploaderror(true);
+                  return null;
+                }
               }
-              return null;
-            })
-            .filter(Boolean)[0]
-      );
-      uploads.map(({ signedUrl, file, options }) =>
-        uploadaxiosinstance
-          .put(signedUrl, file, options)
-          .then(() => {
-            onUploadFinish(signedUrl);
-            toastr.success('One file uploaded successfully');
-          })
-          .catch((error) => {
-            onUploadError(signedUrl);
-            toastr.error(
-              `${
-                error.response
-                  ? error.response.data
-                  : 'File upload failed, try again later'
-              }`
-            );
-          })
-      );
-    }
+              filesArray.push(newfile);
+              fileArray.push({
+                name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                type: file.type,
+                size: newfile.size,
+                width: maxWidth || img.width,
+                height: maxWidth
+                  ? Math.floor((maxWidth * img.height) / img.width)
+                  : img.height,
+              });
+
+              return newfile;
+            },
+            file.type,
+            1
+          );
+        }
+      };
+      return null;
+    });
+
+    const fetchUrls = setInterval(async () => {
+      if (uploaderror) {
+        clearInterval(fetchUrls);
+      }
+      if (
+        fileArray.length === files.length &&
+        filesArray.length === files.length &&
+        files.length > 0 &&
+        !uploaderror
+      ) {
+        try {
+          const signedUrls = await getSignedUrl(fileArray, true).then(
+            (urls) => urls
+          );
+          const uploads = [...(filesArray || [])].map(
+            (file) =>
+              signedUrls
+                .map(({ signedUrl, filename }) => {
+                  if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+                    return {
+                      signedUrl,
+                      file,
+                      options: {
+                        headers: {
+                          'Content-Type': qs.parse(signedUrl)['Content-Type'],
+                          Expires: qs.parse(signedUrl).Expires,
+                          'x-amz-acl':
+                            qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
+                        },
+                        onUploadProgress: (progressEvent) => {
+                          onprogress(progressEvent, signedUrl);
+                        },
+                      },
+                    };
+                  }
+                  return null;
+                })
+                .filter(Boolean)[0]
+          );
+          uploads.map(({ signedUrl, file, options }) =>
+            uploadaxiosinstance
+              .put(signedUrl, file, options)
+              .then(() => {
+                onUploadFinish(signedUrl);
+                toastr.success('Image uploaded successfully');
+              })
+              .catch((error) => {
+                onUploadError(signedUrl);
+                toastr.error(
+                  `${
+                    error.response
+                      ? error.response.data
+                      : 'Image upload failed, try again later'
+                  }`
+                );
+              })
+          );
+          clearInterval(fetchUrls);
+        } catch (error) {
+          clearInterval(fetchUrls);
+        }
+      }
+    }, 100);
   };
 
   const onUploadError = (url) => {
@@ -228,6 +370,7 @@ const S3Uploader = ({
       });
     return urls;
   };
+
   return (
     <Block paper padding={20}>
       <input
@@ -251,26 +394,30 @@ const S3Uploader = ({
         </Block>
       </label>
       <Block row wrap>
-        {fileList.map(({ Location, fd, filename, progress, status }) => (
+        {fileList.map((file) => (
           <Block
+            key={file.fd}
             middle
-            bottom={status === 'done'}
-            center={status !== 'done'}
+            bottom={file.status === 'done'}
+            center={file.status !== 'done'}
             flex={false}
             style={{
               backgroundImage: `url(${
-                status === 'done' ? Location : Images.logo
+                file.status === 'done' ? file.Location : ''
               })`,
               backgroundSize: 'cover',
-              width: previewWidth || 100,
-              height: previewHeight || 100,
+              width: previewWidth || 150,
+              height:
+                previewHeight || (file.width && file.height)
+                  ? Math.floor((150 * file.height) / file.width)
+                  : 150,
             }}
             padding={sizes.padding}
           >
-            {status === 'done' ? (
+            {file.status === 'done' ? (
               <React.Fragment>
                 <Cancel
-                  onClick={() => onDelete(fd)}
+                  onClick={() => onDelete(file.fd)}
                   style={{
                     color: colors.danger,
                     marginLeft: 'auto',
@@ -278,14 +425,50 @@ const S3Uploader = ({
                     cursor: 'pointer',
                   }}
                 />
-                <Text caption style={{ backgroundColor: colors.milkyWhite }}>
-                  {filename}
+                <Text
+                  caption
+                  style={{
+                    backgroundColor: colors.milkyWhite,
+                    border: '1px solid transparent',
+                    borderRadius: 5,
+                    textAlign: 'center',
+                  }}
+                >
+                  {file.filename}
                 </Text>
+                <Tooltip
+                  title={
+                    <Block color={colors.milkyWhite}>
+                      {file.caption && (
+                        <Text small>caption: {file.caption}</Text>
+                      )}
+                      {file.author && <Text small>author: {file.author}</Text>}
+                      {file.imagelocation && (
+                        <Text small>location: {file.imagelocation}</Text>
+                      )}
+                    </Block>
+                  }
+                >
+                  <Text
+                    caption
+                    link
+                    milkyWhite
+                    onClick={() => setaddinginfo(file)}
+                    style={{
+                      backgroundColor: colors.twitterColor,
+                      border: '1px solid transparent',
+                      borderRadius: 5,
+                      textAlign: 'center',
+                    }}
+                  >
+                    + Add Caption
+                  </Text>
+                </Tooltip>
               </React.Fragment>
             ) : (
               <AntProgress
                 type="circle"
-                percent={progress}
+                percent={file.progress}
                 width={60}
                 strokeColor={colors.success}
               />
@@ -302,7 +485,7 @@ const S3Uploader = ({
       >
         <DialogHeader onClose={() => setdeleting(null)} />
         <DialogContent>
-          <Text>Sure you want to remove video?</Text>
+          <Text>Sure you want to remove image?</Text>
         </DialogContent>
         <DialogActions>
           <Button
@@ -324,6 +507,74 @@ const S3Uploader = ({
             Delete
           </Button>
         </DialogActions>
+      </Dialog>
+      <Dialog
+        maxWidth="sm"
+        open={addinginfo !== null}
+        onClose={() => setaddinginfo(null)}
+        minHeight={400}
+      >
+        <DialogHeader onClose={() => setdeleting(null)} />
+        <Form
+          onSubmit={addImageInfo}
+          initialValues={
+            addinginfo
+              ? {
+                  caption: addinginfo.caption,
+                  author: addinginfo.author,
+                  imagelocation: addinginfo.imagelocation,
+                }
+              : {}
+          }
+          render={({ handleSubmit, pristine }) => (
+            <React.Fragment>
+              <DialogContent>
+                <Block>
+                  <Field
+                    type="text"
+                    name="caption"
+                    label="Image caption"
+                    component={Input}
+                    flex
+                  />
+                  <Field
+                    type="text"
+                    name="author"
+                    label="Who took/owns this image?"
+                    component={Input}
+                    flex
+                  />
+                  <Field
+                    type="text"
+                    name="imagelocation"
+                    label="Where was image taken?"
+                    component={Input}
+                    flex
+                  />
+                </Block>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  contained
+                  color={colors.error}
+                  onClick={() => {
+                    setaddinginfo(null);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  contained
+                  color={colors.success}
+                  disabled={pristine}
+                  onClick={handleSubmit}
+                >
+                  Save Image Info
+                </Button>
+              </DialogActions>
+            </React.Fragment>
+          )}
+        />
       </Dialog>
     </Block>
   );
