@@ -46,6 +46,7 @@ const S3Uploader = ({
   accept,
   acceptThumb,
   maxWidth,
+  minWidth,
   aspectratio,
   tolerance,
   maxLength,
@@ -241,6 +242,14 @@ const S3Uploader = ({
         if (maxWidth && video.videoWidth > maxWidth) {
           toastr.error(
             `Video ${file.name} is wider than the maximum allowed ${maxWidth}px`
+          );
+          setuploaderror(true);
+          return null;
+        }
+
+        if (minWidth && video.videoWidth < minWidth) {
+          toastr.error(
+            `Video ${file.name} is narrower than the minimum allowed ${minWidth}px`
           );
           setuploaderror(true);
           return null;
