@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 
 const hasWindow = typeof window !== 'undefined';
 
@@ -35,7 +35,7 @@ const useMetrics = () => {
     setMaxWidth(getMaxWidth());
   }, [width]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const resize = () => {
       setWidth(window.innerWidth);
       setHeight(window.innerHeight);
@@ -45,7 +45,7 @@ const useMetrics = () => {
     return () => {
       window.removeEventListener('resize', resize);
     };
-  });
+  }, []);
 
   return { height, width, maxWidth, isMobile };
 };

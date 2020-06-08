@@ -45,6 +45,7 @@ const Input = ({
   onKeyEnter,
   startAdornment,
   endAdornment,
+  showError,
   ...rest
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
@@ -65,9 +66,9 @@ const Input = ({
   };
 
   const inputStyles = {
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white,
     height: sizes.inputHeight,
-    marginRight: marginRight || 0,
+    // marginRight: marginRight || 0,
     ...style,
   };
 
@@ -99,14 +100,15 @@ const Input = ({
         error={Boolean(meta.touched && meta.error)}
         inputRef={inputRef}
         margin="normal"
-        variant="outlined"
         {...input}
         {...rest}
       />
 
-      <Text small error style={{ height: 10 }}>
-        {meta.touched && meta.error && meta.error}
-      </Text>
+      {showError && (
+        <Text small error style={{ height: 10 }}>
+          {meta.touched && meta.error && meta.error}
+        </Text>
+      )}
     </Block>
   );
 };
@@ -115,6 +117,8 @@ Input.defaultProps = {
   meta: {},
   marginRight: sizes.margin,
   onKeyEnter: () => null,
+  showError: true,
+  variant: 'outlined',
 };
 
 export default Input;

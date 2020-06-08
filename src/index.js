@@ -13,6 +13,8 @@ export { default as SmallCard } from './SmallCard';
 export { default as Loading } from './Loading';
 export { default as NullLoading } from './NullLoading';
 export { default as Input } from './Input';
+export { default as TextInput } from './TextInput';
+export { default as CounterInput } from './CounterInput';
 export { default as TextArea } from './TextArea';
 export { default as DatePicker } from './DatePicker';
 export { default as DateRangePicker } from './DateRangePicker';
@@ -57,6 +59,8 @@ export { default as Field } from './form/Field';
 export { default as FormFields } from './form/FormFields';
 export { default as Fieldset } from './form/Fieldset';
 export { default as FormSpy } from './form/FormSpy';
+export { default as FieldArray } from './form/FieldArray';
+export { default as arrayMutators } from './form/arrayMutators';
 
 export { default as SwipeableViews } from './SwipeableViews';
 

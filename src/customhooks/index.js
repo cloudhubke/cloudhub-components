@@ -6,3 +6,4 @@ export { default as useLocation } from './useLocation';
 export { default as useEventListener } from './useEventListener';
 export { useWindowSize } from '@reach/window-size';
 export { useRect } from '@reach/rect';
+export { default as useRectHook } from './useRectHook';

@@ -5,67 +5,88 @@ import moment from 'moment';
 import 'antd/lib/input/style/index.css';
 import 'antd/lib/date-picker/style/index.css';
 import './datepicker.css';
+import ThemeContext from '../theme/ThemeContext';
+import { makeStyles } from '@material-ui/core';
 
-class AntDatePicker extends Component {
-  static defaultProps = {
-    dateFormat: 'DD MMM, YYYY hh:mm a',
-    showTime: false,
-    timestamp: true,
-    onChange: () => {},
-    value: null,
-    input: {
-      onBlur: () => {},
-      onChange: () => {},
-      value: null
-    }
-  };
+const useStyles = ({ fonts, colors, sizes }) =>
+  makeStyles({
+    datePicker: {
+      ...fonts.default,
+      '& .ant-input': {
+        ...fonts.default,
+        height: sizes.inputHeight,
+        width: '100%',
+        minWidth: 280,
+      },
+    },
+    dropdown: {
+      ...fonts.default,
+      '& div.ant-calendar-input-wrap': {
+        height: sizes.inputHeight,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+    },
+  });
 
-  componentDidMount() {}
+const AntDatePicker = ({
+  timestamp,
+  input,
+  value,
+  onChange,
+  showTime,
+  dateFormat,
+  ...rest
+}) => {
+  const { fonts, sizes, colors } = React.useContext(ThemeContext);
+  const classes = useStyles({ fonts, sizes, colors })();
 
-  onDateChanged = date => {
-    const { timestamp, dateFormat } = this.props;
+  const onDateChanged = (date) => {
     if (date) {
       if (timestamp) {
-        this.props.input.onChange(date.valueOf());
-        this.props.input.onBlur();
-        this.props.onChange(date.valueOf());
+        input.onChange(date.valueOf());
+        input.onBlur();
+        onChange(date.valueOf());
       } else {
-        this.props.input.onChange(date.format(dateFormat));
-        this.props.onChange(date.format(dateFormat));
-        this.props.input.onBlur();
+        input.onChange(date.format(dateFormat));
+        onChange(date.format(dateFormat));
+        input.onBlur();
       }
     } else {
-      this.props.input.onChange('');
-      this.props.onChange('');
+      input.onChange('');
+      onChange('');
     }
   };
 
-  render() {
-    const {
-      timestamp,
-      input,
-      value,
-      onChange,
-      showTime,
-      dateFormat,
-      style,
-      ...rest
-    } = this.props;
+  const val = input.value || value;
 
-    const val = input.value || value;
+  return (
+    <DatePicker
+      className={classes.datePicker}
+      dropdownClassName={classes.dropdown}
+      value={val ? moment(val) : null}
+      format={dateFormat}
+      onChange={onDateChanged}
+      showTime={showTime}
+      getCalendarContainer={(trigger) => trigger.parentNode}
+      {...rest}
+    />
+  );
+};
 
-    return (
-      <DatePicker
-        style={{ ...style, width: '100%' }}
-        value={val ? moment(val) : null}
-        format={dateFormat}
-        onChange={this.onDateChanged}
-        showTime={showTime}
-        getCalendarContainer={trigger => trigger.parentNode}
-        {...rest}
-      />
-    );
-  }
-}
+AntDatePicker.defaultProps = {
+  dateFormat: 'DD MMM, YYYY hh:mm a',
+  showTime: false,
+  timestamp: true,
+  onChange: () => {},
+  value: null,
+  input: {
+    onBlur: () => {},
+    onChange: () => {},
+    value: null,
+  },
+  style: {},
+};
 
 export default AntDatePicker;

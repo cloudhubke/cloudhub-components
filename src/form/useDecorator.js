@@ -1,6 +1,6 @@
 import React from 'react';
 
-const useDecorator = createDecorator => {
+const useDecorator = (createDecorator) => {
   const [values, setValues] = React.useState(values);
 
   const savedDecorator = React.useRef(createDecorator);
@@ -9,12 +9,9 @@ const useDecorator = createDecorator => {
     savedDecorator.current = createDecorator();
   }, [createDecorator]);
 
-  const savedHandler = React.useRef(() => form => {
+  const savedHandler = React.useRef(() => (form) => {
     const unsubscribe = form.subscribe(
       ({ values }) => {
-        console.log('====================================');
-        console.log('VALS', values);
-        console.log('====================================');
         setValues(values);
       },
       { values: true }

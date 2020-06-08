@@ -5,9 +5,7 @@ import { colors } from './theme';
 
 const IconButton = React.forwardRef((props, ref) => {
   const {
-    classes,
     children,
-    flat,
     outlined,
     padding,
     margin,
@@ -121,13 +119,13 @@ const IconButton = React.forwardRef((props, ref) => {
       borderStyle: 'solid',
       borderWidth: 0.5,
       display: 'flex',
-      ...style,
     }),
+    ...style,
   };
 
   return (
     <Block row flex={false}>
-      <MuiIconButton ref={ref} style={buttonStyles} {...rest}>
+      <MuiIconButton ref={ref} {...rest} style={buttonStyles}>
         {children}
       </MuiIconButton>
     </Block>

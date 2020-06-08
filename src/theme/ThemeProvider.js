@@ -1,13 +1,19 @@
 import React from 'react';
+import { Client as Styletron } from 'styletron-engine-atomic';
+import { Provider as StyletronProvider } from 'styletron-react';
+import { LightTheme, BaseProvider, styled } from 'baseui';
+
 import {
   ThemeProvider as MuiThemeProvider,
-  createMuiTheme
+  createMuiTheme,
 } from '@material-ui/core/styles';
 import ThemeContext from './ThemeContext';
 import localsizes from './Sizes';
 import localcolors from './Colors';
 import localfonts from './Fonts';
 import toast, { ToastContainer } from '../toastr';
+
+const engine = new Styletron();
 
 const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const newfonts = { ...localfonts, ...fonts };
@@ -17,15 +23,15 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const theme = createMuiTheme({
     palette: {
       primary: {
-        main: newcolors.primary
+        main: newcolors.primary,
       },
       secondary: {
-        main: newcolors.secondary
+        main: newcolors.secondary,
       },
 
       error: {
-        main: newcolors.danger
-      }
+        main: newcolors.danger,
+      },
     },
     typography: {
       // Use the system font instead of the default Roboto font.
@@ -43,7 +49,7 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
         'sans-serif',
         '"Apple Color Emoji"',
         '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"'
+        '"Segoe UI Symbol"',
       ].join(','),
       zIndex: {
         mobileStepper: 1000,
@@ -51,25 +57,29 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
         drawer: 1200,
         modal: 1300,
         snackbar: 1400,
-        tooltip: 1800
-      }
-    }
+        tooltip: 1800,
+      },
+    },
   });
 
   return (
     <MuiThemeProvider theme={theme}>
-      <ThemeContext.Provider
-        value={{
-          fonts: newfonts,
-          colors: newcolors,
-          sizes: newsizes,
-          CONFIG: props.CONFIG || {},
-          ...props
-        }}
-      >
-        {children}
-        <ToastContainer />
-      </ThemeContext.Provider>
+      <StyletronProvider value={engine}>
+        <BaseProvider theme={LightTheme}>
+          <ThemeContext.Provider
+            value={{
+              fonts: newfonts,
+              colors: newcolors,
+              sizes: newsizes,
+              CONFIG: props.CONFIG || {},
+              ...props,
+            }}
+          >
+            {children}
+            <ToastContainer />
+          </ThemeContext.Provider>
+        </BaseProvider>
+      </StyletronProvider>
     </MuiThemeProvider>
   );
 };
