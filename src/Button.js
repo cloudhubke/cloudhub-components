@@ -4,175 +4,181 @@ import { colors, sizes } from './theme';
 
 let height = 48;
 
-const Button = ({
-  children,
-  flat,
-  outlined,
-  contained,
-  small,
-  medium,
-  large,
-  rounded,
-  padding,
-  margin,
-  color,
-  textColor,
-  style,
-  disabled,
+const Button = React.forwardRef(
+  (
+    {
+      children,
+      flat,
+      outlined,
+      contained,
+      small,
+      medium,
+      large,
+      rounded,
+      padding,
+      margin,
+      color,
+      textColor,
+      style,
+      disabled,
 
-  primary,
-  secondary,
-  tertiary,
-  success,
-  danger,
-  info,
+      primary,
+      secondary,
+      tertiary,
+      success,
+      danger,
+      info,
 
-  ...props
-}) => {
-  const handleMargins = () => {
-    if (typeof margin === 'number') {
-      return {
-        marginTop: margin,
-        marginRight: margin,
-        marginBottom: margin,
-        marginLeft: margin,
-      };
-    }
-
-    if (typeof margin === 'object') {
-      const marginSize = Object.keys(margin).length;
-      switch (marginSize) {
-        case 1:
-          return {
-            marginTop: margin[0],
-            marginRight: margin[0],
-            marginBottom: margin[0],
-            marginLeft: margin[0],
-          };
-        case 2:
-          return {
-            marginTop: margin[0],
-            marginRight: margin[1],
-            marginBottom: margin[0],
-            marginLeft: margin[1],
-          };
-        case 3:
-          return {
-            marginTop: margin[0],
-            marginRight: margin[1],
-            marginBottom: margin[2],
-            marginLeft: margin[1],
-          };
-        default:
-          return {
-            marginTop: margin[0],
-            marginRight: margin[1],
-            marginBottom: margin[2],
-            marginLeft: margin[3],
-          };
+      ...props
+    },
+    ref
+  ) => {
+    const handleMargins = () => {
+      if (typeof margin === 'number') {
+        return {
+          marginTop: margin,
+          marginRight: margin,
+          marginBottom: margin,
+          marginLeft: margin,
+        };
       }
-    }
-    return null;
-  };
 
-  const handlePaddings = () => {
-    if (typeof padding === 'number') {
-      return {
-        paddingTop: padding,
-        paddingRight: padding,
-        paddingBottom: padding,
-        paddingLeft: padding,
-      };
-    }
-
-    if (typeof padding === 'object') {
-      const paddingSize = Object.keys(padding).length;
-      switch (paddingSize) {
-        case 1:
-          return {
-            paddingTop: padding[0],
-            paddingRight: padding[0],
-            paddingBottom: padding[0],
-            paddingLeft: padding[0],
-          };
-        case 2:
-          return {
-            paddingTop: padding[0],
-            paddingRight: padding[1],
-            paddingBottom: padding[0],
-            paddingLeft: padding[1],
-          };
-        case 3:
-          return {
-            paddingTop: padding[0],
-            paddingRight: padding[1],
-            paddingBottom: padding[2],
-            paddingLeft: padding[1],
-          };
-        default:
-          return {
-            paddingTop: padding[0],
-            paddingRight: padding[1],
-            paddingBottom: padding[2],
-            paddingLeft: padding[3],
-          };
+      if (typeof margin === 'object') {
+        const marginSize = Object.keys(margin).length;
+        switch (marginSize) {
+          case 1:
+            return {
+              marginTop: margin[0],
+              marginRight: margin[0],
+              marginBottom: margin[0],
+              marginLeft: margin[0],
+            };
+          case 2:
+            return {
+              marginTop: margin[0],
+              marginRight: margin[1],
+              marginBottom: margin[0],
+              marginLeft: margin[1],
+            };
+          case 3:
+            return {
+              marginTop: margin[0],
+              marginRight: margin[1],
+              marginBottom: margin[2],
+              marginLeft: margin[1],
+            };
+          default:
+            return {
+              marginTop: margin[0],
+              marginRight: margin[1],
+              marginBottom: margin[2],
+              marginLeft: margin[3],
+            };
+        }
       }
-    }
-    return null;
-  };
+      return null;
+    };
 
-  const buttonProps = {
-    ...{},
-    ...(contained && { variant: 'contained' }),
-    ...(outlined && { variant: 'outlined' }),
-    ...(small && { size: 'small' }),
-    ...(medium && { size: 'medium' }),
-    ...(large && { size: 'large' }),
-  };
+    const handlePaddings = () => {
+      if (typeof padding === 'number') {
+        return {
+          paddingTop: padding,
+          paddingRight: padding,
+          paddingBottom: padding,
+          paddingLeft: padding,
+        };
+      }
 
-  const getHeight = (newHeight) => {
-    height = newHeight;
-    return height;
-  };
+      if (typeof padding === 'object') {
+        const paddingSize = Object.keys(padding).length;
+        switch (paddingSize) {
+          case 1:
+            return {
+              paddingTop: padding[0],
+              paddingRight: padding[0],
+              paddingBottom: padding[0],
+              paddingLeft: padding[0],
+            };
+          case 2:
+            return {
+              paddingTop: padding[0],
+              paddingRight: padding[1],
+              paddingBottom: padding[0],
+              paddingLeft: padding[1],
+            };
+          case 3:
+            return {
+              paddingTop: padding[0],
+              paddingRight: padding[1],
+              paddingBottom: padding[2],
+              paddingLeft: padding[1],
+            };
+          default:
+            return {
+              paddingTop: padding[0],
+              paddingRight: padding[1],
+              paddingBottom: padding[2],
+              paddingLeft: padding[3],
+            };
+        }
+      }
+      return null;
+    };
 
-  const buttonStyles = props.className
-    ? {}
-    : {
-        ...styles.button,
-        ...(large && { height: getHeight(64), padding: '0, 15px' }),
-        ...(medium && { height: getHeight(48), padding: '0, 15px' }),
-        ...(small && { height: getHeight(32), padding: '0, 15px' }),
-        ...(margin && { ...handleMargins() }),
-        ...(padding && { ...handlePaddings() }),
-        ...(!color && { color: colors.dark }),
-        ...(color && styles[color]), // predefined styles colors for backgroundColor
+    const buttonProps = {
+      ...{},
+      ...(contained && { variant: 'contained' }),
+      ...(outlined && { variant: 'outlined' }),
+      ...(small && { size: 'outlined' }),
+      ...(medium && { size: 'medium' }),
+      ...(large && { size: 'large' }),
+    };
 
-        ...(primary && styles[primary]),
-        ...(secondary && styles[secondary]),
-        ...(tertiary && styles[tertiary]),
-        ...(info && styles[info]),
-        ...(success && styles[success]),
-        ...(danger && styles[danger]),
+    const getHeight = (newHeight) => {
+      height = newHeight;
+      return height;
+    };
 
-        ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
-        ...(textColor && { color: textColor }), // custom backgroundColor
-        ...(outlined && { backgroundColor: 'transparent' }),
-        ...(rounded && { borderRadius: height / 2 }),
-        ...(disabled && { opacity: 0.7 }),
-        ...style,
-      };
+    const buttonStyles = props.className
+      ? {}
+      : {
+          ...styles.button,
+          ...(large && { height: getHeight(64), padding: '0, 15px' }),
+          ...(medium && { height: getHeight(48), padding: '0, 15px' }),
+          ...(small && { height: getHeight(32), padding: '0, 15px' }),
+          ...(margin && { ...handleMargins() }),
+          ...(padding && { ...handlePaddings() }),
+          ...(!color && { color: colors.dark }),
+          ...(color && styles[color]), // predefined styles colors for backgroundColor
 
-  return (
-    <MuiButton
-      style={buttonStyles}
-      {...buttonProps}
-      disabled={disabled}
-      {...props}
-    >
-      {children}
-    </MuiButton>
-  );
-};
+          ...(primary && styles[primary]),
+          ...(secondary && styles[secondary]),
+          ...(tertiary && styles[tertiary]),
+          ...(info && styles[info]),
+          ...(success && styles[success]),
+          ...(danger && styles[danger]),
+
+          ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
+          ...(textColor && { color: textColor }), // custom backgroundColor
+          ...(outlined && { backgroundColor: 'transparent' }),
+          ...(rounded && { borderRadius: height / 2 }),
+          ...(disabled && { opacity: 0.7 }),
+          ...style,
+        };
+
+    return (
+      <MuiButton
+        ref={ref}
+        style={buttonStyles}
+        {...buttonProps}
+        disabled={disabled}
+        {...props}
+      >
+        {children}
+      </MuiButton>
+    );
+  }
+);
 
 const styles = {
   button: {

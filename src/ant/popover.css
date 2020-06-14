@@ -1,0 +1,8 @@
+.ant-popover-placement-bottom, .ant-popover-placement-bottomLeft, .ant-popover-placement-bottomRight {
+    margin-top: -25px;
+    padding-top: 10px;
+}
+
+.ant-popover-inner-content{
+    padding: 0
+}

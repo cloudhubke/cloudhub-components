@@ -90,6 +90,7 @@ class ImagesUpload extends Component {
     },
     meta: {},
     onChange: () => {},
+    axiosinstance: () => axios.create({}),
     maxWidth: 1024,
     maxSize: 512,
     cardStyles: {
@@ -143,7 +144,7 @@ class ImagesUpload extends Component {
     };
   }
 
-  beforeUpload = file => {
+  beforeUpload = (file) => {
     const isImage = ['image/jpeg', 'image/png'].includes(file.type);
 
     if (!isImage) {
@@ -163,11 +164,11 @@ class ImagesUpload extends Component {
     onSuccess,
     withCredentials,
   }) => {
-    const { maxWidth, maxSize } = this.props;
+    const { maxWidth, maxSize, axiosinstance } = this.props;
     // EXAMPLE: post form-data with 'axios'
     const formData = new FormData();
     if (data) {
-      Object.keys(data).map(key => {
+      Object.keys(data).map((key) => {
         formData.append(key, data[key]);
       });
     }
@@ -185,7 +186,7 @@ class ImagesUpload extends Component {
         formData.append(filename, file);
       }
 
-      axios
+      axiosinstance()
         .post(action, formData, {
           withCredentials,
           headers,
@@ -213,7 +214,7 @@ class ImagesUpload extends Component {
 
   handleCancel = () => this.setState({ previewVisible: false });
 
-  handlePreview = file => {
+  handlePreview = (file) => {
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true,
@@ -227,15 +228,15 @@ class ImagesUpload extends Component {
         return {
           ...fl,
           uid:
-            (fl.fd || '').replace('images', '').replace(/\//g, '')
-            || new Date().getTime(),
+            (fl.fd || '').replace('images', '').replace(/\//g, '') ||
+            new Date().getTime(),
           status: 'done',
         };
       }
       return item;
     });
 
-    const isuploading = files.filter(f => !has(f, 'Location')).length > 0;
+    const isuploading = files.filter((f) => !has(f, 'Location')).length > 0;
 
     this.setState(
       {
@@ -254,8 +255,8 @@ class ImagesUpload extends Component {
     );
   };
 
-  removeFile = file => {
-    const ind = this.state.fileList.findIndex(item => item.uid === file.uid);
+  removeFile = (file) => {
+    const ind = this.state.fileList.findIndex((item) => item.uid === file.uid);
     const filelist = [...this.state.fileList];
     filelist.splice(ind, 1);
 
@@ -269,8 +270,8 @@ class ImagesUpload extends Component {
     }
   };
 
-  handleRemove = file => {
-    const ind = this.state.fileList.findIndex(item => item.url === file.url);
+  handleRemove = (file) => {
+    const ind = this.state.fileList.findIndex((item) => item.url === file.url);
     const filelist = [...this.state.fileList];
     filelist.splice(ind, 1);
 
@@ -340,7 +341,7 @@ class ImagesUpload extends Component {
             onChange={this.handleChange}
             onRemove={this.handleRemove}
             customRequest={this.customRequest}
-            ref={node => {
+            ref={(node) => {
               this.uploader = node;
             }}
           >

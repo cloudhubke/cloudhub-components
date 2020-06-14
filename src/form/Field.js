@@ -2,19 +2,18 @@ import React from 'react';
 import { Field as FinalFormField } from 'react-final-form';
 import isEmpty from 'lodash/isEmpty';
 
+import Block from '../Block';
 import FieldBlock from '../FieldBlock';
-import Input from '../Input';
 
 const notEmptyField = (value) => (isEmpty(value) ? undefined : 'Required');
 const requiredField = (value) => (value ? undefined : 'Required');
 
 function mustBeAlphabet(value) {
-  var letters = /^[A-Za-z]+$/;
+  const letters = /^[A-Za-z]+$/;
   if (`${value}`.match(letters)) {
     return undefined;
-  } else {
-    return 'Alphabets only';
   }
+  return 'Alphabets only';
 }
 
 const mustBeNumber = (value) => {
@@ -54,10 +53,10 @@ const maxFieldLength = (max) => (value) => {
 };
 
 const validateEmail = (value) => {
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const valid = re.test(value);
   if (value && !valid) {
-    return `Should be a valid email address`;
+    return 'Should be a valid email address';
   }
   return undefined;
 };
@@ -65,7 +64,7 @@ const validateEmail = (value) => {
 const composeValidators = (...validators) => (value) =>
   validators.reduce((error, validator) => error || validator(value), undefined);
 
-//Component
+// Component
 const FormField = ({
   required,
   notEmpty,
@@ -83,8 +82,9 @@ const FormField = ({
   flex = false,
   component,
   wrap = true,
-  style,
-  ...props
+  containerStyle,
+  props,
+  ...rest
 }) => {
   let validators = [];
   const fieldprops = {};
@@ -131,26 +131,41 @@ const FormField = ({
     validators = [...validators, maxFieldLength(maxLength)];
   }
 
+  const LabelComponent = () => {
+    if (typeof label === 'function') {
+      return label();
+    }
+
+    return (
+      <Block row middle wrap>
+        {`${required ? '*' : ''}`}
+        {label}
+      </Block>
+    );
+  };
   // const renderComponent = fldprops => {
   //   return <Component {...fldprops} {...props} />;
   // };
 
   return wrap ? (
-    <FieldBlock row={row} style={{ ...style }} flex={flex}>
-      {row ? (
-        <FieldBlock>
-          {`${required && label ? '*' : ''}${label || ''}`}
-        </FieldBlock>
-      ) : (
-        <label>{`${required && label ? '*' : ''}${label || ''}`}</label>
-      )}
-      <FinalFormField
-        validate={composeValidators(...validators)}
-        component={component}
-        label={null}
-        {...fieldprops}
-        {...props}
-      />
+    <FieldBlock
+      row={row}
+      // middle={row}
+      style={{ alignItems: 'stretch', ...containerStyle }}
+      flex={flex}
+    >
+      <LabelComponent />
+      <Block>
+        <FinalFormField
+          validate={composeValidators(...validators)}
+          component={component}
+          label={null}
+          {...fieldprops}
+          required={required}
+          {...props}
+          {...rest}
+        />
+      </Block>
     </FieldBlock>
   ) : (
     <FinalFormField

@@ -5,14 +5,14 @@ import { sizes } from '../theme';
 import CloudhubImagesUpload from './uploader/ImagesUpload';
 import ThemeContext from '../theme/ThemeContext';
 
-const ImagesUpload = props => {
+const ImagesUpload = (props) => {
   const value = props.input ? props.input.value : props.value;
 
   const { CONFIG } = React.useContext(ThemeContext);
 
   if (CONFIG.FILEAPI_ENDPOINT) {
     if (Array.isArray(value)) {
-      value.map(file => {
+      value.map((file) => {
         if (!`${file.url}`.includes('http')) {
           const url = `${CONFIG.FILEAPI_ENDPOINT}${`${file.url}`.replace(
             '/fileapi',
