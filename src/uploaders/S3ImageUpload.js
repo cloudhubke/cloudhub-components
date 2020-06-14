@@ -586,5 +586,6 @@ S3Uploader.defaultProps = {
     value: null,
     onChange: () => {},
   },
+  setuploading: () => {},
 };
 export default S3Uploader;
