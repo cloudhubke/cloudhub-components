@@ -28,6 +28,7 @@ import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import ThemeContext from '../theme/ThemeContext';
 
 import AntProgress from '../ant/AntProgress';
+import useDebounce from '../customhooks/useDebounce';
 
 const S3Uploader = ({
   dirname,
@@ -61,6 +62,9 @@ const S3Uploader = ({
   const [uploaderror, setuploaderror] = React.useState(false);
   const [addinginfo, setaddinginfo] = React.useState(null);
   const [thumberror, setthumberror] = React.useState(false);
+  const [updating, setupdating] = React.useState(null);
+  const [finished, setfinished] = React.useState([]);
+  const [uploadError, setuploadError] = React.useState([]);
 
   const elemId = uniq(5);
 
@@ -163,22 +167,83 @@ const S3Uploader = ({
   }, [confirmdelete, deleting]);
 
   const onprogress = (progressEvent, url) => {
-    setfileList((urls) => {
-      if (urls.length > 0) {
-        const progressArray = urls.map((obj) => {
-          if (obj.signedUrl === url) {
-            const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            return { ...obj, progress };
-          }
-          return obj;
-        });
-        return progressArray;
-      }
-      return urls;
-    });
+    setupdating({ progressEvent, url });
   };
+  const progressobj = useDebounce(updating, 200);
+  React.useEffect(() => {
+    if (progressobj) {
+      setfileList((urls) => {
+        if (urls.length > 0) {
+          const progressArray = urls.map((obj) => {
+            if (obj.signedUrl === progressobj.url) {
+              const progress = Math.round(
+                (progressobj.progressEvent.loaded * 100) /
+                  progressobj.progressEvent.total
+              );
+              return { ...obj, progress };
+            }
+            return obj;
+          });
+          return progressArray;
+        }
+        return urls;
+      });
+    }
+  }, [progressobj]);
+
+  const onUploadFinish = (url) => {
+    setfinished((finished) => [...(finished || []), url]);
+  };
+
+  const finishedArray = useDebounce(finished, 300);
+
+  React.useEffect(() => {
+    if (finishedArray) {
+      setfileList((urls) => {
+        if (urls.length > 0) {
+          const progressArray = urls.map((obj) => {
+            if (finishedArray.indexOf(obj.signedUrl) !== -1) {
+              const newobj = { ...obj, status: 'done' };
+              delete newobj.signedUrl;
+              delete newobj.progress;
+              return { ...newobj };
+            }
+            return obj;
+          });
+          return progressArray;
+        }
+        return urls;
+      });
+    }
+  }, [finishedArray]);
+
+  const onUploadError = (url) => {
+    setuploadError((errors) => [...(errors || []), url]);
+  };
+
+  const errorArray = useDebounce(uploadError, 300);
+
+  React.useEffect(() => {
+    if (errorArray) {
+      setfileList((urls) => {
+        if (urls.length > 0) {
+          const progressArray = urls.map((obj) => {
+            if (errorArray.indexOf(obj.signedUrl) !== -1) {
+              toastr.error(
+                `File ${
+                  obj.filename || obj.name
+                } upload failed. please try again later`
+              );
+              return null;
+            }
+            return obj;
+          });
+          return progressArray;
+        }
+        return urls;
+      });
+    }
+  }, [errorArray]);
 
   const onthumbprogress = (progressEvent, url) => {
     setaddingThumbnail((thumb) => {
@@ -189,24 +254,6 @@ const S3Uploader = ({
         };
       }
       return thumb;
-    });
-  };
-
-  const onUploadFinish = (url) => {
-    setfileList((urls) => {
-      if (urls.length > 0) {
-        const progressArray = urls.map((obj) => {
-          if (obj.signedUrl === url) {
-            const newobj = { ...obj, status: 'done' };
-            delete newobj.signedUrl;
-            delete newobj.progress;
-            return { ...newobj };
-          }
-          return obj;
-        });
-        return progressArray;
-      }
-      return urls;
     });
   };
 
@@ -394,7 +441,7 @@ const S3Uploader = ({
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = () => {
-        const tol = tolerance || 0.1;
+        const tol = tolerance || 0.3;
         if (
           thumb &&
           thumb.videoHeight &&
@@ -483,29 +530,6 @@ const S3Uploader = ({
         }
       }
     }, 100);
-  };
-
-  const onUploadError = (url) => {
-    setfileList((files) => {
-      if (files.length > 0) {
-        const progressArray = files
-          .map((obj) => {
-            if (obj.signedUrl === url) {
-              toastr.error(
-                `File ${
-                  obj.filename || obj.name
-                } upload failed. please try again later`
-              );
-              return null;
-            }
-            return obj;
-          })
-          .filter(Boolean);
-
-        return progressArray;
-      }
-      return files;
-    });
   };
 
   const onDelete = (Location) => {
