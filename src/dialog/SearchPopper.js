@@ -18,9 +18,8 @@ const SearchButton = () => (
 );
 
 const SearchForm = ({
-  value,
-  onChange,
-  options,
+  input: { onChange, value },
+
   url,
   axiosinstance,
   paramName,
@@ -89,7 +88,7 @@ const SearchForm = ({
   }, [url, debouncedText]);
 
   React.useEffect(() => {
-    onChange(debouncedText);
+    input.onChange(debouncedText);
   }, [debouncedText]);
 
   React.useEffect(() => {

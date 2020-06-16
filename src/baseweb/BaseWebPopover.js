@@ -34,7 +34,6 @@ const BaseWebPopover = ({
     minHeight: rect.height,
     overflowY: 'hidden',
     display: 'flex',
-    backgroundColor: '#FFF',
     ...paperStyle,
   };
 
@@ -76,6 +75,7 @@ const BaseWebPopover = ({
         float: 'left',
         display: 'inline-block',
         flex: 0,
+        backgroundColor: 'cyan',
         ...containerStyle,
       }}
     >
