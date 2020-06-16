@@ -9,16 +9,27 @@ const BaseWebFormFieldPopover = ({
   arrowStyle,
   inputProps,
   input,
+  onChange,
+  value,
   labelExtractor,
   Form,
   anchorComponent: AnchorComponent,
   ...props
 }) => {
-  // const [val] = React.useState(input.values || {});
+  const val = value || input.value;
   const { colors } = React.useContext(ThemeContext);
-  const val = input.value || {};
 
   const [text, setText] = React.useState(labelExtractor(val));
+
+  const onChangeValues = (values) => {
+    if (typeof input.onChange === 'function') {
+      input.onChange(values);
+    }
+
+    if (typeof onChange === 'function') {
+      onChange(values);
+    }
+  };
 
   React.useEffect(() => {
     setText(labelExtractor(val));
@@ -39,6 +50,7 @@ const BaseWebFormFieldPopover = ({
               paper
               inputStyle={{ pointerEvents: 'none', cursor: 'pointer' }}
               placeholder="Select..."
+              onRemoveText={() => onChangeValues(null)}
               {...inputProps}
             />
           )
@@ -50,9 +62,7 @@ const BaseWebFormFieldPopover = ({
           <Form
             rect={rect}
             values={val}
-            onChange={(values) => {
-              input.onChange(values);
-            }}
+            onChange={onChangeValues}
             onClose={() => {
               onClose();
             }}
