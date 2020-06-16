@@ -99,18 +99,18 @@ const S3Uploader = ({
       setuploading(false);
     }
   }, [fileList, addingThumbnail, onChange]);
-
+  const thumbUpdate = useDebounce(addingThumbnail, 500);
   React.useEffect(() => {
-    if (addingThumbnail && addingThumbnail.status === 'done') {
+    if (thumbUpdate && thumbUpdate.status === 'done') {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.uid === addingThumbnail.video) {
+            if (obj.uid === thumbUpdate.video) {
               const newobj = {
                 ...obj,
                 status: 'done',
-                thumbnail: addingThumbnail.Location,
-                thumbfd: addingThumbnail.fd,
+                thumbnail: thumbUpdate.Location,
+                thumbfd: thumbUpdate.fd,
               };
               setaddingThumbnail(null);
               return { ...newobj };
@@ -122,7 +122,7 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [addingThumbnail]);
+  }, [thumbUpdate]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -170,6 +170,7 @@ const S3Uploader = ({
     setupdating({ progressEvent, url });
   };
   const progressobj = useDebounce(updating, 200);
+
   React.useEffect(() => {
     if (progressobj) {
       setfileList((urls) => {
