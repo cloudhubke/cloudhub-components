@@ -122,6 +122,17 @@ const FieldPopper = ({
     onOpen();
   };
 
+  const renderChildren = () => {
+    if (typeof children === 'function') {
+      return children({ closePopper });
+    }
+
+    return React.cloneElement(children, {
+      closePopper,
+      ...children.props,
+    });
+  };
+
   const paperstyles = {
     ...(color ? { backgroundColor: color } : {}),
     minWidth: rect.width || 0,
@@ -193,7 +204,7 @@ const FieldPopper = ({
                   />
                 ) : null}
                 <Paper className={classes.paper} style={paperstyles}>
-                  {children}
+                  {renderChildren()}
                 </Paper>
               </div>
             </TransitionComponent>

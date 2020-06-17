@@ -7,7 +7,7 @@ import { sizes } from './theme';
 
 const FieldLabel = ({
   label,
-  icon,
+  icon: IconComponent,
   onClick,
   height,
   style,
@@ -25,20 +25,22 @@ const FieldLabel = ({
       justifyContent: 'flex-start',
       alignItems: 'center',
       height,
-      ...style
-    }
+      ...style,
+    },
   };
 
-  const renderIcon = IconComponent => {
+  const renderIcon = () => {
     if (IconComponent) {
-      return (
-        <IconComponent
-          style={{
-            marginRight: sizes.margin,
-            ...textStyles
-          }}
-        />
-      );
+      if (typeof IconComponent === 'function') {
+        return IconComponent();
+      }
+      return React.cloneElement(IconComponent, {
+        style: {
+          marginRight: sizes.margin,
+          ...textStyles,
+        },
+        ...IconComponent.props,
+      });
     }
     return null;
   };
@@ -51,7 +53,7 @@ const FieldLabel = ({
         disabled={disabled}
         {...props}
       >
-        {renderIcon(icon)}
+        {renderIcon()}
 
         {label && (
           <Text cropped style={{ ...textStyles }}>
@@ -70,7 +72,7 @@ FieldLabel.defaultProps = {
   height: sizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
-  disabled: true
+  disabled: true,
 };
 
 export default FieldLabel;

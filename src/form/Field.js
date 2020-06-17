@@ -138,7 +138,7 @@ const FormField = ({
 
     return (
       <Block row middle wrap>
-        {`${required ? '*' : ''}`}
+        {`${label && required ? '*' : ''}`}
         {label}
       </Block>
     );
@@ -174,6 +174,7 @@ const FormField = ({
       label={null}
       {...fieldprops}
       {...props}
+      {...rest}
     />
   );
 };

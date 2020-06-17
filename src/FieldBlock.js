@@ -9,6 +9,7 @@ const FieldBlock = ({ children, style, label, ...rest }) => (
       marginTop: 2.5,
       minWidth: 250,
       minHeight: sizes.inputHeight + 13,
+      marginRight: sizes.margin / 2,
       ...style,
     }}
     bottom

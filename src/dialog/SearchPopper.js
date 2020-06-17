@@ -37,7 +37,6 @@ const SearchForm = ({
   const [text, setText] = React.useState(
     isObject(value) ? labelExtractor(value || '') : value
   );
-  const [selectedValue, setSelectedValue] = React.useState(value);
   const [fetching, setFetching] = React.useState(false);
   const [fetch, setFetch] = React.useState(isEmpty(data));
 
@@ -67,10 +66,6 @@ const SearchForm = ({
     }
   };
 
-  const onSelect = (item) => {
-    setSelectedValue(item);
-  };
-
   React.useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -92,31 +87,16 @@ const SearchForm = ({
     onChange(debouncedText);
   }, [debouncedText]);
 
-  React.useEffect(() => {
-    onChange(selectedValue);
-    setText(
-      isObject(selectedValue) ? labelExtractor(selectedValue) : selectedValue
-    );
-    if (inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.setSelectionRange(`${text}`.length, `${text}`.length);
-    }
-  }, [selectedValue]);
-
   const renderResults = () =>
     data.map((item, index) => {
       if (typeof RenderItem === 'function') {
-        return RenderItem({ item, index, onSelect });
+        return RenderItem({
+          item,
+          index,
+        });
       }
 
-      return (
-        <RenderItem
-          key={keyExtractor(item)}
-          item={item}
-          index={index}
-          onSelect
-        />
-      );
+      return <RenderItem key={keyExtractor(item)} item={item} index={index} />;
     });
 
   return (
@@ -156,6 +136,7 @@ SearchForm.defaultProps = {
   keyExtractor: (item) => (isObject(item) ? item.id || item : item),
   paramName: 'filter',
   otherparams: {},
+  onChange: () => null,
 };
 
 const SearchPopper = ({
@@ -164,6 +145,7 @@ const SearchPopper = ({
   value,
   input,
   renderItem,
+  closeOnSelect,
   popperStyle,
   url,
   ...props
@@ -178,6 +160,13 @@ const SearchPopper = ({
   React.useEffect(() => {
     setText(isObject(val) ? props.labelExtractor(val) : val);
   }, [input.value]);
+
+  const selectItem = ({ item, closePopper }) => {
+    input.onChange(item);
+    if (closeOnSelect) {
+      closePopper();
+    }
+  };
 
   const SearchInputComponent = (props) => (
     <TextInput
@@ -208,21 +197,27 @@ const SearchPopper = ({
         });
       }}
     >
-      <SearchForm
-        value={input.value}
-        onChange={(item) => {
-          input.onChange(item);
-        }}
-        url={url}
-        data={data}
-        onDataChanged={(data) => setData(data)}
-        renderItem={renderItem}
-        inputProps={{
-          ...inputProps,
-        }}
-        popperStyle={popperStyle}
-        {...props}
-      />
+      {({ closePopper }) => (
+        <SearchForm
+          value={text}
+          onChange={(value) => input.onChange(value)}
+          url={url}
+          data={data}
+          onDataChanged={(data) => setData(data)}
+          renderItem={({ item, index }) =>
+            renderItem({
+              item,
+              index,
+              onSelect: () => selectItem({ item, closePopper }),
+            })
+          }
+          inputProps={{
+            ...inputProps,
+          }}
+          popperStyle={popperStyle}
+          {...props}
+        />
+      )}
     </FieldPopper>
   );
 };
@@ -241,6 +236,7 @@ SearchPopper.defaultProps = {
   },
   url: '',
   popperStyle: {},
+  closeOnSelect: true,
 };
 
 export default SearchPopper;
