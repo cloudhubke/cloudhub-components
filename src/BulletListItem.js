@@ -17,6 +17,7 @@ const BulletListItem = ({
   margin,
   padding,
   style,
+  flex,
   ...props
 }) => {
   const bulletSymbol = () => {
@@ -127,6 +128,7 @@ const BulletListItem = ({
       color={color}
       props={props}
       style={style}
+      flex={flex}
     >
       {bulletSymbol()}
       {props.children}

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Slider, Tooltip } from '@material-ui/core';
+import Block from './Block';
+import ThemeContext from './theme/ThemeContext';
 
 function ValueLabelComponent(props) {
   const { children, open, value } = props;
@@ -158,68 +160,117 @@ const CustomizedSlider = ({
   ios,
   pretto,
   airbnb,
-  min,
-  max,
+  Min,
+  Max,
   marks,
   value,
+  input,
+  onChange,
+  title,
   valueLabelDisplay,
   defaultValue,
   ThumbComponent,
   ValueLabelComponent,
+  name,
+  onChangeCommitted,
+  ...props
 }) => {
-  if (ios) {
-    return (
-      <IOSSlider
-        color={color}
-        aria-label="ios slider"
-        defaultValue={defaultValue || 60}
-        min={min}
-        max={max}
-        marks={marks}
-        value={value}
-        valueLabelDisplay={valueLabelDisplay || 'auto'}
-      />
-    );
-  }
-  if (pretto) {
-    return (
-      <PrettoSlider
-        color={color}
-        defaultValue={defaultValue || 60}
-        min={min}
-        max={max}
-        marks={marks}
-        value={value}
-        valueLabelDisplay={valueLabelDisplay || 'auto'}
-        aria-label="pretto slider"
-      />
-    );
-  }
-  if (airbnb) {
-    return (
-      <AirbnbSlider
-        color={color}
-        ThumbComponent={AirbnbThumbComponent}
-        defaultValue={defaultValue || 60}
-        min={min}
-        max={max}
-        marks={marks}
-        value={value}
-        valueLabelDisplay={valueLabelDisplay || 'auto'}
-      />
-    );
-  }
+  const { sizes } = React.useContext(ThemeContext);
+  const changeValue = (event, val) => {
+    if (input && typeof input.onChange === 'function') {
+      input.onChange(val);
+    }
+    if (typeof onChange === 'function') {
+      onChange(val);
+    }
+  };
+
   return (
-    <Slider
-      color={color}
-      aria-label="custom thumb label"
-      defaultValue={defaultValue || 60}
-      min={min}
-      max={max}
-      marks={marks}
-      value={value}
-      valueLabelDisplay={valueLabelDisplay || 'auto'}
-    />
+    <Block
+      middle
+      style={{
+        width: '100%',
+        paddingTop: sizes.padding,
+        zIndex: 0,
+        minHeight: 100,
+      }}
+    >
+      <Block>{title}</Block>
+      <Block style={{ marginTop: sizes.doubleBaseMargin * 2 }}>
+        {ios && (
+          <IOSSlider
+            name={input ? input.name : name}
+            color={color}
+            defaultValue={defaultValue || (input ? input.value : value)}
+            aria-label="ios slider"
+            min={Min || 0}
+            max={Max || 100}
+            marks={marks}
+            value={value}
+            valueLabelDisplay={valueLabelDisplay || 'auto'}
+            onChange={changeValue}
+            onChangeCommitted={onChangeCommitted}
+            {...props}
+          />
+        )}
+        {pretto && (
+          <PrettoSlider
+            name={input ? input.name : name}
+            color={color}
+            min={Min || 0}
+            max={Max || 100}
+            defaultValue={defaultValue || (input ? input.value : value)}
+            marks={marks}
+            value={value}
+            valueLabelDisplay={valueLabelDisplay || 'auto'}
+            aria-label="pretto slider"
+            onChange={changeValue}
+            onChangeCommitted={onChangeCommitted}
+            {...props}
+          />
+        )}
+        {airbnb && (
+          <AirbnbSlider
+            name={input ? input.name : name}
+            color={color}
+            ThumbComponent={AirbnbThumbComponent}
+            defaultValue={defaultValue || (input ? input.value : value)}
+            min={Min || 0}
+            max={Max || 100}
+            marks={marks}
+            value={value}
+            valueLabelDisplay={valueLabelDisplay || 'auto'}
+            onChange={changeValue}
+            onChangeCommitted={onChangeCommitted}
+            {...props}
+          />
+        )}
+        {!airbnb && !pretto && !ios && (
+          <Slider
+            name={input ? input.name : name}
+            color={color}
+            aria-label="custom thumb label"
+            min={Min || 0}
+            max={Max || 100}
+            marks={marks}
+            defaultValue={defaultValue || (input ? input.value : value)}
+            value={input ? input.value : value}
+            valueLabelDisplay={valueLabelDisplay || 'auto'}
+            onChange={changeValue}
+            onChangeCommitted={onChangeCommitted}
+            {...props}
+          />
+        )}
+      </Block>
+    </Block>
   );
+};
+Slider.defaultProps = {
+  onChange: () => {},
+  input: {
+    value: null,
+    onChange: () => {},
+  },
+  onChangeCommitted: () => {},
 };
 export default CustomizedSlider;

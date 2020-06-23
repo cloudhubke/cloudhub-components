@@ -22,6 +22,7 @@ const HoverButton = ({
   bold,
   padding,
   margin,
+  small,
   children,
   ...props
 }) => {
@@ -46,7 +47,7 @@ const HoverButton = ({
       space="between"
       middle
       flex={flex}
-      padding={padding || sizes.padding / 2}
+      padding={padding || padding === 0 ? padding : sizes.padding / 2}
       margin={margin || 0}
       onMouseEnter={() => sethover(true)}
       onMouseLeave={() => sethover(false)}
@@ -56,22 +57,28 @@ const HoverButton = ({
           ? {
               ...fonts.button,
               border: `1px solid ${hoverBorderColor || 'white'}`,
-              height: sizes.inputHeight || 'min-content',
-              borderRadius: 5,
+              height: small
+                ? sizes.icons.medium
+                : sizes.inputHeight || 'min-content',
+              borderRadius: sizes.buttonRadius,
               cursor: 'pointer',
               fontWeight: bold ? 700 : 500,
               fontSize: fontSize || sizes.h6,
               color: textHoverColor || colors.milkyWhite,
+              whiteSpace: small ? 'nowrap' : 'normal',
               ...(hoverStyle || {}),
             }
           : {
               ...fonts.button,
               border: `1px solid ${borderColor || 'black'}`,
-              height: sizes.inputHeight || 'min-content',
-              borderRadius: 5,
+              height: small
+                ? sizes.icons.medium
+                : sizes.inputHeight || 'min-content',
+              borderRadius: sizes.buttonRadius,
               cursor: 'pointer',
               fontWeight: bold ? 700 : 500,
               color: textColor || colors.dark,
+              whiteSpace: small ? 'nowrap' : 'normal',
               ...(style || {}),
             }
       }
