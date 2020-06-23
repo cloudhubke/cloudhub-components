@@ -10,7 +10,7 @@ const MuiRating = ({ input, value, onChange, ...props }) =>
       value={input.value}
     />
   ) : (
-    <Rating {...props} value={value} onChange={onChange} />
+    <Rating {...props} value={Number(value)} onChange={onChange} />
   );
 MuiRating.defaultProps = {
   input: {
