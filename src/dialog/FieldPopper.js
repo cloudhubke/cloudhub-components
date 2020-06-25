@@ -93,7 +93,6 @@ const FieldPopper = ({
   flip,
   preventOverflow,
   open,
-  onClose,
   color,
   children,
   anchorComponent,
@@ -104,6 +103,7 @@ const FieldPopper = ({
   searchInputComponent: TextInput,
   transitionDelay = 500,
   onOpen,
+  onClose,
   ...rest
 }) => {
   const anchorRef = React.useRef();
@@ -115,6 +115,7 @@ const FieldPopper = ({
 
   const closePopper = () => {
     setPopperOpen(false);
+    onClose();
   };
 
   const openPopper = () => {

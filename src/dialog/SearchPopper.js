@@ -105,7 +105,9 @@ const SearchForm = ({
         ref={inputRef}
         elevation={0}
         showRemove
-        onRemoveText={() => setText('')}
+        onRemoveText={() => {
+          onChange('');
+        }}
         rightComponent={<SearchButton />}
         style={{ borderWidth: 0 }}
         value={text}
@@ -144,6 +146,7 @@ const SearchPopper = ({
   inputProps,
   value,
   input,
+  onChange,
   renderItem,
   closeOnSelect,
   popperStyle,
@@ -161,8 +164,15 @@ const SearchPopper = ({
     setText(isObject(val) ? props.labelExtractor(val) : val);
   }, [input.value]);
 
+  const logChange = (item) => {
+    const v = props.valueExtractor(item);
+    input.onChange(v);
+    onChange(v);
+  };
+
   const selectItem = ({ item, closePopper }) => {
-    input.onChange(item);
+    setText(isObject(item) ? props.labelExtractor(item) : item);
+    logChange(item);
     if (closeOnSelect) {
       closePopper();
     }
@@ -196,11 +206,14 @@ const SearchPopper = ({
           }
         });
       }}
+      onClose={() => logChange(text)}
     >
       {({ closePopper }) => (
         <SearchForm
           value={text}
-          onChange={(value) => input.onChange(value)}
+          onChange={(value) => {
+            setText(isObject(value) ? props.labelExtractor(value) : value);
+          }}
           url={url}
           data={data}
           onDataChanged={(data) => setData(data)}
@@ -227,8 +240,9 @@ SearchPopper.defaultProps = {
     value: '',
     onChange: () => null,
   },
+  onChange: () => null,
   labelExtractor: (item) => `${item}`,
-  valueExtractor: ({ item }) => item,
+  valueExtractor: (item) => item,
   renderItem: (item) => `${item}`,
 
   inputProps: {
