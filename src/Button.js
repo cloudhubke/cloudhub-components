@@ -129,7 +129,7 @@ const Button = React.forwardRef(
       ...{},
       ...(contained && { variant: 'contained' }),
       ...(outlined && { variant: 'outlined' }),
-      ...(small && { size: 'outlined' }),
+      ...(small && { size: 'small' }),
       ...(medium && { size: 'medium' }),
       ...(large && { size: 'large' }),
     };

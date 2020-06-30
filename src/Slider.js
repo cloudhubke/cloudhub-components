@@ -203,6 +203,7 @@ const CustomizedSlider = ({
             color={color}
             defaultValue={defaultValue || (input ? input.value : value)}
             aria-label="ios slider"
+            getAriaLabel={() => 'ios slider'}
             min={Min || 0}
             max={Max || 100}
             marks={marks}
@@ -224,6 +225,7 @@ const CustomizedSlider = ({
             value={value}
             valueLabelDisplay={valueLabelDisplay || 'auto'}
             aria-label="pretto slider"
+            getAriaLabel={() => 'pretto slider'}
             onChange={changeValue}
             onChangeCommitted={onChangeCommitted}
             {...props}
@@ -232,6 +234,8 @@ const CustomizedSlider = ({
         {airbnb && (
           <AirbnbSlider
             name={input ? input.name : name}
+            aria-label="airbnb slider"
+            getAriaLabel={() => 'airbnb slider'}
             color={color}
             ThumbComponent={AirbnbThumbComponent}
             defaultValue={defaultValue || (input ? input.value : value)}
@@ -250,6 +254,7 @@ const CustomizedSlider = ({
             name={input ? input.name : name}
             color={color}
             aria-label="custom thumb label"
+            getAriaLabel={() => 'custom thumb label'}
             min={Min || 0}
             max={Max || 100}
             marks={marks}

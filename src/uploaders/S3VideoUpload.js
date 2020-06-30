@@ -68,14 +68,20 @@ const S3Uploader = ({
 
   const elemId = uniq(5);
 
+  const inputValue =
+    input && input.value ? useDebounce(input.value, 500) : null;
+  const incomingValue = useDebounce(value, 500);
+
   React.useEffect(() => {
-    if (input && input.value) {
-      setfileList(input.value);
+    if (inputValue) {
+      setfileList(inputValue);
     }
-    if (value) {
-      setfileList(value);
+  }, [inputValue]);
+  React.useEffect(() => {
+    if (incomingValue) {
+      setfileList(incomingValue);
     }
-  }, [input, value]);
+  }, [incomingValue]);
 
   React.useEffect(() => {
     if (typeof input.onChange === 'function') {
