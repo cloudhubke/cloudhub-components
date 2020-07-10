@@ -13,6 +13,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from '@material-ui/core';
+import isEqual from 'lodash/isEqual';
 import { AttachFile, Attachment, Close } from '@material-ui/icons';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import ThemeContext from '../theme/ThemeContext';
@@ -32,9 +33,12 @@ const S3Uploader = ({
   maxSize,
   accept,
   setuploading,
+  disabled,
+  readOnly,
 }) => {
+  const incominginput = input.value || value || [];
   const { colors } = React.useContext(ThemeContext);
-  const [fileList, setfileList] = React.useState(input.value || value || []);
+  const [fileList, setfileList] = React.useState(incominginput || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
   const [updating, setupdating] = React.useState(null);
@@ -43,38 +47,35 @@ const S3Uploader = ({
 
   const elemId = uniq(5);
 
-  const inputValue =
-    input && input.value ? useDebounce(input.value, 500) : null;
-  const incomingValue = useDebounce(value, 500);
-
   React.useEffect(() => {
-    if (inputValue) {
-      setfileList(inputValue);
+    if (incominginput && !isEqual(incominginput, fileList)) {
+      setfileList(incominginput);
     }
-  }, [inputValue]);
-  React.useEffect(() => {
-    if (incomingValue) {
-      setfileList(incomingValue);
-    }
-  }, [incomingValue]);
+  }, [incominginput]);
 
-  React.useEffect(() => {
+  const logChange = () => {
     if (typeof input.onChange === 'function') {
       input.onChange(fileList || []);
     }
     if (typeof onChange === 'function') {
       onChange(fileList || []);
     }
-    const uploading = fileList.map(({ status }) => {
-      if (status === 'done') return 'done';
-      return 'uploading';
-    });
-    if (uploading.indexOf('uploading') !== -1) {
-      setuploading(true);
-    } else {
-      setuploading(false);
+  };
+
+  React.useEffect(() => {
+    if (Array.isArray(fileList)) {
+      const uploading = fileList.map(({ status }) => {
+        if (status === 'done') return 'done';
+        return 'uploading';
+      });
+      if (uploading.indexOf('uploading') !== -1) {
+        setuploading(true);
+      } else {
+        setuploading(false);
+        logChange();
+      }
     }
-  }, [fileList, onChange]);
+  }, [fileList]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -187,7 +188,12 @@ const S3Uploader = ({
 
   const handleFiles = async (event) => {
     const { files } = event.target;
-    if (limit && files.length + fileList.length > limit) {
+    if (
+      limit &&
+      Array.isArray(fileList) &&
+      Array.isArray(files) &&
+      files.length + fileList.length > limit
+    ) {
       return toastr.error(`Only a maximum of ${limit} files allowed`);
     }
     if (maxSize && maxSize > 0) {
@@ -298,6 +304,7 @@ const S3Uploader = ({
           clip: 'rect(1px, 1px, 1px, 1px)',
         }}
         onChange={handleFiles}
+        disabled={disabled || readOnly}
       />
       <label htmlFor={`fileElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
@@ -306,38 +313,46 @@ const S3Uploader = ({
         </Block>
       </label>
       <List>
-        {fileList.map(({ fd, filename, progress, status }) => (
-          <ListItem key={fd} dense divider>
-            <ListItemIcon>
-              <Attachment edge="start" />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Text subHeader underline>
-                  {filename}
-                </Text>
-              }
-            />
-            <ListItemSecondaryAction>
-              {progress < 100 && (
-                <Text small edge="end">
-                  ...uploading <Text subHeader>{`${progress}%`}</Text>
-                </Text>
-              )}
-              {status === 'done' && (
-                <IconButton edge="end" onClick={() => onDelete(fd)}>
-                  <Close />
-                </IconButton>
-              )}
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
+        {Array.isArray(fileList) &&
+          fileList.map(({ fd, filename, progress, status }) => (
+            <ListItem key={fd} dense divider>
+              <ListItemIcon>
+                <Attachment edge="start" />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Text subHeader underline>
+                    {filename}
+                  </Text>
+                }
+              />
+              <ListItemSecondaryAction>
+                {progress < 100 && (
+                  <Text small edge="end">
+                    ...uploading <Text subHeader>{`${progress}%`}</Text>
+                  </Text>
+                )}
+                {status === 'done' && (
+                  <IconButton
+                    edge="end"
+                    onClick={() => {
+                      if (!disabled && !readOnly) {
+                        onDelete(fd);
+                      }
+                    }}
+                  >
+                    <Close />
+                  </IconButton>
+                )}
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
       </List>
       <Dialog
         maxWidth="sm"
         open={deleting !== null}
         onClose={() => setdeleting(null)}
-        onConfirm={() => setconfirmdelete(true)}
+        // onConfirm={() => setconfirmdelete(true)}
         minHeight={200}
       >
         <DialogHeader onClose={() => setdeleting(null)} />

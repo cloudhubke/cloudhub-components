@@ -8,6 +8,7 @@ import uniq from 'uid';
 import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
 import { Block, Text, toastr, Dialog, Button, Form, Field, Input } from '..';
 import { Tooltip } from '@material-ui/core';
+import isEqual from 'lodash/isEqual';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
 import ThemeContext from '../theme/ThemeContext';
@@ -33,9 +34,14 @@ const S3Uploader = ({
   aspectratio,
   tolerance,
   setuploading,
+  readOnly,
+  disabled,
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
-  const [fileList, setfileList] = React.useState(input.value || value || []);
+
+  const incominginput = input.value || value || [];
+
+  const [fileList, setfileList] = React.useState(incominginput || []);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
   const [uploaderror, setuploaderror] = React.useState(false);
@@ -46,20 +52,11 @@ const S3Uploader = ({
 
   const elemId = uniq(5);
 
-  const inputValue =
-    input && input.value ? useDebounce(input.value, 500) : null;
-  const incomingValue = useDebounce(value, 500);
-
   React.useEffect(() => {
-    if (inputValue) {
-      setfileList(inputValue);
+    if (Array.isArray(incominginput) && !isEqual(incominginput, fileList)) {
+      setfileList(incominginput);
     }
-  }, [inputValue]);
-  React.useEffect(() => {
-    if (incomingValue) {
-      setfileList(incomingValue);
-    }
-  }, [incomingValue]);
+  }, [incominginput]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -91,28 +88,39 @@ const S3Uploader = ({
     }
   }, [confirmdelete, deleting]);
 
-  React.useEffect(() => {
-    if (typeof input.onChange === 'function') {
+  const logChange = () => {
+    if (
+      typeof input.onChange === 'function' &&
+      !isEqual(fileList, incominginput)
+    ) {
       input.onChange(fileList || []);
     }
-    if (typeof onChange === 'function') {
+    if (typeof onChange === 'function' && !isEqual(fileList, incominginput)) {
       onChange(fileList || []);
     }
-    const uploading = fileList.map(({ status }) => {
-      if (status === 'done') return 'done';
-      return 'uploading';
-    });
-    if (uploading.indexOf('uploading') !== -1) {
-      setuploading(true);
-    } else {
-      setuploading(false);
+  };
+
+  React.useEffect(() => {
+    if (Array.isArray(fileList)) {
+      const uploading = fileList.map(({ status }) => {
+        if (status === 'done') return 'done';
+        return 'uploading';
+      });
+      if (uploading.indexOf('uploading') !== -1) {
+        setuploading(true);
+      } else {
+        setuploading(false);
+        logChange();
+      }
     }
-  }, [fileList, onChange]);
+  }, [fileList]);
 
   const onprogress = (progressEvent, url) => {
     setupdating({ progressEvent, url });
   };
+
   const progressobj = useDebounce(updating, 200);
+
   React.useEffect(() => {
     if (progressobj) {
       setfileList((urls) => {
@@ -207,7 +215,12 @@ const S3Uploader = ({
   const handleFiles = async (event) => {
     setuploaderror(false);
     const { files } = event.target;
-    if (limit && files.length + fileList.length > limit) {
+    if (
+      limit &&
+      Array.isArray(fileList) &&
+      Array.isArray(files) &&
+      files.length + fileList.length > limit
+    ) {
       return toastr.error(`Only a maximum of ${limit} files allowed`);
     }
     const fileArray = [];
@@ -379,26 +392,21 @@ const S3Uploader = ({
   };
 
   const getSignedUrl = async (files) => {
-    const urls = await signaxiosinstance()
-      .post(signurl, {
+    try {
+      const { data } = await signaxiosinstance().post(signurl, {
         files,
         ACL: ACL || 'public-read',
         dirname: dirname || 'images/',
-      })
-      .then(({ data }) => {
-        const signedUrls = data.signedUrls.map((obj) => ({
-          ...obj,
-          progress: 0,
-        }));
-        setfileList((files) => [...files, ...signedUrls]);
-        return signedUrls;
-      })
-      .catch(() => {
-        toastr.error(
-          'There was an error uploading file. Please try again later'
-        );
       });
-    return urls;
+      const signedUrls = data.signedUrls.map((obj) => ({
+        ...obj,
+        progress: 0,
+      }));
+      setfileList((files) => [...(files || []), ...signedUrls]);
+      return signedUrls;
+    } catch (error) {
+      toastr.error('There was an error uploading file. Please try again later');
+    }
   };
 
   return (
@@ -416,6 +424,7 @@ const S3Uploader = ({
           clip: 'rect(1px, 1px, 1px, 1px)',
         }}
         onChange={handleFiles}
+        disabled={readOnly || disabled}
       />
       <label htmlFor={`fileElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
@@ -424,93 +433,115 @@ const S3Uploader = ({
         </Block>
       </label>
       <Block row wrap>
-        {fileList.map((file) => (
-          <Block
-            key={file.fd}
-            middle
-            bottom={file.status === 'done'}
-            center={file.status !== 'done'}
-            flex={false}
-            style={{
-              backgroundImage: `url(${
-                file.status === 'done' ? file.Location : ''
-              })`,
-              backgroundSize: 'cover',
-              width: previewWidth || 150,
-              height:
-                previewHeight || (file.width && file.height)
-                  ? Math.floor((150 * file.height) / file.width)
-                  : 150,
-            }}
-            padding={sizes.padding}
-          >
-            {file.status === 'done' ? (
-              <React.Fragment>
-                <Cancel
-                  onClick={() => onDelete(file.fd)}
-                  style={{
-                    color: colors.danger,
-                    marginLeft: 'auto',
-                    marginBottom: 'auto',
-                    cursor: 'pointer',
-                  }}
-                />
-                <Text
-                  caption
-                  style={{
-                    backgroundColor: colors.milkyWhite,
-                    border: '1px solid transparent',
-                    borderRadius: 5,
-                    textAlign: 'center',
-                  }}
-                >
-                  {file.filename}
-                </Text>
-                <Tooltip
-                  title={
-                    <Block color={colors.milkyWhite}>
-                      {file.caption && (
-                        <Text small>caption: {file.caption}</Text>
-                      )}
-                      {file.author && <Text small>author: {file.author}</Text>}
-                      {file.imagelocation && (
-                        <Text small>location: {file.imagelocation}</Text>
-                      )}
-                    </Block>
-                  }
-                >
+        {Array.isArray(fileList) &&
+          fileList.map((file) => (
+            <Block
+              key={file.fd}
+              middle
+              bottom={file.status === 'done'}
+              center={file.status !== 'done'}
+              flex={false}
+              style={{
+                backgroundImage: `url(${
+                  file.status === 'done' ? file.Location : ''
+                })`,
+                backgroundSize: 'cover',
+                width: previewWidth || 150,
+                height:
+                  previewHeight || (file.width && file.height)
+                    ? Math.floor((150 * file.height) / file.width)
+                    : 150,
+              }}
+              padding={sizes.padding}
+            >
+              {file.status === 'done' ? (
+                <React.Fragment>
+                  <Cancel
+                    onClick={() => {
+                      if (!disabled && !readOnly) {
+                        onDelete(file.fd);
+                      }
+                    }}
+                    style={{
+                      color: colors.danger,
+                      marginLeft: 'auto',
+                      marginBottom: 'auto',
+                      cursor: 'pointer',
+                    }}
+                  />
                   <Text
                     caption
-                    link
-                    milkyWhite
-                    onClick={() => setaddinginfo(file)}
                     style={{
-                      backgroundColor: colors.twitterColor,
+                      backgroundColor: colors.milkyWhite,
                       border: '1px solid transparent',
                       borderRadius: 5,
                       textAlign: 'center',
                     }}
                   >
-                    + Add Caption
+                    {file.filename}
                   </Text>
-                </Tooltip>
-              </React.Fragment>
-            ) : (
-              <AntProgress
-                type="circle"
-                percent={file.progress}
-                width={60}
-                strokeColor={colors.success}
-              />
-            )}
-          </Block>
-        ))}
+                  <Tooltip
+                    title={
+                      <div
+                        style={{
+                          backgroundColor: colors.milkyWhite,
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                      >
+                        {file.caption && (
+                          <Text small>caption: {file.caption}</Text>
+                        )}
+                        {file.author && (
+                          <Text small>author: {file.author}</Text>
+                        )}
+                        {file.imagelocation && (
+                          <Text small>location: {file.imagelocation}</Text>
+                        )}
+                        {file.externallink && (
+                          <Text small>link: {file.externallink}</Text>
+                        )}
+                      </div>
+                    }
+                  >
+                    <div>
+                      <Text
+                        caption
+                        link
+                        milkyWhite
+                        onClick={() => {
+                          if (!disabled && !readOnly) {
+                            setaddinginfo(file);
+                          }
+                        }}
+                        style={{
+                          backgroundColor: colors.twitterColor,
+                          border: '1px solid transparent',
+                          borderRadius: 5,
+                          textAlign: 'center',
+                        }}
+                      >
+                        + Add Caption
+                      </Text>
+                    </div>
+                  </Tooltip>
+                </React.Fragment>
+              ) : (
+                <AntProgress
+                  type="circle"
+                  percent={file.progress}
+                  width={60}
+                  strokeColor={colors.success}
+                />
+              )}
+            </Block>
+          ))}
       </Block>
       <Dialog
         maxWidth="sm"
         open={deleting !== null}
         onClose={() => setdeleting(null)}
-        onConfirm={() => setconfirmdelete(true)}
+        // onConfirm={() => setconfirmdelete(true)}
         minHeight={200}
       >
         <DialogHeader onClose={() => setdeleting(null)} />
@@ -553,6 +584,7 @@ const S3Uploader = ({
                   caption: addinginfo.caption,
                   author: addinginfo.author,
                   imagelocation: addinginfo.imagelocation,
+                  externallink: addinginfo.externallink,
                 }
               : {}
           }
@@ -578,6 +610,13 @@ const S3Uploader = ({
                     type="text"
                     name="imagelocation"
                     label="Where was image taken?"
+                    component={Input}
+                    flex
+                  />
+                  <Field
+                    type="text"
+                    name="externallink"
+                    label="Website of author or image collction"
                     component={Input}
                     flex
                   />

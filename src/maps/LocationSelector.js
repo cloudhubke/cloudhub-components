@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import isEqual from 'lodash/isEqual';
-import Block from './Block';
-import Text from './Text';
-import PlacesAutoComplete from './dist/maps/PlacesAutoComplete';
+import Block from '../Block';
+import Text from '../Text';
+import PlacesAutoComplete from './PlacesAutoComplete';
 import { sizes, colors } from '../theme';
 import GoogleMapsComponent from './GoogleMapsComponent';
 import ThemeContext from '../theme/ThemeContext';
@@ -41,7 +41,7 @@ class LocationSelector extends Component {
     };
   }
 
-  onChange = value => {
+  onChange = (value) => {
     this.setState({
       value,
       center: { lat: value.latitude, lng: value.longitude },
@@ -62,7 +62,7 @@ class LocationSelector extends Component {
             <Block>
               <GoogleMapsComponent
                 center={this.state.center}
-                onRegionChange={region => this.setState({ region })}
+                onRegionChange={(region) => this.setState({ region })}
               />
             </Block>
             <Block

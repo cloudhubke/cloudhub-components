@@ -13,6 +13,7 @@ import {
   Close,
   InfoOutlined,
 } from '@material-ui/icons';
+import isEqual from 'lodash/isEqual';
 import {
   Block,
   Text,
@@ -26,7 +27,6 @@ import {
 } from '..';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import ThemeContext from '../theme/ThemeContext';
-
 import AntProgress from '../ant/AntProgress';
 import useDebounce from '../customhooks/useDebounce';
 
@@ -53,9 +53,12 @@ const S3Uploader = ({
   maxLength,
   minLength,
   setuploading,
+  disabled,
+  readOnly,
 }) => {
+  const incominginput = input.value || value || [];
   const { sizes, colors } = React.useContext(ThemeContext);
-  const [fileList, setfileList] = React.useState(input.value || value || []);
+  const [fileList, setfileList] = React.useState(incominginput || []);
   const [addingThumbnail, setaddingThumbnail] = React.useState(null);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
@@ -68,43 +71,41 @@ const S3Uploader = ({
 
   const elemId = uniq(5);
 
-  const inputValue =
-    input && input.value ? useDebounce(input.value, 500) : null;
-  const incomingValue = useDebounce(value, 500);
-
   React.useEffect(() => {
-    if (inputValue) {
-      setfileList(inputValue);
+    if (Array.isArray(incominginput) && !isEqual(incominginput, fileList)) {
+      setfileList(incominginput);
     }
-  }, [inputValue]);
-  React.useEffect(() => {
-    if (incomingValue) {
-      setfileList(incomingValue);
-    }
-  }, [incomingValue]);
+  }, [incominginput]);
 
-  React.useEffect(() => {
+  const logChange = () => {
     if (typeof input.onChange === 'function') {
       input.onChange(fileList || []);
     }
     if (typeof onChange === 'function') {
       onChange(fileList || []);
     }
-    const uploading = fileList.map(({ status }) => {
-      if (status === 'done') return 'done';
-      return 'uploading';
-    });
-    if (
-      uploading.indexOf('uploading') !== -1 ||
-      (addingThumbnail &&
-        addingThumbnail.video &&
-        addingThumbnail.status !== 'done')
-    ) {
-      setuploading(true);
-    } else {
-      setuploading(false);
+  };
+
+  React.useEffect(() => {
+    if (Array.isArray(fileList)) {
+      const uploading = fileList.map(({ status }) => {
+        if (status === 'done') return 'done';
+        return 'uploading';
+      });
+      if (
+        uploading.indexOf('uploading') !== -1 ||
+        (addingThumbnail &&
+          addingThumbnail.video &&
+          addingThumbnail.status !== 'done')
+      ) {
+        setuploading(true);
+      } else {
+        setuploading(false);
+        logChange();
+      }
     }
-  }, [fileList, addingThumbnail, onChange]);
+  }, [fileList, addingThumbnail]);
+
   const thumbUpdate = useDebounce(addingThumbnail, 500);
   React.useEffect(() => {
     if (thumbUpdate && thumbUpdate.status === 'done') {
@@ -131,7 +132,7 @@ const S3Uploader = ({
   }, [thumbUpdate]);
 
   React.useEffect(() => {
-    if (deleting && confirmdelete) {
+    if (deleting && confirmdelete && Array.isArray(fileList)) {
       const fileArr = fileList
         .map(({ Location, fd, thumbfd }) => {
           if (Location === deleting) {
@@ -271,7 +272,12 @@ const S3Uploader = ({
   const handleFiles = async (event) => {
     setuploaderror(false);
     const { files } = event.target;
-    if (limit && files.length + fileList.length > limit) {
+    if (
+      limit &&
+      Array.isArray(fileList) &&
+      Array.isArray(files) &&
+      files.length + fileList.length > limit
+    ) {
       return toastr.error(`Only a maximum of ${limit} files allowed`);
     }
     if (maxSize && maxSize > 0) {
@@ -634,6 +640,7 @@ const S3Uploader = ({
           clip: 'rect(1px, 1px, 1px, 1px)',
         }}
         onChange={handleFiles}
+        disabled={disabled || readOnly}
       />
       <label htmlFor={`videoElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
@@ -642,131 +649,147 @@ const S3Uploader = ({
         </Block>
       </label>
       <List>
-        {fileList.map((file) => (
-          <ListItem dense key={file.fd}>
-            <Block row paper>
-              {file.status === 'done' && (
-                <React.Fragment>
-                  <VideoThumbnail
-                    small
-                    title={file.filename}
-                    length={file.length}
-                    list
-                    flex={false}
-                    thumbnail={file.thumbnail}
-                  />
-                  {!file.thumbnail && (
-                    <React.Fragment>
-                      <input
-                        type="file"
-                        id={`thumbElem${elemId}`}
-                        accept={acceptThumb || 'image/*'}
-                        style={{
-                          position: 'absolute',
-                          width: 1,
-                          height: 1,
-                          overflow: 'hidden',
-                          clip: 'rect(1px, 1px, 1px, 1px)',
-                        }}
-                        onChange={(e) => {
-                          setaddingThumbnail({
-                            video: file.uid,
-                            videoHeight: file.videoHeight,
-                            videoWidth: file.videoWidth,
-                          });
-                          addThumb(e);
-                        }}
-                      />
-                      {!addingThumbnail && (
-                        <label
-                          htmlFor={`thumbElem${elemId}`}
+        {Array.isArray(fileList) &&
+          fileList.map((file) => (
+            <ListItem dense key={file.fd}>
+              <Block row paper>
+                {file.status === 'done' && (
+                  <React.Fragment>
+                    <VideoThumbnail
+                      small
+                      title={file.filename}
+                      length={file.length}
+                      list
+                      flex={false}
+                      thumbnail={file.thumbnail}
+                    />
+                    {!file.thumbnail && (
+                      <React.Fragment>
+                        <input
+                          type="file"
+                          id={`thumbElem${elemId}`}
+                          accept={acceptThumb || 'image/*'}
                           style={{
-                            cursor: 'pointer',
-                            marginTop: 'auto',
-                            marginBottom: 'auto',
+                            position: 'absolute',
+                            width: 1,
+                            height: 1,
+                            overflow: 'hidden',
+                            clip: 'rect(1px, 1px, 1px, 1px)',
                           }}
-                        >
-                          <Block
-                            flex={false}
-                            margin={[0, sizes.doubleBaseMargin]}
-                            center
-                            middle
+                          onChange={(e) => {
+                            setaddingThumbnail({
+                              video: file.uid,
+                              videoHeight: file.videoHeight,
+                              videoWidth: file.videoWidth,
+                            });
+                            addThumb(e);
+                          }}
+                          disabled={disabled || readOnly}
+                        />
+                        {!addingThumbnail && (
+                          <label
+                            htmlFor={`thumbElem${elemId}`}
                             style={{
                               cursor: 'pointer',
+                              marginTop: 'auto',
+                              marginBottom: 'auto',
                             }}
                           >
-                            <AddPhotoAlternate />
-                            <Text small bold success>
-                              Add Thumbnail
-                            </Text>
-                          </Block>
-                        </label>
-                      )}
-                      {addingThumbnail && addingThumbnail.video === file.uid && (
-                        <AntProgress
-                          type="circle"
-                          percent={addingThumbnail.progress}
-                          width={40}
-                          strokeColor={colors.blue}
-                          style={{
-                            marginTop: 'auto',
-                            marginBottom: 'auto',
-                            marginLeft: sizes.doubleBaseMargin,
-                          }}
-                        />
-                      )}
-                    </React.Fragment>
-                  )}
-                  <Block
-                    flex={false}
-                    margin={[0, sizes.doubleBaseMargin]}
-                    center
-                    middle
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => setaddinginfo(file)}
-                  >
-                    <InfoOutlined style={{ color: colors.twitterColor }} />
-                    <Text small bold twitterColor>
-                      Add Caption
+                            <Block
+                              flex={false}
+                              margin={[0, sizes.doubleBaseMargin]}
+                              center
+                              middle
+                              style={{
+                                cursor: 'pointer',
+                              }}
+                            >
+                              <AddPhotoAlternate />
+                              <Text small bold success>
+                                Add Thumbnail
+                              </Text>
+                            </Block>
+                          </label>
+                        )}
+                        {addingThumbnail && addingThumbnail.video === file.uid && (
+                          <AntProgress
+                            type="circle"
+                            percent={addingThumbnail.progress}
+                            width={40}
+                            strokeColor={colors.blue}
+                            style={{
+                              marginTop: 'auto',
+                              marginBottom: 'auto',
+                              marginLeft: sizes.doubleBaseMargin,
+                            }}
+                          />
+                        )}
+                      </React.Fragment>
+                    )}
+                    <Block
+                      flex={false}
+                      margin={[0, sizes.doubleBaseMargin]}
+                      center
+                      middle
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        if (!disabled && !readOnly) {
+                          setaddinginfo(file);
+                        }
+                      }}
+                    >
+                      <InfoOutlined style={{ color: colors.twitterColor }} />
+                      <Text small bold twitterColor>
+                        Add Caption
+                      </Text>
+                    </Block>
+                  </React.Fragment>
+                )}
+                {file.progress < 100 && (
+                  <Block row bottom space="between">
+                    <AntProgress
+                      type="circle"
+                      percent={file.progress}
+                      width={40}
+                      strokeColor={colors.success}
+                    />
+                    <Text style={{ margin: sizes.baseMargin }}>
+                      ...uploading
                     </Text>
                   </Block>
-                </React.Fragment>
-              )}
-              {file.progress < 100 && (
-                <Block row bottom space="between">
-                  <AntProgress
-                    type="circle"
-                    percent={file.progress}
-                    width={40}
-                    strokeColor={colors.success}
+                )}
+              </Block>
+              <ListItemSecondaryAction>
+                {file.status === 'done' ? (
+                  <Delete
+                    style={{ color: colors.error, cursor: 'pointer' }}
+                    onClick={() => {
+                      if (!disabled && !readOnly) {
+                        onDelete(file.Location);
+                      }
+                    }}
                   />
-                  <Text style={{ margin: sizes.baseMargin }}>...uploading</Text>
-                </Block>
-              )}
-            </Block>
-            <ListItemSecondaryAction>
-              {file.status === 'done' ? (
-                <Delete
-                  style={{ color: colors.error, cursor: 'pointer' }}
-                  onClick={() => onDelete(file.Location)}
-                />
-              ) : (
-                <Close
-                  style={{ color: colors.error, cursor: 'pointer' }}
-                  onClick={() => onDelete(file.Location)}
-                />
-              )}
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
+                ) : (
+                  <Close
+                    style={{ color: colors.error, cursor: 'pointer' }}
+                    onClick={() => {
+                      if (!disabled && !readOnly) {
+                        onDelete(file.Location);
+                      }
+                    }}
+                  />
+                )}
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
       </List>
       <Dialog
         maxWidth="sm"
         open={deleting !== null}
         onClose={() => setdeleting(null)}
-        onConfirm={() => setconfirmdelete(true)}
+        // onConfirm={() => setconfirmdelete(true)}
         minHeight={200}
       >
         <DialogHeader onClose={() => setdeleting(null)} />
@@ -800,7 +823,7 @@ const S3Uploader = ({
         onClose={() => setaddinginfo(null)}
         minHeight={400}
       >
-        <DialogHeader onClose={() => setdeleting(null)} />
+        <DialogHeader onClose={() => setaddinginfo(null)} />
         <Form
           onSubmit={addVideoInfo}
           initialValues={
@@ -809,6 +832,7 @@ const S3Uploader = ({
                   caption: addinginfo.caption,
                   author: addinginfo.author,
                   imagelocation: addinginfo.imagelocation,
+                  externallink: addinginfo.externallink,
                 }
               : {}
           }
@@ -834,6 +858,13 @@ const S3Uploader = ({
                     type="text"
                     name="videolocation"
                     label="Where was video taken?"
+                    component={Input}
+                    flex
+                  />
+                  <Field
+                    type="text"
+                    name="externallink"
+                    label="Website of author or video collction"
                     component={Input}
                     flex
                   />
