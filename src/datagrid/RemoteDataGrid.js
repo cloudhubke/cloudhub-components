@@ -160,7 +160,7 @@ const RemoteDataGrid = React.forwardRef(
     const [searchTerm, setSearchTerm] = React.useState('');
     const [deletingRows, setDeletingRows] = React.useState([]);
 
-    const changeSelection = indexes => {
+    const changeSelection = (indexes) => {
       setSelection(indexes);
     };
 
@@ -210,7 +210,7 @@ const RemoteDataGrid = React.forwardRef(
       loadData();
     }, [sorting, currentPage, searchTerm, pageSize]);
 
-    const changePageSize = pageSize => {
+    const changePageSize = (pageSize) => {
       const count = totalCount || data.length;
       const totalPages = Math.ceil(count / pageSize);
       const currentPage = Math.min(currentPage || 0, totalPages - 1);
@@ -219,8 +219,10 @@ const RemoteDataGrid = React.forwardRef(
     };
 
     React.useImperativeHandle(ref, () => ({
-      onSave: row => {
-        const ind = data.findIndex(d => keyExtractor(d) === keyExtractor(row));
+      onSave: (row) => {
+        const ind = data.findIndex(
+          (d) => keyExtractor(d) === keyExtractor(row)
+        );
         if (ind === -1) {
           setData([row, ...data].map((d, i) => ({ ...d, counter: i + 1 })));
         } else {
@@ -237,10 +239,15 @@ const RemoteDataGrid = React.forwardRef(
       reload: () => {
         loadData();
       },
-      onDeleteSuccess: deletedRows => {
-        const deleted = [...deletedRows].map(r => keyExtractor(r));
-        setData(data.filter(r => !includes(deleted, keyExtractor(r))));
+      onDeleteSuccess: (deletedRows) => {
+        const deleted = [...deletedRows].map((r) => keyExtractor(r));
+        setData(data.filter((r) => !includes(deleted, keyExtractor(r))));
       },
+      getData: () => ({
+        data,
+        totalCount,
+        selection,
+      }),
     }));
 
     const cellComponent = ({ row: r, column, style }) => {
@@ -254,7 +261,7 @@ const RemoteDataGrid = React.forwardRef(
               permissions={permissions}
               row={row}
               column={column}
-              onDelete={row => setDeletingRows([row])}
+              onDelete={(row) => setDeletingRows([row])}
               onView={props.onView}
               onEdit={props.onEdit}
             />
@@ -275,7 +282,7 @@ const RemoteDataGrid = React.forwardRef(
         <Header
           permissions={permissions}
           queryString={getQueryParams()}
-          onSearch={text => setSearchTerm(text)}
+          onSearch={(text) => setSearchTerm(text)}
           onRefresh={() => loadData()}
           {...props}
         />
@@ -296,22 +303,22 @@ const RemoteDataGrid = React.forwardRef(
               />
               <SortingState
                 sorting={sorting}
-                onSortingChange={sorting => setSorting(sorting)}
+                onSortingChange={(sorting) => setSorting(sorting)}
               />
 
               <GroupingState
                 grouping={grouping}
-                onGroupingChange={grouping => setGrouping(grouping)}
+                onGroupingChange={(grouping) => setGrouping(grouping)}
               />
 
               <FilteringState
                 filters={filters}
-                onFiltersChange={filters => setFilters(filters)}
+                onFiltersChange={(filters) => setFilters(filters)}
               />
 
               <PagingState
                 currentPage={currentPage}
-                onCurrentPageChange={page => setCurrrentPage(page)}
+                onCurrentPageChange={(page) => setCurrrentPage(page)}
                 pageSize={pageSize}
                 onPageSizeChange={changePageSize}
               />
@@ -338,7 +345,7 @@ const RemoteDataGrid = React.forwardRef(
               )}
 
               <TableColumnReordering
-                defaultOrder={columns.map(column => column.name)}
+                defaultOrder={columns.map((column) => column.name)}
               />
               <TableHeaderRow
                 showSortingControls
@@ -347,7 +354,7 @@ const RemoteDataGrid = React.forwardRef(
               />
 
               <TableFilterRow
-                cellComponent={props => {
+                cellComponent={(props) => {
                   if (
                     props.column.name === 'actions' ||
                     props.column.name === 'counter'
@@ -388,7 +395,7 @@ const RemoteDataGrid = React.forwardRef(
                 <Grid
                   rows={deletingRows}
                   columns={props.columns.filter(
-                    c => c.name.toLowerCase() !== 'actions'
+                    (c) => c.name.toLowerCase() !== 'actions'
                   )}
                 >
                   <Table cellComponent={cellComponent} />
@@ -443,9 +450,9 @@ RemoteDataGrid.defaultProps = {
   onPrint: () => {},
   url: '/',
   axiosinstance: () => axios.create({}),
-  keyExtractor: row => row.id,
-  dataExtractor: data => data.items || data,
-  countExtractor: data => data.totalCount,
+  keyExtractor: (row) => row.id,
+  dataExtractor: (data) => data.items || data,
+  countExtractor: (data) => data.totalCount,
   permissions: {
     allowadd: true,
     allowedit: true,

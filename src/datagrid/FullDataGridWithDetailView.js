@@ -10,7 +10,7 @@ import {
   IntegratedPaging,
   IntegratedSorting,
   IntegratedSelection,
-  RowDetailState
+  RowDetailState,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -27,7 +27,7 @@ import {
   TableFilterRow,
   TableColumnVisibility,
   ColumnChooser,
-  TableRowDetail
+  TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
@@ -50,28 +50,28 @@ import './grid.css';
 
 const styleSheet = () => ({
   commandButton: {
-    minWidth: '40px'
+    minWidth: '40px',
   },
   lookupEditCell: {
     verticalAlign: 'middle',
     paddingRight: sizes.padding,
     '& ~ $lookupEditCell': {
-      paddingLeft: sizes.padding
-    }
+      paddingLeft: sizes.padding,
+    },
   },
   dialog: {
-    width: 'calc(100% - 16px)'
+    width: 'calc(100% - 16px)',
   },
   editDialog: {
     minWidth: '800px',
-    height: '600px'
+    height: '600px',
   },
 
   // ===================================================== Header ========================
 
   headerBar: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   header: {
     display: 'flex',
@@ -79,7 +79,7 @@ const styleSheet = () => ({
     padding: '10px 20px 10px 20px',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   headerInputs: {
     display: 'flex',
@@ -87,22 +87,22 @@ const styleSheet = () => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexBasis: '50%',
-    marginLeft: 10
+    marginLeft: 10,
   },
   headerButton: {
     fontWeight: 500,
     textTransform: 'capitalize',
     fontSize: 12,
-    marginLeft: 5
+    marginLeft: 5,
   },
   filterBar: {
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
-  filterField: { width: 200, marginLeft: 10 }
+  filterField: { width: 200, marginLeft: 10 },
 });
 
 const staticColumns = [{ name: 'actions', title: 'Actions', width: 200 }];
@@ -113,7 +113,7 @@ const FullDataGridWithDetailView = React.forwardRef(
     const [defaultColumnWidths] = React.useState([
       { columnName: 'counter', width: 70 },
       { columnName: 'actions', width: 150 },
-      ...props.columnWidths
+      ...props.columnWidths,
     ]);
     const [sorting, setSorting] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(0);
@@ -137,7 +137,7 @@ const FullDataGridWithDetailView = React.forwardRef(
               permissions={permissions}
               row={row}
               column={column}
-              onDelete={row => setDeletingRows([row])}
+              onDelete={(row) => setDeletingRows([row])}
               onView={props.onView}
               onEdit={props.onEdit}
             />
@@ -153,7 +153,7 @@ const FullDataGridWithDetailView = React.forwardRef(
 
     React.useImperativeHandle(ref, () => ({
       reload: () => {},
-      onDeleteSuccess: () => {}
+      onDeleteSuccess: () => {},
     }));
 
     const {
@@ -161,14 +161,14 @@ const FullDataGridWithDetailView = React.forwardRef(
       classes,
       allowColumnResizing,
       hiddencolumns,
-      rowComponent
+      rowComponent,
     } = props;
 
     return (
       <Paper className="grid-container">
         <Header
           permissions={permissions}
-          onSearch={text => setSearchTerm(text)}
+          onSearch={(text) => setSearchTerm(text)}
           {...props}
         />
         <Grid
@@ -177,28 +177,28 @@ const FullDataGridWithDetailView = React.forwardRef(
         >
           <SelectionState
             selection={selection}
-            onSelectionChange={selection => setSelection(selection)}
+            onSelectionChange={(selection) => setSelection(selection)}
           />
           <SortingState
             sorting={sorting}
-            onSortingChange={sorting => setSorting(sorting)}
+            onSortingChange={(sorting) => setSorting(sorting)}
           />
 
           <GroupingState
             grouping={grouping}
-            onGroupingChange={grouping => setGrouping(grouping)}
+            onGroupingChange={(grouping) => setGrouping(grouping)}
           />
 
           <FilteringState
             filters={filters}
-            onFiltersChange={filters => setFilters(filters)}
+            onFiltersChange={(filters) => setFilters(filters)}
           />
 
           <PagingState
             currentPage={currentPage}
-            onCurrentPageChange={currentPage => setCurrentPage(currentPage)}
+            onCurrentPageChange={(currentPage) => setCurrentPage(currentPage)}
             pageSize={pageSize}
-            onPageSizeChange={size => setPageSize(size)}
+            onPageSizeChange={(size) => setPageSize(size)}
           />
 
           <IntegratedGrouping />
@@ -220,7 +220,7 @@ const FullDataGridWithDetailView = React.forwardRef(
           )}
 
           <TableColumnReordering
-            defaultOrder={columns.map(column => column.name)}
+            defaultOrder={columns.map((column) => column.name)}
           />
 
           <TableHeaderRow
@@ -233,7 +233,7 @@ const FullDataGridWithDetailView = React.forwardRef(
           <TableRowDetail contentComponent={props.detailTemplate} />
 
           <TableFilterRow
-            cellComponent={props => {
+            cellComponent={(props) => {
               if (
                 props.column.name === 'actions' ||
                 props.column.name === 'counter'
@@ -267,7 +267,7 @@ const FullDataGridWithDetailView = React.forwardRef(
             <Grid
               rows={deletingRows}
               columns={props.columns.filter(
-                c => c.name.toLowerCase() !== 'actions'
+                (c) => c.name.toLowerCase() !== 'actions'
               )}
             >
               <Table cellComponent={cellComponent} />
@@ -326,9 +326,9 @@ FullDataGridWithDetailView.defaultProps = {
     allowadd: true,
     allowedit: true,
     allowdelete: true,
-    allowprint: true
+    allowprint: true,
   },
-  actionsMenu: null
+  actionsMenu: null,
 };
 
 export default withStyles(styleSheet)(FullDataGridWithDetailView);

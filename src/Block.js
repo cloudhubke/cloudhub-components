@@ -1,12 +1,11 @@
 // just copy this code from the driving repo :)
 
-import React, { Component } from 'react';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
+import React from 'react';
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import classNames from 'classnames';
 import { sizes, colors } from './theme';
+import { Slide, Grow, Paper } from './mui/core';
 
 const Block = React.forwardRef((props, ref) => {
   const handleMargins = () => {
@@ -126,6 +125,8 @@ const Block = React.forwardRef((props, ref) => {
     space,
     style,
     animated,
+    slideAnimated,
+    animationDirection,
     paper,
     visible,
     children,
@@ -171,6 +172,21 @@ const Block = React.forwardRef((props, ref) => {
           {children}
         </div>
       </Grow>
+    );
+  }
+
+  if (slideAnimated) {
+    return (
+      <Slide
+        direction={animationDirection || 'up'}
+        in={visible}
+        mountOnEnter
+        unmountOnExit
+      >
+        <div ref={ref} style={blockStyles} {...rest}>
+          {children}
+        </div>
+      </Slide>
     );
   }
 
