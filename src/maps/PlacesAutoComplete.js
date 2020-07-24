@@ -4,13 +4,10 @@ import { Autocomplete } from '@react-google-maps/api';
 const PlacesAutoComplete = (props) => {
   const [autocomplete, setautocomplete] = React.useState(null);
   const onLoad = (autocomplete) => {
-    console.log('autocomplete: ', autocomplete);
-
     setautocomplete(autocomplete);
   };
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
-      console.log(autocomplete.getPlace());
       props.onChange(autocomplete.getPlace());
     } else {
       console.log('Autocomplete is not loaded yet!');

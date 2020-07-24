@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable operator-linebreak */
 /* eslint-disable consistent-return */
@@ -12,7 +13,7 @@ import isEqual from 'lodash/isEqual';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
 import ThemeContext from '../theme/ThemeContext';
-import useDebounce from '../customhooks/useDebounce';
+// import useDebounce from '../customhooks/useDebounce';
 
 const S3Uploader = ({
   dirname,
@@ -39,24 +40,23 @@ const S3Uploader = ({
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
 
-  const incominginput = input.value || value || [];
-
-  const [fileList, setfileList] = React.useState(incominginput || []);
+  const [fileList, setfileList] = React.useState([]);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
   const [uploaderror, setuploaderror] = React.useState(false);
   const [addinginfo, setaddinginfo] = React.useState(null);
-  const [updating, setupdating] = React.useState(null);
-  const [finished, setfinished] = React.useState([]);
-  const [uploadError, setuploadError] = React.useState([]);
+  // const [updating, setupdating] = React.useState(null);
+  // const [finished, setfinished] = React.useState([]);
+  // const [uploadError, setuploadError] = React.useState([]);
 
   const elemId = uniq(5);
 
   React.useEffect(() => {
+    const incominginput = input && input.value ? input.value : value || [];
     if (Array.isArray(incominginput) && !isEqual(incominginput, fileList)) {
       setfileList(incominginput);
     }
-  }, [incominginput]);
+  }, [input, value]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -88,15 +88,16 @@ const S3Uploader = ({
     }
   }, [confirmdelete, deleting]);
 
-  const logChange = () => {
+  const logChange = (fileUpdate) => {
+    const incominginput = input && input.value ? input.value : value || [];
     if (
       typeof input.onChange === 'function' &&
-      !isEqual(fileList, incominginput)
+      !isEqual(fileUpdate, incominginput)
     ) {
-      input.onChange(fileList || []);
+      input.onChange(fileUpdate || []);
     }
-    if (typeof onChange === 'function' && !isEqual(fileList, incominginput)) {
-      onChange(fileList || []);
+    if (typeof onChange === 'function' && !isEqual(fileUpdate, incominginput)) {
+      onChange(fileUpdate || []);
     }
   };
 
@@ -110,26 +111,19 @@ const S3Uploader = ({
         setuploading(true);
       } else {
         setuploading(false);
-        logChange();
+        logChange(fileList);
       }
     }
   }, [fileList]);
 
   const onprogress = (progressEvent, url) => {
-    setupdating({ progressEvent, url });
-  };
-
-  const progressobj = useDebounce(updating, 200);
-
-  React.useEffect(() => {
-    if (progressobj) {
+    if (progressEvent && url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.signedUrl === progressobj.url) {
+            if (obj.signedUrl === url) {
               const progress = Math.round(
-                (progressobj.progressEvent.loaded * 100) /
-                  progressobj.progressEvent.total
+                (progressEvent.loaded * 100) / progressEvent.total
               );
               return { ...obj, progress };
             }
@@ -140,20 +134,14 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [progressobj]);
-
-  const onUploadFinish = (url) => {
-    setfinished((finished) => [...(finished || []), url]);
   };
 
-  const finishedArray = useDebounce(finished, 300);
-
-  React.useEffect(() => {
-    if (finishedArray) {
+  const onUploadFinish = (url) => {
+    if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (finishedArray.indexOf(obj.signedUrl) !== -1) {
+            if (url === obj.signedUrl) {
               const newobj = { ...obj, status: 'done' };
               delete newobj.signedUrl;
               delete newobj.progress;
@@ -166,20 +154,14 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [finishedArray]);
-
-  const onUploadError = (url) => {
-    setuploadError((errors) => [...(errors || []), url]);
   };
 
-  const errorArray = useDebounce(uploadError, 300);
-
-  React.useEffect(() => {
-    if (errorArray) {
+  const onUploadError = (url) => {
+    if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (errorArray.indexOf(obj.signedUrl) !== -1) {
+            if (url === obj.signedUrl) {
               toastr.error(
                 `File ${
                   obj.filename || obj.name
@@ -194,7 +176,7 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [errorArray]);
+  };
 
   const addImageInfo = (vals) => {
     const fileobj = { ...addinginfo, ...vals };
@@ -213,178 +195,176 @@ const S3Uploader = ({
   };
 
   const handleFiles = async (event) => {
-    setuploaderror(false);
-    const { files } = event.target;
-    if (
-      limit &&
-      Array.isArray(fileList) &&
-      Array.isArray(files) &&
-      files.length + fileList.length > limit
-    ) {
-      return toastr.error(`Only a maximum of ${limit} files allowed`);
-    }
-    const fileArray = [];
-    const filesArray = [];
-    await [...(files || [])].map((file) => {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = () => {
-        if (minWidth && img.width < minWidth) {
-          toastr.error(
-            `Image ${file.name} has a width smaller than the required ${minWidth}px`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (
-          aspectratio &&
-          !tolerance &&
-          (img.width / img.height).toFixed(2) !== aspectratio.toFixed(2)
-        ) {
-          toastr.error(
-            `Image  ${file.name} aspect ratio is ${(
-              img.width / img.height
-            ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
-          );
-          setuploaderror(true);
-          return null;
-        }
-
-        if (
-          aspectratio &&
-          tolerance &&
-          Math.abs(img.width / img.height - aspectratio) > tolerance
-        ) {
-          toastr.error(
-            `Image  ${file.name} aspect ratio is ${(
-              img.width / img.height
-            ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
-          );
-          setuploaderror(true);
-          return null;
-        }
-
-        if (!uploaderror) {
-          const elem = document.createElement('canvas');
-          elem.width = maxWidth || img.width;
-          elem.height = maxWidth
-            ? Math.floor((maxWidth * img.height) / img.width)
-            : img.height;
-          const ctx = elem.getContext('2d');
-          // img.width and img.height will contain the original dimensions
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            maxWidth || img.width,
-            maxWidth
-              ? Math.floor((maxWidth * img.height) / img.width)
-              : img.height
-          );
-          ctx.canvas.toBlob(
-            (blob) => {
-              const newfile = new File(
-                [blob],
-                file.name.replace(/[^\w\d_\-.]+/gi, ''),
-                {
-                  type: file.type,
-                  lastModified: Date.now(),
-                }
-              );
-              if (maxSize && maxSize > 0) {
-                const sizelimit = Number(maxSize * 1024);
-                if (file.size > sizelimit) {
+    try {
+      setuploaderror(false);
+      const { files } = event.target;
+      if (
+        limit &&
+        Array.isArray(fileList) &&
+        Array.isArray(files) &&
+        files.length + fileList.length > limit
+      ) {
+        return toastr.error(`Only a maximum of ${limit} files allowed`);
+      }
+      const fileObjArray = await [...(files || [])]
+        .map(
+          async (file) =>
+            new Promise((resolve, reject) => {
+              const img = new Image();
+              img.src = URL.createObjectURL(file);
+              img.onload = () => {
+                if (minWidth && img.width < minWidth) {
                   toastr.error(
-                    `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
+                    `Image ${file.name} has a width smaller than the required ${minWidth}px`
                   );
                   setuploaderror(true);
-                  return null;
+                  reject(new Error('Invalid Width'));
                 }
+                if (
+                  aspectratio &&
+                  !tolerance &&
+                  (img.width / img.height).toFixed(2) !== aspectratio.toFixed(2)
+                ) {
+                  toastr.error(
+                    `Image  ${file.name} aspect ratio is ${(
+                      img.width / img.height
+                    ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
+                  );
+                  setuploaderror(true);
+                  reject(new Error('Invalid aspect ratio'));
+                }
+
+                if (
+                  aspectratio &&
+                  tolerance &&
+                  Math.abs(
+                    Number(img.width) / Number(img.height) - Number(aspectratio)
+                  ) > Number(tolerance)
+                ) {
+                  toastr.error(
+                    `Image  ${file.name} aspect ratio is ${(
+                      img.width / img.height
+                    ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
+                  );
+                  setuploaderror(true);
+                  reject(new Error('Invalid aspect ration'));
+                }
+
+                if (!uploaderror) {
+                  const elem = document.createElement('canvas');
+                  elem.width = maxWidth || img.width;
+                  elem.height = maxWidth
+                    ? Math.floor((maxWidth * img.height) / img.width)
+                    : img.height;
+                  const ctx = elem.getContext('2d');
+                  // img.width and img.height will contain the original dimensions
+                  ctx.drawImage(
+                    img,
+                    0,
+                    0,
+                    maxWidth || img.width,
+                    maxWidth
+                      ? Math.floor((maxWidth * img.height) / img.width)
+                      : img.height
+                  );
+                  ctx.canvas.toBlob(
+                    (blob) => {
+                      const newfile = new File(
+                        [blob],
+                        file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                        {
+                          type: file.type,
+                          lastModified: Date.now(),
+                        }
+                      );
+                      if (maxSize && maxSize > 0) {
+                        const sizelimit = Number(maxSize * 1024);
+                        if (file.size > sizelimit) {
+                          toastr.error(
+                            `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
+                          );
+                          setuploaderror(true);
+                          reject(new Error('File too large'));
+                        }
+                      }
+                      const fileprops = {
+                        name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                        type: file.type,
+                        size: newfile.size,
+                        width: maxWidth || img.width,
+                        height: maxWidth
+                          ? Math.floor((maxWidth * img.height) / img.width)
+                          : img.height,
+                      };
+                      const result = { newfile, fileprops };
+                      resolve(result);
+                    },
+                    file.type,
+                    1
+                  );
+                }
+              };
+            })
+        )
+        .filter(Boolean);
+      let Allfiles = [];
+      await Promise.all(fileObjArray).then((Files) => {
+        Allfiles = Files;
+      });
+      const fileArray = Allfiles.map(({ fileprops }) => fileprops);
+      const filesArray = Allfiles.map(({ newfile }) => newfile);
+
+      const signedUrls = await getSignedUrl(fileArray, true).then(
+        (urls) => urls
+      );
+      const uploads = [...(filesArray || [])].map(
+        (file) =>
+          signedUrls
+            .map(({ signedUrl, filename }) => {
+              if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+                return {
+                  signedUrl,
+                  file,
+                  options: {
+                    headers: {
+                      'Content-Type': qs.parse(signedUrl)['Content-Type'],
+                      Expires: qs.parse(signedUrl).Expires,
+                      'x-amz-acl':
+                        qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
+                    },
+                    onUploadProgress: (progressEvent) => {
+                      onprogress(progressEvent, signedUrl);
+                    },
+                  },
+                };
               }
-              filesArray.push(newfile);
-              fileArray.push({
-                name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
-                type: file.type,
-                size: newfile.size,
-                width: maxWidth || img.width,
-                height: maxWidth
-                  ? Math.floor((maxWidth * img.height) / img.width)
-                  : img.height,
-              });
+              return null;
+            })
+            .filter(Boolean)[0]
+      );
 
-              return newfile;
-            },
-            file.type,
-            1
-          );
-        }
-      };
-      return null;
-    });
-
-    const fetchUrls = setInterval(async () => {
-      if (uploaderror) {
-        clearInterval(fetchUrls);
+      for (const upload of uploads) {
+        // eslint-disable-next-line no-await-in-loop
+        await uploadaxiosinstance
+          .put(upload.signedUrl, upload.file, upload.options)
+          .then(() => {
+            onUploadFinish(upload.signedUrl);
+            toastr.success('Image uploaded successfully');
+          })
+          .catch((error) => {
+            onUploadError(upload.signedUrl);
+            toastr.error(
+              `${
+                error.response
+                  ? error.response.data
+                  : 'Image upload failed, try again later'
+              }`
+            );
+          });
       }
-      if (
-        fileArray.length === files.length &&
-        filesArray.length === files.length &&
-        files.length > 0 &&
-        !uploaderror
-      ) {
-        try {
-          const signedUrls = await getSignedUrl(fileArray, true).then(
-            (urls) => urls
-          );
-          const uploads = [...(filesArray || [])].map(
-            (file) =>
-              signedUrls
-                .map(({ signedUrl, filename }) => {
-                  if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
-                    return {
-                      signedUrl,
-                      file,
-                      options: {
-                        headers: {
-                          'Content-Type': qs.parse(signedUrl)['Content-Type'],
-                          Expires: qs.parse(signedUrl).Expires,
-                          'x-amz-acl':
-                            qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
-                        },
-                        onUploadProgress: (progressEvent) => {
-                          onprogress(progressEvent, signedUrl);
-                        },
-                      },
-                    };
-                  }
-                  return null;
-                })
-                .filter(Boolean)[0]
-          );
-          uploads.map(({ signedUrl, file, options }) =>
-            uploadaxiosinstance
-              .put(signedUrl, file, options)
-              .then(() => {
-                onUploadFinish(signedUrl);
-                toastr.success('Image uploaded successfully');
-              })
-              .catch((error) => {
-                onUploadError(signedUrl);
-                toastr.error(
-                  `${
-                    error.response
-                      ? error.response.data
-                      : 'Image upload failed, try again later'
-                  }`
-                );
-              })
-          );
-          clearInterval(fetchUrls);
-        } catch (error) {
-          clearInterval(fetchUrls);
-        }
-      }
-    }, 100);
+    } catch (error) {
+      toastr.error('Some files could not be uploaded');
+    }
   };
 
   const onDelete = (fd) => {
@@ -541,7 +521,6 @@ const S3Uploader = ({
         maxWidth="sm"
         open={deleting !== null}
         onClose={() => setdeleting(null)}
-        // onConfirm={() => setconfirmdelete(true)}
         minHeight={200}
       >
         <DialogHeader onClose={() => setdeleting(null)} />

@@ -96,13 +96,15 @@ const HoverButton = ({
                 : textColor || colors.dark
             }
           >
-            {text}
+            {children || text}
           </Text>{' '}
         </Block>
       ) : (
         childitems
       )}
-      {suffix || (
+      {suffix || suffix === null ? (
+        suffix
+      ) : (
         <ChevronRight
           style={{
             color: hover ? textHoverColor : textColor,

@@ -53,12 +53,12 @@ const S3Uploader = ({
     }
   }, [incominginput]);
 
-  const logChange = () => {
+  const logChange = (fileUpdate) => {
     if (typeof input.onChange === 'function') {
-      input.onChange(fileList || []);
+      input.onChange(fileUpdate || []);
     }
     if (typeof onChange === 'function') {
-      onChange(fileList || []);
+      onChange(fileUpdate || []);
     }
   };
 
@@ -70,9 +70,10 @@ const S3Uploader = ({
       });
       if (uploading.indexOf('uploading') !== -1) {
         setuploading(true);
+        logChange(fileList);
       } else {
         setuploading(false);
-        logChange();
+        logChange(fileList);
       }
     }
   }, [fileList]);

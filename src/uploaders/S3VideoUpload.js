@@ -77,12 +77,12 @@ const S3Uploader = ({
     }
   }, [incominginput]);
 
-  const logChange = () => {
+  const logChange = (fileUpdate) => {
     if (typeof input.onChange === 'function') {
-      input.onChange(fileList || []);
+      input.onChange(fileUpdate || []);
     }
     if (typeof onChange === 'function') {
-      onChange(fileList || []);
+      onChange(fileUpdate || []);
     }
   };
 
@@ -99,9 +99,10 @@ const S3Uploader = ({
           addingThumbnail.status !== 'done')
       ) {
         setuploading(true);
+        logChange(fileList);
       } else {
         setuploading(false);
-        logChange();
+        logChange(fileList);
       }
     }
   }, [fileList, addingThumbnail]);
