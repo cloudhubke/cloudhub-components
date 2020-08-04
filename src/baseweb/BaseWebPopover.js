@@ -5,7 +5,7 @@ import { useRect } from '@reach/rect';
 import Button from '../Button';
 import Input from '../Input';
 import Block from '../Block';
-import useRectHook from '../customhooks/useRectHook.js';
+// import useRectHook from '../customhooks/useRectHook.js';
 import ThemeContext from '../theme/ThemeContext';
 
 let rect = {};

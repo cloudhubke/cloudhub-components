@@ -35,6 +35,7 @@ export { default as Chips } from './Chips';
 export { default as FieldLabel } from './FieldLabel';
 export { default as FieldButton } from './FieldButton';
 export { default as Slider } from './Slider';
+export { default as Switch } from './Switch';
 export { default as Rating } from './Rating';
 
 export { default as IconButton } from './IconButton';

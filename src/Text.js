@@ -97,7 +97,10 @@ const Text = ({
   cropped,
   ...props
 }) => {
-  const { fonts, colors, sizes } = React.useContext(ThemeContext);
+  const { fonts, colors } = React.useContext(ThemeContext) || {
+    fonts: {},
+    colors: {},
+  };
   const [hovered, sethovered] = React.useState(false);
 
   const styles = {

@@ -31,10 +31,10 @@ const Select = ({
   useEffect(() => {
     if (Array.isArray(options)) {
       setOpts(
-        [...options].map(item => ({
+        [...options].map((item) => ({
           value: isObject(item) ? keyExtractor(item) : item || '',
           label: isObject(item) ? labelExtractor(item) : item || '',
-          item
+          item,
         }))
       );
     }
@@ -48,18 +48,18 @@ const Select = ({
     if (isMulti) {
       if (Array.isArray(value)) {
         setSelectedValue(
-          [...value].map(item => ({
+          [...value].map((item) => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item
+            item,
           }))
         );
       } else {
         setSelectedValue(
-          [value].map(item => ({
+          [value].map((item) => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item
+            item,
           }))
         );
       }
@@ -67,20 +67,21 @@ const Select = ({
       setSelectedValue({
         value: isObject(value) ? keyExtractor(value) : value || '',
         label: isObject(value) ? labelExtractor(value) : value || '',
-        item: value
+        item: value,
       });
     }
   }, [value, isMulti]);
 
-  const logChange = val => {
+  const logChange = (val) => {
     setSelectedValue(val);
 
     if (!val || isEmpty(val)) {
+      onSelectChange(val);
       return onChange(val);
     }
     if (isMulti) {
       if (val && Array.isArray(val)) {
-        const options = val.map(item => {
+        const options = val.map((item) => {
           if (!isObject(item.item)) {
             return item.item;
           }
@@ -156,9 +157,9 @@ Select.defaultProps = {
   selectUp: false,
   disabled: false,
   menuPlacement: 'auto',
-  labelExtractor: item => item,
-  valueExtractor: item => item,
-  keyExtractor: item => item
+  labelExtractor: (item) => item,
+  valueExtractor: (item) => item,
+  keyExtractor: (item) => item,
 };
 
 export default Select;

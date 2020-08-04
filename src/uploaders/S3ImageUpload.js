@@ -206,107 +206,105 @@ const S3Uploader = ({
       ) {
         return toastr.error(`Only a maximum of ${limit} files allowed`);
       }
-      const fileObjArray = await [...(files || [])]
-        .map(
-          async (file) =>
-            new Promise((resolve, reject) => {
-              const img = new Image();
-              img.src = URL.createObjectURL(file);
-              img.onload = () => {
-                if (minWidth && img.width < minWidth) {
-                  toastr.error(
-                    `Image ${file.name} has a width smaller than the required ${minWidth}px`
-                  );
-                  setuploaderror(true);
-                  reject(new Error('Invalid Width'));
-                }
-                if (
-                  aspectratio &&
-                  !tolerance &&
-                  (img.width / img.height).toFixed(2) !== aspectratio.toFixed(2)
-                ) {
-                  toastr.error(
-                    `Image  ${file.name} aspect ratio is ${(
-                      img.width / img.height
-                    ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
-                  );
-                  setuploaderror(true);
-                  reject(new Error('Invalid aspect ratio'));
-                }
+      const fileObjArray = await [...(files || [])].map(
+        async (file) =>
+          new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = () => {
+              if (minWidth && img.width < minWidth) {
+                toastr.error(
+                  `Image ${file.name} has a width smaller than the required ${minWidth}px`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid Width'));
+              }
+              if (
+                aspectratio &&
+                !tolerance &&
+                (img.width / img.height).toFixed(2) !== aspectratio.toFixed(2)
+              ) {
+                toastr.error(
+                  `Image  ${file.name} aspect ratio is ${(
+                    img.width / img.height
+                  ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid aspect ratio'));
+              }
 
-                if (
-                  aspectratio &&
-                  tolerance &&
-                  Math.abs(
-                    Number(img.width) / Number(img.height) - Number(aspectratio)
-                  ) > Number(tolerance)
-                ) {
-                  toastr.error(
-                    `Image  ${file.name} aspect ratio is ${(
-                      img.width / img.height
-                    ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
-                  );
-                  setuploaderror(true);
-                  reject(new Error('Invalid aspect ration'));
-                }
+              if (
+                aspectratio &&
+                tolerance &&
+                Math.abs(
+                  Number(img.width) / Number(img.height) - Number(aspectratio)
+                ) > Number(tolerance)
+              ) {
+                toastr.error(
+                  `Image  ${file.name} aspect ratio is ${(
+                    img.width / img.height
+                  ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid aspect ration'));
+              }
 
-                if (!uploaderror) {
-                  const elem = document.createElement('canvas');
-                  elem.width = maxWidth || img.width;
-                  elem.height = maxWidth
+              if (!uploaderror) {
+                const elem = document.createElement('canvas');
+                elem.width = maxWidth || img.width;
+                elem.height = maxWidth
+                  ? Math.floor((maxWidth * img.height) / img.width)
+                  : img.height;
+                const ctx = elem.getContext('2d');
+                // img.width and img.height will contain the original dimensions
+                ctx.drawImage(
+                  img,
+                  0,
+                  0,
+                  maxWidth || img.width,
+                  maxWidth
                     ? Math.floor((maxWidth * img.height) / img.width)
-                    : img.height;
-                  const ctx = elem.getContext('2d');
-                  // img.width and img.height will contain the original dimensions
-                  ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    maxWidth || img.width,
-                    maxWidth
-                      ? Math.floor((maxWidth * img.height) / img.width)
-                      : img.height
-                  );
-                  ctx.canvas.toBlob(
-                    (blob) => {
-                      const newfile = new File(
-                        [blob],
-                        file.name.replace(/[^\w\d_\-.]+/gi, ''),
-                        {
-                          type: file.type,
-                          lastModified: Date.now(),
-                        }
-                      );
-                      if (maxSize && maxSize > 0) {
-                        const sizelimit = Number(maxSize * 1024);
-                        if (file.size > sizelimit) {
-                          toastr.error(
-                            `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
-                          );
-                          setuploaderror(true);
-                          reject(new Error('File too large'));
-                        }
-                      }
-                      const fileprops = {
-                        name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                    : img.height
+                );
+                ctx.canvas.toBlob(
+                  (blob) => {
+                    const newfile = new File(
+                      [blob],
+                      file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                      {
                         type: file.type,
-                        size: newfile.size,
-                        width: maxWidth || img.width,
-                        height: maxWidth
-                          ? Math.floor((maxWidth * img.height) / img.width)
-                          : img.height,
-                      };
-                      const result = { newfile, fileprops };
-                      resolve(result);
-                    },
-                    file.type,
-                    1
-                  );
-                }
-              };
-            })
-        )
-        .filter(Boolean);
+                        lastModified: Date.now(),
+                      }
+                    );
+                    if (maxSize && maxSize > 0) {
+                      const sizelimit = Number(maxSize * 1024);
+                      if (file.size > sizelimit) {
+                        toastr.error(
+                          `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
+                        );
+                        setuploaderror(true);
+                        reject(new Error('File too large'));
+                      }
+                    }
+                    const fileprops = {
+                      name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                      type: file.type,
+                      size: newfile.size,
+                      width: maxWidth || img.width,
+                      height: maxWidth
+                        ? Math.floor((maxWidth * img.height) / img.width)
+                        : img.height,
+                    };
+                    const result = { newfile, fileprops };
+                    resolve(result);
+                  },
+                  file.type,
+                  1
+                );
+              }
+            };
+          })
+      );
       let Allfiles = [];
       await Promise.all(fileObjArray).then((Files) => {
         Allfiles = Files;

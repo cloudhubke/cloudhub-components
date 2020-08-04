@@ -61,18 +61,18 @@ const RemoteSelector = ({
     if (isMulti) {
       if (Array.isArray(value)) {
         setSelectedValue(
-          [...value].map(item => ({
+          [...value].map((item) => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item
+            item,
           }))
         );
       } else {
         setSelectedValue(
-          [value].map(item => ({
+          [value].map((item) => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item
+            item,
           }))
         );
       }
@@ -80,19 +80,20 @@ const RemoteSelector = ({
       setSelectedValue({
         value: isObject(value) ? keyExtractor(value) : value || '',
         label: isObject(value) ? labelExtractor(value) : value || '',
-        item: value
+        item: value,
       });
     }
   }, [value, isMulti]);
 
-  const logChange = val => {
+  const logChange = (val) => {
     setSelectedValue(val);
     if (!val || isEmpty(val)) {
+      onSelectChange(val);
       return onChange(val);
     }
     if (isMulti) {
       if (val && Array.isArray(val)) {
-        const options = val.map(item => {
+        const options = val.map((item) => {
           if (!isObject(item.item)) {
             return item.item;
           }
@@ -128,10 +129,10 @@ const RemoteSelector = ({
         .then(({ data }) => {
           const array = data ? data.items || data : [];
 
-          const options = [...array, ...otheroptions].map(item => ({
+          const options = [...array, ...otheroptions].map((item) => ({
             value: isObject(item) ? keyExtractor(item) : item || '',
             label: isObject(item) ? labelExtractor(item) : item || '',
-            item
+            item,
           }));
 
           setFirstOptions(options);
@@ -146,10 +147,10 @@ const RemoteSelector = ({
       .then(({ data }) => {
         const array = data ? data.items || data : [];
 
-        const options = [...array, ...otheroptions].map(item => ({
+        const options = [...array, ...otheroptions].map((item) => ({
           value: isObject(item) ? keyExtractor(item) : item || '',
           label: isObject(item) ? labelExtractor(item) : item || '',
-          item
+          item,
         }));
 
         if (firstoptions.length === 0) {
@@ -164,7 +165,7 @@ const RemoteSelector = ({
 
   const debouncedFetch = useRef(debounce(fetchOptions, debounceTime)).current;
 
-  const handleInputChange = searchText => {
+  const handleInputChange = (searchText) => {
     setSearchText(searchText);
   };
 
@@ -183,7 +184,7 @@ const RemoteSelector = ({
           onInputChange={handleInputChange}
           onMenuOpen={onMenuOpen}
           menuPlacement={menuPlacement || 'auto'}
-          getOptionValue={option => option.value}
+          getOptionValue={(option) => option.value}
           isMulti={isMulti}
           {...props}
         />
@@ -200,7 +201,7 @@ const RemoteSelector = ({
           onInputChange={handleInputChange}
           onMenuOpen={onMenuOpen}
           menuPlacement={menuPlacement || 'auto'}
-          getOptionValue={option => option.value}
+          getOptionValue={(option) => option.value}
           isMulti={isMulti}
           {...props}
         />
@@ -224,9 +225,9 @@ RemoteSelector.defaultProps = {
   selectUp: false,
   disabled: false,
   menuPlacement: 'auto',
-  valueExtractor: item => item,
-  labelExtractor: item => item,
-  keyExtractor: item => item
+  valueExtractor: (item) => item,
+  labelExtractor: (item) => item,
+  keyExtractor: (item) => item,
 };
 
 export default RemoteSelector;

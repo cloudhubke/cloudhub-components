@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable operator-linebreak */
 /* eslint-disable consistent-return */
@@ -28,7 +29,6 @@ import {
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import ThemeContext from '../theme/ThemeContext';
 import AntProgress from '../ant/AntProgress';
-import useDebounce from '../customhooks/useDebounce';
 
 const S3Uploader = ({
   dirname,
@@ -50,8 +50,8 @@ const S3Uploader = ({
   minWidth,
   aspectratio,
   tolerance,
-  maxLength,
-  minLength,
+  maxDuration,
+  minDuration,
   setuploading,
   disabled,
   readOnly,
@@ -65,9 +65,6 @@ const S3Uploader = ({
   const [uploaderror, setuploaderror] = React.useState(false);
   const [addinginfo, setaddinginfo] = React.useState(null);
   const [thumberror, setthumberror] = React.useState(false);
-  const [updating, setupdating] = React.useState(null);
-  const [finished, setfinished] = React.useState([]);
-  const [uploadError, setuploadError] = React.useState([]);
 
   const elemId = uniq(5);
 
@@ -106,31 +103,6 @@ const S3Uploader = ({
       }
     }
   }, [fileList, addingThumbnail]);
-
-  const thumbUpdate = useDebounce(addingThumbnail, 500);
-  React.useEffect(() => {
-    if (thumbUpdate && thumbUpdate.status === 'done') {
-      setfileList((urls) => {
-        if (urls.length > 0) {
-          const progressArray = urls.map((obj) => {
-            if (obj.uid === thumbUpdate.video) {
-              const newobj = {
-                ...obj,
-                status: 'done',
-                thumbnail: thumbUpdate.Location,
-                thumbfd: thumbUpdate.fd,
-              };
-              setaddingThumbnail(null);
-              return { ...newobj };
-            }
-            return obj;
-          });
-          return progressArray;
-        }
-        return urls;
-      });
-    }
-  }, [thumbUpdate]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete && Array.isArray(fileList)) {
@@ -175,12 +147,7 @@ const S3Uploader = ({
   }, [confirmdelete, deleting]);
 
   const onprogress = (progressEvent, url) => {
-    setupdating({ progressEvent, url });
-  };
-  const progressobj = useDebounce(updating, 200);
-
-  React.useEffect(() => {
-    if (progressobj) {
+    if (progressEvent && url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
@@ -198,20 +165,14 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [progressobj]);
-
-  const onUploadFinish = (url) => {
-    setfinished((finished) => [...(finished || []), url]);
   };
 
-  const finishedArray = useDebounce(finished, 300);
-
-  React.useEffect(() => {
-    if (finishedArray) {
+  const onUploadFinish = (url) => {
+    if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (finishedArray.indexOf(obj.signedUrl) !== -1) {
+            if (url === obj.signedUrl) {
               const newobj = { ...obj, status: 'done' };
               delete newobj.signedUrl;
               delete newobj.progress;
@@ -224,20 +185,14 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [finishedArray]);
-
-  const onUploadError = (url) => {
-    setuploadError((errors) => [...(errors || []), url]);
   };
 
-  const errorArray = useDebounce(uploadError, 300);
-
-  React.useEffect(() => {
-    if (errorArray) {
+  const onUploadError = (url) => {
+    if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (errorArray.indexOf(obj.signedUrl) !== -1) {
+            if (url === obj.signedUrl) {
               toastr.error(
                 `File ${
                   obj.filename || obj.name
@@ -252,7 +207,7 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [errorArray]);
+  };
 
   const onthumbprogress = (progressEvent, url) => {
     setaddingThumbnail((thumb) => {
@@ -267,166 +222,184 @@ const S3Uploader = ({
   };
 
   const onThumbFinish = () => {
-    setaddingThumbnail((thumb) => ({ ...thumb, status: 'done' }));
+    setfileList((urls) => {
+      if (urls.length > 0) {
+        const progressArray = urls.map((obj) => {
+          if (obj.uid === thumbUpdate.video) {
+            const newobj = {
+              ...obj,
+              status: 'done',
+              thumbnail: addingThumbnail.Location,
+              thumbfd: addingThumbnail.fd,
+            };
+            setaddingThumbnail(null);
+            return { ...newobj };
+          }
+          return obj;
+        });
+        return progressArray;
+      }
+      return urls;
+    });
   };
 
   const handleFiles = async (event) => {
-    setuploaderror(false);
-    const { files } = event.target;
-    if (
-      limit &&
-      Array.isArray(fileList) &&
-      Array.isArray(files) &&
-      files.length + fileList.length > limit
-    ) {
-      return toastr.error(`Only a maximum of ${limit} files allowed`);
-    }
-    if (maxSize && maxSize > 0) {
-      const sizelimit = Number(maxSize * 1024 * 1024);
-      const inds = [...(files || [])]
-        .map((file, index) => (file.size > sizelimit ? index + 1 : null))
-        .filter(Boolean);
-      if (inds.length > 0) {
-        return toastr.error(
-          `File "${
-            files[inds[0] - 1].name
-          }" exceeds ${maxSize}MB. Please try again with a smaller file`
-        );
-      }
-    }
-    const fileArray = [];
-    await [...(files || [])].map((file) => {
-      const video = document.createElement('video');
-      video.src = URL.createObjectURL(file);
-      video.preload = 'metadata';
-      video.onloadedmetadata = () => {
-        if (maxWidth && video.videoWidth > maxWidth) {
-          toastr.error(
-            `Video ${file.name} is wider than the maximum allowed ${maxWidth}px`
-          );
-          setuploaderror(true);
-          return null;
-        }
-
-        if (minWidth && video.videoWidth < minWidth) {
-          toastr.error(
-            `Video ${file.name} is narrower than the minimum allowed ${minWidth}px`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (
-          aspectratio &&
-          !tolerance &&
-          (video.videoWidth / video.videoHeight).toFixed(2) !==
-            aspectratio.toFixed(2)
-        ) {
-          toastr.error(
-            `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (
-          aspectratio &&
-          tolerance &&
-          Math.abs(video.videoWidth / video.videoHeight - aspectratio) >
-            tolerance
-        ) {
-          toastr.error(
-            `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (minLength && video.duration < minLength) {
-          toastr.error(
-            `Video ${file.name} is shorter than the minimum required ${minLength} seconds`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (maxLength && video.duration > maxLength) {
-          toastr.error(
-            `Video ${file.name} is longer than the maximum allowed ${maxLength} seconds`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        fileArray.push({
-          name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
-          type: file.type,
-          size: file.size,
-          length: video.duration,
-          videoWidth: video.videoWidth,
-          videoHeight: video.videoHeight,
-        });
-      };
-      return null;
-    });
-    const fetchUrls = setInterval(async () => {
-      if (uploaderror) {
-        clearInterval(fetchUrls);
-        return null;
-      }
+    try {
+      setuploaderror(false);
+      const { files } = event.target;
       if (
-        fileArray.length === files.length &&
-        files.length > 0 &&
-        !uploaderror
+        limit &&
+        Array.isArray(fileList) &&
+        Array.isArray(files) &&
+        files.length + fileList.length > limit
       ) {
-        try {
-          const signedUrls = await getSignedUrl(fileArray, true).then(
-            (urls) => urls
+        return toastr.error(`Only a maximum of ${limit} files allowed`);
+      }
+      if (maxSize && maxSize > 0) {
+        const sizelimit = Number(maxSize * 1024 * 1024);
+        const inds = [...(files || [])]
+          .map((file, index) => (file.size > sizelimit ? index + 1 : null))
+          .filter(Boolean);
+        if (inds.length > 0) {
+          return toastr.error(
+            `File "${
+              files[inds[0] - 1].name
+            }" exceeds ${maxSize}MB. Please try again with a smaller file`
           );
-          const uploads = [...(files || [])].map(
-            (file) =>
-              signedUrls
-                .map(({ signedUrl, filename }) => {
-                  if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
-                    return {
-                      signedUrl,
-                      file,
-                      options: {
-                        headers: {
-                          'Content-Type': qs.parse(signedUrl)['Content-Type'],
-                          Expires: qs.parse(signedUrl).Expires,
-                          'x-amz-acl':
-                            qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
-                        },
-                        onUploadProgress: (progressEvent) => {
-                          onprogress(progressEvent, signedUrl);
-                        },
-                      },
-                    };
-                  }
-                  return null;
-                })
-                .filter(Boolean)[0]
-          );
-          uploads.map(({ signedUrl, file, options }) =>
-            uploadaxiosinstance
-              .put(signedUrl, file, options)
-              .then(() => {
-                onUploadFinish(signedUrl);
-                toastr.success('Video uploaded successfully');
-              })
-              .catch((error) => {
-                onUploadError(signedUrl);
-                toastr.error(
-                  `${
-                    error.response
-                      ? error.response.data
-                      : 'Video upload failed, try again later'
-                  }`
-                );
-              })
-          );
-          clearInterval(fetchUrls);
-        } catch (error) {
-          clearInterval(fetchUrls);
         }
       }
-    }, 100);
+      const fileObjArray = await [...(files || [])].map(
+        async (file) =>
+          new Promise((resolve, reject) => {
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(file);
+            video.preload = 'metadata';
+            video.onloadedmetadata = () => {
+              if (maxWidth && video.videoWidth > maxWidth) {
+                toastr.error(
+                  `Video ${file.name} is wider than the maximum allowed ${maxWidth}px`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid Width'));
+              }
+
+              if (minWidth && video.videoWidth < minWidth) {
+                toastr.error(
+                  `Video ${file.name} is narrower than the minimum allowed ${minWidth}px`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid Width'));
+              }
+              if (
+                aspectratio &&
+                !tolerance &&
+                (video.videoWidth / video.videoHeight).toFixed(2) !==
+                  aspectratio.toFixed(2)
+              ) {
+                toastr.error(
+                  `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid aspect ratio'));
+              }
+              if (
+                aspectratio &&
+                tolerance &&
+                Math.abs(video.videoWidth / video.videoHeight - aspectratio) >
+                  tolerance
+              ) {
+                toastr.error(
+                  `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid aspect ratio'));
+              }
+              if (minDuration && video.duration < minDuration) {
+                toastr.error(
+                  `Video ${file.name} is shorter than the minimum required ${minDuration} seconds`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid video duration'));
+              }
+              if (maxDuration && video.duration > maxDuration) {
+                toastr.error(
+                  `Video ${file.name} is longer than the maximum allowed ${maxDuration} seconds`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid video duration'));
+              }
+              if (!uploaderror) {
+                const fileprops = {
+                  name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                  type: file.type,
+                  size: file.size,
+                  length: video.duration,
+                  videoWidth: video.videoWidth,
+                  videoHeight: video.videoHeight,
+                };
+                resolve({ file, fileprops });
+              }
+            };
+          })
+      );
+      let Allfiles = [];
+      await Promise.all(fileObjArray).then((Files) => {
+        Allfiles = Files;
+      });
+
+      const fileArray = Allfiles.map(({ fileprops }) => fileprops);
+      const filesArray = Allfiles.map(({ file }) => file);
+
+      const signedUrls = await getSignedUrl(fileArray, true);
+
+      const uploads = [...(filesArray || [])].map(
+        (file) =>
+          signedUrls
+            .map(({ signedUrl, filename }) => {
+              if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+                return {
+                  signedUrl,
+                  file,
+                  options: {
+                    headers: {
+                      'Content-Type': qs.parse(signedUrl)['Content-Type'],
+                      Expires: qs.parse(signedUrl).Expires,
+                      'x-amz-acl':
+                        qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
+                    },
+                    onUploadProgress: (progressEvent) => {
+                      onprogress(progressEvent, signedUrl);
+                    },
+                  },
+                };
+              }
+              return null;
+            })
+            .filter(Boolean)[0]
+      );
+
+      for (const upload of uploads) {
+        // eslint-disable-next-line no-await-in-loop
+        await uploadaxiosinstance
+          .put(upload.signedUrl, upload.file, upload.options)
+          .then(() => {
+            onUploadFinish(upload.signedUrl);
+            toastr.success('Video uploaded successfully');
+          })
+          .catch((error) => {
+            onUploadError(upload.signedUrl);
+            toastr.error(
+              `${
+                error.response
+                  ? error.response.data
+                  : 'Video upload failed, try again later'
+              }`
+            );
+          });
+      }
+    } catch {
+      toastr.error('Some files could not be uploaded');
+    }
   };
 
   const addThumb = async (event) => {
@@ -489,9 +462,8 @@ const S3Uploader = ({
       }
       if (fileArray.length > 0 && !ThumbError) {
         try {
-          const signedUrls = await getSignedUrl(fileArray, false).then(
-            (urls) => urls
-          );
+          const signedUrls = await getSignedUrl(fileArray, false);
+
           const uploads = [...(files || [])].map(
             (file) =>
               signedUrls
@@ -551,63 +523,25 @@ const S3Uploader = ({
   };
 
   const getSignedUrl = async (files, video) => {
-    const urls = await signaxiosinstance()
-      .post(signurl, {
+    try {
+      const { data } = await signaxiosinstance().post(signurl, {
         files,
         ACL: ACL || 'public-read',
         dirname: video ? dirname || 'video/' : thumbdirname || 'thumbnail/',
-      })
-      .then(({ data }) => {
-        const signedUrls = video
-          ? data.signedUrls.map((obj) => ({
-              ...obj,
-              progress: 0,
-              length:
-                files
-                  .map(({ length, name }) => {
-                    if (obj.filename === name) {
-                      return length;
-                    }
-                    return null;
-                  })
-                  .filter(Boolean)[0] || NaN,
-              videoWidth:
-                files
-                  .map(({ videoWidth, name }) => {
-                    if (obj.filename === name) {
-                      return videoWidth;
-                    }
-                    return null;
-                  })
-                  .filter(Boolean)[0] || NaN,
-              videoHeight:
-                files
-                  .map(({ videoHeight, name }) => {
-                    if (obj.filename === name) {
-                      return videoHeight;
-                    }
-                    return null;
-                  })
-                  .filter(Boolean)[0] || NaN,
-            }))
-          : data.signedUrls.map((obj) => ({
-              ...obj,
-              progress: 0,
-            }));
-        if (video) {
-          setfileList((files) => [...files, ...signedUrls]);
-        } else {
-          setaddingThumbnail(({ video }) => ({ ...signedUrls[0], video }));
-        }
-
-        return signedUrls;
-      })
-      .catch(() => {
-        toastr.error(
-          'There was an error uploading file. Please try again later'
-        );
       });
-    return urls;
+      const signedUrls = data.signedUrls.map((obj) => ({
+        ...obj,
+        progress: 0,
+      }));
+      if (video) {
+        setfileList((files) => [...files, ...signedUrls]);
+      } else {
+        setaddingThumbnail(({ video }) => ({ ...signedUrls[0], video }));
+      }
+      return signedUrls;
+    } catch (error) {
+      toastr.error('There was an error uploading file. Please try again later');
+    }
   };
 
   const addVideoInfo = (vals) => {
