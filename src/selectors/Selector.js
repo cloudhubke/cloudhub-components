@@ -8,124 +8,146 @@ import isString from 'lodash/isString';
 import debounce from 'lodash/debounce';
 import axios from 'axios';
 
-const RemoteSelector = ({
-  value,
-  onChange,
-  onSelectChange,
-  axiosinstance,
-  returnkeys,
-  valueField,
-  displayField,
-  labelExtractor,
-  keyExtractor,
-  valueExtractor,
-  filterKey = 'filter',
-  menuPlacement,
-  disabled,
-  placeholder,
-  url,
-  params,
-  isMulti,
-  creatable,
-  debounceTime = 1000,
-  otheroptions,
-  ...props
-}) => {
-  const [loaded, setLoaded] = useState(false);
-  const [options, setOptions] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [firstoptions, setFirstOptions] = useState([]);
-  const [selectedValue, setSelectedValue] = useState([]);
+const RemoteSelector = React.forwardRef(
+  (
+    {
+      value,
+      onChange,
+      onSelectChange,
+      axiosinstance,
+      returnkeys,
+      valueField,
+      displayField,
+      labelExtractor,
+      keyExtractor,
+      valueExtractor,
+      filterKey = 'filter',
+      menuPlacement,
+      disabled,
+      placeholder,
+      url,
+      params,
+      isMulti,
+      creatable,
+      debounceTime = 1000,
+      otheroptions,
+      ...props
+    },
+    ref
+  ) => {
+    const [loaded, setLoaded] = useState(false);
+    const [options, setOptions] = useState([]);
+    const [searchText, setSearchText] = useState('');
+    const [firstoptions, setFirstOptions] = useState([]);
+    const [selectedValue, setSelectedValue] = useState([]);
 
-  useEffect(() => {
-    if (Array.isArray(value)) {
-      if (options.length === 0 && value.length > 0) {
-        setOptions([...value]);
-      }
-    }
-    return () => null;
-  }, [options, value]);
-
-  useEffect(() => {
-    if (!searchText) {
-      setOptions([...firstoptions]);
-    }
-    return () => null;
-  }, [searchText, firstoptions]);
-
-  useEffect(() => {
-    if (!value) {
-      setSelectedValue(null);
-      return;
-    }
-    if (isMulti) {
+    useEffect(() => {
       if (Array.isArray(value)) {
-        setSelectedValue(
-          [...value].map((item) => ({
-            value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? labelExtractor(item) : item || '',
-            item,
-          }))
-        );
-      } else {
-        setSelectedValue(
-          [value].map((item) => ({
-            value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? labelExtractor(item) : item || '',
-            item,
-          }))
-        );
+        if (options.length === 0 && value.length > 0) {
+          setOptions([...value]);
+        }
       }
-    } else if (value) {
-      setSelectedValue({
-        value: isObject(value) ? keyExtractor(value) : value || '',
-        label: isObject(value) ? labelExtractor(value) : value || '',
-        item: value,
-      });
-    }
-  }, [value, isMulti]);
+      return () => null;
+    }, [options, value]);
 
-  const logChange = (val) => {
-    setSelectedValue(val);
-    if (!val || isEmpty(val)) {
-      onSelectChange(val);
-      return onChange(val);
-    }
-    if (isMulti) {
-      if (val && Array.isArray(val)) {
-        const options = val.map((item) => {
-          if (!isObject(item.item)) {
-            return item.item;
-          }
-          const objValue = { ...item.item };
-          return valueExtractor(objValue);
+    useEffect(() => {
+      if (!searchText) {
+        setOptions([...firstoptions]);
+      }
+      return () => null;
+    }, [searchText, firstoptions]);
+
+    useEffect(() => {
+      if (!value) {
+        setSelectedValue(null);
+        return;
+      }
+      if (isMulti) {
+        if (Array.isArray(value)) {
+          setSelectedValue(
+            [...value].map((item) => ({
+              value: isObject(item) ? keyExtractor(item) : item || '',
+              label: isObject(item) ? labelExtractor(item) : item || '',
+              item,
+            }))
+          );
+        } else {
+          setSelectedValue(
+            [value].map((item) => ({
+              value: isObject(item) ? keyExtractor(item) : item || '',
+              label: isObject(item) ? labelExtractor(item) : item || '',
+              item,
+            }))
+          );
+        }
+      } else if (value) {
+        setSelectedValue({
+          value: isObject(value) ? keyExtractor(value) : value || '',
+          label: isObject(value) ? labelExtractor(value) : value || '',
+          item: value,
         });
-        onChange(options);
+      }
+    }, [value, isMulti]);
+
+    const logChange = (val) => {
+      setSelectedValue(val);
+      if (!val || isEmpty(val)) {
+        onSelectChange(val);
+        return onChange(val);
+      }
+      if (isMulti) {
+        if (val && Array.isArray(val)) {
+          const options = val.map((item) => {
+            if (!isObject(item.item)) {
+              return item.item;
+            }
+            const objValue = { ...item.item };
+            return valueExtractor(objValue);
+          });
+          onChange(options);
+          onSelectChange(val || []);
+          return true;
+        }
+        onChange(val || []);
         onSelectChange(val || []);
         return true;
       }
-      onChange(val || []);
-      onSelectChange(val || []);
-      return true;
-    }
-    if (val && val.value) {
-      if (!isObject(val.item)) {
-        onSelectChange(val.item);
-        return onChange(val.item);
+      if (val && val.value) {
+        if (!isObject(val.item)) {
+          onSelectChange(val.item);
+          return onChange(val.item);
+        }
+        const objValue = { ...val.item };
+
+        onChange(valueExtractor(objValue));
+        onSelectChange(objValue);
+        return true;
       }
-      const objValue = { ...val.item };
+    };
 
-      onChange(valueExtractor(objValue));
-      onSelectChange(objValue);
-      return true;
-    }
-  };
+    const onMenuOpen = () => {
+      if (!loaded) {
+        setLoaded(true);
+        axiosinstance()
+          .get(url, { params: { ...params, [filterKey]: '' } })
+          .then(({ data }) => {
+            const array = data ? data.items || data : [];
 
-  const onMenuOpen = () => {
-    if (!loaded) {
-      setLoaded(true);
+            const options = [...array, ...otheroptions].map((item) => ({
+              value: isObject(item) ? keyExtractor(item) : item || '',
+              label: isObject(item) ? labelExtractor(item) : item || '',
+              item,
+            }));
+
+            setFirstOptions(options);
+            setOptions(options);
+          });
+      }
+    };
+
+    const fetchOptions = (inputValue, callback) => {
       axiosinstance()
-        .get(url, { params: { ...params, [filterKey]: '' } })
+        .get(url, { params: { ...params, [filterKey]: inputValue.trim() } })
         .then(({ data }) => {
           const array = data ? data.items || data : [];
 
@@ -135,84 +157,69 @@ const RemoteSelector = ({
             item,
           }));
 
-          setFirstOptions(options);
-          setOptions(options);
+          if (firstoptions.length === 0) {
+            setFirstOptions(options);
+            setOptions(options);
+          } else {
+            setOptions(options);
+          }
+          callback(options);
         });
-    }
-  };
+    };
 
-  const fetchOptions = (inputValue, callback) => {
-    axiosinstance()
-      .get(url, { params: { ...params, [filterKey]: inputValue.trim() } })
-      .then(({ data }) => {
-        const array = data ? data.items || data : [];
+    const debouncedFetch = useRef(debounce(fetchOptions, debounceTime)).current;
 
-        const options = [...array, ...otheroptions].map((item) => ({
-          value: isObject(item) ? keyExtractor(item) : item || '',
-          label: isObject(item) ? labelExtractor(item) : item || '',
-          item,
-        }));
+    const handleInputChange = (searchText) => {
+      setSearchText(searchText);
+    };
 
-        if (firstoptions.length === 0) {
-          setFirstOptions(options);
-          setOptions(options);
-        } else {
-          setOptions(options);
-        }
-        callback(options);
-      });
-  };
+    React.useImperativeHandle(ref, () => ({
+      reload: () => {
+        fetchOptions(searchText, () => null);
+      },
+    }));
 
-  const debouncedFetch = useRef(debounce(fetchOptions, debounceTime)).current;
-
-  const handleInputChange = (searchText) => {
-    setSearchText(searchText);
-  };
-
-  React.useEffect(() => {
-    fetchOptions('');
-  }, [params]);
-
-  return (
-    <React.Fragment>
-      {creatable ? (
-        <AsyncCreatableSelect
-          cacheOptions
-          isClearable
-          value={selectedValue}
-          defaultOptions={options}
-          loadOptions={debouncedFetch}
-          onChange={logChange}
-          placeholder={placeholder}
-          isDisabled={disabled}
-          onInputChange={handleInputChange}
-          onMenuOpen={onMenuOpen}
-          menuPlacement={menuPlacement || 'auto'}
-          getOptionValue={(option) => option.value}
-          isMulti={isMulti}
-          {...props}
-        />
-      ) : (
-        <AsyncSelect
-          cacheOptions
-          isClearable
-          value={selectedValue}
-          defaultOptions={options}
-          loadOptions={debouncedFetch}
-          onChange={logChange}
-          placeholder={placeholder}
-          isDisabled={disabled}
-          onInputChange={handleInputChange}
-          onMenuOpen={onMenuOpen}
-          menuPlacement={menuPlacement || 'auto'}
-          getOptionValue={(option) => option.value}
-          isMulti={isMulti}
-          {...props}
-        />
-      )}
-    </React.Fragment>
-  );
-};
+    return (
+      <React.Fragment>
+        {creatable ? (
+          <AsyncCreatableSelect
+            cacheOptions
+            isClearable
+            value={selectedValue}
+            defaultOptions={options}
+            loadOptions={debouncedFetch}
+            onChange={logChange}
+            placeholder={placeholder}
+            isDisabled={disabled}
+            onInputChange={handleInputChange}
+            onMenuOpen={onMenuOpen}
+            menuPlacement={menuPlacement || 'auto'}
+            getOptionValue={(option) => option.value}
+            isMulti={isMulti}
+            {...props}
+          />
+        ) : (
+          <AsyncSelect
+            cacheOptions
+            isClearable
+            value={selectedValue}
+            defaultOptions={options}
+            loadOptions={debouncedFetch}
+            onChange={logChange}
+            placeholder={placeholder}
+            isDisabled={disabled}
+            onInputChange={handleInputChange}
+            onMenuOpen={onMenuOpen}
+            menuPlacement={menuPlacement || 'auto'}
+            getOptionValue={(option) => option.value}
+            isMulti={isMulti}
+            {...props}
+          />
+        )}
+      </React.Fragment>
+    );
+  }
+);
 
 RemoteSelector.defaultProps = {
   isMulti: false,

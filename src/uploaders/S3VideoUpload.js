@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable operator-linebreak */
 /* eslint-disable consistent-return */
@@ -13,6 +14,7 @@ import {
   Close,
   InfoOutlined,
 } from '@material-ui/icons';
+import isEqual from 'lodash/isEqual';
 import {
   Block,
   Text,
@@ -26,9 +28,7 @@ import {
 } from '..';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import ThemeContext from '../theme/ThemeContext';
-
 import AntProgress from '../ant/AntProgress';
-import useDebounce from '../customhooks/useDebounce';
 
 const S3Uploader = ({
   dirname,
@@ -50,82 +50,65 @@ const S3Uploader = ({
   minWidth,
   aspectratio,
   tolerance,
-  maxLength,
-  minLength,
+  maxDuration,
+  minDuration,
   setuploading,
+  uploading,
+  disabled,
+  readOnly,
 }) => {
+  const incominginput = input.value || value || [];
   const { sizes, colors } = React.useContext(ThemeContext);
-  const [fileList, setfileList] = React.useState(input.value || value || []);
+  const [fileList, setfileList] = React.useState(incominginput || []);
   const [addingThumbnail, setaddingThumbnail] = React.useState(null);
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
   const [uploaderror, setuploaderror] = React.useState(false);
   const [addinginfo, setaddinginfo] = React.useState(null);
   const [thumberror, setthumberror] = React.useState(false);
-  const [updating, setupdating] = React.useState(null);
-  const [finished, setfinished] = React.useState([]);
-  const [uploadError, setuploadError] = React.useState([]);
 
   const elemId = uniq(5);
 
   React.useEffect(() => {
-    if (input && input.value) {
-      setfileList(input.value);
+    if (Array.isArray(incominginput) && !isEqual(incominginput, fileList)) {
+      setfileList(incominginput);
     }
-    if (value) {
-      setfileList(value);
-    }
-  }, [input, value]);
+  }, [incominginput]);
 
-  React.useEffect(() => {
+  const logChange = (fileUpdate) => {
     if (typeof input.onChange === 'function') {
-      input.onChange(fileList || []);
+      input.onChange(fileUpdate || []);
     }
     if (typeof onChange === 'function') {
-      onChange(fileList || []);
+      onChange(fileUpdate || []);
     }
-    const uploading = fileList.map(({ status }) => {
-      if (status === 'done') return 'done';
-      return 'uploading';
-    });
-    if (
-      uploading.indexOf('uploading') !== -1 ||
-      (addingThumbnail &&
-        addingThumbnail.video &&
-        addingThumbnail.status !== 'done')
-    ) {
-      setuploading(true);
-    } else {
-      setuploading(false);
-    }
-  }, [fileList, addingThumbnail, onChange]);
-  const thumbUpdate = useDebounce(addingThumbnail, 500);
-  React.useEffect(() => {
-    if (thumbUpdate && thumbUpdate.status === 'done') {
-      setfileList((urls) => {
-        if (urls.length > 0) {
-          const progressArray = urls.map((obj) => {
-            if (obj.uid === thumbUpdate.video) {
-              const newobj = {
-                ...obj,
-                status: 'done',
-                thumbnail: thumbUpdate.Location,
-                thumbfd: thumbUpdate.fd,
-              };
-              setaddingThumbnail(null);
-              return { ...newobj };
-            }
-            return obj;
-          });
-          return progressArray;
-        }
-        return urls;
-      });
-    }
-  }, [thumbUpdate]);
+  };
 
   React.useEffect(() => {
-    if (deleting && confirmdelete) {
+    if (Array.isArray(fileList)) {
+      const isuploading = fileList.map(({ status }) => {
+        if (status === 'done') return 'done';
+        return 'uploading';
+      });
+      if (
+        isuploading.indexOf('uploading') !== -1 ||
+        (addingThumbnail &&
+          addingThumbnail.video &&
+          addingThumbnail.status !== 'done')
+      ) {
+        if (!uploading) {
+          setuploading(true);
+        }
+        logChange(fileList);
+      } else {
+        setuploading(false);
+        logChange(fileList);
+      }
+    }
+  }, [fileList, addingThumbnail]);
+
+  React.useEffect(() => {
+    if (deleting && confirmdelete && Array.isArray(fileList)) {
       const fileArr = fileList
         .map(({ Location, fd, thumbfd }) => {
           if (Location === deleting) {
@@ -167,19 +150,13 @@ const S3Uploader = ({
   }, [confirmdelete, deleting]);
 
   const onprogress = (progressEvent, url) => {
-    setupdating({ progressEvent, url });
-  };
-  const progressobj = useDebounce(updating, 200);
-
-  React.useEffect(() => {
-    if (progressobj) {
+    if (progressEvent && url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.signedUrl === progressobj.url) {
+            if (obj.signedUrl === url) {
               const progress = Math.round(
-                (progressobj.progressEvent.loaded * 100) /
-                  progressobj.progressEvent.total
+                (progressEvent.loaded * 100) / progressEvent.total
               );
               return { ...obj, progress };
             }
@@ -190,20 +167,14 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [progressobj]);
-
-  const onUploadFinish = (url) => {
-    setfinished((finished) => [...(finished || []), url]);
   };
 
-  const finishedArray = useDebounce(finished, 300);
-
-  React.useEffect(() => {
-    if (finishedArray) {
+  const onUploadFinish = (url) => {
+    if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (finishedArray.indexOf(obj.signedUrl) !== -1) {
+            if (url === obj.signedUrl) {
               const newobj = { ...obj, status: 'done' };
               delete newobj.signedUrl;
               delete newobj.progress;
@@ -216,20 +187,14 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [finishedArray]);
-
-  const onUploadError = (url) => {
-    setuploadError((errors) => [...(errors || []), url]);
   };
 
-  const errorArray = useDebounce(uploadError, 300);
-
-  React.useEffect(() => {
-    if (errorArray) {
+  const onUploadError = (url) => {
+    if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (errorArray.indexOf(obj.signedUrl) !== -1) {
+            if (url === obj.signedUrl) {
               toastr.error(
                 `File ${
                   obj.filename || obj.name
@@ -244,7 +209,7 @@ const S3Uploader = ({
         return urls;
       });
     }
-  }, [errorArray]);
+  };
 
   const onthumbprogress = (progressEvent, url) => {
     setaddingThumbnail((thumb) => {
@@ -259,161 +224,184 @@ const S3Uploader = ({
   };
 
   const onThumbFinish = () => {
-    setaddingThumbnail((thumb) => ({ ...thumb, status: 'done' }));
+    setfileList((urls) => {
+      if (urls.length > 0) {
+        const progressArray = urls.map((obj) => {
+          if (obj.uid === addingThumbnail.video) {
+            const newobj = {
+              ...obj,
+              status: 'done',
+              thumbnail: addingThumbnail.Location,
+              thumbfd: addingThumbnail.fd,
+            };
+            setaddingThumbnail(null);
+            return { ...newobj };
+          }
+          return obj;
+        });
+        return progressArray;
+      }
+      return urls;
+    });
   };
 
   const handleFiles = async (event) => {
-    setuploaderror(false);
-    const { files } = event.target;
-    if (limit && files.length + fileList.length > limit) {
-      return toastr.error(`Only a maximum of ${limit} files allowed`);
-    }
-    if (maxSize && maxSize > 0) {
-      const sizelimit = Number(maxSize * 1024 * 1024);
-      const inds = [...(files || [])]
-        .map((file, index) => (file.size > sizelimit ? index + 1 : null))
-        .filter(Boolean);
-      if (inds.length > 0) {
-        return toastr.error(
-          `File "${
-            files[inds[0] - 1].name
-          }" exceeds ${maxSize}MB. Please try again with a smaller file`
-        );
-      }
-    }
-    const fileArray = [];
-    await [...(files || [])].map((file) => {
-      const video = document.createElement('video');
-      video.src = URL.createObjectURL(file);
-      video.preload = 'metadata';
-      video.onloadedmetadata = () => {
-        if (maxWidth && video.videoWidth > maxWidth) {
-          toastr.error(
-            `Video ${file.name} is wider than the maximum allowed ${maxWidth}px`
-          );
-          setuploaderror(true);
-          return null;
-        }
-
-        if (minWidth && video.videoWidth < minWidth) {
-          toastr.error(
-            `Video ${file.name} is narrower than the minimum allowed ${minWidth}px`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (
-          aspectratio &&
-          !tolerance &&
-          (video.videoWidth / video.videoHeight).toFixed(2) !==
-            aspectratio.toFixed(2)
-        ) {
-          toastr.error(
-            `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (
-          aspectratio &&
-          tolerance &&
-          Math.abs(video.videoWidth / video.videoHeight - aspectratio) >
-            tolerance
-        ) {
-          toastr.error(
-            `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (minLength && video.duration < minLength) {
-          toastr.error(
-            `Video ${file.name} is shorter than the minimum required ${minLength} seconds`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        if (maxLength && video.duration > maxLength) {
-          toastr.error(
-            `Video ${file.name} is longer than the maximum allowed ${maxLength} seconds`
-          );
-          setuploaderror(true);
-          return null;
-        }
-        fileArray.push({
-          name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
-          type: file.type,
-          size: file.size,
-          length: video.duration,
-          videoWidth: video.videoWidth,
-          videoHeight: video.videoHeight,
-        });
-      };
-      return null;
-    });
-    const fetchUrls = setInterval(async () => {
-      if (uploaderror) {
-        clearInterval(fetchUrls);
-        return null;
-      }
+    try {
+      setuploaderror(false);
+      const { files } = event.target;
       if (
-        fileArray.length === files.length &&
-        files.length > 0 &&
-        !uploaderror
+        limit &&
+        Array.isArray(fileList) &&
+        Array.isArray(files) &&
+        files.length + fileList.length > limit
       ) {
-        try {
-          const signedUrls = await getSignedUrl(fileArray, true).then(
-            (urls) => urls
+        return toastr.error(`Only a maximum of ${limit} files allowed`);
+      }
+      if (maxSize && maxSize > 0) {
+        const sizelimit = Number(maxSize * 1024 * 1024);
+        const inds = [...(files || [])]
+          .map((file, index) => (file.size > sizelimit ? index + 1 : null))
+          .filter(Boolean);
+        if (inds.length > 0) {
+          return toastr.error(
+            `File "${
+              files[inds[0] - 1].name
+            }" exceeds ${maxSize}MB. Please try again with a smaller file`
           );
-          const uploads = [...(files || [])].map(
-            (file) =>
-              signedUrls
-                .map(({ signedUrl, filename }) => {
-                  if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
-                    return {
-                      signedUrl,
-                      file,
-                      options: {
-                        headers: {
-                          'Content-Type': qs.parse(signedUrl)['Content-Type'],
-                          Expires: qs.parse(signedUrl).Expires,
-                          'x-amz-acl':
-                            qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
-                        },
-                        onUploadProgress: (progressEvent) => {
-                          onprogress(progressEvent, signedUrl);
-                        },
-                      },
-                    };
-                  }
-                  return null;
-                })
-                .filter(Boolean)[0]
-          );
-          uploads.map(({ signedUrl, file, options }) =>
-            uploadaxiosinstance
-              .put(signedUrl, file, options)
-              .then(() => {
-                onUploadFinish(signedUrl);
-                toastr.success('Video uploaded successfully');
-              })
-              .catch((error) => {
-                onUploadError(signedUrl);
-                toastr.error(
-                  `${
-                    error.response
-                      ? error.response.data
-                      : 'Video upload failed, try again later'
-                  }`
-                );
-              })
-          );
-          clearInterval(fetchUrls);
-        } catch (error) {
-          clearInterval(fetchUrls);
         }
       }
-    }, 100);
+      const fileObjArray = await [...(files || [])].map(
+        async (file) =>
+          new Promise((resolve, reject) => {
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(file);
+            video.preload = 'metadata';
+            video.onloadedmetadata = () => {
+              if (maxWidth && video.videoWidth > maxWidth) {
+                toastr.error(
+                  `Video ${file.name} is wider than the maximum allowed ${maxWidth}px`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid Width'));
+              }
+
+              if (minWidth && video.videoWidth < minWidth) {
+                toastr.error(
+                  `Video ${file.name} is narrower than the minimum allowed ${minWidth}px`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid Width'));
+              }
+              if (
+                aspectratio &&
+                !tolerance &&
+                (video.videoWidth / video.videoHeight).toFixed(2) !==
+                  aspectratio.toFixed(2)
+              ) {
+                toastr.error(
+                  `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid aspect ratio'));
+              }
+              if (
+                aspectratio &&
+                tolerance &&
+                Math.abs(video.videoWidth / video.videoHeight - aspectratio) >
+                  tolerance
+              ) {
+                toastr.error(
+                  `Video ${file.name} aspect ratio doesn't match the required ${aspectratio}`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid aspect ratio'));
+              }
+              if (minDuration && video.duration < minDuration) {
+                toastr.error(
+                  `Video ${file.name} is shorter than the minimum required ${minDuration} seconds`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid video duration'));
+              }
+              if (maxDuration && video.duration > maxDuration) {
+                toastr.error(
+                  `Video ${file.name} is longer than the maximum allowed ${maxDuration} seconds`
+                );
+                setuploaderror(true);
+                reject(new Error('Invalid video duration'));
+              }
+              if (!uploaderror) {
+                const fileprops = {
+                  name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                  type: file.type,
+                  size: file.size,
+                  length: video.duration,
+                  videoWidth: video.videoWidth,
+                  videoHeight: video.videoHeight,
+                };
+                resolve({ file, fileprops });
+              }
+            };
+          })
+      );
+      let Allfiles = [];
+      await Promise.all(fileObjArray).then((Files) => {
+        Allfiles = Files;
+      });
+
+      const fileArray = Allfiles.map(({ fileprops }) => fileprops);
+      const filesArray = Allfiles.map(({ file }) => file);
+
+      const signedUrls = await getSignedUrl(fileArray, true);
+
+      const uploads = [...(filesArray || [])].map(
+        (file) =>
+          signedUrls
+            .map(({ signedUrl, filename }) => {
+              if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+                return {
+                  signedUrl,
+                  file,
+                  options: {
+                    headers: {
+                      'Content-Type': qs.parse(signedUrl)['Content-Type'],
+                      Expires: qs.parse(signedUrl).Expires,
+                      'x-amz-acl':
+                        qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
+                    },
+                    onUploadProgress: (progressEvent) => {
+                      onprogress(progressEvent, signedUrl);
+                    },
+                  },
+                };
+              }
+              return null;
+            })
+            .filter(Boolean)[0]
+      );
+
+      for (const upload of uploads) {
+        // eslint-disable-next-line no-await-in-loop
+        await uploadaxiosinstance
+          .put(upload.signedUrl, upload.file, upload.options)
+          .then(() => {
+            onUploadFinish(upload.signedUrl);
+            toastr.success('Video uploaded successfully');
+          })
+          .catch((error) => {
+            onUploadError(upload.signedUrl);
+            toastr.error(
+              `${
+                error.response
+                  ? error.response.data
+                  : 'Video upload failed, try again later'
+              }`
+            );
+          });
+      }
+    } catch {
+      toastr.error('Some files could not be uploaded');
+    }
   };
 
   const addThumb = async (event) => {
@@ -476,9 +464,8 @@ const S3Uploader = ({
       }
       if (fileArray.length > 0 && !ThumbError) {
         try {
-          const signedUrls = await getSignedUrl(fileArray, false).then(
-            (urls) => urls
-          );
+          const signedUrls = await getSignedUrl(fileArray, false);
+
           const uploads = [...(files || [])].map(
             (file) =>
               signedUrls
@@ -538,63 +525,25 @@ const S3Uploader = ({
   };
 
   const getSignedUrl = async (files, video) => {
-    const urls = await signaxiosinstance()
-      .post(signurl, {
+    try {
+      const { data } = await signaxiosinstance().post(signurl, {
         files,
         ACL: ACL || 'public-read',
         dirname: video ? dirname || 'video/' : thumbdirname || 'thumbnail/',
-      })
-      .then(({ data }) => {
-        const signedUrls = video
-          ? data.signedUrls.map((obj) => ({
-              ...obj,
-              progress: 0,
-              length:
-                files
-                  .map(({ length, name }) => {
-                    if (obj.filename === name) {
-                      return length;
-                    }
-                    return null;
-                  })
-                  .filter(Boolean)[0] || NaN,
-              videoWidth:
-                files
-                  .map(({ videoWidth, name }) => {
-                    if (obj.filename === name) {
-                      return videoWidth;
-                    }
-                    return null;
-                  })
-                  .filter(Boolean)[0] || NaN,
-              videoHeight:
-                files
-                  .map(({ videoHeight, name }) => {
-                    if (obj.filename === name) {
-                      return videoHeight;
-                    }
-                    return null;
-                  })
-                  .filter(Boolean)[0] || NaN,
-            }))
-          : data.signedUrls.map((obj) => ({
-              ...obj,
-              progress: 0,
-            }));
-        if (video) {
-          setfileList((files) => [...files, ...signedUrls]);
-        } else {
-          setaddingThumbnail(({ video }) => ({ ...signedUrls[0], video }));
-        }
-
-        return signedUrls;
-      })
-      .catch(() => {
-        toastr.error(
-          'There was an error uploading file. Please try again later'
-        );
       });
-    return urls;
+      const signedUrls = data.signedUrls.map((obj) => ({
+        ...obj,
+        progress: 0,
+      }));
+      if (video) {
+        setfileList((files) => [...files, ...signedUrls]);
+      } else {
+        setaddingThumbnail(({ video }) => ({ ...signedUrls[0], video }));
+      }
+      return signedUrls;
+    } catch (error) {
+      toastr.error('There was an error uploading file. Please try again later');
+    }
   };
 
   const addVideoInfo = (vals) => {
@@ -628,6 +577,7 @@ const S3Uploader = ({
           clip: 'rect(1px, 1px, 1px, 1px)',
         }}
         onChange={handleFiles}
+        disabled={disabled || readOnly}
       />
       <label htmlFor={`videoElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
@@ -636,131 +586,147 @@ const S3Uploader = ({
         </Block>
       </label>
       <List>
-        {fileList.map((file) => (
-          <ListItem dense key={file.fd}>
-            <Block row paper>
-              {file.status === 'done' && (
-                <React.Fragment>
-                  <VideoThumbnail
-                    small
-                    title={file.filename}
-                    length={file.length}
-                    list
-                    flex={false}
-                    thumbnail={file.thumbnail}
-                  />
-                  {!file.thumbnail && (
-                    <React.Fragment>
-                      <input
-                        type="file"
-                        id={`thumbElem${elemId}`}
-                        accept={acceptThumb || 'image/*'}
-                        style={{
-                          position: 'absolute',
-                          width: 1,
-                          height: 1,
-                          overflow: 'hidden',
-                          clip: 'rect(1px, 1px, 1px, 1px)',
-                        }}
-                        onChange={(e) => {
-                          setaddingThumbnail({
-                            video: file.uid,
-                            videoHeight: file.videoHeight,
-                            videoWidth: file.videoWidth,
-                          });
-                          addThumb(e);
-                        }}
-                      />
-                      {!addingThumbnail && (
-                        <label
-                          htmlFor={`thumbElem${elemId}`}
+        {Array.isArray(fileList) &&
+          fileList.map((file) => (
+            <ListItem dense key={file.fd}>
+              <Block row paper>
+                {file.status === 'done' && (
+                  <React.Fragment>
+                    <VideoThumbnail
+                      small
+                      title={file.filename}
+                      length={file.length}
+                      list
+                      flex={false}
+                      thumbnail={file.thumbnail}
+                    />
+                    {!file.thumbnail && (
+                      <React.Fragment>
+                        <input
+                          type="file"
+                          id={`thumbElem${elemId}`}
+                          accept={acceptThumb || 'image/*'}
                           style={{
-                            cursor: 'pointer',
-                            marginTop: 'auto',
-                            marginBottom: 'auto',
+                            position: 'absolute',
+                            width: 1,
+                            height: 1,
+                            overflow: 'hidden',
+                            clip: 'rect(1px, 1px, 1px, 1px)',
                           }}
-                        >
-                          <Block
-                            flex={false}
-                            margin={[0, sizes.doubleBaseMargin]}
-                            center
-                            middle
+                          onChange={(e) => {
+                            setaddingThumbnail({
+                              video: file.uid,
+                              videoHeight: file.videoHeight,
+                              videoWidth: file.videoWidth,
+                            });
+                            addThumb(e);
+                          }}
+                          disabled={disabled || readOnly}
+                        />
+                        {!addingThumbnail && (
+                          <label
+                            htmlFor={`thumbElem${elemId}`}
                             style={{
                               cursor: 'pointer',
+                              marginTop: 'auto',
+                              marginBottom: 'auto',
                             }}
                           >
-                            <AddPhotoAlternate />
-                            <Text small bold success>
-                              Add Thumbnail
-                            </Text>
-                          </Block>
-                        </label>
-                      )}
-                      {addingThumbnail && addingThumbnail.video === file.uid && (
-                        <AntProgress
-                          type="circle"
-                          percent={addingThumbnail.progress}
-                          width={40}
-                          strokeColor={colors.blue}
-                          style={{
-                            marginTop: 'auto',
-                            marginBottom: 'auto',
-                            marginLeft: sizes.doubleBaseMargin,
-                          }}
-                        />
-                      )}
-                    </React.Fragment>
-                  )}
-                  <Block
-                    flex={false}
-                    margin={[0, sizes.doubleBaseMargin]}
-                    center
-                    middle
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => setaddinginfo(file)}
-                  >
-                    <InfoOutlined style={{ color: colors.twitterColor }} />
-                    <Text small bold twitterColor>
-                      Add Caption
+                            <Block
+                              flex={false}
+                              margin={[0, sizes.doubleBaseMargin]}
+                              center
+                              middle
+                              style={{
+                                cursor: 'pointer',
+                              }}
+                            >
+                              <AddPhotoAlternate />
+                              <Text small bold success>
+                                Add Thumbnail
+                              </Text>
+                            </Block>
+                          </label>
+                        )}
+                        {addingThumbnail && addingThumbnail.video === file.uid && (
+                          <AntProgress
+                            type="circle"
+                            percent={addingThumbnail.progress}
+                            width={40}
+                            strokeColor={colors.blue}
+                            style={{
+                              marginTop: 'auto',
+                              marginBottom: 'auto',
+                              marginLeft: sizes.doubleBaseMargin,
+                            }}
+                          />
+                        )}
+                      </React.Fragment>
+                    )}
+                    <Block
+                      flex={false}
+                      margin={[0, sizes.doubleBaseMargin]}
+                      center
+                      middle
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        if (!disabled && !readOnly) {
+                          setaddinginfo(file);
+                        }
+                      }}
+                    >
+                      <InfoOutlined style={{ color: colors.twitterColor }} />
+                      <Text small bold twitterColor>
+                        Add Caption
+                      </Text>
+                    </Block>
+                  </React.Fragment>
+                )}
+                {file.progress < 100 && (
+                  <Block row bottom space="between">
+                    <AntProgress
+                      type="circle"
+                      percent={file.progress}
+                      width={40}
+                      strokeColor={colors.success}
+                    />
+                    <Text style={{ margin: sizes.baseMargin }}>
+                      ...uploading
                     </Text>
                   </Block>
-                </React.Fragment>
-              )}
-              {file.progress < 100 && (
-                <Block row bottom space="between">
-                  <AntProgress
-                    type="circle"
-                    percent={file.progress}
-                    width={40}
-                    strokeColor={colors.success}
+                )}
+              </Block>
+              <ListItemSecondaryAction>
+                {file.status === 'done' ? (
+                  <Delete
+                    style={{ color: colors.error, cursor: 'pointer' }}
+                    onClick={() => {
+                      if (!disabled && !readOnly) {
+                        onDelete(file.Location);
+                      }
+                    }}
                   />
-                  <Text style={{ margin: sizes.baseMargin }}>...uploading</Text>
-                </Block>
-              )}
-            </Block>
-            <ListItemSecondaryAction>
-              {file.status === 'done' ? (
-                <Delete
-                  style={{ color: colors.error, cursor: 'pointer' }}
-                  onClick={() => onDelete(file.Location)}
-                />
-              ) : (
-                <Close
-                  style={{ color: colors.error, cursor: 'pointer' }}
-                  onClick={() => onDelete(file.Location)}
-                />
-              )}
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
+                ) : (
+                  <Close
+                    style={{ color: colors.error, cursor: 'pointer' }}
+                    onClick={() => {
+                      if (!disabled && !readOnly) {
+                        onDelete(file.Location);
+                      }
+                    }}
+                  />
+                )}
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
       </List>
       <Dialog
         maxWidth="sm"
         open={deleting !== null}
         onClose={() => setdeleting(null)}
-        onConfirm={() => setconfirmdelete(true)}
+        // onConfirm={() => setconfirmdelete(true)}
         minHeight={200}
       >
         <DialogHeader onClose={() => setdeleting(null)} />
@@ -794,7 +760,7 @@ const S3Uploader = ({
         onClose={() => setaddinginfo(null)}
         minHeight={400}
       >
-        <DialogHeader onClose={() => setdeleting(null)} />
+        <DialogHeader onClose={() => setaddinginfo(null)} />
         <Form
           onSubmit={addVideoInfo}
           initialValues={
@@ -803,6 +769,7 @@ const S3Uploader = ({
                   caption: addinginfo.caption,
                   author: addinginfo.author,
                   imagelocation: addinginfo.imagelocation,
+                  externallink: addinginfo.externallink,
                 }
               : {}
           }
@@ -828,6 +795,13 @@ const S3Uploader = ({
                     type="text"
                     name="videolocation"
                     label="Where was video taken?"
+                    component={Input}
+                    flex
+                  />
+                  <Field
+                    type="text"
+                    name="externallink"
+                    label="Website of author or video collction"
                     component={Input}
                     flex
                   />

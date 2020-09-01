@@ -27,6 +27,7 @@ const HoverButton = ({
   ...props
 }) => {
   const [hover, sethover] = React.useState(false);
+
   const { fonts, sizes, colors } = React.useContext(ThemeContext);
 
   const buttonhovercolor = hoverColor || `rgb(${hexToRgb(colors.dark)}, 0.5)`;
@@ -96,13 +97,15 @@ const HoverButton = ({
                 : textColor || colors.dark
             }
           >
-            {text}
+            {children || text}
           </Text>{' '}
         </Block>
       ) : (
         childitems
       )}
-      {suffix || (
+      {suffix || suffix === null ? (
+        suffix
+      ) : (
         <ChevronRight
           style={{
             color: hover ? textHoverColor : textColor,

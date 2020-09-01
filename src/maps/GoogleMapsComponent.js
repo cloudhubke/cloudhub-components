@@ -2,8 +2,9 @@ import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import ThemeContext from '../theme/ThemeContext';
 
-const GoogleMapsComponent = props => {
+const GoogleMapsComponent = (props) => {
   const { CONFIG } = React.useContext(ThemeContext);
+  console.log('COmponent', CONFIG);
   return (
     <LoadScript id="script-loader" googleMapsApiKey={CONFIG.GOOGLE_APIKEY}>
       <GoogleMap
@@ -18,12 +19,12 @@ const GoogleMapsComponent = props => {
         }}
       >
         <Marker
-          onLoad={marker => {
+          onLoad={(marker) => {
             console.log('marker: ', marker.position.lat());
           }}
           draggable
           position={props.center}
-          onDragEnd={e => {
+          onDragEnd={(e) => {
             const region = {
               lat: e.latLng.lat(),
               lng: e.latLng.lng(),

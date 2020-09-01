@@ -6,59 +6,57 @@ import CloudhubRemoteSelector from './Selector';
 import getCustomStyles from './getCustomStyles';
 import ThemeContext from '../theme/ThemeContext';
 
-const RemoteSelector = ({
-  input,
-  onChange,
-  meta,
-  isMulti,
-  displayField,
-  returnkeys,
-  ...rest
-}) => {
-  const error = meta.error && meta.touched;
-  const { sizes, colors } = React.useContext(ThemeContext);
-  const customStyles = getCustomStyles({ error, isMulti, sizes, colors });
+const RemoteSelector = React.forwardRef(
+  (
+    { input, onChange, meta, isMulti, displayField, returnkeys, ...rest },
+    ref
+  ) => {
+    const error = meta.error && meta.touched;
+    const { sizes, colors } = React.useContext(ThemeContext);
+    const customStyles = getCustomStyles({ error, isMulti, sizes, colors });
 
-  let labelExtractor = (item) => item.id;
-  let valueExtractor = (item) => item.id;
+    let labelExtractor = (item) => item.id;
+    let valueExtractor = (item) => item.id;
 
-  if (displayField) {
-    labelExtractor = (item) => item[displayField];
-  }
-
-  if (returnkeys) {
-    if (Array.isArray(returnkeys)) {
-      valueExtractor = (item) => {
-        const obj = {};
-        returnkeys.forEach((k) => {
-          obj[k] = item[k];
-        });
-        return obj;
-      };
+    if (displayField) {
+      labelExtractor = (item) => item[displayField];
     }
-  }
 
-  return (
-    <Block style={{ marginRight: sizes.margin }}>
-      <CloudhubRemoteSelector
-        value={input.value}
-        onChange={(val) => {
-          input.onChange(val);
-          input.onBlur();
-        }}
-        meta={meta}
-        isMulti={isMulti}
-        styles={customStyles}
-        labelExtractor={labelExtractor}
-        valueExtractor={valueExtractor}
-        {...rest}
-      />
-      <Text small error style={{ height: 10 }}>
-        {meta.touched && meta.error && meta.error}
-      </Text>
-    </Block>
-  );
-};
+    if (returnkeys) {
+      if (Array.isArray(returnkeys)) {
+        valueExtractor = (item) => {
+          const obj = {};
+          returnkeys.forEach((k) => {
+            obj[k] = item[k];
+          });
+          return obj;
+        };
+      }
+    }
+
+    return (
+      <Block style={{ marginRight: sizes.margin }}>
+        <CloudhubRemoteSelector
+          ref={ref}
+          value={input.value}
+          onChange={(val) => {
+            input.onChange(val);
+            input.onBlur();
+          }}
+          meta={meta}
+          isMulti={isMulti}
+          styles={customStyles}
+          labelExtractor={labelExtractor}
+          valueExtractor={valueExtractor}
+          {...rest}
+        />
+        <Text small error style={{ height: 10 }}>
+          {meta.touched && meta.error && meta.error}
+        </Text>
+      </Block>
+    );
+  }
+);
 
 RemoteSelector.defaultProps = {
   input: {
