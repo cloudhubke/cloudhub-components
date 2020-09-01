@@ -169,6 +169,10 @@ const RemoteSelector = ({
     setSearchText(searchText);
   };
 
+  React.useEffect(() => {
+    fetchOptions('');
+  }, [params]);
+
   return (
     <React.Fragment>
       {creatable ? (

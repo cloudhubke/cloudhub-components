@@ -5,7 +5,6 @@ import { useRect } from '@reach/rect';
 import Button from '../Button';
 import Input from '../Input';
 import Block from '../Block';
-import useRectHook from '../customhooks/useRectHook.js';
 import ThemeContext from '../theme/ThemeContext';
 
 let rect = {};
@@ -15,27 +14,37 @@ const BaseWebPopover = ({
   children,
   triggerType,
   arrow,
-  paperStyle,
   containerStyle,
+  bodyStyle = {},
   overrides,
   open,
   placement,
+  color = '#FCFCFC',
   ...props
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
   const anchorRef = React.useRef();
-  rect = useRect(anchorRef) || {};
-  //   rect = useRect(anchorRef, !rect.height) || {};
+  // rect = useRect(anchorRef) || {};
+  rect = useRect(anchorRef, !rect.height) || {};
 
   const [isOpen, setIsOpen] = React.useState(open);
 
+  const bodyStyles = {
+    backgroundColor: 'transparent',
+    borderTopLeftRadius: '5px',
+    borderTopRightRadius: '5px',
+    borderBottomRightRadius: '5px',
+    borderBottomLeftRadius: '5px',
+    ...bodyStyle,
+  };
+
   const paperStyles = {
+    ...bodyStyles,
     width: rect.width || 0,
-    minHeight: rect.height,
+    minHeight: rect.height || 0,
     overflowY: 'hidden',
     display: 'flex',
-    backgroundColor: '#FFF',
-    ...paperStyle,
+    backgroundColor: color,
   };
 
   const Content = ({ close }) => {
@@ -91,8 +100,8 @@ const BaseWebPopover = ({
         overrides={{
           Arrow: {
             style: {
-              //   backgroundColor: 'white',
-              //   border: `${sizes.padding}px solid ${colors.white}`,
+              backgroundColor: color,
+              border: `${sizes.padding}px solid ${colors.color}`,
               ...(overrides.Arrow ? overrides.Arrow.style : {}),
             },
             props: {
@@ -105,7 +114,7 @@ const BaseWebPopover = ({
           },
           Body: {
             style: {
-              backgroundColor: 'transparent',
+              ...bodyStyles,
               ...(overrides.Body ? overrides.Body.style : {}),
             },
           },
