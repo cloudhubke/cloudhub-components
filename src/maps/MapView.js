@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript } from '@react-google-maps/api';
 
 import ThemeContext from '../theme/ThemeContext';
 
-const Mapview = props => {
+const Mapview = (props) => {
   const { CONFIG } = React.useContext(ThemeContext);
   return (
     <LoadScript id="script-loader" googleMapsApiKey={CONFIG.GOOGLE_APIKEY}>

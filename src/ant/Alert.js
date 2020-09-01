@@ -13,7 +13,7 @@ const Alert = ({
   description,
   closable,
   onClose,
-  showIcon
+  showIcon,
 }) => {
   let type = 'info';
 
@@ -45,7 +45,7 @@ const Alert = ({
 Alert.defaultProps = {
   closable: true,
   onClose: () => {},
-  showIcon: true
+  showIcon: true,
 };
 
 export default Alert;

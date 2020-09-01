@@ -11,7 +11,6 @@ import Lens from '@material-ui/icons/Lens';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { colors } from './theme';
-import Text from './Text';
 
 const ListSubMenu = ({
   children,
@@ -21,6 +20,7 @@ const ListSubMenu = ({
   expandedStyles = {},
   style = {},
   showHeaderIcon,
+  dividerColor,
   ...rest
 }) => {
   const [menuexpanded, setMenuExpand] = useState(expanded);
@@ -39,11 +39,21 @@ const ListSubMenu = ({
         )}
         <ListItemText primary={header} />
         {showHeaderIcon && menuexpanded && (
-          <ExpandLess style={{ fontSize: 24 }} />
+          <ExpandLess
+            style={{
+              fontSize: 24,
+              color: style && style.color ? style.color : 'inherit',
+            }}
+          />
         )}
 
         {showHeaderIcon && !menuexpanded && (
-          <ExpandMore style={{ fontSize: 24 }} />
+          <ExpandMore
+            style={{
+              fontSize: 24,
+              color: style && style.color ? style.color : 'inherit',
+            }}
+          />
         )}
       </ListItem>
       <Collapse in={menuexpanded} timeout="auto" unmountOnExit>
@@ -51,7 +61,8 @@ const ListSubMenu = ({
           {children}
         </List>
       </Collapse>
-      <Divider />
+      {!dividerColor && <Divider />}
+      {dividerColor && <Divider style={{ backgroundColor: dividerColor }} />}
     </Fragment>
   );
 };
@@ -60,7 +71,7 @@ ListSubMenu.defaultProps = {
   headerIcon: <Lens />,
   header: '',
   open: false,
-  showHeaderIcon: true
+  showHeaderIcon: true,
 };
 
 export default ListSubMenu;

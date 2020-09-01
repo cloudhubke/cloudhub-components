@@ -20,7 +20,6 @@ const SearchButton = () => (
 const SearchForm = ({
   value,
   onChange,
-  options,
   url,
   axiosinstance,
   paramName,
@@ -147,10 +146,12 @@ const SearchPopper = ({
   value,
   input,
   onChange,
+  onChangeText,
   renderItem,
   closeOnSelect,
   popperStyle,
   url,
+  options,
   ...props
 }) => {
   const val = value || input.value;
@@ -163,6 +164,17 @@ const SearchPopper = ({
   React.useEffect(() => {
     setText(isObject(val) ? props.labelExtractor(val) : val);
   }, [input.value]);
+
+  React.useEffect(() => {
+    if (Array.isArray(options) && options.length > 0) {
+      setData(options);
+    }
+  }, [options]);
+
+  const debouncedText = useDebounce(text, 500);
+  React.useEffect(() => {
+    onChangeText(debouncedText);
+  }, [debouncedText]);
 
   const logChange = (item) => {
     const v = props.valueExtractor(item);
@@ -244,7 +256,7 @@ SearchPopper.defaultProps = {
   labelExtractor: (item) => `${item}`,
   valueExtractor: (item) => item,
   renderItem: (item) => `${item}`,
-
+  onChangeText: () => {},
   inputProps: {
     placeholder: 'Search...',
   },
