@@ -27,6 +27,7 @@ const HoverButton = ({
   ...props
 }) => {
   const [hover, sethover] = React.useState(false);
+
   const { fonts, sizes, colors } = React.useContext(ThemeContext);
 
   const buttonhovercolor = hoverColor || `rgb(${hexToRgb(colors.dark)}, 0.5)`;

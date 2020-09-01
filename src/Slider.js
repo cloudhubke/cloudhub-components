@@ -22,6 +22,7 @@ ValueLabelComponent.propTypes = {
 };
 
 const CustomizedSlider = ({
+  secondary,
   color,
   ios,
   pretto,
@@ -47,8 +48,7 @@ const CustomizedSlider = ({
   const { sizes } = React.useContext(ThemeContext);
   const iOSBoxShadow =
     '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
-
-  const IOSSlider = withStyles((color) => ({
+  const IOSSlider = withStyles(() => ({
     root: {
       color: color || '#3880ff',
       height: 2,
@@ -99,7 +99,7 @@ const CustomizedSlider = ({
     },
   }))(Slider);
 
-  const PrettoSlider = withStyles((color) => ({
+  const PrettoSlider = withStyles(() => ({
     root: {
       color: color || '#52af77',
       height: 8,
@@ -129,7 +129,7 @@ const CustomizedSlider = ({
     },
   }))(Slider);
 
-  const AirbnbSlider = withStyles((color) => ({
+  const AirbnbSlider = withStyles(() => ({
     root: {
       color: color || '#3a8589',
       height: 3,
@@ -202,10 +202,8 @@ const CustomizedSlider = ({
         {ios && (
           <IOSSlider
             name={input ? input.name : name}
-            color={color}
+            color={secondary ? 'secondary' : 'primary'}
             defaultValue={defaultValue || (input ? input.value : value)}
-            aria-label="ios slider"
-            getAriaLabel={() => 'ios slider'}
             min={Min || 0}
             max={Max || 100}
             marks={marks}
@@ -219,17 +217,13 @@ const CustomizedSlider = ({
         {pretto && (
           <PrettoSlider
             name={input ? input.name : name}
-            color={color}
-            overides={{ color, hideThumb }}
-            hideThumb={hideThumb}
+            color={secondary ? 'secondary' : 'primary'}
             min={Min || 0}
             max={Max || 100}
             defaultValue={defaultValue || (input ? input.value : value)}
             marks={marks}
             value={value}
             valueLabelDisplay={valueLabelDisplay || 'auto'}
-            aria-label="pretto slider"
-            getAriaLabel={() => 'pretto slider'}
             onChange={changeValue}
             onChangeCommitted={onChangeCommitted}
             {...props}
@@ -238,10 +232,7 @@ const CustomizedSlider = ({
         {airbnb && (
           <AirbnbSlider
             name={input ? input.name : name}
-            hideThumb={hideThumb}
-            aria-label="airbnb slider"
-            getAriaLabel={() => 'airbnb slider'}
-            color={color}
+            color={secondary ? 'secondary' : 'primary'}
             ThumbComponent={AirbnbThumbComponent}
             defaultValue={defaultValue || (input ? input.value : value)}
             min={Min || 0}
@@ -257,10 +248,7 @@ const CustomizedSlider = ({
         {!airbnb && !pretto && !ios && (
           <Slider
             name={input ? input.name : name}
-            color={color}
-            hideThumb={hideThumb}
-            aria-label="custom thumb label"
-            getAriaLabel={() => 'custom thumb label'}
+            color={secondary ? 'secondary' : 'primary'}
             min={Min || 0}
             max={Max || 100}
             marks={marks}

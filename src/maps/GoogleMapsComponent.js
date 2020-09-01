@@ -4,6 +4,7 @@ import ThemeContext from '../theme/ThemeContext';
 
 const GoogleMapsComponent = (props) => {
   const { CONFIG } = React.useContext(ThemeContext);
+  console.log('COmponent', CONFIG);
   return (
     <LoadScript id="script-loader" googleMapsApiKey={CONFIG.GOOGLE_APIKEY}>
       <GoogleMap

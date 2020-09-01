@@ -37,6 +37,7 @@ const S3Uploader = ({
   setuploading,
   readOnly,
   disabled,
+  uploading,
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
 
@@ -103,12 +104,15 @@ const S3Uploader = ({
 
   React.useEffect(() => {
     if (Array.isArray(fileList)) {
-      const uploading = fileList.map(({ status }) => {
+      const isuploading = fileList.map(({ status }) => {
         if (status === 'done') return 'done';
         return 'uploading';
       });
-      if (uploading.indexOf('uploading') !== -1) {
-        setuploading(true);
+      if (isuploading.indexOf('uploading') !== -1) {
+        if (!uploading) {
+          setuploading(true);
+        }
+        logChange(fileList);
       } else {
         setuploading(false);
         logChange(fileList);

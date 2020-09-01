@@ -53,6 +53,7 @@ const S3Uploader = ({
   maxDuration,
   minDuration,
   setuploading,
+  uploading,
   disabled,
   readOnly,
 }) => {
@@ -85,17 +86,19 @@ const S3Uploader = ({
 
   React.useEffect(() => {
     if (Array.isArray(fileList)) {
-      const uploading = fileList.map(({ status }) => {
+      const isuploading = fileList.map(({ status }) => {
         if (status === 'done') return 'done';
         return 'uploading';
       });
       if (
-        uploading.indexOf('uploading') !== -1 ||
+        isuploading.indexOf('uploading') !== -1 ||
         (addingThumbnail &&
           addingThumbnail.video &&
           addingThumbnail.status !== 'done')
       ) {
-        setuploading(true);
+        if (!uploading) {
+          setuploading(true);
+        }
         logChange(fileList);
       } else {
         setuploading(false);
@@ -151,10 +154,9 @@ const S3Uploader = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.signedUrl === progressobj.url) {
+            if (obj.signedUrl === url) {
               const progress = Math.round(
-                (progressobj.progressEvent.loaded * 100) /
-                  progressobj.progressEvent.total
+                (progressEvent.loaded * 100) / progressEvent.total
               );
               return { ...obj, progress };
             }
@@ -225,7 +227,7 @@ const S3Uploader = ({
     setfileList((urls) => {
       if (urls.length > 0) {
         const progressArray = urls.map((obj) => {
-          if (obj.uid === thumbUpdate.video) {
+          if (obj.uid === addingThumbnail.video) {
             const newobj = {
               ...obj,
               status: 'done',

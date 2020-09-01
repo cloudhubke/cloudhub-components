@@ -35,7 +35,6 @@ const LocationSelector = ({
   const onLoad = (autocomplete) => {
     setautocomplete(autocomplete);
   };
-
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       setmarker({
@@ -62,7 +61,6 @@ const LocationSelector = ({
       setshowmap(false);
     }
   };
-
   return (
     <Block>
       {!showmap && (
