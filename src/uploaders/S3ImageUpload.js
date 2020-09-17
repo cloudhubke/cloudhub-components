@@ -38,6 +38,7 @@ const S3Uploader = ({
   readOnly,
   disabled,
   uploading,
+  mime,
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
 
@@ -270,41 +271,44 @@ const S3Uploader = ({
                     ? Math.floor((maxWidth * img.height) / img.width)
                     : img.height
                 );
-                ctx.canvas.toBlob(
-                  (blob) => {
-                    const newfile = new File(
-                      [blob],
-                      file.name.replace(/[^\w\d_\-.]+/gi, ''),
-                      {
-                        type: file.type,
-                        lastModified: Date.now(),
-                      }
-                    );
-                    if (maxSize && maxSize > 0) {
-                      const sizelimit = Number(maxSize * 1024);
-                      if (file.size > sizelimit) {
-                        toastr.error(
-                          `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
-                        );
-                        setuploaderror(true);
-                        reject(new Error('File too large'));
-                      }
+
+                const newname = () => {
+                  if (mime) {
+                    const oldname = file.name.replace(/[^\w\d_\-.]+/gi, '');
+                    const oldtype = `.${(file.type || '').split('/')[1] || ''}`;
+                    const newtype = `.${(mime || '').split('/')[1] || ''}`;
+                    const newfilename = oldname.replace(oldtype, newtype);
+                    return newfilename;
+                  }
+                  return file.name.replace(/[^\w\d_\-.]+/gi, '');
+                };
+                ctx.canvas.toBlob((blob) => {
+                  const newfile = new File([blob], newname(), {
+                    type: mime || file.type,
+                    lastModified: Date.now(),
+                  });
+                  if (maxSize && maxSize > 0) {
+                    const sizelimit = Number(maxSize * 1024);
+                    if (newfile.size > sizelimit) {
+                      toastr.error(
+                        `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
+                      );
+                      setuploaderror(true);
+                      reject(new Error('File too large'));
                     }
-                    const fileprops = {
-                      name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
-                      type: file.type,
-                      size: newfile.size,
-                      width: maxWidth || img.width,
-                      height: maxWidth
-                        ? Math.floor((maxWidth * img.height) / img.width)
-                        : img.height,
-                    };
-                    const result = { newfile, fileprops };
-                    resolve(result);
-                  },
-                  file.type,
-                  1
-                );
+                  }
+                  const fileprops = {
+                    name: newfile.name,
+                    type: newfile.type,
+                    size: newfile.size,
+                    width: maxWidth || img.width,
+                    height: maxWidth
+                      ? Math.floor((maxWidth * img.height) / img.width)
+                      : img.height,
+                  };
+                  const result = { newfile, fileprops };
+                  resolve(result);
+                }, mime || file.type);
               }
             };
           })
@@ -315,7 +319,6 @@ const S3Uploader = ({
       });
       const fileArray = Allfiles.map(({ fileprops }) => fileprops);
       const filesArray = Allfiles.map(({ newfile }) => newfile);
-
       const signedUrls = await getSignedUrl(fileArray, true).then(
         (urls) => urls
       );
@@ -597,7 +600,7 @@ const S3Uploader = ({
                   <Field
                     type="text"
                     name="externallink"
-                    label="Website of author or image collction"
+                    label="Website of author or image collection"
                     component={Input}
                     flex
                   />

@@ -8,6 +8,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Divider from '@material-ui/core/Divider';
 import Text from './Text';
 import Block from './Block';
+import { sizes } from './theme';
 
 const ListMenuItem = ({
   icon,
@@ -22,30 +23,31 @@ const ListMenuItem = ({
   ...rest
 }) => (
   <React.Fragment>
-    <ListItem {...rest} styles={{ flex: 1, display: 'flex', ...style }}>
-      {children || (
-        <React.Fragment>
-          {icon && (
-            <ListItemIcon
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {icon}
-            </ListItemIcon>
-          )}
-          {avatar && <ListItemAvatar>{avatar}</ListItemAvatar>}
+    {children && (
+      <ListItem {...rest} styles={{ flex: 1, display: 'flex', ...style }}>
+        {children}
+      </ListItem>
+    )}
+    {!children && (
+      <ListItem {...rest} styles={{ flex: 1, display: 'flex', ...style }}>
+        {icon && (
+          <ListItemIcon
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {icon}
+          </ListItemIcon>
+        )}
+        {avatar && <ListItemAvatar>{avatar}</ListItemAvatar>}
 
-          <ListItemText primary={primary} secondary={secondary} />
+        <ListItemText primary={primary} secondary={secondary} />
 
-          {action && (
-            <ListItemSecondaryAction>{action}</ListItemSecondaryAction>
-          )}
-        </React.Fragment>
-      )}
-    </ListItem>
+        {action && <ListItemSecondaryAction>{action}</ListItemSecondaryAction>}
+      </ListItem>
+    )}
     {divider && !dividerColor && <Divider />}
     {divider && dividerColor && (
       <Divider style={{ backgroundColor: dividerColor }} />

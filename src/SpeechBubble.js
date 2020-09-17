@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     maxHeight: props.height,
     border: `1px solid ${props.borderColor}`,
     borderRadius: 10,
-    boxShadow: `2px 2px 4px ${props.borderColor}`,
+    boxShadow: props.noshadow ? 'none' : `2px 2px 4px ${props.borderColor}`,
     position: 'relative',
     margin: 20,
     '&::before': {
@@ -100,11 +100,13 @@ const useStyles = makeStyles({
         if (props.bottom || props.top) {
           return 10;
         }
+        return 0;
       },
       marginTop: () => {
         if (props.right || props.left) {
           return 2;
         }
+        return 0;
       },
       left: () => {
         if (props.top || props.bottom) return '50%';
@@ -199,6 +201,7 @@ const SpeechBubble = ({
   bottomleft,
   rightbottom,
   leftbottom,
+  noshadow,
   ...props
 }) => {
   const classes = useStyles({
@@ -218,6 +221,7 @@ const SpeechBubble = ({
     bottomleft,
     rightbottom,
     leftbottom,
+    noshadow,
   });
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import countries from './countrypicker/data/countries';
 
-const Flag = ({ country, small, medium, large, width, height }) => {
+const Flag = ({ country, small, medium, large, width, height, ...props }) => {
   const flagWidth = () => {
     if (small) return 16;
     if (large) return 48;
@@ -20,6 +20,7 @@ const Flag = ({ country, small, medium, large, width, height }) => {
       alt={country}
       width={width || flagWidth()}
       height={height || flagHeight()}
+      {...props}
     />
   ) : null;
 };
