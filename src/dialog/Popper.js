@@ -91,23 +91,31 @@ const Popper = (props) => {
     flip,
     preventOverflow,
     open,
+    onOpen,
     onClose,
     color,
     children,
-    anchorComponent,
+    anchorComponent: AnchorComponent,
     disableClickAwayClose,
     overflow,
     paperStyle,
-    transitionDelay = 1000,
+    transitionDelay = 0,
+    trigger = 'click',
     ...rest
   } = props;
+
+  const [popperopen, setPopperOpen] = React.useState(open);
 
   const classes = getStyles({ color, overflow }).useStyles();
 
   const closePopper = () => {
-    if (!disableClickAwayClose) {
-      onClose();
-    }
+    setPopperOpen(false);
+    onClose();
+  };
+
+  const openPopper = () => {
+    setPopperOpen(true);
+    onOpen();
   };
 
   const paperstyles = {
@@ -119,14 +127,29 @@ const Popper = (props) => {
 
   const id = open ? 'scroll-playground' : null;
 
+  const Anchor = () => {
+    if (typeof AnchorComponent === 'function') {
+      return AnchorComponent();
+    }
+
+    return React.cloneElement(AnchorComponent, {
+      ...AnchorComponent.props,
+      onClick: () => {
+        if (trigger === 'click') {
+          openPopper();
+        }
+      },
+    });
+  };
+
   return (
     <Block flex={false} row>
       <span ref={anchorRef} {...rest} style={{ width: 'auto' }}>
-        {anchorComponent}
+        {<Anchor />}
       </span>
       <MuiPopper
         id={id}
-        open={open}
+        open={popperopen}
         anchorEl={anchorRef.current}
         placement={placement}
         disablePortal={disableportal}
@@ -149,7 +172,13 @@ const Popper = (props) => {
         elevation={5}
       >
         {({ TransitionProps }) => (
-          <ClickAwayListener onClickAway={closePopper}>
+          <ClickAwayListener
+            onClickAway={() => {
+              if (!disableClickAwayClose) {
+                closePopper();
+              }
+            }}
+          >
             <Fade {...TransitionProps} timeout={transitionDelay}>
               <div>
                 {arrow ? (
@@ -176,6 +205,7 @@ Popper.propTypes = {
   placement: PropTypes.string,
   preventOverflow: PropTypes.string,
   paperstyles: PropTypes.object,
+  onOpen: PropTypes.func,
   onClose: PropTypes.func,
   anchorComponent: PropTypes.element,
   color: PropTypes.string,
@@ -185,10 +215,11 @@ Popper.propTypes = {
 
 Popper.defaultProps = {
   arrow: true,
-  open: true,
+  open: false,
   placement: 'bottom',
   preventOverflow: 'scrollParent',
   paperstyles: {},
+  onOpen: () => {},
   onClose: () => {},
   anchorComponent: null,
   color: colors.white,
