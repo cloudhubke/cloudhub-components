@@ -418,7 +418,10 @@ const S3ImageUpload = ({
         <Block
           key={fileURL}
           middle
-          style={{ display: cropping === index ? 'flex' : 'none' }}
+          style={{
+            display: cropping === index ? 'flex' : 'none',
+            alignSelf: 'center',
+          }}
         >
           <Block style={{ width: '60%' }}>
             <img
@@ -427,8 +430,19 @@ const S3ImageUpload = ({
               id={`cropper-view${index}`}
             />
           </Block>
-          <Block row flex={false} right style={{ width: '60%' }}>
-            <Button contained color={colors.error} id={`cancel-crop${index}`}>
+          <Block
+            row
+            flex={false}
+            right
+            style={{ width: '60%' }}
+            margin={sizes.baseMargin}
+          >
+            <Button
+              contained
+              color={colors.error}
+              id={`cancel-crop${index}`}
+              style={{ marginRight: sizes.doubleBaseMargin }}
+            >
               <Text button>Cancel</Text>
             </Button>
             <Button contained color={colors.success} id={`crop-button${index}`}>
