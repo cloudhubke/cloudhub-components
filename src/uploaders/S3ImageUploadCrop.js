@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-loop-func */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable operator-linebreak */
@@ -10,12 +12,15 @@ import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
 import { Block, Text, toastr, Dialog, Button, Form, Field, Input } from '..';
 import { Tooltip } from '@material-ui/core';
 import isEqual from 'lodash/isEqual';
+import Cropper from 'cropperjs';
+import 'cropperjs/dist/cropper.min.css';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
 import ThemeContext from '../theme/ThemeContext';
+
 // import useDebounce from '../customhooks/useDebounce';
 
-const S3Uploader = ({
+const S3ImageUpload = ({
   dirname,
   ACL,
   signaxiosinstance,
@@ -33,7 +38,6 @@ const S3Uploader = ({
   maxWidth,
   minWidth,
   aspectratio,
-  tolerance,
   setuploading,
   readOnly,
   disabled,
@@ -47,12 +51,10 @@ const S3Uploader = ({
   const [deleting, setdeleting] = React.useState(null);
   const [uploaderror, setuploaderror] = React.useState(false);
   const [addinginfo, setaddinginfo] = React.useState(null);
-  // const [updating, setupdating] = React.useState(null);
-  // const [finished, setfinished] = React.useState([]);
-  // const [uploadError, setuploadError] = React.useState([]);
+  const [cropping, setcropping] = React.useState(null);
+  const [cropurls, setcropurls] = React.useState([]);
 
   const elemId = uniq(5);
-
   React.useEffect(() => {
     const incominginput = input && input.value ? input.value : value || [];
     if (Array.isArray(incominginput) && !isEqual(incominginput, fileList)) {
@@ -198,10 +200,10 @@ const S3Uploader = ({
     });
     setaddinginfo(null);
   };
-
   const handleFiles = async (event) => {
     try {
       setuploaderror(false);
+      setcropping(null);
       const { files } = event.target;
       if (
         limit &&
@@ -211,11 +213,20 @@ const S3Uploader = ({
       ) {
         return toastr.error(`Only a maximum of ${limit} files allowed`);
       }
-      const fileObjArray = await [...(files || [])].map(
-        async (file) =>
-          new Promise((resolve, reject) => {
+      const fileObjArray = [];
+
+      const fileURLs = [...(files || [])].map((file) => {
+        const url = URL.createObjectURL(file);
+        return url;
+      });
+      setcropurls(fileURLs);
+      let i = 0;
+      const cropImage = (file) =>
+        new Promise(async (resolve, reject) => {
+          {
             const img = new Image();
             img.src = URL.createObjectURL(file);
+            // eslint-disable-next-line
             img.onload = () => {
               if (minWidth && img.width < minWidth) {
                 toastr.error(
@@ -224,54 +235,22 @@ const S3Uploader = ({
                 setuploaderror(true);
                 reject(new Error('Invalid Width'));
               }
-              if (
-                aspectratio &&
-                !tolerance &&
-                (img.width / img.height).toFixed(2) !== aspectratio.toFixed(2)
-              ) {
-                toastr.error(
-                  `Image  ${file.name} aspect ratio is ${(
-                    img.width / img.height
-                  ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
-                );
-                setuploaderror(true);
-                reject(new Error('Invalid aspect ratio'));
-              }
-
-              if (
-                aspectratio &&
-                tolerance &&
-                Math.abs(
-                  Number(img.width) / Number(img.height) - Number(aspectratio)
-                ) > Number(tolerance)
-              ) {
-                toastr.error(
-                  `Image  ${file.name} aspect ratio is ${(
-                    img.width / img.height
-                  ).toFixed(2)} but must be ${aspectratio.toFixed(2)}`
-                );
-                setuploaderror(true);
-                reject(new Error('Invalid aspect ration'));
-              }
-
-              if (!uploaderror) {
-                const elem = document.createElement('canvas');
-                elem.width = maxWidth || img.width;
-                elem.height = maxWidth
-                  ? Math.floor((maxWidth * img.height) / img.width)
-                  : img.height;
-                const ctx = elem.getContext('2d');
-                // img.width and img.height will contain the original dimensions
-                ctx.drawImage(
-                  img,
-                  0,
-                  0,
-                  maxWidth || img.width,
-                  maxWidth
-                    ? Math.floor((maxWidth * img.height) / img.width)
-                    : img.height
-                );
-
+            };
+            if (!uploaderror) {
+              setTimeout(async () => {
+                setcropping(i);
+                const cropperView = document.getElementById(`cropper-view${i}`);
+                const cancelCrop = document.getElementById(`cancel-crop${i}`);
+                const cropButton = document.getElementById(`crop-button${i}`);
+                const cropper = new Cropper(cropperView, {
+                  aspectRatio: aspectratio || NaN,
+                  movable: true,
+                  rotatable: true,
+                  scalable: true,
+                  zoomable: true,
+                  minCropBoxWidth: 600,
+                  viewMode: 1,
+                });
                 const newname = () => {
                   if (mime) {
                     const oldname = file.name.replace(/[^\w\d_\-.]+/gi, '');
@@ -282,90 +261,108 @@ const S3Uploader = ({
                   }
                   return file.name.replace(/[^\w\d_\-.]+/gi, '');
                 };
-                ctx.canvas.toBlob((blob) => {
-                  const newfile = new File([blob], newname(), {
-                    type: mime || file.type,
-                    lastModified: Date.now(),
-                  });
-                  if (maxSize && maxSize > 0) {
-                    const sizelimit = Number(maxSize * 1024);
-                    if (newfile.size > sizelimit) {
-                      toastr.error(
-                        `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
-                      );
-                      setuploaderror(true);
-                      reject(new Error('File too large'));
+                if (cropButton) {
+                  cropButton.addEventListener('click', () => {
+                    if (cropper && cropper.getCroppedCanvas()) {
+                      cropper
+                        .getCroppedCanvas({ minWidth: minWidth || 0 })
+                        .toBlob((blob) => {
+                          const newfile = new File([blob], newname(), {
+                            type: mime || file.type,
+                            lastModified: Date.now(),
+                          });
+                          if (maxSize && maxSize > 0) {
+                            const sizelimit = Number(maxSize * 1024);
+                            if (newfile.size > sizelimit) {
+                              toastr.error(
+                                `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
+                              );
+                              setuploaderror(true);
+                            }
+                          }
+                          const fileprops = {
+                            name: newfile.name,
+                            type: newfile.type,
+                            size: newfile.size,
+                            width: maxWidth || img.width,
+                            height: maxWidth
+                              ? Math.floor((maxWidth * img.height) / img.width)
+                              : img.height,
+                          };
+                          const result = { newfile, fileprops };
+                          resolve(result);
+                        }, mime || file.type);
                     }
-                  }
-                  const fileprops = {
-                    name: newfile.name,
-                    type: newfile.type,
-                    size: newfile.size,
-                    width: maxWidth || img.width,
-                    height: maxWidth
-                      ? Math.floor((maxWidth * img.height) / img.width)
-                      : img.height,
-                  };
-                  const result = { newfile, fileprops };
-                  resolve(result);
-                }, mime || file.type);
-              }
-            };
-          })
-      );
-      let Allfiles = [];
-      await Promise.all(fileObjArray).then((Files) => {
-        Allfiles = Files;
-      });
-      const fileArray = Allfiles.map(({ fileprops }) => fileprops);
-      const filesArray = Allfiles.map(({ newfile }) => newfile);
-      const signedUrls = await getSignedUrl(fileArray, true).then(
-        (urls) => urls
-      );
-      const uploads = [...(filesArray || [])].map(
-        (file) =>
-          signedUrls
-            .map(({ signedUrl, filename }) => {
-              if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
-                return {
-                  signedUrl,
-                  file,
-                  options: {
-                    headers: {
-                      'Content-Type': qs.parse(signedUrl)['Content-Type'],
-                      Expires: qs.parse(signedUrl).Expires,
-                      'x-amz-acl':
-                        qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
-                    },
-                    onUploadProgress: (progressEvent) => {
-                      onprogress(progressEvent, signedUrl);
-                    },
-                  },
-                };
-              }
-              return null;
-            })
-            .filter(Boolean)[0]
-      );
+                  });
+                }
+                if (cancelCrop) {
+                  cancelCrop.addEventListener('click', () => {
+                    setuploaderror(true);
+                    reject(new Error('Upload Cancelled'));
+                    setcropping(null);
+                  });
+                }
+              }, 200);
+            }
+          }
+        });
 
-      for (const upload of uploads) {
-        // eslint-disable-next-line no-await-in-loop
-        await uploadaxiosinstance
-          .put(upload.signedUrl, upload.file, upload.options)
-          .then(() => {
-            onUploadFinish(upload.signedUrl);
-            toastr.success('Image uploaded successfully');
-          })
-          .catch((error) => {
-            onUploadError(upload.signedUrl);
-            toastr.error(
-              `${
-                error.response
-                  ? error.response.data
-                  : 'Image upload failed, try again later'
-              }`
-            );
-          });
+      for (const file of files) {
+        const fileObj = await cropImage(file);
+        await fileObjArray.push(fileObj);
+        setcropping(null);
+        i += 1;
+        if (i === files.length) {
+          const fileArray = fileObjArray.map(({ fileprops }) => fileprops);
+          const filesArray = fileObjArray.map(({ newfile }) => newfile);
+          const signedUrls = await getSignedUrl(fileArray, true).then(
+            (urls) => urls
+          );
+          const uploads = [...(filesArray || [])].map(
+            (file) =>
+              signedUrls
+                .map(({ signedUrl, filename }) => {
+                  if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+                    return {
+                      signedUrl,
+                      file,
+                      options: {
+                        headers: {
+                          'Content-Type': qs.parse(signedUrl)['Content-Type'],
+                          Expires: qs.parse(signedUrl).Expires,
+                          'x-amz-acl':
+                            qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
+                        },
+                        onUploadProgress: (progressEvent) => {
+                          onprogress(progressEvent, signedUrl);
+                        },
+                      },
+                    };
+                  }
+                  return null;
+                })
+                .filter(Boolean)[0]
+          );
+          for (const upload of uploads) {
+            // eslint-disable-next-line
+            await uploadaxiosinstance
+              .put(upload.signedUrl, upload.file, upload.options)
+              .then(() => {
+                onUploadFinish(upload.signedUrl);
+                toastr.success('Image uploaded successfully');
+              })
+              .catch((error) => {
+                onUploadError(upload.signedUrl);
+                toastr.error(
+                  `${
+                    error.response
+                      ? error.response.data
+                      : 'Image upload failed, try again later'
+                  }`
+                );
+              });
+          }
+        }
       }
     } catch (error) {
       toastr.error('Some files could not be uploaded');
@@ -411,6 +408,35 @@ const S3Uploader = ({
         onChange={handleFiles}
         disabled={readOnly || disabled}
       />
+      <label htmlFor={`fileElem${elemId}`} style={{ cursor: 'pointer' }}>
+        <Block middle center>
+          <AddAPhotoSharp />
+          <Text caption>upload</Text>
+        </Block>
+      </label>
+      {cropurls.map((fileURL, index) => (
+        <Block
+          key={fileURL}
+          middle
+          style={{ display: cropping === index ? 'flex' : 'none' }}
+        >
+          <Block style={{ width: '60%' }}>
+            <img
+              src={fileURL}
+              alt="cropper-preview"
+              id={`cropper-view${index}`}
+            />
+          </Block>
+          <Block row flex={false} right style={{ width: '60%' }}>
+            <Button contained color={colors.error} id={`cancel-crop${index}`}>
+              <Text button>Cancel</Text>
+            </Button>
+            <Button contained color={colors.success} id={`crop-button${index}`}>
+              <Text button>Save</Text>
+            </Button>
+          </Block>
+        </Block>
+      ))}
       <Block row wrap>
         {Array.isArray(fileList) &&
           fileList.map((file) => (
@@ -515,22 +541,6 @@ const S3Uploader = ({
               )}
             </Block>
           ))}
-        <label htmlFor={`fileElem${elemId}`} style={{ cursor: 'pointer' }}>
-          <Block
-            paper
-            shadowhover
-            middle
-            center
-            margin={[0, sizes.baseMargin]}
-            style={{
-              width: previewWidth || 150,
-              height: previewHeight || 150,
-            }}
-          >
-            <AddAPhotoSharp />
-            <Text caption>upload</Text>
-          </Block>
-        </label>
       </Block>
       <Dialog
         maxWidth="sm"
@@ -643,7 +653,7 @@ const S3Uploader = ({
   );
 };
 
-S3Uploader.defaultProps = {
+S3ImageUpload.defaultProps = {
   onChange: () => {},
   input: {
     value: null,
@@ -651,4 +661,4 @@ S3Uploader.defaultProps = {
   },
   setuploading: () => {},
 };
-export default S3Uploader;
+export default S3ImageUpload;
