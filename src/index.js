@@ -37,7 +37,7 @@ export { default as FieldButton } from './FieldButton';
 export { default as Slider } from './Slider';
 export { default as Switch } from './Switch';
 export { default as Rating } from './Rating';
-
+export { default as Flag } from './Flag';
 export { default as IconButton } from './IconButton';
 export { default as ActionsMenu } from './ActionsMenu';
 

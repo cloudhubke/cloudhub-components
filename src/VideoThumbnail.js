@@ -135,7 +135,6 @@ const VideoThumbnail = ({
       style={{
         height: divHeight(),
         width: divWidth(),
-        marginTop: sizes.doubleBaseMargin,
         cursor: 'pointer',
         ...(style || {}),
       }}

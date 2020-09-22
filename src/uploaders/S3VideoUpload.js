@@ -224,25 +224,33 @@ const S3Uploader = ({
   };
 
   const onThumbFinish = () => {
-    setfileList((urls) => {
-      if (urls.length > 0) {
-        const progressArray = urls.map((obj) => {
-          if (obj.uid === addingThumbnail.video) {
-            const newobj = {
-              ...obj,
-              status: 'done',
-              thumbnail: addingThumbnail.Location,
-              thumbfd: addingThumbnail.fd,
-            };
-            setaddingThumbnail(null);
-            return { ...newobj };
+    setaddingThumbnail((current) => {
+      if (current) {
+        setfileList((urls) => {
+          if (urls.length > 0) {
+            const progressArray = urls.map((obj) => {
+              if (obj.uid === current.video) {
+                const newobj = {
+                  ...obj,
+                  status: 'done',
+                  thumbnail: current.Location,
+                  thumbfd: current.fd,
+                };
+                return { ...newobj };
+              }
+              return obj;
+            });
+            return progressArray;
           }
-          return obj;
+          return urls;
         });
-        return progressArray;
       }
-      return urls;
+      return null;
     });
+  };
+
+  const onThumbError = () => {
+    setaddingThumbnail(null);
   };
 
   const handleFiles = async (event) => {
@@ -425,99 +433,89 @@ const S3Uploader = ({
         );
       }
     }
-    const fileArray = [];
-    [...(files || [])].map((file) => {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = () => {
-        const tol = tolerance || 0.3;
-        if (
-          thumb &&
-          thumb.videoHeight &&
-          thumb.videoWidth &&
-          Math.abs(
-            img.width / img.height - thumb.videoWidth / thumb.videoHeight
-          ) > tol
-        ) {
-          setthumberror(true);
-        } else {
-          fileArray.push({
-            name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
-            type: file.type,
-            size: file.size,
-          });
-        }
-      };
-      return null;
+    const fileObjArray = await [...(files || [])].map(
+      async (file) =>
+        new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = URL.createObjectURL(file);
+          img.onload = () => {
+            const tol = tolerance || 0.3;
+            if (
+              thumb &&
+              thumb.videoHeight &&
+              thumb.videoWidth &&
+              Math.abs(
+                img.width / img.height - thumb.videoWidth / thumb.videoHeight
+              ) > tol
+            ) {
+              setthumberror(true);
+              reject(new Error('Thumbnail aspect ratio does not match video'));
+            } else if (!thumberror) {
+              const fileprops = {
+                name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
+                type: file.type,
+                size: file.size,
+              };
+              resolve({ file, fileprops });
+            }
+          };
+        })
+    );
+    let Allfiles = [];
+    await Promise.all(fileObjArray).then((Files) => {
+      Allfiles = Files;
     });
-    const uploadthumb = setInterval(async () => {
-      let ThumbError;
-      setthumberror((current) => {
-        ThumbError = current;
-        return current;
-      });
 
-      if (ThumbError || thumberror) {
-        setaddingThumbnail(null);
-        toastr.error('Thumbnal aspect ratio does not match video');
-        clearInterval(uploadthumb);
-      }
-      if (fileArray.length > 0 && !ThumbError) {
-        try {
-          const signedUrls = await getSignedUrl(fileArray, false);
+    const fileArray = Allfiles.map(({ fileprops }) => fileprops);
+    const filesArray = Allfiles.map(({ file }) => file);
+    const signedUrls = await getSignedUrl(fileArray, false).then(
+      (urls) => urls
+    );
+    const uploads = [...(filesArray || [])].map(
+      (file) =>
+        signedUrls
+          .map(({ signedUrl, filename }) => {
+            if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+              return {
+                signedUrl,
+                file,
+                options: {
+                  headers: {
+                    'Content-Type': qs.parse(signedUrl)['Content-Type'],
+                    Expires: qs.parse(signedUrl).Expires,
+                    'x-amz-acl':
+                      qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
+                  },
+                  onUploadProgress: (progressEvent) => {
+                    onthumbprogress(progressEvent, signedUrl);
+                  },
+                },
+              };
+            }
+            return null;
+          })
+          .filter(Boolean)[0]
+    );
 
-          const uploads = [...(files || [])].map(
-            (file) =>
-              signedUrls
-                .map(({ signedUrl, filename }) => {
-                  if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
-                    return {
-                      signedUrl,
-                      file,
-                      options: {
-                        headers: {
-                          'Content-Type': qs.parse(signedUrl)['Content-Type'],
-                          Expires: qs.parse(signedUrl).Expires,
-                          'x-amz-acl':
-                            qs.parse(signedUrl)['x-amz-acl'] || 'public-read',
-                        },
-                        onUploadProgress: (progressEvent) => {
-                          onthumbprogress(progressEvent, signedUrl);
-                        },
-                      },
-                    };
-                  }
-                  return null;
-                })
-                .filter(Boolean)[0]
-          );
-          uploads.map(({ signedUrl, file, options }) =>
-            uploadaxiosinstance
-              .put(signedUrl, file, options)
-              .then(() => {
-                onThumbFinish(signedUrl);
-                toastr.success('Thumbnail added successfully');
-              })
-              .catch((error) => {
-                setaddingThumbnail(null);
-                toastr.error(
-                  `${
-                    error.response
-                      ? error.response.data
-                      : 'Thumbnail upload failed, try again later'
-                  }`
-                );
-              })
-          );
-          clearInterval(uploadthumb);
-        } catch (error) {
-          clearInterval(uploadthumb);
+    for (const upload of uploads) {
+      // eslint-disable-next-line no-await-in-loop
+      await uploadaxiosinstance
+        .put(upload.signedUrl, upload.file, upload.options)
+        .then(() => {
+          onThumbFinish(upload.signedUrl);
+          toastr.success('Thumbnail added successfully');
+        })
+        .catch((error) => {
+          onThumbError(upload.signedUrl);
           toastr.error(
-            'There was an error adding thumbnail. Please try again later'
+            `${
+              error.response
+                ? error.response.data
+                : 'Image upload failed, try again later'
+            }`
           );
-        }
-      }
-    }, 100);
+        });
+    }
   };
 
   const onDelete = (Location) => {
@@ -801,7 +799,7 @@ const S3Uploader = ({
                   <Field
                     type="text"
                     name="externallink"
-                    label="Website of author or video collction"
+                    label="Website of author or video collection"
                     component={Input}
                     flex
                   />
