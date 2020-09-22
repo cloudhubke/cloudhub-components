@@ -46,7 +46,7 @@ const FieldLabel = ({
   };
 
   return (
-    <Block style={{ marginRight: sizes.margin }}>
+    <Block>
       <Button
         onClick={onClick}
         style={styles.button}

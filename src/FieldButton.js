@@ -22,17 +22,17 @@ const FieldButton = ({
     button: {
       textTransform: 'none',
       height,
-      ...style
-    }
+      ...style,
+    },
   };
 
-  const renderIcon = IconComponent => {
+  const renderIcon = (IconComponent) => {
     if (IconComponent) {
       return (
         <IconComponent
           style={{
             marginRight: sizes.margin,
-            ...textStyles
+            ...textStyles,
           }}
         />
       );
@@ -44,8 +44,7 @@ const FieldButton = ({
     <Block
       flex={false}
       style={{
-        marginRight: sizes.margin,
-        ...containterStyles
+        ...containterStyles,
       }}
     >
       <Button onClick={onClick} style={styles.button} {...props}>
@@ -68,7 +67,7 @@ FieldButton.defaultProps = {
   height: libsizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
-  containterStyles: {}
+  containterStyles: {},
 };
 
 export default FieldButton;

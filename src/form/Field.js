@@ -148,10 +148,12 @@ const FormField = ({
   // };
 
   return wrap ? (
-    <FieldBlock
+    <Block
       row={row}
-      // middle={row}
-      style={{ alignItems: 'stretch', ...containerStyle }}
+      style={{
+        alignItems: 'stretch',
+        ...containerStyle,
+      }}
       flex={flex}
     >
       <LabelComponent />
@@ -166,7 +168,7 @@ const FormField = ({
           {...rest}
         />
       </Block>
-    </FieldBlock>
+    </Block>
   ) : (
     <FinalFormField
       validate={composeValidators(...validators)}

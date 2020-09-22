@@ -44,7 +44,7 @@ const StaticListSelector = (props) => {
   }
 
   return (
-    <Block style={{ marginRight: sizes.margin }}>
+    <Block>
       <CloudhubSelector
         options={options || []}
         value={val}

@@ -12,8 +12,8 @@ const checkBoxStyles = {
     textTransform: 'none',
     display: 'flex',
     justifyContent: 'flex-start',
-    color: colors.dark
-  }
+    color: colors.dark,
+  },
 };
 
 const CheckBox = ({
@@ -24,7 +24,7 @@ const CheckBox = ({
   tag,
   height,
   meta,
-  disabled
+  disabled,
 }) => {
   const val = input.value || value;
 
@@ -43,7 +43,7 @@ const CheckBox = ({
 
   return (
     <Block>
-      <Block row style={{ marginRight: sizes.margin }}>
+      <Block row>
         <Button
           fullWidth
           onClick={onCheck}
@@ -57,7 +57,7 @@ const CheckBox = ({
                 height,
                 width: height,
                 color: green[500],
-                marginRight: sizes.margin
+                marginRight: sizes.margin,
               }}
             />
           ) : (
@@ -65,7 +65,7 @@ const CheckBox = ({
               style={{
                 height,
                 width: height,
-                marginRight: sizes.margin
+                marginRight: sizes.margin,
               }}
             />
           )}
@@ -83,12 +83,12 @@ CheckBox.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
-    onBlur: () => {}
+    onBlur: () => {},
   },
   meta: {},
   value: null,
   onChange: () => {},
-  height: sizes.inputHeight
+  height: sizes.inputHeight,
 };
 
 export default CheckBox;

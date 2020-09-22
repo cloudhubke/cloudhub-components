@@ -127,7 +127,6 @@ const PhoneInput = ({
         const inputStyles = {
           backgroundColor: colors.white,
           height: sizes.inputHeight,
-          marginRight: marginRight || 0,
           ...style,
         };
         return (
@@ -190,7 +189,6 @@ PhoneInput.defaultProps = {
     value: '',
   },
   onPhoneChanged: () => {},
-  marginRight: sizes.margin,
   showCode: false,
 };
 

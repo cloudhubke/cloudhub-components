@@ -66,9 +66,7 @@ const Input = ({
   };
 
   const inputStyles = {
-    // backgroundColor: colors.white,
     height: sizes.inputHeight,
-    // marginRight: marginRight || 0,
     ...style,
   };
 
@@ -115,7 +113,6 @@ const Input = ({
 
 Input.defaultProps = {
   meta: {},
-  marginRight: sizes.margin,
   onKeyEnter: () => null,
   showError: true,
   variant: 'outlined',
