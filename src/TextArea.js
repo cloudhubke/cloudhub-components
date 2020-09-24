@@ -5,12 +5,11 @@ import { sizes, colors } from './theme';
 import Block from './Block';
 import Text from './Text';
 
-const TextArea = props => {
-  const { classes, label, input, meta, rows, marginRight, ...rest } = props;
+const TextArea = (props) => {
+  const { classes, label, input, meta, rows, ...rest } = props;
 
   const inputStyles = {
     ...{},
-    marginRight: marginRight || 0,
     backgroundColor: colors.white,
   };
 
@@ -42,7 +41,6 @@ const styles = () => ({
 
 TextArea.defaultProps = {
   meta: {},
-  marginRight: sizes.margin,
   rows: 3,
 };
 
