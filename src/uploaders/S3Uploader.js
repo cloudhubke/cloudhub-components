@@ -218,6 +218,7 @@ const S3Uploader = ({
 
     if (fileArray.length > 0) {
       const signedUrls = await getSignedUrl(fileArray).then((urls) => urls);
+      signedUrls.filter(Boolean);
       const uploads = [...(files || [])].map(
         (file) =>
           signedUrls

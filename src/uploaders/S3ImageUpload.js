@@ -15,7 +15,7 @@ import AntProgress from '../ant/AntProgress';
 import ThemeContext from '../theme/ThemeContext';
 // import useDebounce from '../customhooks/useDebounce';
 
-const S3Uploader = ({
+const S3ImageUpload = ({
   dirname,
   ACL,
   signaxiosinstance,
@@ -322,6 +322,7 @@ const S3Uploader = ({
       const signedUrls = await getSignedUrl(fileArray, true).then(
         (urls) => urls
       );
+      signedUrls.filter(Boolean);
       const uploads = [...(filesArray || [])].map(
         (file) =>
           signedUrls
@@ -643,7 +644,7 @@ const S3Uploader = ({
   );
 };
 
-S3Uploader.defaultProps = {
+S3ImageUpload.defaultProps = {
   onChange: () => {},
   input: {
     value: null,
@@ -651,4 +652,4 @@ S3Uploader.defaultProps = {
   },
   setuploading: () => {},
 };
-export default S3Uploader;
+export default S3ImageUpload;

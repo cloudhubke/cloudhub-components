@@ -318,6 +318,7 @@ const S3ImageUpload = ({
           const signedUrls = await getSignedUrl(fileArray, true).then(
             (urls) => urls
           );
+          signedUrls.filter(Boolean);
           const uploads = [...(filesArray || [])].map(
             (file) =>
               signedUrls
@@ -421,6 +422,7 @@ const S3ImageUpload = ({
           style={{
             display: cropping === index ? 'flex' : 'none',
             alignSelf: 'center',
+            maxWidth: '100%',
           }}
         >
           <Block style={{ width: '60%' }}>
@@ -428,6 +430,7 @@ const S3ImageUpload = ({
               src={fileURL}
               alt="cropper-preview"
               id={`cropper-view${index}`}
+              style={{ maxWidth: '100%' }}
             />
           </Block>
           <Block
