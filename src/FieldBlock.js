@@ -10,6 +10,9 @@ const FieldBlock = ({ children, style, label, ...rest }) => {
 
   const fn = (child, index) => {
     if (index > 0) {
+      if (!child) {
+        return child;
+      }
       return React.cloneElement(child, {
         ...child.props,
         containerStyle: {
