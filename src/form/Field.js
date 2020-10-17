@@ -112,6 +112,7 @@ const FormField = ({
   if (min || min === 0) {
     validators = [...validators, minFieldValue(min)];
   }
+
   if (max || max === 0) {
     validators = [...validators, maxFieldValue(max)];
   }
