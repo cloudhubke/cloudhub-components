@@ -9,7 +9,6 @@ import PickCountry from './countrypicker/PickCountry';
 import Block from './Block';
 import Text from './Text';
 import ThemeContext from './theme/ThemeContext';
-import { sizes } from './theme';
 
 const useStyles = ({ sizes, colors }) =>
   makeStyles({

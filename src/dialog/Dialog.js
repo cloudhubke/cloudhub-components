@@ -2,13 +2,13 @@ import React from 'react';
 import MuiDialog from '@material-ui/core/Dialog';
 import { makeStyles } from '@material-ui/core/styles';
 import SlideComponent from '../SlideComponent';
-import { colors } from '../theme';
+import ThemeContext from '../theme/ThemeContext';
 
-const getAnimation = animation => {
+const getAnimation = (animation) => {
   switch (animation) {
     case 'slide':
       return {
-        TransitionComponent: SlideComponent
+        TransitionComponent: SlideComponent,
       };
 
     default:
@@ -16,17 +16,17 @@ const getAnimation = animation => {
   }
 };
 
-const getStyles = ({ minHeight, height, fullScreen, style }) => {
+const getStyles = ({ minHeight, height, fullScreen, colors, style }) => {
   const useStyles = makeStyles({
     paper: {
       ...(!fullScreen && { minHeight, height }),
       backgroundColor: colors.milkyWhite,
-      ...style
-    }
+      ...style,
+    },
   });
 
   return {
-    useStyles
+    useStyles,
   };
 };
 
@@ -42,22 +42,28 @@ const Dialog = ({
   title,
   ...props
 }) => {
-  const classes = getStyles({ minHeight, maxHeight, fullScreen }).useStyles();
+  const { colors } = React.useContext(ThemeContext);
+  const classes = getStyles({
+    minHeight,
+    maxHeight,
+    fullScreen,
+    colors,
+  }).useStyles();
 
   const dialogprops = {
     ...(!fullScreen && { maxWidth }),
-    fullScreen
+    fullScreen,
   };
 
   const closeDialog = () => {
     props.onClose();
   };
 
-  const fn = child => {
+  const fn = (child) => {
     if (child.props.onClose && typeof child.props.onClose === 'function') {
       return React.cloneElement(child, {
         ...child.props,
-        onClose: closeDialog
+        onClose: closeDialog,
       });
     }
 
@@ -88,7 +94,7 @@ Dialog.defaultProps = {
   height: 'auto',
   minHeight: 500,
   tabs: null,
-  actions: null
+  actions: null,
 };
 
 export default Dialog;

@@ -3,22 +3,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // @material-ui/core components
-import withStyles from '@material-ui/core/styles/withStyles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Grid from '@material-ui/core/Grid';
-import { sizes } from './theme';
 
-const style = {
+const useStyles = makeStyles(({ sizes }) => ({
   grid: {
     paddingRight: sizes.base,
     paddingLeft: sizes.base,
     width: '100%',
     margin: 0,
-    padding: 0
-  }
-};
+    padding: 0,
+  },
+}));
 
-function GridContainer({ ...props }) {
-  const { classes, children, className, ...rest } = props;
+function GridContainer({ children, className, ...rest }) {
+  const classes = useStyles();
+
   return (
     <Grid container {...rest} className={`${classes.grid} ${className}`}>
       {children}
@@ -28,13 +28,13 @@ function GridContainer({ ...props }) {
 
 GridContainer.defaultProps = {
   className: '',
-  children: null
+  children: null,
 };
 
 GridContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.node,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
-export default withStyles(style)(GridContainer);
+export default GridContainer;

@@ -9,8 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRect } from '@reach/rect';
 import Block from '../Block';
 import TextInput from '../TextInput';
-
-import { colors } from '../theme';
+import colors from '../theme/Colors';
 
 const getStyles = ({ color, rect = {}, popperStyle, style }) => {
   const useStyles = makeStyles({

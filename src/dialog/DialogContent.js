@@ -1,9 +1,10 @@
 import React from 'react';
 import Block from '../Block';
 
-import { sizes } from '../theme';
+import ThemeContext from '../theme/ThemeContext';
 
 const DialogContent = ({ children, dialog, style, ...props }) => {
+  const { sizes } = React.useContext(ThemeContext);
   const dialogStyles = { ...style };
 
   return (
@@ -20,7 +21,7 @@ const DialogContent = ({ children, dialog, style, ...props }) => {
             left: 0,
             right: 0,
             overflowX: 'hidden',
-            overflowY: 'auto'
+            overflowY: 'auto',
           }}
           {...props}
         >
@@ -33,7 +34,7 @@ const DialogContent = ({ children, dialog, style, ...props }) => {
   );
 };
 DialogContent.defaultProps = {
-  dialog: true
+  dialog: true,
 };
 
 export default DialogContent;

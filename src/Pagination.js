@@ -5,136 +5,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 // @material-ui/core components
-import withStyles from '@material-ui/core/styles/withStyles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Button from '@material-ui/core/Button';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
-import { colors, hexToRgb } from './theme';
+import hexToRgb from './theme/hexToRgb';
 
-function Pagination({ ...props }) {
-  const { classes, count, rowsPerPage, color, className } = props;
-  const paginationClasses = classNames(classes.pagination, className);
-
-  const [currentPage, setPage] = useState(0);
-
-  useEffect(() => {
-    setPage(currentPage);
-  }, [currentPage]);
-
-  const totalpages = Math.ceil(count / rowsPerPage) - 1;
-  const firstPage = 0;
-  const lastPage = Math.max(0, totalpages);
-
-  const pages = [
-    totalpages > 1 && currentPage === lastPage ? currentPage - 2 : null,
-    currentPage > 0 ? currentPage - 1 : null,
-    currentPage,
-    totalpages > currentPage ? currentPage + 1 : null,
-    totalpages > 1 && currentPage === 0 ? currentPage + 2 : null,
-  ];
-
-  const handleButtoClick = (page) => {
-    if (Number(page) || page === 0) {
-      setPage(page);
-      props.onChangePage(page);
-    }
-    if (page === 'last') {
-      setPage(lastPage);
-      props.onChangePage(lastPage);
-    }
-    if (page === 'first') {
-      setPage(firstPage);
-      props.onChangePage(firstPage);
-    }
-  };
-
-  const firstpaginationLink = classNames({
-    [classes.paginationLink]: true,
-    [classes.disabled]: currentPage === 0,
-  });
-
-  const lastpaginationLink = classNames({
-    [classes.paginationLink]: true,
-    [classes.disabled]: currentPage === lastPage,
-  });
-
-  return (
-    <ul className={paginationClasses}>
-      <li>
-        <Button
-          onClick={() => handleButtoClick('first')}
-          className={firstpaginationLink}
-          disabled={currentPage === 0}
-        >
-          First
-        </Button>
-      </li>
-      <li>
-        <Button
-          onClick={() =>
-            handleButtoClick(currentPage > 0 ? currentPage - 1 : 0)
-          }
-          className={firstpaginationLink}
-          disabled={currentPage === 0}
-        >
-          <ChevronLeft />
-        </Button>
-      </li>
-      {pages
-        .filter((p) => p !== null)
-        .map((page, index) => {
-          const paginationLink = classNames({
-            [classes.paginationLink]: true,
-            [classes[color]]: page === currentPage,
-            [classes.disabled]: false,
-          });
-          return (
-            <li className={classes.paginationItem} key={index}>
-              <Button
-                onClick={() => handleButtoClick(page)}
-                className={paginationLink}
-                disabled={false}
-              >
-                {page + 1}
-              </Button>
-            </li>
-          );
-        })}
-      <li>
-        <Button
-          onClick={() => handleButtoClick(currentPage + 1)}
-          className={lastpaginationLink}
-          disabled={currentPage === lastPage}
-        >
-          <ChevronRight />
-        </Button>
-      </li>
-      <li>
-        <Button
-          onClick={() => handleButtoClick('last')}
-          className={lastpaginationLink}
-          disabled={currentPage === lastPage}
-        >
-          Last
-        </Button>
-      </li>
-    </ul>
-  );
-}
-
-Pagination.defaultProps = {
-  color: 'primary',
-  onChangePage: () => {},
-};
-
-Pagination.propTypes = {
-  classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
-  onChangePage: PropTypes.func,
-};
-
-const paginationStyle = {
+const useStyles = makeStyles(({ colors }) => ({
   pagination: {
     display: 'flex',
     paddingLeft: '0',
@@ -265,6 +143,130 @@ const paginationStyle = {
       borderColor: colors.grayColor[6],
     },
   },
+}));
+
+function Pagination({ ...props }) {
+  const { count, rowsPerPage, color, className } = props;
+  const paginationClasses = classNames(classes.pagination, className);
+  const classes = useStyles();
+
+  const [currentPage, setPage] = useState(0);
+
+  useEffect(() => {
+    setPage(currentPage);
+  }, [currentPage]);
+
+  const totalpages = Math.ceil(count / rowsPerPage) - 1;
+  const firstPage = 0;
+  const lastPage = Math.max(0, totalpages);
+
+  const pages = [
+    totalpages > 1 && currentPage === lastPage ? currentPage - 2 : null,
+    currentPage > 0 ? currentPage - 1 : null,
+    currentPage,
+    totalpages > currentPage ? currentPage + 1 : null,
+    totalpages > 1 && currentPage === 0 ? currentPage + 2 : null,
+  ];
+
+  const handleButtoClick = (page) => {
+    if (Number(page) || page === 0) {
+      setPage(page);
+      props.onChangePage(page);
+    }
+    if (page === 'last') {
+      setPage(lastPage);
+      props.onChangePage(lastPage);
+    }
+    if (page === 'first') {
+      setPage(firstPage);
+      props.onChangePage(firstPage);
+    }
+  };
+
+  const firstpaginationLink = classNames({
+    [classes.paginationLink]: true,
+    [classes.disabled]: currentPage === 0,
+  });
+
+  const lastpaginationLink = classNames({
+    [classes.paginationLink]: true,
+    [classes.disabled]: currentPage === lastPage,
+  });
+
+  return (
+    <ul className={paginationClasses}>
+      <li>
+        <Button
+          onClick={() => handleButtoClick('first')}
+          className={firstpaginationLink}
+          disabled={currentPage === 0}
+        >
+          First
+        </Button>
+      </li>
+      <li>
+        <Button
+          onClick={() =>
+            handleButtoClick(currentPage > 0 ? currentPage - 1 : 0)
+          }
+          className={firstpaginationLink}
+          disabled={currentPage === 0}
+        >
+          <ChevronLeft />
+        </Button>
+      </li>
+      {pages
+        .filter((p) => p !== null)
+        .map((page, index) => {
+          const paginationLink = classNames({
+            [classes.paginationLink]: true,
+            [classes[color]]: page === currentPage,
+            [classes.disabled]: false,
+          });
+          return (
+            // eslint-disable-next-line react/no-array-index-key
+            <li className={classes.paginationItem} key={`i${index}`}>
+              <Button
+                onClick={() => handleButtoClick(page)}
+                className={paginationLink}
+                disabled={false}
+              >
+                {page + 1}
+              </Button>
+            </li>
+          );
+        })}
+      <li>
+        <Button
+          onClick={() => handleButtoClick(currentPage + 1)}
+          className={lastpaginationLink}
+          disabled={currentPage === lastPage}
+        >
+          <ChevronRight />
+        </Button>
+      </li>
+      <li>
+        <Button
+          onClick={() => handleButtoClick('last')}
+          className={lastpaginationLink}
+          disabled={currentPage === lastPage}
+        >
+          Last
+        </Button>
+      </li>
+    </ul>
+  );
+}
+
+Pagination.defaultProps = {
+  color: 'primary',
+  onChangePage: () => {},
 };
 
-export default withStyles(paginationStyle)(Pagination);
+Pagination.propTypes = {
+  classes: PropTypes.object.isRequired,
+  color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
+  onChangePage: PropTypes.func,
+};
+
+export default Pagination;

@@ -1,12 +1,12 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { sizes, colors } from './theme';
 import Block from './Block';
 import Text from './Text';
+import ThemeContext from './theme/ThemeContext';
 
-const TextArea = (props) => {
-  const { classes, label, input, meta, rows, ...rest } = props;
+const TextArea = ({ classes, label, input, meta, rows, ...rest }) => {
+  const { colors } = React.useContext(ThemeContext);
 
   const inputStyles = {
     ...{},

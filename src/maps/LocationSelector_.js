@@ -3,7 +3,6 @@ import isEqual from 'lodash/isEqual';
 import Block from '../Block';
 import Text from '../Text';
 import PlacesAutoComplete from './PlacesAutoComplete';
-import { sizes, colors } from '../theme';
 import GoogleMapsComponent from './GoogleMapsComponent';
 import ThemeContext from '../theme/ThemeContext';
 
@@ -57,7 +56,7 @@ class LocationSelector extends Component {
     const hasError = meta.touched && meta.error;
     return (
       <ThemeContext.Provider>
-        {({ CONFIG }) => (
+        {({ CONFIG, colors, sizes }) => (
           <Block>
             <Block>
               <GoogleMapsComponent

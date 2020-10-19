@@ -3,7 +3,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MuiSwitch from '@material-ui/core/Switch';
 import { makeStyles } from '@material-ui/core';
 import Block from './Block';
-import { colors } from './theme';
+import colors from './theme/Colors';
 
 const useStyles = ({ color }) =>
   makeStyles({

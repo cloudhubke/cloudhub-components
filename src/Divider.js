@@ -1,8 +1,10 @@
 import React from 'react';
 import Block from './Block';
-import { sizes, colors } from './theme';
+import ThemeContext from './theme/ThemeContext';
 
 const Divider = ({ children, height, style, ...props }) => {
+  const { sizes } = React.useContext(ThemeContext);
+
   if (children) {
     return (
       <Block flex={false} row middle>
@@ -23,7 +25,6 @@ const Divider = ({ children, height, style, ...props }) => {
 };
 
 Divider.defaultProps = {
-  color: colors.gray,
   height: 1,
 };
 

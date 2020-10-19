@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 import Text from './Text';
 import Block from './Block';
-import { sizes as libsizes } from './theme';
+import sizes from './theme/Sizes';
 import ThemeContext from './theme/ThemeContext';
 
 const FieldButton = ({
@@ -64,7 +64,7 @@ const FieldButton = ({
 
 FieldButton.defaultProps = {
   label: '',
-  height: libsizes.inputHeight,
+  height: sizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
   containterStyles: {},

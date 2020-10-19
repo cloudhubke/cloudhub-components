@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
-import { sizes, colors } from './theme';
 import Popper from './dialog/Popper';
 import IconButton from './IconButton';
 import Chips from './Chips';
@@ -11,14 +10,21 @@ import Button from './Button';
 import Field from './form/Field';
 import Text from './Text';
 import TimePicker from './TimePicker';
+import ThemeContext from './theme/ThemeContext';
+
+let styles;
 
 const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
+  const { colors, sizes } = React.useContext(ThemeContext);
+  if (!styles) {
+    styles = createStyles({ sizes, colors });
+  }
   const savedPopper = useRef();
   const [popperopen, setPopperOpen] = useState(false);
 
   const id = popperopen ? 'time-duration-popover' : null;
 
-  const onInputChange = values => {
+  const onInputChange = (values) => {
     input.onChange(values);
     onChange(values);
   };
@@ -40,8 +46,8 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
       <Block style={{ maxHeight: sizes.inputHeight, overflow: 'auto' }}>
         <Chips
           data={data}
-          getLabel={data => data.label}
-          extractKey={data => data.id}
+          getLabel={(data) => data.label}
+          extractKey={(data) => data.id}
         />
       </Block>
       <Block flex={false}>
@@ -51,8 +57,8 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
           onClose={() => setPopperOpen(false)}
           paperStyle={{ overflow: 'visible' }}
           disableClickAwayClose
-          anchorComponent={(
-<IconButton
+          anchorComponent={
+            <IconButton
               aria-describedby={id}
               onClick={() => setPopperOpen(true)}
             >
@@ -60,7 +66,7 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
                 style={{ fontSize: 32, color: colors.gray }}
               />
             </IconButton>
-)}
+          }
         >
           <Block style={{ width: 400 }}>
             <Form
@@ -110,13 +116,13 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
   );
 };
 
-const styles = {
+const createStyles = ({ sizes, colors }) => ({
   input: {
     height: sizes.inputHeight,
     border: `0.5px solid ${colors.gray}`,
     borderRadius: 5,
   },
-};
+});
 
 TimeDurationPicker.defaultProps = {
   onChange: () => {},

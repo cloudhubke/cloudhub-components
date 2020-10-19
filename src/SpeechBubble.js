@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Block from './Block';
-import { sizes } from './theme';
+import ThemeContext from './theme/ThemeContext';
 
 const useStyles = makeStyles({
   speech: (props) => ({
@@ -204,6 +204,7 @@ const SpeechBubble = ({
   noshadow,
   ...props
 }) => {
+  const { sizes } = React.useContext(ThemeContext);
   const classes = useStyles({
     width,
     height,

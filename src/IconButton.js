@@ -1,7 +1,9 @@
 import React from 'react';
 import MuiIconButton from '@material-ui/core/IconButton';
 import Block from './Block';
-import { colors } from './theme';
+import ThemeContext from './theme/ThemeContext';
+
+let styles;
 
 const IconButton = React.forwardRef((props, ref) => {
   const {
@@ -14,6 +16,11 @@ const IconButton = React.forwardRef((props, ref) => {
     style,
     ...rest
   } = props;
+  const { colors } = React.useContext(ThemeContext);
+
+  if (!styles) {
+    styles = createStyles({ colors });
+  }
 
   const handleMargins = () => {
     if (typeof margin === 'number') {
@@ -131,7 +138,7 @@ const IconButton = React.forwardRef((props, ref) => {
     </Block>
   );
 });
-const styles = {
+const createStyles = ({ colors }) => ({
   button: {
     height: 'auto',
     width: 'auto',
@@ -193,6 +200,6 @@ const styles = {
   fire: { backgroundColor: colors.fire, borderColor: colors.fire },
   drawer: { backgroundColor: colors.drawer, borderColor: colors.drawer },
   eggplant: { backgroundColor: colors.eggplan, borderColor: colors.eggplantt },
-};
+});
 
 export default IconButton;

@@ -2,12 +2,31 @@
 
 import React from 'react';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import classNames from 'classnames';
-import { sizes, colors } from './theme';
+import ThemeContext from './theme/ThemeContext';
+
 import { Slide, Grow, Paper } from './mui/core';
 
+const useStyles = () =>
+  makeStyles({
+    shadowhover: {
+      boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+      '&:hover': {
+        boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+      },
+    },
+  });
+
+let styles;
+
 const Block = React.forwardRef((props, ref) => {
+  const { sizes, colors } = React.useContext(ThemeContext);
+  const classes = useStyles();
+  if (!styles) {
+    styles = createStyles({ sizes, colors });
+  }
+
   const handleMargins = () => {
     const { margin } = props;
     if (typeof margin === 'number') {
@@ -103,7 +122,6 @@ const Block = React.forwardRef((props, ref) => {
   };
 
   const {
-    classes,
     absolute,
     flex,
     row,
@@ -216,7 +234,7 @@ const Block = React.forwardRef((props, ref) => {
   );
 });
 
-export const styles = {
+const createStyles = ({ sizes, colors }) => ({
   block: {
     flex: 1,
     display: 'flex',
@@ -304,20 +322,10 @@ export const styles = {
   rose: { backgroundColor: colors.roseColor[0] },
   warning: { backgroundColor: colors.warningColor[0] },
   danger: { backgroundColor: colors.dangerColor[0] },
-};
-
-const classStyles = () => ({
-  shadowhover: {
-    boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-
-    '&:hover': {
-      boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
-    },
-  },
 });
 
 Block.defaultProps = {
   visible: true,
 };
 
-export default withStyles(classStyles)(Block);
+export default Block;

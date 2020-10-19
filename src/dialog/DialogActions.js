@@ -1,13 +1,16 @@
 import React from 'react';
 import Block from '../Block';
-import { sizes } from '../theme';
+import ThemeContext from '../theme/ThemeContext';
 
 const DialogActions = ({ children, ...props }) => {
-  const childbuttons = React.Children.map(children, child =>
+  const { sizes } = React.useContext(ThemeContext);
+
+  const childbuttons = React.Children.map(children, (child) =>
     React.cloneElement(child, {
       ...child.props,
       style: { ...(child.props.style || {}), marginLeft: 10 },
-    }));
+    })
+  );
 
   return (
     <Block

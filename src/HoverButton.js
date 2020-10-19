@@ -2,7 +2,7 @@ import React from 'react';
 import { ChevronRight } from '@material-ui/icons';
 import Block from './Block';
 import Text from './Text';
-import { hexToRgb } from './theme';
+import hexToRgb from './theme/hexToRgb';
 import ThemeContext from './theme/ThemeContext';
 
 const HoverButton = ({

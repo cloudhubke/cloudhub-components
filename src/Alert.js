@@ -1,12 +1,16 @@
 import React from 'react';
 import AntAlert from './ant/Alert';
-import { sizes } from './theme';
 import Block from './Block';
+import ThemeContext from './theme/ThemeContext';
 
-const Alert = (props) => (
-  <Block margin={sizes.margin} flex={props.flex}>
-    <AntAlert {...props} />
-  </Block>
-);
+const Alert = (props) => {
+  const { sizes } = React.useContext(ThemeContext);
+
+  return (
+    <Block margin={sizes.margin} flex={props.flex}>
+      <AntAlert {...props} />
+    </Block>
+  );
+};
 
 export default Alert;
