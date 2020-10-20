@@ -6,6 +6,7 @@ import Text from './Text';
 import Block from './Block';
 import Button from './Button';
 import ThemeContext from './theme/ThemeContext';
+import sizes from './theme/Sizes';
 
 const CheckBox = ({
   value,
