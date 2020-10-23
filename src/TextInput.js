@@ -5,19 +5,9 @@ import { makeStyles } from './mui/styles';
 import { TextField, IconButton, Divider } from './mui/core';
 import ThemeContext from './theme/ThemeContext';
 
-const useStyles = ({ sizes, style, error, colors, inputStyle }) =>
+const useStyles = ({ inputStyle }) =>
   makeStyles({
-    root: {
-      padding: '2px 5px',
-      backgroundColor: colors.white,
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderColor: error ? colors.error : colors.gray,
-      // borderRadius: 5,
-      ...style,
-    },
     input: {
-      height: sizes.inputHeight,
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'row',
@@ -67,6 +57,7 @@ const SearchPopper = React.forwardRef(
       inputStyle,
       inputProps,
       divider,
+      error,
       ...props
     },
     ref
@@ -163,8 +154,16 @@ const SearchPopper = React.forwardRef(
         row
         middle
         paper={paper}
-        className={classes.root}
         elevation={elevation}
+        style={{
+          padding: 5,
+          backgroundColor: colors.white,
+          borderWidth: 1,
+          borderStyle: 'solid',
+          borderColor: error ? colors.error : colors.gray,
+          height: sizes.inputHeight,
+          ...style,
+        }}
       >
         <LeftComponent />
         <TextField
@@ -181,7 +180,7 @@ const SearchPopper = React.forwardRef(
           label={placeholder || label || ''}
           onFocus={onFocus}
           onBlur={onLostFocus}
-          style={{ width: '100%' }}
+          style={{ width: '100%', height: 'auto' }}
           multiline
           {...input}
           {...props}
@@ -208,7 +207,6 @@ SearchPopper.defaultProps = {
   onSubmit: () => {},
   elevation: 1,
   input: {
-    value: '',
     onChange: () => null,
   },
   paper: false,

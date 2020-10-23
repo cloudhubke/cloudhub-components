@@ -1,6 +1,12 @@
 import hexToRgba from 'hex-to-rgba';
 
-const getCustomStyles = ({ error, isMulti, sizes, colors }) => {
+const getCustomStyles = ({
+  error,
+  isMulti,
+  sizes,
+  colors,
+  style: inputStyle,
+}) => {
   const borderColor = error ? colors.error : colors.gray;
   const customStyles = {
     menu: (provided, state) => ({
@@ -18,27 +24,27 @@ const getCustomStyles = ({ error, isMulti, sizes, colors }) => {
       ...provided,
     }),
     control: (provided, state) => {
-      let style = {};
+      let style = { ...inputStyle };
       if (state.isFocused) {
         style = {
-          ...style,
           boxShadow: `0 1px 0 1px ${hexToRgba(colors.primary, 0.1)}`,
           borderWidth: 1.5,
           borderColor: colors.primary || '#2684FF',
           '&:hover': {
             borderColor: colors.primary || '#2684FF',
           },
+          ...style,
         };
       }
 
       if (state.menuIsOpen) {
         style = {
-          ...style,
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
           boxShadow: '0 1px 0 1px hsla(0, 0%, 0%, 0.1)',
           borderWidth: 1.5,
           borderColor: colors.primary || '#2684FF',
+          ...style,
         };
       }
 
