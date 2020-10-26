@@ -1,20 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import green from '@material-ui/core/colors/green';
 import MuiCheckBox from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
 import Text from './Text';
 import Block from './Block';
 import Button from './Button';
-import { sizes, colors } from './theme';
-
-const checkBoxStyles = {
-  checkBox: {
-    textTransform: 'none',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    color: colors.dark
-  }
-};
+import ThemeContext from './theme/ThemeContext';
+import sizes from './theme/Sizes';
 
 const CheckBox = ({
   value,
@@ -22,13 +14,22 @@ const CheckBox = ({
   input,
   label,
   tag,
-  height,
+  height = sizes.inputHeight,
   meta,
-  disabled
+  disabled,
 }) => {
   const val = input.value || value;
-
+  const { colors, sizes } = React.useContext(ThemeContext);
   const [checkvalue, setCheckValue] = React.useState(Boolean(val));
+
+  const checkBoxStyles = {
+    checkBox: {
+      textTransform: 'none',
+      display: 'flex',
+      justifyContent: 'flex-start',
+      color: colors.dark,
+    },
+  };
 
   const onCheck = () => {
     input.onChange(!checkvalue);
@@ -43,7 +44,7 @@ const CheckBox = ({
 
   return (
     <Block>
-      <Block row style={{ marginRight: sizes.margin }}>
+      <Block row>
         <Button
           fullWidth
           onClick={onCheck}
@@ -57,7 +58,7 @@ const CheckBox = ({
                 height,
                 width: height,
                 color: green[500],
-                marginRight: sizes.margin
+                marginRight: sizes.margin,
               }}
             />
           ) : (
@@ -65,7 +66,7 @@ const CheckBox = ({
               style={{
                 height,
                 width: height,
-                marginRight: sizes.margin
+                marginRight: sizes.margin,
               }}
             />
           )}
@@ -83,12 +84,11 @@ CheckBox.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
-    onBlur: () => {}
+    onBlur: () => {},
   },
   meta: {},
   value: null,
   onChange: () => {},
-  height: sizes.inputHeight
 };
 
 export default CheckBox;

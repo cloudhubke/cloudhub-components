@@ -1,8 +1,4 @@
-import sizes from './Sizes';
-import colors from './Colors';
-import Images from './Images';
-
-const hexToRgb = hexcolor => {
+const hexToRgb = (hexcolor) => {
   let input = hexcolor;
   input += '';
   input = input.replace('#', '');
@@ -26,4 +22,4 @@ const hexToRgb = hexcolor => {
   )}`;
 };
 
-export { sizes, colors, Images, hexToRgb };
+export default hexToRgb;

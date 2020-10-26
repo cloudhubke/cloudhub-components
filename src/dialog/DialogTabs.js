@@ -1,12 +1,14 @@
 import React from 'react';
 import Block from '../Block';
+import ThemeContext from '../theme/ThemeContext';
 
-import { sizes } from '../theme';
+const DialogTabs = ({ children, ...props }) => {
+  const { sizes } = React.useContext(ThemeContext);
 
-const DialogTabs = ({ children, ...props }) => (
-  <Block flex={false} padding={[sizes.padding, 0]} {...props}>
-    <div>{children}</div>
-  </Block>
-);
-
+  return (
+    <Block flex={false} padding={[sizes.padding, 0]} {...props}>
+      <div>{children}</div>
+    </Block>
+  );
+};
 export default DialogTabs;

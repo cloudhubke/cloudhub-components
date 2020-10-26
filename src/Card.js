@@ -1,30 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { sizes, colors } from './theme';
 import Block from './Block';
+import ThemeContext from './theme/ThemeContext';
 
-export default class Card extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+const Card = ({ color, style, hover, children, ...props }) => {
+  const { colors, sizes } = React.useContext(ThemeContext);
+  const styles = {
+    card: {
+      borderRadius: sizes.border,
+      padding: sizes.base + 4,
+      marginBottom: sizes.base,
+    },
+  };
+  const cardStyles = { ...styles.card, ...(hover && styles.hover), ...style };
 
-  render() {
-    const { color, style, hover, children, ...props } = this.props;
-    const cardStyles = { ...styles.card, ...(hover && styles.hover), ...style };
-
-    return (
-      <Block color={color || colors.white} style={cardStyles} {...props}>
-        {children}
-      </Block>
-    );
-  }
-}
-
-export const styles = {
-  card: {
-    borderRadius: sizes.border,
-    padding: sizes.base + 4,
-    marginBottom: sizes.base,
-  },
+  return (
+    <Block color={color || colors.white} style={cardStyles} {...props}>
+      {children}
+    </Block>
+  );
 };
+
+export default Card;

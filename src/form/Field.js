@@ -112,6 +112,7 @@ const FormField = ({
   if (min || min === 0) {
     validators = [...validators, minFieldValue(min)];
   }
+
   if (max || max === 0) {
     validators = [...validators, maxFieldValue(max)];
   }
@@ -148,10 +149,12 @@ const FormField = ({
   // };
 
   return wrap ? (
-    <FieldBlock
+    <Block
       row={row}
-      // middle={row}
-      style={{ alignItems: 'stretch', ...containerStyle }}
+      style={{
+        alignItems: 'stretch',
+        ...containerStyle,
+      }}
       flex={flex}
     >
       <LabelComponent />
@@ -166,7 +169,7 @@ const FormField = ({
           {...rest}
         />
       </Block>
-    </FieldBlock>
+    </Block>
   ) : (
     <FinalFormField
       validate={composeValidators(...validators)}

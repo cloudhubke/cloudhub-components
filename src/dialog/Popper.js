@@ -9,9 +9,10 @@ import Fade from '@material-ui/core/Fade';
 import { ClickAwayListener } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Block from '../Block';
-import { sizes, colors } from '../theme';
+import colors from '../theme/Colors';
+import ThemeContext from '../theme/ThemeContext';
 
-const getStyles = ({ color }) => {
+const getStyles = ({ color, sizes }) => {
   const useStyles = makeStyles({
     paper: {
       maxWidth: 400,
@@ -103,10 +104,11 @@ const Popper = (props) => {
     trigger = 'click',
     ...rest
   } = props;
+  const { sizes } = React.useContext(ThemeContext);
 
   const [popperopen, setPopperOpen] = React.useState(open);
 
-  const classes = getStyles({ color, overflow }).useStyles();
+  const classes = getStyles({ color, overflow, sizes }).useStyles();
 
   const closePopper = () => {
     setPopperOpen(false);

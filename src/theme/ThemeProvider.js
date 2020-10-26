@@ -60,6 +60,9 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
         tooltip: 1800,
       },
     },
+    sizes: { ...newsizes },
+    colors: { ...newcolors },
+    fonts: { ...newfonts },
   });
 
   return (

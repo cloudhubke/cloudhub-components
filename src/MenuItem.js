@@ -7,9 +7,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Block from './Block';
-import { colors, sizes } from './theme';
+import ThemeContext from './theme/ThemeContext';
 
-const getStyles = ({ selected }) => {
+const getStyles = ({ selected, colors, sizes }) => {
   const useStyles = makeStyles({
     listItem: {
       backgroundColor: selected ? colors.jungleGreen : 'transparent',
@@ -37,7 +37,8 @@ const MenuItem = ({
   selected,
   ...rest
 }) => {
-  const classes = getStyles({ selected }).useStyles();
+  const { colors, sizes } = React.useContext(ThemeContext);
+  const classes = getStyles({ selected, colors, sizes }).useStyles();
 
   return (
     <Block flex={false} row className={classes.listItem}>

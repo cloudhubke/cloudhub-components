@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronRight } from '@material-ui/icons';
 import Block from './Block';
-import { sizes } from './theme';
+import ThemeContext from './theme/ThemeContext';
 
 const BulletListItem = ({
   bulletColor,
@@ -20,6 +20,8 @@ const BulletListItem = ({
   flex,
   ...props
 }) => {
+  const { sizes } = React.useContext(ThemeContext);
+
   const bulletSymbol = () => {
     if (chevron) {
       return (

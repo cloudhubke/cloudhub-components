@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -7,11 +7,10 @@ import ViewList from '@material-ui/icons/ViewList';
 
 import IconButton from '../IconButton';
 import Block from '../Block';
-
-import { colors } from '../theme';
+import ThemeContext from '../theme/ThemeContext';
 
 const RowActions = ({ row, column, permissions, ...props }) => {
-  const [] = useState(0);
+  const { colors } = React.useContext(ThemeContext);
 
   delete row.counter;
 
@@ -22,14 +21,14 @@ const RowActions = ({ row, column, permissions, ...props }) => {
         style={{
           height: '100%',
           width: '100%',
-          minWidth: 150
+          minWidth: 150,
         }}
       >
         {props.actionsMenu ? (
           props.actionsMenu({
             row,
             column,
-            ...permissions
+            ...permissions,
           })
         ) : (
           <IconButton

@@ -1,7 +1,9 @@
 import React from 'react';
 import MuiContainer from '@material-ui/core/Container';
-import { colors } from './theme';
 import { useMetrics } from './customhooks';
+import ThemeContext from './theme/ThemeContext';
+
+let styles;
 
 const Container = ({
   children,
@@ -22,6 +24,11 @@ const Container = ({
   ...otherprops
 }) => {
   const { maxWidth } = useMetrics();
+  const { colors, sizes } = React.useContext(ThemeContext);
+
+  if (!styles) {
+    styles = createStyles({ colors, sizes });
+  }
 
   const handleMargins = () => {
     if (typeof margin === 'number') {
@@ -146,7 +153,7 @@ const Container = ({
   );
 };
 
-const styles = {
+const createStyles = ({ colors }) => ({
   containerStyles: {
     display: 'flex',
     position: 'relative',
@@ -226,6 +233,6 @@ const styles = {
   rose: { backgroundColor: colors.roseColor[0] },
   warning: { backgroundColor: colors.warningColor[0] },
   danger: { backgroundColor: colors.dangerColor[0] },
-};
+});
 
 export default Container;

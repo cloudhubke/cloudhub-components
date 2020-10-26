@@ -2,26 +2,25 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import isEqual from 'lodash/isEqual';
 import Chip from '@material-ui/core/Chip';
-import { sizes } from './theme';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ sizes }) => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    padding: sizes.pa
+    padding: sizes.padding,
   },
   chip: {
-    margin: sizes.margin
-  }
+    margin: sizes.margin,
+  },
 }));
 
 const Chips = ({ onChange, extractKey, extractLabel, data, icon }) => {
   const classes = useStyles();
   const [chipData, setChipData] = React.useState(data);
 
-  const handleDelete = index => () => {
-    setChipData(data => data.filter((chip, i) => i !== index));
+  const handleDelete = (index) => () => {
+    setChipData((data) => data.filter((chip, i) => i !== index));
   };
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const Chips = ({ onChange, extractKey, extractLabel, data, icon }) => {
 Chips.defaultProps = {
   extractLabel: () => null,
   extractKey: () => null,
-  onChange: () => null
+  onChange: () => null,
 };
 
 export default Chips;

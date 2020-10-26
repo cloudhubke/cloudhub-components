@@ -15,18 +15,18 @@ const getStyles = ({ fonts, sizes }) => {
         height: sizes.inputHeight,
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
       },
       '& .ant-calendar-range-picker-separator': {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-end'
-      }
-    }
+        justifyContent: 'flex-end',
+      },
+    },
   });
 
   return {
-    useStyles
+    useStyles,
   };
 };
 
@@ -34,7 +34,7 @@ const DateRangePicker = ({ meta, ...props }) => {
   const { fonts, sizes } = React.useContext(ThemeContext);
   const classes = getStyles({ fonts, sizes }).useStyles();
   return (
-    <Block style={{ marginRight: sizes.margin }}>
+    <Block>
       <AntRangePicker
         dateFormat="DD MMM, YYYY"
         {...props}
@@ -48,7 +48,7 @@ const DateRangePicker = ({ meta, ...props }) => {
 };
 
 DateRangePicker.defaultProps = {
-  meta: {}
+  meta: {},
 };
 
 export default DateRangePicker;

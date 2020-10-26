@@ -3,7 +3,6 @@ import { Form, FormSpy } from 'react-final-form';
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
-import { sizes, colors } from './theme';
 
 import Popper from './dialog/Popper';
 import IconButton from './IconButton';
@@ -14,6 +13,7 @@ import Button from './Button';
 import Field from './form/Field';
 import Text from './Text';
 import TimePicker from './TimePicker';
+import ThemeContext from './theme/ThemeContext';
 
 const TimeDurationPicker = ({
   spy,
@@ -30,10 +30,18 @@ const TimeDurationPicker = ({
 
   const [durations, setDurations] = useState(values);
   const [popperopen, setPopperOpen] = useState(false);
-
   const id = popperopen ? 'time-duration-popover' : null;
+  const { colors, sizes } = React.useContext(ThemeContext);
 
-  const onInputChange = values => {
+  const styles = {
+    input: {
+      height: sizes.inputHeight,
+      border: `0.5px solid ${colors.gray}`,
+      borderRadius: 5,
+    },
+  };
+
+  const onInputChange = (values) => {
     if (values.Start && values.End) {
       setDurations([...durations, values]);
     }
@@ -47,14 +55,14 @@ const TimeDurationPicker = ({
     }
   }, [durations, values, input, onChange]);
 
-  const format = tt => moment(tt, 'HHmmss').format('hh:mm a');
+  const format = (tt) => moment(tt, 'HHmmss').format('hh:mm a');
 
   return (
     <Block row middle style={styles.input} padding={[0, sizes.padding]}>
       <Block style={{ maxHeight: sizes.inputHeight, overflow: 'auto' }}>
         <Chips
           data={durations}
-          extractLabel={data => `${format(data.Start)} - ${format(data.End)}`}
+          extractLabel={(data) => `${format(data.Start)} - ${format(data.End)}`}
           extractKey={(d, i) => i}
         />
       </Block>
@@ -65,8 +73,8 @@ const TimeDurationPicker = ({
           onClose={() => setPopperOpen(false)}
           paperStyle={{ overflow: 'visible' }}
           disableClickAwayClose
-          anchorComponent={(
-<IconButton
+          anchorComponent={
+            <IconButton
               aria-describedby={id}
               onClick={() => setPopperOpen(true)}
             >
@@ -74,7 +82,7 @@ const TimeDurationPicker = ({
                 style={{ fontSize: 32, color: colors.gray }}
               />
             </IconButton>
-)}
+          }
         >
           <Block style={{ width: 400 }}>
             <Form
@@ -129,14 +137,6 @@ const TimeDurationPicker = ({
       </Block>
     </Block>
   );
-};
-
-const styles = {
-  input: {
-    height: sizes.inputHeight,
-    border: `0.5px solid ${colors.gray}`,
-    borderRadius: 5,
-  },
 };
 
 TimeDurationPicker.defaultProps = {

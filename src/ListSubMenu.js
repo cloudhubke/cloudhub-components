@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import Lens from '@material-ui/icons/Lens';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { colors } from './theme';
+import ThemeContext from './theme/ThemeContext';
 
 const ListSubMenu = ({
   children,
@@ -23,6 +23,7 @@ const ListSubMenu = ({
   dividerColor,
   ...rest
 }) => {
+  const { colors } = React.useContext(ThemeContext);
   const [menuexpanded, setMenuExpand] = useState(expanded);
   return (
     <Fragment>

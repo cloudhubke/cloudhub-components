@@ -1,8 +1,7 @@
-import React, { createRef, Component } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { sizes } from './theme';
 
 import Block from './Block';
 import Text from './Text';
@@ -66,9 +65,7 @@ const Input = ({
   };
 
   const inputStyles = {
-    // backgroundColor: colors.white,
     height: sizes.inputHeight,
-    // marginRight: marginRight || 0,
     ...style,
   };
 
@@ -115,7 +112,6 @@ const Input = ({
 
 Input.defaultProps = {
   meta: {},
-  marginRight: sizes.margin,
   onKeyEnter: () => null,
   showError: true,
   variant: 'outlined',

@@ -2,8 +2,8 @@ import React from 'react';
 import { ListItem, ListItemText, ListItemAvatar } from '@material-ui/core';
 import { PlayArrow, PlayCircleOutline } from '@material-ui/icons';
 import moment from 'moment';
-import { sizes, colors } from './theme';
 import { Block, Text, Avatar } from './index';
+import ThemeContext from './theme/ThemeContext';
 
 const VideoThumbnail = ({
   thumbnail,
@@ -33,6 +33,7 @@ const VideoThumbnail = ({
   style,
   ...props
 }) => {
+  const { sizes, colors } = React.useContext(ThemeContext);
   const thumbWidth = () => {
     if (width) return width;
     if (height && !width) return Math.round((height * 16) / 9);

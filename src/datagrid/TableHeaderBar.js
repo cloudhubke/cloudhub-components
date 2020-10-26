@@ -10,7 +10,7 @@ import Button from '../Button';
 import { useDebounce } from '../customhooks';
 import Block from '../Block';
 import Text from '../Text';
-import { sizes } from '../theme';
+import ThemeContext from '../theme/ThemeContext';
 
 const styles = {
   root: {
@@ -43,8 +43,8 @@ const TableHeaderBar = ({
   onRefresh,
   onSearchChange,
   onPrint,
-  ...props
 }) => {
+  const { sizes } = React.useContext(ThemeContext);
   const [text, setText] = React.useState('');
   const debouncedText = useDebounce(text, 500);
 
@@ -64,7 +64,7 @@ const TableHeaderBar = ({
           style={{ flex: 1, minWidth: 200 }}
           icon="search"
           placeholder="Search..."
-          onChange={e => setText(e.target.value)}
+          onChange={(e) => setText(e.target.value)}
         />
         <Button onClick={onAdd} style={styles.buttonStyle} disabled={!allowadd}>
           <AddIcon /> Add

@@ -3,7 +3,7 @@ import Text from './Text';
 import Block from './Block';
 import Button from './Button';
 
-import { sizes } from './theme';
+import sizes from './theme/Sizes';
 
 const FieldLabel = ({
   label,
@@ -46,7 +46,7 @@ const FieldLabel = ({
   };
 
   return (
-    <Block style={{ marginRight: sizes.margin }}>
+    <Block>
       <Button
         onClick={onClick}
         style={styles.button}

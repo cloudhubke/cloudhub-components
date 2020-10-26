@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 import Text from './Text';
 import Block from './Block';
-import { sizes as libsizes } from './theme';
+import sizes from './theme/Sizes';
 import ThemeContext from './theme/ThemeContext';
 
 const FieldButton = ({
@@ -22,17 +22,17 @@ const FieldButton = ({
     button: {
       textTransform: 'none',
       height,
-      ...style
-    }
+      ...style,
+    },
   };
 
-  const renderIcon = IconComponent => {
+  const renderIcon = (IconComponent) => {
     if (IconComponent) {
       return (
         <IconComponent
           style={{
             marginRight: sizes.margin,
-            ...textStyles
+            ...textStyles,
           }}
         />
       );
@@ -44,8 +44,7 @@ const FieldButton = ({
     <Block
       flex={false}
       style={{
-        marginRight: sizes.margin,
-        ...containterStyles
+        ...containterStyles,
       }}
     >
       <Button onClick={onClick} style={styles.button} {...props}>
@@ -65,10 +64,10 @@ const FieldButton = ({
 
 FieldButton.defaultProps = {
   label: '',
-  height: libsizes.inputHeight,
+  height: sizes.inputHeight,
   onClick: () => {},
   textStyles: { color: 'inherit' },
-  containterStyles: {}
+  containterStyles: {},
 };
 
 export default FieldButton;

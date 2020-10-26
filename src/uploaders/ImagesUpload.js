@@ -1,14 +1,13 @@
 import React from 'react';
 import isPlainObject from 'lodash/isPlainObject';
 import Block from '../Block';
-import { sizes } from '../theme';
 import CloudhubImagesUpload from './uploader/ImagesUpload';
 import ThemeContext from '../theme/ThemeContext';
 
 const ImagesUpload = (props) => {
   const value = props.input ? props.input.value : props.value;
 
-  const { CONFIG } = React.useContext(ThemeContext);
+  const { CONFIG, sizes } = React.useContext(ThemeContext);
 
   if (CONFIG.FILEAPI_ENDPOINT) {
     if (Array.isArray(value)) {

@@ -3,9 +3,8 @@ import List from '@material-ui/core/List';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { sizes } from './theme';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(({ sizes }) => ({
   root: {
     width: '100%',
     backgroundColor: 'transparent',
@@ -21,12 +20,12 @@ const ListMenu = ({ children, header, ...rest }) => {
 
   const subheader = header
     ? {
-      subheader: (
+        subheader: (
           <ListSubheader component="div" id="nested-list-subheader">
             {header}
           </ListSubheader>
-      ),
-    }
+        ),
+      }
     : {};
 
   return (

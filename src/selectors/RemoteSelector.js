@@ -35,7 +35,7 @@ const RemoteSelector = React.forwardRef(
     }
 
     return (
-      <Block style={{ marginRight: sizes.margin }}>
+      <Block>
         <CloudhubRemoteSelector
           ref={ref}
           value={input.value}

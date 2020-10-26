@@ -15,12 +15,20 @@ const StaticListSelector = (props) => {
     isMulti,
     displayField,
     returnkeys,
+    showError = true,
+    style,
     ...rest
   } = props;
 
   const error = meta.error && meta.touched;
   const { sizes, colors } = React.useContext(ThemeContext);
-  const customStyles = getCustomStyles({ error, isMulti, sizes, colors });
+  const customStyles = getCustomStyles({
+    error,
+    isMulti,
+    sizes,
+    colors,
+    style,
+  });
 
   const val = input.value || value;
 
@@ -44,7 +52,7 @@ const StaticListSelector = (props) => {
   }
 
   return (
-    <Block style={{ marginRight: sizes.margin }}>
+    <Block>
       <CloudhubSelector
         options={options || []}
         value={val}
@@ -58,9 +66,11 @@ const StaticListSelector = (props) => {
         valueExtractor={valueExtractor}
         {...rest}
       />
-      <Text small error style={{ height: 10 }}>
-        {meta.touched && meta.error && meta.error}
-      </Text>
+      {showError && (
+        <Text small error style={{ height: 10 }}>
+          {meta.touched && meta.error && meta.error}
+        </Text>
+      )}
     </Block>
   );
 };
