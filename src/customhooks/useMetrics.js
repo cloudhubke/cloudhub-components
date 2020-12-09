@@ -1,8 +1,9 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React from 'react';
+import debounce from 'lodash/debounce';
 
 const hasWindow = typeof window !== 'undefined';
 
-const useMetrics = () => {
+const useMetrics = (debounceDuration = 1000) => {
   const [width, setWidth] = React.useState(hasWindow && window.innerWidth);
   const [height, setHeight] = React.useState(hasWindow && window.innerHeight);
   const [maxWidth, setMaxWidth] = React.useState('lg');
@@ -17,8 +18,8 @@ const useMetrics = () => {
     }
   }, []);
 
-  React.useEffect(() => {
-    const getMaxWidth = () => {
+  React.useLayoutEffect(() => {
+    const getMaxWidth = (width) => {
       if (width < 600 || isMobile) {
         return 'sm';
       }
@@ -32,14 +33,11 @@ const useMetrics = () => {
       return 'lg';
     };
 
-    setMaxWidth(getMaxWidth());
-  }, [width]);
-
-  useLayoutEffect(() => {
-    const resize = () => {
+    const resize = debounce(() => {
       setWidth(window.innerWidth);
       setHeight(window.innerHeight);
-    };
+      setMaxWidth(getMaxWidth(window.innerWidth));
+    }, debounceDuration);
 
     window.addEventListener('resize', resize);
     return () => {

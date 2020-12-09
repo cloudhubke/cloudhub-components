@@ -1,7 +1,11 @@
 import React from 'react';
-import { Client as Styletron } from 'styletron-engine-atomic';
+import {
+  LightTheme,
+  BaseProvider,
+  ThemeProvider as BaseuiThemeProvider,
+} from 'baseui';
 import { Provider as StyletronProvider } from 'styletron-react';
-import { LightTheme, BaseProvider, styled } from 'baseui';
+import { Client as Styletron } from 'styletron-engine-atomic';
 
 import {
   ThemeProvider as MuiThemeProvider,
@@ -11,7 +15,7 @@ import ThemeContext from './ThemeContext';
 import localsizes from './Sizes';
 import localcolors from './Colors';
 import localfonts from './Fonts';
-import toast, { ToastContainer } from '../toastr';
+import { ToastContainer } from '../toastr';
 
 const engine = new Styletron();
 
@@ -20,55 +24,71 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const newcolors = { ...localcolors, ...colors };
   const newsizes = { ...localsizes, ...sizes };
 
-  const theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: newcolors.primary,
-      },
-      secondary: {
-        main: newcolors.secondary,
-      },
+  const createTheme = React.useCallback(
+    () =>
+      createMuiTheme({
+        palette: {
+          primary: {
+            main: newcolors.primary,
+          },
+          secondary: {
+            main: newcolors.secondary,
+          },
 
-      error: {
-        main: newcolors.danger,
-      },
-    },
-    typography: {
-      // Use the system font instead of the default Roboto font.
-      useNextVariants: true,
-      fontSize: 16,
-      htmlFontSize: 16,
-      fontFamily: [
-        newfonts.body.fontFamily,
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
-      zIndex: {
-        mobileStepper: 1000,
-        appBar: 1100,
-        drawer: 1200,
-        modal: 1300,
-        snackbar: 1400,
-        tooltip: 1800,
-      },
-    },
-    sizes: { ...newsizes },
-    colors: { ...newcolors },
-    fonts: { ...newfonts },
-  });
+          error: {
+            main: newcolors.danger,
+          },
+        },
+        typography: {
+          // Use the system font instead of the default Roboto font.
+          useNextVariants: true,
+          fontSize: 16,
+          htmlFontSize: 16,
+          fontFamily: [
+            newfonts.body.fontFamily,
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+          ].join(','),
+          zIndex: {
+            mobileStepper: 1000,
+            appBar: 1100,
+            drawer: 1200,
+            modal: 1300,
+            snackbar: 1400,
+            tooltip: 1800,
+          },
+        },
+        sizes: { ...newsizes },
+        colors: { ...newcolors },
+        fonts: { ...newfonts },
+      }),
+    []
+  );
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={createTheme()}>
       <StyletronProvider value={engine}>
-        <BaseProvider theme={LightTheme}>
+        <BaseProvider
+          overrides={{
+            AppContainer: {
+              style: {
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+              },
+            },
+          }}
+          theme={LightTheme}
+        >
           <ThemeContext.Provider
             value={{
               fonts: newfonts,
@@ -79,7 +99,9 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
             }}
           >
             {children}
-            <ToastContainer />
+            <div style={{ flex: 0 }}>
+              <ToastContainer />
+            </div>
           </ThemeContext.Provider>
         </BaseProvider>
       </StyletronProvider>
