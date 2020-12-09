@@ -164,17 +164,19 @@ const S3ImageUpload = ({
     if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
-          const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
-              toastr.error(
-                `File ${
-                  obj.filename || obj.name
-                } upload failed. please try again later`
-              );
-              return null;
-            }
-            return obj;
-          });
+          const progressArray = urls
+            .map((obj) => {
+              if (url === obj.signedUrl) {
+                toastr.error(
+                  `File ${
+                    obj.filename || obj.name
+                  } upload failed. please try again later`
+                );
+                return null;
+              }
+              return obj;
+            })
+            .filter(Boolean);
           return progressArray;
         }
         return urls;
