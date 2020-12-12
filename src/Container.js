@@ -21,9 +21,10 @@ const Container = ({
   right,
   left,
   wrap,
+  maxWidth: mxWidth,
   ...otherprops
 }) => {
-  const { maxWidth } = useMetrics();
+  const { maxWidth } = mxWidth ? { maxWidth: mxWidth } : useMetrics();
   const { colors, sizes } = React.useContext(ThemeContext);
 
   if (!styles) {

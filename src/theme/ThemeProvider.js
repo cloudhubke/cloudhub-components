@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  LightTheme,
-  BaseProvider,
-  ThemeProvider as BaseuiThemeProvider,
-} from 'baseui';
+import { LightTheme, BaseProvider } from 'baseui';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { Client as Styletron } from 'styletron-engine-atomic';
 
@@ -80,10 +76,12 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
           overrides={{
             AppContainer: {
               style: {
+                height: '100%',
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                height: '100%',
+
+                backgroundColor: newcolors.background || '#FFFFCC',
               },
             },
           }}

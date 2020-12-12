@@ -1,17 +1,20 @@
-
 import React from 'react';
-import { Location } from '@reach/router';
+import {
+  Location,
+  LocationProvider as ReachLocationProvider,
+} from '@reach/router';
 import LocationContext from './LocationContext';
 
-
-const LocationProvider = (props) => (
+const LocationProvider = ({ children, ...props }) => (
+  <ReachLocationProvider {...props}>
     <Location>
-    {({ location, navigate }) => (
+      {({ location, navigate }) => (
         <LocationContext.Provider value={{ location, navigate }}>
-        {props.children}
+          {children}
         </LocationContext.Provider>
-    )}
+      )}
     </Location>
+  </ReachLocationProvider>
 );
 
 export default LocationProvider;
