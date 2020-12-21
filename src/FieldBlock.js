@@ -9,6 +9,9 @@ const FieldBlock = ({ children, style, label, ...rest }) => {
   let childitems = children;
 
   const fn = (child, index) => {
+    if (!child) {
+      return child;
+    }
     if (
       index > 0 &&
       child.type &&
@@ -19,7 +22,7 @@ const FieldBlock = ({ children, style, label, ...rest }) => {
         child.type.prototype.constructor.displayName ||
         child.type.prototype.constructor.name;
 
-      if (!child || ComponentName !== 'FormField') {
+      if (ComponentName !== 'FormField') {
         return React.cloneElement(child, {
           ...child.props,
           style: {
