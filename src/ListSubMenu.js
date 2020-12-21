@@ -21,6 +21,7 @@ const ListSubMenu = ({
   style = {},
   showHeaderIcon,
   dividerColor,
+  divider = true,
   ...rest
 }) => {
   const { colors } = React.useContext(ThemeContext);
@@ -62,8 +63,10 @@ const ListSubMenu = ({
           {children}
         </List>
       </Collapse>
-      {!dividerColor && <Divider />}
-      {dividerColor && <Divider style={{ backgroundColor: dividerColor }} />}
+      {divider && !dividerColor && <Divider />}
+      {divider && dividerColor && (
+        <Divider style={{ backgroundColor: dividerColor }} />
+      )}
     </Fragment>
   );
 };
@@ -71,7 +74,6 @@ const ListSubMenu = ({
 ListSubMenu.defaultProps = {
   headerIcon: <Lens />,
   header: '',
-  open: false,
   showHeaderIcon: true,
 };
 
