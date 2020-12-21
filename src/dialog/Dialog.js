@@ -60,6 +60,9 @@ const Dialog = ({
   };
 
   const fn = (child) => {
+    if (!child) {
+      return null;
+    }
     if (child.props.onClose && typeof child.props.onClose === 'function') {
       return React.cloneElement(child, {
         ...child.props,

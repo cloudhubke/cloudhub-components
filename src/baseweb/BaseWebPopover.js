@@ -53,6 +53,9 @@ const BaseWebPopover = React.forwardRef(
     };
 
     const Content = ({ close }) => {
+      if (!children) {
+        return children;
+      }
       if (typeof children === 'function') {
         return children({ rect, onClose: close });
       }

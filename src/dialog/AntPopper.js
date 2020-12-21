@@ -35,6 +35,10 @@ const AntPopper = ({
   };
 
   const Content = () => {
+    if (!children) {
+      return null;
+    }
+
     if (typeof children === 'function') {
       return children({ rect, onClose: onClosePopper });
     }
@@ -47,6 +51,9 @@ const AntPopper = ({
   };
 
   const AnchorElement = React.forwardRef((props, ref) => {
+    if (!AnchorElement) {
+      return null;
+    }
     if (typeof anchorComponent === 'function') {
       return anchorComponent();
     }

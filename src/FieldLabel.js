@@ -31,6 +31,9 @@ const FieldLabel = ({
 
   const renderIcon = () => {
     if (IconComponent) {
+      if (!IconComponent) {
+        return IconComponent;
+      }
       if (typeof IconComponent === 'function') {
         return IconComponent();
       }

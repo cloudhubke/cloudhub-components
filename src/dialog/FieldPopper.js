@@ -123,6 +123,9 @@ const FieldPopper = ({
   };
 
   const renderChildren = () => {
+    if (!children) {
+      return null;
+    }
     if (typeof children === 'function') {
       return children({ closePopper });
     }
