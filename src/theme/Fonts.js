@@ -3,57 +3,59 @@ import colors from './Colors';
 
 const Fonts = {
   h1: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.h1,
     lineHeight: '150%',
   },
-
   h2: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.h2,
     lineHeight: '150%',
   },
   h3: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.h3,
     lineHeight: '150%',
   },
   h4: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.h4,
     lineHeight: '150%',
   },
   h5: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.h5,
     lineHeight: '150%',
   },
   h6: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.h6,
     lineHeight: '150%',
   },
 
   header: {
-    fontFamily: 'clanpro-black',
+    fontFamily: 'Montserrat',
     fontSize: sizes.header,
     lineHeight: '150%',
     letterSpacing: 0.5,
+    fontWeight: 700,
     color: colors.black,
   },
   subHeader: {
-    fontFamily: 'clanpro-thin',
+    fontFamily: 'Montserrat',
     fontSize: sizes.subHeader,
     lineHeight: '150%',
     letterSpacing: 0.5,
+    fontWeight: 500,
     color: colors.black,
   },
 
   title: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.title,
     lineHeight: '150%',
     letterSpacing: 0.5,
+    fontWeight: 700,
     color: colors.black,
   },
 
@@ -62,20 +64,22 @@ const Fonts = {
     fontSize: sizes.subTitle,
     lineHeight: '150%',
     letterSpacing: 0.5,
+    fontWeight: 400,
     color: colors.black,
   },
 
   semibold: {
-    fontFamily: 'clanpro-bold',
-    fontWeight: 100,
+    fontFamily: 'Montserrat',
+    fontWeight: 600,
   },
 
   bold: {
-    fontFamily: 'clanpro-bold',
+    fontFamily: 'Montserrat',
+    fontWeight: 700,
   },
 
   light: {
-    fontFamily: 'clanpro-thin',
+    fontFamily: 'Montserrat',
   },
 
   italic: {
@@ -89,16 +93,16 @@ const Fonts = {
   },
 
   normal: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
   },
 
   default: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.body,
   },
 
   body: {
-    fontFamily: 'clanpro-book',
+    fontFamily: 'Montserrat',
     fontSize: sizes.body,
     lineHeight: '200%',
     color: colors.darkGray,
@@ -109,6 +113,7 @@ const Fonts = {
   },
   small: {
     fontSize: sizes.small,
+    fontWeight: 500,
     lineHeight: '200%',
     color: colors.darkGray,
   },

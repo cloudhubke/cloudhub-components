@@ -18,7 +18,7 @@ const useMetrics = (debounceDuration = 1000) => {
     }
   }, []);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const getMaxWidth = (width) => {
       if (width < 600 || isMobile) {
         return 'sm';

@@ -1,31 +1,24 @@
 import React from 'react';
 import { LightTheme, BaseProvider } from 'baseui';
 import { Provider as StyletronProvider } from 'styletron-react';
-import { Client as Styletron } from 'styletron-engine-atomic';
+import { Server as Styletron } from 'styletron-engine-atomic';
 
 import {
   ThemeProvider as MuiThemeProvider,
   createMuiTheme,
 } from '@material-ui/core/styles';
-
 import ThemeContext from './ThemeContext';
 import localsizes from './Sizes';
 import localcolors from './Colors';
 import localfonts from './Fonts';
 import { ToastContainer } from '../toastr';
 
-const engine = new Styletron({
-  hydrate: document.getElementsByClassName('_styletron_hydrate_'),
-});
+const engine = new Styletron();
 
-const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
+const ServerThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const newfonts = { ...localfonts, ...fonts };
   const newcolors = { ...localcolors, ...colors };
   const newsizes = { ...localsizes, ...sizes };
-
-  console.log('====================================');
-  console.log(newfonts.body.fontFamily);
-  console.log('====================================');
 
   const createTheme = React.useCallback(
     () =>
@@ -114,4 +107,6 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   );
 };
 
-export default ThemeProvider;
+export const styles = engine.getStylesheetsHtml();
+
+export default ServerThemeProvider;
