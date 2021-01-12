@@ -18,11 +18,11 @@ const PageSeo = ({
     SeoContext
   );
 
-  const { pathname } = useLocation();
+  const { location } = useLocation();
 
   const imageUrl = `${image}`.includes('http')
     ? image
-    : `${homeUrl}/${image}`.replace('//', '/');
+    : `${homeUrl}${image}`.replace('//', '/');
 
   const getMetaTags = () => {
     const metaTags = [
@@ -43,7 +43,7 @@ const PageSeo = ({
       },
       { name: 'og:title', content: `${title}` },
       { name: 'og:type', content: ogType },
-      { name: 'og:url', content: `${homeUrl}${pathname}` },
+      { name: 'og:url', content: `${homeUrl}${location.pathname}` },
       { name: 'og:image', content: `${imageUrl}` },
       { name: 'og:description', content: description },
 
@@ -69,7 +69,7 @@ const PageSeo = ({
         lang: 'en',
       }}
       title={`${siteName}${title ? `: ${title}` : ''}`}
-      link={[{ rel: 'canonical', href: `${homeUrl}${pathname}` }]}
+      link={[{ rel: 'canonical', href: `${homeUrl}${location.pathname}` }]}
       meta={getMetaTags()}
     />
   );
