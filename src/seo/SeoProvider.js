@@ -9,13 +9,7 @@ const SeoProvicder = ({ children, ...props }) => {
 
   return (
     <SeoContext.Provider value={{ ...props }}>
-      <PageSeo
-        siteName={props.siteName}
-        title={props.title}
-        description={props.description}
-        image={props.image}
-        ogType="website"
-      />
+      <PageSeo ogType="website" />
       {children}
     </SeoContext.Provider>
   );
