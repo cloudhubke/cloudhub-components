@@ -14,38 +14,51 @@ const PageSeo = ({
   updated,
   tags,
 }) => {
-  const { homeUrl, siteName, twitterHandle, fbId } = React.useContext(
-    SeoContext
-  );
+  const {
+    homeUrl,
+    siteName,
+    twitterHandle,
+    fbId,
+    description: siteDescription,
+    image: siteImage,
+  } = React.useContext(SeoContext);
 
   const { location } = useLocation();
 
-  const imageUrl = `${image}`.includes('http')
-    ? image
-    : `${homeUrl}${image}`.replace('//', '/');
+  let imageUrl;
+
+  if (image) {
+    imageUrl = `${image}`.includes('http')
+      ? image
+      : `${homeUrl}${image}`.replace('//', '/');
+  } else {
+    imageUrl = `${siteImage}`.includes('http')
+      ? siteImage
+      : `${homeUrl}${siteImage}`.replace('//', '/');
+  }
 
   const getMetaTags = () => {
     const metaTags = [
-      { itemprop: 'name', content: title },
-      { itemprop: 'description', content: description },
+      { itemprop: 'name', content: title || siteName },
+      { itemprop: 'description', content: description || siteDescription },
       { itemprop: 'image', content: `${imageUrl}` },
-      { name: 'description', content: description },
+      { name: 'description', content: description || siteDescription },
       { name: 'keywords', content: tags.join(', ') },
 
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:site', content: `${twitterHandle}` },
-      { name: 'twitter:title', content: `${title}` },
-      { name: 'twitter:description', content: description },
+      { name: 'twitter:title', content: `${title || siteName}` },
+      { name: 'twitter:description', content: description || siteDescription },
       { name: 'twitter:creator', content: twitterHandle },
       {
         name: 'twitter:image:src',
         content: `${imageUrl}`,
       },
-      { name: 'og:title', content: `${title}` },
+      { name: 'og:title', content: `${title || siteName}` },
       { name: 'og:type', content: ogType },
       { name: 'og:url', content: `${homeUrl}${location.pathname}` },
       { name: 'og:image', content: `${imageUrl}` },
-      { name: 'og:description', content: description },
+      { name: 'og:description', content: description || siteDescription },
 
       { name: 'og:site_name', content: siteName },
       { name: 'fb:app_id', content: fbId },
