@@ -2,19 +2,27 @@ import React from 'react';
 import PageSeo from './PageSeo';
 import SeoContext from './SeoContext';
 
-const SeoProvicder = ({ children, ...props }) => (
-  <SeoContext.Provider value={{ ...props }}>
-    <PageSeo
-      title={props.title}
-      description={props.description}
-      image={props.image}
-      ogType="website"
-    />
-    {children}
-  </SeoContext.Provider>
-);
+const SeoProvicder = ({ children, ...props }) => {
+  if (!props.homeUrl || !props.siteName || !props.description) {
+    throw new Error('Invalid SEO Params');
+  }
+
+  return (
+    <SeoContext.Provider value={{ ...props }}>
+      <PageSeo
+        siteName={props.siteName}
+        title={props.title}
+        description={props.description}
+        image={props.image}
+        ogType="website"
+      />
+      {children}
+    </SeoContext.Provider>
+  );
+};
 
 SeoProvicder.defaultProps = {
+  siteName: '',
   title: '',
   description: '',
   image: '',
