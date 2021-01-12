@@ -46,7 +46,7 @@
     "@react-google-maps/api": "^1.7.7",
     "antd": "^3.21.2",
     "awesome-phonenumber": "^2.10.0",
-    "axios": "^0.17.0",
+    "axios": "^0.21.1",
     "baseui": "9.82.0",
     "clsx": "^1.0.4",
     "cropperjs": "1.5.9",
