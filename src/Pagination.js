@@ -147,8 +147,8 @@ const useStyles = makeStyles(({ colors }) => ({
 
 function Pagination({ ...props }) {
   const { count, rowsPerPage, color, className } = props;
-  const paginationClasses = classNames(classes.pagination, className);
   const classes = useStyles();
+  const paginationClasses = classNames(classes.pagination, className);
 
   const [currentPage, setPage] = useState(0);
 

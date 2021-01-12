@@ -120,6 +120,10 @@ const Popper = (props) => {
     onOpen();
   };
 
+  React.useEffect(() => {
+    setPopperOpen(open);
+  }, [open]);
+
   const paperstyles = {
     ...(color ? { backgroundColor: color } : {}),
     ...paperStyle,

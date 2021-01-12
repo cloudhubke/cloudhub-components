@@ -15,7 +15,7 @@ import AntProgress from '../ant/AntProgress';
 import ThemeContext from '../theme/ThemeContext';
 // import useDebounce from '../customhooks/useDebounce';
 
-const S3Uploader = ({
+const S3ImageUpload = ({
   dirname,
   ACL,
   signaxiosinstance,
@@ -41,24 +41,21 @@ const S3Uploader = ({
   mime,
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
-
-  const [fileList, setfileList] = React.useState([]);
+  const incominginput = input && input.value ? input.value : value;
+  const [fileList, setfileList] = React.useState(
+    Array.isArray(incominginput) ? incominginput : []
+  );
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
   const [uploaderror, setuploaderror] = React.useState(false);
   const [addinginfo, setaddinginfo] = React.useState(null);
-  // const [updating, setupdating] = React.useState(null);
-  // const [finished, setfinished] = React.useState([]);
-  // const [uploadError, setuploadError] = React.useState([]);
 
   const elemId = uniq(5);
-
   React.useEffect(() => {
-    const incominginput = input && input.value ? input.value : value || [];
     if (Array.isArray(incominginput) && !isEqual(incominginput, fileList)) {
       setfileList(incominginput);
     }
-  }, [input, value]);
+  }, [incominginput]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -256,10 +253,8 @@ const S3Uploader = ({
 
               if (!uploaderror) {
                 const elem = document.createElement('canvas');
-                elem.width = maxWidth || img.width;
-                elem.height = maxWidth
-                  ? Math.floor((maxWidth * img.height) / img.width)
-                  : img.height;
+                elem.width = maxWidth || minWidth || img.width;
+                elem.height = Math.floor((elem.width * img.height) / img.width);
                 const ctx = elem.getContext('2d');
                 // img.width and img.height will contain the original dimensions
                 ctx.drawImage(
@@ -322,6 +317,7 @@ const S3Uploader = ({
       const signedUrls = await getSignedUrl(fileArray, true).then(
         (urls) => urls
       );
+      signedUrls.filter(Boolean);
       const uploads = [...(filesArray || [])].map(
         (file) =>
           signedUrls
@@ -643,7 +639,7 @@ const S3Uploader = ({
   );
 };
 
-S3Uploader.defaultProps = {
+S3ImageUpload.defaultProps = {
   onChange: () => {},
   input: {
     value: null,
@@ -651,4 +647,4 @@ S3Uploader.defaultProps = {
   },
   setuploading: () => {},
 };
-export default S3Uploader;
+export default S3ImageUpload;

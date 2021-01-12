@@ -1,10 +1,7 @@
 /* eslint-disable no-await-in-loop */
-/* eslint-disable no-loop-func */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable operator-linebreak */
 /* eslint-disable consistent-return */
-/* eslint-disable function-paren-newline */
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import qs from 'qs';
 import uniq from 'uid';
@@ -17,8 +14,6 @@ import 'cropperjs/dist/cropper.min.css';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
 import ThemeContext from '../theme/ThemeContext';
-
-// import useDebounce from '../customhooks/useDebounce';
 
 const S3ImageUpload = ({
   dirname,
@@ -37,6 +32,7 @@ const S3ImageUpload = ({
   previewHeight,
   maxWidth,
   minWidth,
+  height,
   aspectratio,
   setuploading,
   readOnly,
@@ -46,7 +42,10 @@ const S3ImageUpload = ({
 }) => {
   const { sizes, colors } = React.useContext(ThemeContext);
 
-  const [fileList, setfileList] = React.useState([]);
+  const incominginput = input && input.value ? input.value : value;
+  const [fileList, setfileList] = React.useState(
+    Array.isArray(incominginput) ? incominginput : []
+  );
   const [confirmdelete, setconfirmdelete] = React.useState(false);
   const [deleting, setdeleting] = React.useState(null);
   const [uploaderror, setuploaderror] = React.useState(false);
@@ -56,11 +55,10 @@ const S3ImageUpload = ({
 
   const elemId = uniq(5);
   React.useEffect(() => {
-    const incominginput = input && input.value ? input.value : value || [];
     if (Array.isArray(incominginput) && !isEqual(incominginput, fileList)) {
-      setfileList(incominginput);
+      setfileList(incominginput || []);
     }
-  }, [input, value]);
+  }, [incominginput]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -93,7 +91,6 @@ const S3ImageUpload = ({
   }, [confirmdelete, deleting]);
 
   const logChange = (fileUpdate) => {
-    const incominginput = input && input.value ? input.value : value || [];
     if (
       typeof input.onChange === 'function' &&
       !isEqual(fileUpdate, incominginput)
@@ -167,17 +164,19 @@ const S3ImageUpload = ({
     if (url) {
       setfileList((urls) => {
         if (urls.length > 0) {
-          const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
-              toastr.error(
-                `File ${
-                  obj.filename || obj.name
-                } upload failed. please try again later`
-              );
-              return null;
-            }
-            return obj;
-          });
+          const progressArray = urls
+            .map((obj) => {
+              if (url === obj.signedUrl) {
+                toastr.error(
+                  `File ${
+                    obj.filename || obj.name
+                  } upload failed. please try again later`
+                );
+                return null;
+              }
+              return obj;
+            })
+            .filter(Boolean);
           return progressArray;
         }
         return urls;
@@ -249,6 +248,7 @@ const S3ImageUpload = ({
                   scalable: true,
                   zoomable: true,
                   minCropBoxWidth: 600,
+
                   viewMode: 1,
                 });
                 const newname = () => {
@@ -261,36 +261,65 @@ const S3ImageUpload = ({
                   }
                   return file.name.replace(/[^\w\d_\-.]+/gi, '');
                 };
+                // if (cropperView) {
+                //   cropperView.addEventListener('zoom', (event) => {
+                //     // console.log(
+                //     //   event.detail.ratio,
+                //     //   event.target.naturalWidth,
+                //     //   event.target.clientWidth
+                //     // );
+                //     // if (event.detail.ratio > event.detail.oldRatio) {
+                //     //   event.preventDefault(); // Prevent zoom in below minWidth
+                //     // }
+                //   });
+                // }
                 if (cropButton) {
                   cropButton.addEventListener('click', () => {
-                    if (cropper && cropper.getCroppedCanvas()) {
+                    if (
+                      cropper &&
+                      cropper.getCroppedCanvas({
+                        minWidth: minWidth || maxWidth || 0,
+                        maxWidth: minWidth || maxWidth || Infinity,
+                      })
+                    ) {
                       cropper
-                        .getCroppedCanvas({ minWidth: minWidth || 0 })
+                        .getCroppedCanvas({
+                          minWidth: minWidth || 0,
+                          maxWidth: maxWidth || minWidth || Infinity,
+                        })
                         .toBlob((blob) => {
                           const newfile = new File([blob], newname(), {
                             type: mime || file.type,
                             lastModified: Date.now(),
                           });
-                          if (maxSize && maxSize > 0) {
-                            const sizelimit = Number(maxSize * 1024);
-                            if (newfile.size > sizelimit) {
-                              toastr.error(
+                          if (
+                            maxSize &&
+                            maxSize > 0 &&
+                            newfile.size > Number(maxSize * 1024)
+                          ) {
+                            toastr.error(
+                              `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
+                            );
+                            reject(
+                              new Error(
                                 `Image "${file.name}" exceeds ${maxSize}KB. Please try again with a smaller file`
-                              );
-                              setuploaderror(true);
-                            }
+                              )
+                            );
+                          } else {
+                            const fileprops = {
+                              name: newfile.name,
+                              type: newfile.type,
+                              size: newfile.size,
+                              width: maxWidth || img.width,
+                              height: maxWidth
+                                ? Math.floor(
+                                    (maxWidth * img.height) / img.width
+                                  )
+                                : img.height,
+                            };
+                            const result = { newfile, fileprops };
+                            resolve(result);
                           }
-                          const fileprops = {
-                            name: newfile.name,
-                            type: newfile.type,
-                            size: newfile.size,
-                            width: maxWidth || img.width,
-                            height: maxWidth
-                              ? Math.floor((maxWidth * img.height) / img.width)
-                              : img.height,
-                          };
-                          const result = { newfile, fileprops };
-                          resolve(result);
                         }, mime || file.type);
                     }
                   });
@@ -318,6 +347,7 @@ const S3ImageUpload = ({
           const signedUrls = await getSignedUrl(fileArray, true).then(
             (urls) => urls
           );
+          signedUrls.filter(Boolean);
           const uploads = [...(filesArray || [])].map(
             (file) =>
               signedUrls
@@ -380,7 +410,7 @@ const S3ImageUpload = ({
         ACL: ACL || 'public-read',
         dirname: dirname || 'images/',
       });
-      const signedUrls = data.signedUrls.map((obj) => ({
+      const signedUrls = (data.signedUrls || []).map((obj) => ({
         ...obj,
         progress: 0,
       }));
@@ -423,11 +453,16 @@ const S3ImageUpload = ({
             alignSelf: 'center',
           }}
         >
-          <Block style={{ width: '60%' }}>
+          <Block>
             <img
               src={fileURL}
               alt="cropper-preview"
               id={`cropper-view${index}`}
+              style={{
+                display: 'block',
+                maxWidth: '100%',
+                maxHeight: height || '100%',
+              }}
             />
           </Block>
           <Block
@@ -672,6 +707,7 @@ S3ImageUpload.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
+    name: '',
   },
   setuploading: () => {},
 };
