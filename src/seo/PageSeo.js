@@ -22,7 +22,10 @@ const PageSeo = ({
     description: siteDescription,
     image: siteImage,
     title: defaultTitle,
+    tags: keywords,
   } = React.useContext(SeoContext);
+
+  const keywordsArray = [...(tags || []), ...(keywords || [])];
 
   const { location } = useLocation();
 
@@ -56,7 +59,11 @@ const PageSeo = ({
         property: 'description',
         content: description || siteDescription,
       },
-      { name: 'keywords', property: 'keywords', content: tags.join(', ') },
+      {
+        name: 'keywords',
+        property: 'keywords',
+        content: keywordsArray.join(', '),
+      },
 
       {
         name: 'twitter:card',
@@ -109,28 +116,6 @@ const PageSeo = ({
       { name: 'og:site_name', property: 'og:site_name', content: siteName },
       { name: 'fb:app_id', property: 'fb:app_id', content: fbId },
     ];
-
-    if (published) {
-      metaTags.push({
-        name: 'article:published_time',
-        property: 'article:published_time',
-        content: published,
-      });
-    }
-    if (updated) {
-      metaTags.push({
-        name: 'article:modified_time',
-        property: 'article:modified_time',
-        content: updated,
-      });
-    }
-
-    if (tags)
-      metaTags.push({
-        name: 'article:tag',
-        property: 'article:tag',
-        content: tags,
-      });
 
     return metaTags;
   };
