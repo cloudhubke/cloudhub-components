@@ -43,39 +43,86 @@ const PageSeo = ({
       { itemprop: 'name', content: title || defaultTitle },
       { itemprop: 'description', content: description || siteDescription },
       { itemprop: 'image', content: `${imageUrl}` },
-      { name: 'description', content: description || siteDescription },
-      { name: 'keywords', content: tags.join(', ') },
+      {
+        name: 'description',
+        property: 'description',
+        content: description || siteDescription,
+      },
+      { name: 'keywords', property: 'keywords', content: tags.join(', ') },
 
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:site', content: `${twitterHandle}` },
+      {
+        name: 'twitter:card',
+        property: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:site',
+        property: 'twitter:site',
+        content: `${twitterHandle}`,
+      },
       {
         name: 'twitter:title',
+        property: 'twitter:title',
         content: `${siteName}: ${title || defaultTitle}`,
       },
-      { name: 'twitter:description', content: description || siteDescription },
-      { name: 'twitter:creator', content: twitterHandle },
+      {
+        name: 'twitter:description',
+        property: 'twitter:description',
+        content: description || siteDescription,
+      },
+      {
+        name: 'twitter:creator',
+        property: 'twitter:creator',
+        content: twitterHandle,
+      },
       {
         name: 'twitter:image:src',
+        property: 'twitter:image:src',
         content: `${imageUrl}`,
       },
-      { name: 'og:title', content: `${siteName}: ${title || defaultTitle}` },
-      { name: 'og:type', content: ogType },
-      { name: 'og:url', content: `${homeUrl}${location.pathname}` },
-      { name: 'og:image', content: `${imageUrl}` },
-      { name: 'og:description', content: description || siteDescription },
+      {
+        name: 'og:title',
+        property: 'og:title',
+        content: `${siteName}: ${title || defaultTitle}`,
+      },
+      { name: 'og:type', property: 'og:type', content: ogType },
+      {
+        name: 'og:url',
+        property: 'og:url',
+        content: `${homeUrl}${location.pathname}`,
+      },
+      { name: 'og:image', property: 'og:image', content: `${imageUrl}` },
+      {
+        name: 'og:description',
+        property: 'og:description',
+        content: description || siteDescription,
+      },
 
-      { name: 'og:site_name', content: siteName },
-      { name: 'fb:app_id', content: fbId },
+      { name: 'og:site_name', property: 'og:site_name', content: siteName },
+      { name: 'fb:app_id', property: 'fb:app_id', content: fbId },
     ];
 
     if (published) {
-      metaTags.push({ name: 'article:published_time', content: published });
+      metaTags.push({
+        name: 'article:published_time',
+        property: 'article:published_time',
+        content: published,
+      });
     }
     if (updated) {
-      metaTags.push({ name: 'article:modified_time', content: updated });
+      metaTags.push({
+        name: 'article:modified_time',
+        property: 'article:modified_time',
+        content: updated,
+      });
     }
 
-    if (tags) metaTags.push({ name: 'article:tag', content: tags });
+    if (tags)
+      metaTags.push({
+        name: 'article:tag',
+        property: 'article:tag',
+        content: tags,
+      });
 
     return metaTags;
   };
