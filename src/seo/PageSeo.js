@@ -21,6 +21,7 @@ const PageSeo = ({
     fbId,
     description: siteDescription,
     image: siteImage,
+    title: defaultTitle,
   } = React.useContext(SeoContext);
 
   const { location } = useLocation();
@@ -39,7 +40,7 @@ const PageSeo = ({
 
   const getMetaTags = () => {
     const metaTags = [
-      { itemprop: 'name', content: title || siteName },
+      { itemprop: 'name', content: title || defaultTitle },
       { itemprop: 'description', content: description || siteDescription },
       { itemprop: 'image', content: `${imageUrl}` },
       { name: 'description', content: description || siteDescription },
@@ -47,14 +48,17 @@ const PageSeo = ({
 
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:site', content: `${twitterHandle}` },
-      { name: 'twitter:title', content: `${title || siteName}` },
+      {
+        name: 'twitter:title',
+        content: `${siteName}: ${title || defaultTitle}`,
+      },
       { name: 'twitter:description', content: description || siteDescription },
       { name: 'twitter:creator', content: twitterHandle },
       {
         name: 'twitter:image:src',
         content: `${imageUrl}`,
       },
-      { name: 'og:title', content: `${title || siteName}` },
+      { name: 'og:title', content: `${siteName}: ${title || defaultTitle}` },
       { name: 'og:type', content: ogType },
       { name: 'og:url', content: `${homeUrl}${location.pathname}` },
       { name: 'og:image', content: `${imageUrl}` },
@@ -81,7 +85,7 @@ const PageSeo = ({
       htmlAttributes={{
         lang: 'en',
       }}
-      title={`${siteName}${title ? `: ${title}` : ''}`}
+      title={`${siteName}: ${title || defaultTitle}`}
       link={[{ rel: 'canonical', href: `${homeUrl}${location.pathname}` }]}
       meta={getMetaTags()}
     />

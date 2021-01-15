@@ -23,9 +23,7 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const newcolors = { ...localcolors, ...colors };
   const newsizes = { ...localsizes, ...sizes };
 
-  console.log('====================================');
-  console.log(newfonts.body.fontFamily);
-  console.log('====================================');
+  const mainFontFamily = newfonts.body.fontFamily;
 
   const createTheme = React.useCallback(
     () =>
@@ -48,17 +46,17 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
           fontSize: 16,
           htmlFontSize: 16,
           fontFamily: [
-            newfonts.body.fontFamily,
-            '-apple-system',
-            'BlinkMacSystemFont',
+            // `${mainFontFamily}`,
+            // '-apple-system',
+            // 'BlinkMacSystemFont',
             '"Segoe UI"',
             'Roboto',
             '"Helvetica Neue"',
             'Arial',
             'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
+            // '"Apple Color Emoji"',
+            // '"Segoe UI Emoji"',
+            // '"Segoe UI Symbol"',
           ].join(','),
           zIndex: {
             mobileStepper: 1000,

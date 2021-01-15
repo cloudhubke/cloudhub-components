@@ -20,6 +20,8 @@ const ServerThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const newcolors = { ...localcolors, ...colors };
   const newsizes = { ...localsizes, ...sizes };
 
+  const mainFontFamily = newfonts.body.fontFamily;
+
   const createTheme = React.useCallback(
     () =>
       createMuiTheme({
@@ -41,7 +43,7 @@ const ServerThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
           fontSize: 16,
           htmlFontSize: 16,
           fontFamily: [
-            newfonts.body.fontFamily,
+            `${mainFontFamily}`,
             '-apple-system',
             'BlinkMacSystemFont',
             '"Segoe UI"',
