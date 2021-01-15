@@ -29,13 +29,21 @@ const PageSeo = ({
   let imageUrl;
 
   if (image) {
+    const hasSlash =
+      `${homeUrl}`.slice(`${homeUrl}`.length - 1) === '/' ||
+      `${image}`.slice(0, 1) === '/';
+
     imageUrl = `${image}`.includes('http')
       ? image
-      : `${homeUrl}${image}`.replace('//', '/');
+      : `${homeUrl}${hasSlash ? '' : '/'}${image}`;
   } else {
+    const hasSlash =
+      `${homeUrl}`.slice(`${homeUrl}`.length - 1) === '/' ||
+      `${siteImage}`.slice(0, 1) === '/';
+
     imageUrl = `${siteImage}`.includes('http')
       ? siteImage
-      : `${homeUrl}${siteImage}`.replace('//', '/');
+      : `${homeUrl}${hasSlash ? '' : '/'}${siteImage}`;
   }
 
   const getMetaTags = () => {
