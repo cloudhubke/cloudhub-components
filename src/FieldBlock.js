@@ -9,15 +9,34 @@ const FieldBlock = ({ children, style, label, ...rest }) => {
   let childitems = children;
 
   const fn = (child, index) => {
-    if (index > 0) {
-      if (!child) {
-        return child;
+    if (!child) {
+      return child;
+    }
+    if (
+      index > 0 &&
+      child.type &&
+      child.type.prototype &&
+      child.type.prototype.constructor
+    ) {
+      const ComponentName =
+        child.type.prototype.constructor.displayName ||
+        child.type.prototype.constructor.name;
+
+      if (ComponentName !== 'FormField') {
+        return React.cloneElement(child, {
+          ...child.props,
+          style: {
+            marginLeft: sizes.margin / 2,
+            ...child.props.style,
+          },
+        });
       }
+
       return React.cloneElement(child, {
         ...child.props,
         containerStyle: {
-          ...child.props.containerStyle,
           marginLeft: sizes.margin / 2,
+          ...child.props.containerStyle,
         },
       });
     }

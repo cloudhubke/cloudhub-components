@@ -52,7 +52,6 @@ export { default as Tabs } from './Tabs';
 export { default as Dialog } from './dialog/Dialog';
 export { default as SlideComponent } from './SlideComponent';
 export { default as PleaseWait } from './PleaseWait';
-export { default as SEO } from './SEO';
 export { default as SpeechBubble } from './SpeechBubble';
 // Forms
 

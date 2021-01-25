@@ -33,15 +33,6 @@ const HoverButton = ({
   const buttonhovercolor = hoverColor || `rgb(${hexToRgb(colors.dark)}, 0.5)`;
   const buttoncolor = color || colors.milkyWhite;
 
-  const fn = (child) =>
-    React.cloneElement(child, {
-      ...child.props,
-      color: hover
-        ? textHoverColor || colors.milkyWhite
-        : textColor || colors.dark,
-    });
-  const childitems = React.Children.map(children, fn);
-
   return (
     <Block
       row
@@ -56,7 +47,6 @@ const HoverButton = ({
       style={
         hover
           ? {
-              ...fonts.button,
               border: `1px solid ${hoverBorderColor || 'white'}`,
               height: small
                 ? sizes.icons.medium
@@ -64,13 +54,11 @@ const HoverButton = ({
               borderRadius: sizes.buttonRadius,
               cursor: 'pointer',
               fontWeight: bold ? 700 : 500,
-              fontSize: fontSize || sizes.h6,
               color: textHoverColor || colors.milkyWhite,
               whiteSpace: small ? 'nowrap' : 'normal',
               ...(hoverStyle || {}),
             }
           : {
-              ...fonts.button,
               border: `1px solid ${borderColor || 'black'}`,
               height: small
                 ? sizes.icons.medium
@@ -86,23 +74,11 @@ const HoverButton = ({
       {...props}
     >
       {prefix || null}
-      {text ? (
-        <Block padding={[0, sizes.padding]}>
-          <Text
-            size={fontSize || sizes.h6}
-            bold={bold || false}
-            color={
-              hover
-                ? textHoverColor || colors.milkyWhite
-                : textColor || colors.dark
-            }
-          >
-            {children || text}
-          </Text>{' '}
-        </Block>
-      ) : (
-        childitems
-      )}
+
+      <Block padding={[0, sizes.padding]} style={{ overflow: 'hidden' }}>
+        {children || text}
+      </Block>
+
       {suffix || suffix === null ? (
         suffix
       ) : (

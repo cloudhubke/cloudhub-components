@@ -1,24 +1,21 @@
 import React from 'react';
 import { LightTheme, BaseProvider } from 'baseui';
 import { Provider as StyletronProvider } from 'styletron-react';
-import { Client as Styletron } from 'styletron-engine-atomic';
+import { Server as Styletron } from 'styletron-engine-atomic';
 
 import {
   ThemeProvider as MuiThemeProvider,
   createMuiTheme,
 } from '@material-ui/core/styles';
-
 import ThemeContext from './ThemeContext';
 import localsizes from './Sizes';
 import localcolors from './Colors';
 import localfonts from './Fonts';
 import { ToastContainer } from '../toastr';
 
-const engine = new Styletron({
-  hydrate: document.getElementsByClassName('_styletron_hydrate_'),
-});
+const engine = new Styletron();
 
-const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
+const ServerThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   const newfonts = { ...localfonts, ...fonts };
   const newcolors = { ...localcolors, ...colors };
   const newsizes = { ...localsizes, ...sizes };
@@ -46,17 +43,17 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
           fontSize: 16,
           htmlFontSize: 16,
           fontFamily: [
-            // `${mainFontFamily}`,
-            // '-apple-system',
-            // 'BlinkMacSystemFont',
+            `${mainFontFamily}`,
+            '-apple-system',
+            'BlinkMacSystemFont',
             '"Segoe UI"',
             'Roboto',
             '"Helvetica Neue"',
             'Arial',
             'sans-serif',
-            // '"Apple Color Emoji"',
-            // '"Segoe UI Emoji"',
-            // '"Segoe UI Symbol"',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
           ].join(','),
           zIndex: {
             mobileStepper: 1000,
@@ -112,4 +109,6 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   );
 };
 
-export default ThemeProvider;
+export const styles = engine.getStylesheetsHtml();
+
+export default ServerThemeProvider;

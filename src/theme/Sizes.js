@@ -1,29 +1,21 @@
 const sizes = {
   // global sizes
   base: 10,
-  font: 16,
+  font: 14,
   border: 15,
   padding: 15,
   margin: 15,
 
   // font sizes
   h1: 48,
-  h2: 36,
-  h3: 28,
-  h4: 24,
-  h5: 20,
-  h6: 18,
-
-  title: 24,
-  subTitle: 22,
-
-  header: 28,
-  subHeader: 26,
-
+  h2: 24,
+  h3: 16,
+  title: 18,
+  header: 15,
+  subHeader: 14,
   body: 16,
-  caption: 14,
+  caption: 12,
   small: 12,
-  tiny: 9,
   button: 24,
 
   marginHorizontal: 10,
@@ -34,8 +26,9 @@ const sizes = {
   smallMargin: 5,
   doubleSection: 50,
   horizontalLineHeight: 1,
-  navBarHeight: 75,
-  adminNavBarHeight: 75,
+  navBarHeight: 65,
+  adminNavBarHeight: 65,
+  inputHeight: 45,
   buttonRadius: 4,
   icons: {
     tiny: 15,
@@ -50,11 +43,6 @@ const sizes = {
     large: 60,
     logo: 200,
   },
-
-  // InputSharp,
-
-  inputHeight: 45,
-  inputMinWidth: 150,
 };
 
 export default sizes;

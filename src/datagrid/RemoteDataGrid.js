@@ -167,7 +167,7 @@ const RemoteDataGrid = React.forwardRef(
     React.useEffect(() => {
       const selectedrows = data.filter((r, i) => [...selection].includes(i));
       props.onChangeSelection(selectedrows);
-    }, [selection]);
+    }, [selection.length]);
 
     const getQueryParams = () => {
       const queryparams = {

@@ -1,8 +1,9 @@
 import React from 'react';
 import {
   Location,
-  LocationProvider as ReachLocationProvider,
+  ServerLocation as ReachLocationProvider,
 } from '@reach/router';
+
 import LocationContext from './LocationContext';
 
 const LocationProvider = ({ children, ...props }) => (

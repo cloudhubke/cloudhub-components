@@ -134,6 +134,9 @@ const Popper = (props) => {
   const id = open ? 'scroll-playground' : null;
 
   const Anchor = () => {
+    if (!AnchorComponent) {
+      return null;
+    }
     if (typeof AnchorComponent === 'function') {
       return AnchorComponent();
     }
