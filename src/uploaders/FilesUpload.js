@@ -67,6 +67,7 @@ class FilesUpload extends Component {
       onChange: () => {},
     },
     onChange: () => {},
+    onRemove: () => {},
   };
 
   constructor(props) {
@@ -107,7 +108,7 @@ class FilesUpload extends Component {
 
   removeUnUploadedFiles() {
     const { fileList } = this.state;
-    const newfilelist = fileList.filter(i => i.Location !== undefined);
+    const newfilelist = fileList.filter((i) => i.Location !== undefined);
 
     setTimeout(() => {
       this.setState({ fileList: newfilelist });
@@ -142,13 +143,14 @@ class FilesUpload extends Component {
     }
   };
 
-  handleRemove = file => {
-    const ind = this.state.fileList.findIndex(item => item.url === file.url);
+  handleRemove = (file) => {
+    const ind = this.state.fileList.findIndex((item) => item.url === file.url);
     const filelist = [...this.state.fileList];
     filelist.splice(ind, 1);
 
     this.setState({ fileList: filelist });
     this.props.input.onChange(filelist);
+    this.props.onRemove(file);
   };
 
   changeItemName = ({ FileName, index }) => {
@@ -214,7 +216,7 @@ class FilesUpload extends Component {
                 <p style={{ fontWeight: 'bold', marginLeft: 20, flex: 1 }}>
                   <Input
                     defaultValue={item.FileName || item.name}
-                    onChange={e =>
+                    onChange={(e) =>
                       this.changeItemName({ FileName: e.target.value, index })
                     }
                   />

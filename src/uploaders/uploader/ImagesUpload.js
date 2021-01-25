@@ -90,6 +90,7 @@ class ImagesUpload extends Component {
     },
     meta: {},
     onChange: () => {},
+    onRemove: () => {},
     axiosinstance: () => axios.create({}),
     maxWidth: 1024,
     maxSize: 512,
@@ -283,6 +284,7 @@ class ImagesUpload extends Component {
       this.props.input.onChange(filelist);
       this.props.onChange(filelist);
     }
+    this.props.onRemove(file);
   };
 
   render() {
