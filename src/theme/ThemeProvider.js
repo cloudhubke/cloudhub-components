@@ -38,19 +38,24 @@ const ThemeProvider = ({ children, fonts, colors, sizes, theme, ...props }) => {
       createMuiTheme({
         palette: {
           primary: {
-            ...primaryColors,
+            main: newcolors.primary,
+            ...(primaryColors || {}),
           },
           secondary: {
-            ...secondaryColors,
+            main: newcolors.secondary,
+            ...(secondaryColors || {}),
           },
           tertiary: {
-            ...tertiaryColors,
+            main: newcolors.tertiary,
+            ...(tertiaryColors || {}),
           },
           text: {
-            ...textColors,
+            main: newcolors.text,
+            ...(textColors || {}),
           },
           background: {
-            ...backgroundColors,
+            main: newcolors.background,
+            ...(backgroundColors || {}),
           },
         },
         layout: {

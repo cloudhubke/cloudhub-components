@@ -155,24 +155,24 @@ const Button = React.forwardRef(
         borderColor: colors.instagramColor,
       },
       success: {
-        backgroundColor: colors.successColor[0],
-        borderColor: colors.successColor[0],
+        backgroundColor: colors.success,
+        borderColor: colors.success,
       },
       info: {
-        backgroundColor: colors.infoColor[0],
-        borderColor: colors.infoColor[0],
+        backgroundColor: colors.info,
+        borderColor: colors.info,
       },
       rose: {
-        backgroundColor: colors.roseColor[0],
-        borderColor: colors.roseColor[0],
+        backgroundColor: colors.rose,
+        borderColor: colors.rose,
       },
       warning: {
-        backgroundColor: colors.warningColor[0],
-        borderColor: colors.warningColor[0],
+        backgroundColor: colors.warning,
+        borderColor: colors.warning,
       },
       danger: {
-        backgroundColor: colors.dangerColor[0],
-        borderColor: colors.dangerColor[0],
+        backgroundColor: colors.danger,
+        borderColor: colors.danger,
       },
     };
 
