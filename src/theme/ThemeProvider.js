@@ -18,54 +18,54 @@ const engine = new Styletron({
   hydrate: document.getElementsByClassName('_styletron_hydrate_'),
 });
 
-const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
+const ThemeProvider = ({ children, fonts, colors, sizes, theme, ...props }) => {
   const newfonts = { ...localfonts, ...fonts };
   const newcolors = { ...localcolors, ...colors };
   const newsizes = { ...localsizes, ...sizes };
 
   const mainFontFamily = newfonts.body.fontFamily;
 
+  const {
+    primaryColors,
+    secondaryColors,
+    tertiaryColors,
+    textColors,
+    backgroundColors,
+  } = newcolors;
+
   const createTheme = React.useCallback(
     () =>
       createMuiTheme({
         palette: {
           primary: {
-            main: newcolors.primary,
+            ...primaryColors,
           },
           secondary: {
-            main: newcolors.secondary,
+            ...secondaryColors,
           },
-
-          error: {
-            main: newcolors.danger,
+          tertiary: {
+            ...tertiaryColors,
+          },
+          text: {
+            ...textColors,
+          },
+          background: {
+            ...backgroundColors,
           },
         },
+        layout: {
+          contentWidth: 1236,
+        },
         typography: {
-          // Use the system font instead of the default Roboto font.
-          useNextVariants: true,
-          fontSize: 16,
-          htmlFontSize: 16,
-          fontFamily: [
-            // `${mainFontFamily}`,
-            // '-apple-system',
-            // 'BlinkMacSystemFont',
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            // '"Apple Color Emoji"',
-            // '"Segoe UI Emoji"',
-            // '"Segoe UI Symbol"',
-          ].join(','),
-          zIndex: {
-            mobileStepper: 1000,
-            appBar: 1100,
-            drawer: 1200,
-            modal: 1300,
-            snackbar: 1400,
-            tooltip: 1800,
-          },
+          fontFamily: [`${mainFontFamily}`, 'Arial', 'sans-serif'].join(','),
+        },
+        zIndex: {
+          mobileStepper: 1000,
+          appBar: 1100,
+          drawer: 1200,
+          modal: 1300,
+          snackbar: 1400,
+          tooltip: 1800,
         },
         sizes: { ...newsizes },
         colors: { ...newcolors },
@@ -75,7 +75,8 @@ const ThemeProvider = ({ children, fonts, colors, sizes, ...props }) => {
   );
 
   return (
-    <MuiThemeProvider theme={createTheme()}>
+    // Apply theme for designs (Premium themes)
+    <MuiThemeProvider theme={theme || createTheme()}>
       <StyletronProvider value={engine}>
         <BaseProvider
           overrides={{
