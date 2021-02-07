@@ -59,7 +59,8 @@ const colors = {
   grey: grey[500],
   blueGrey: blueGrey[500],
 
-  background: '#1F0808',
+  background: '#FFFFFC',
+
   clear: 'rgba(0,0,0,0)',
   facebook: '#3b5998',
   google: '#dd4b39',

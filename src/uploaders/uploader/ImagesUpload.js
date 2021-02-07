@@ -145,7 +145,12 @@ class ImagesUpload extends Component {
   }
 
   beforeUpload = (file) => {
-    const isImage = ['image/jpeg', 'image/png'].includes(file.type);
+    const isImage = [
+      'image/jpeg',
+      'image/png',
+      'image/svg',
+      'image/svg+xml',
+    ].includes(file.type);
 
     if (!isImage) {
       this.setState({ error: 'You can only upload JPG/PNG file!' });
