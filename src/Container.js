@@ -229,11 +229,11 @@ const createStyles = ({ colors }) => ({
   dribbbleColor: { backgroundColor: colors.twitterColor },
   redditColor: { backgroundColor: colors.twitterColor },
   instagramColor: { backgroundColor: colors.twitterColor },
-  success: { backgroundColor: colors.successColor[0] },
-  info: { backgroundColor: colors.infoColor[0] },
-  rose: { backgroundColor: colors.roseColor[0] },
-  warning: { backgroundColor: colors.warningColor[0] },
-  danger: { backgroundColor: colors.dangerColor[0] },
+  success: { backgroundColor: colors.success },
+  info: { backgroundColor: colors.info },
+  rose: { backgroundColor: colors.rose },
+  warning: { backgroundColor: colors.warning },
+  danger: { backgroundColor: colors.danger },
 });
 
 export default Container;

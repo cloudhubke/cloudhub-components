@@ -13,6 +13,7 @@ const createDecorator = (callback) => (form) => {
 
 const FormFields = ({ input, value, onChange, onSubmit, render }) => {
   const [values, setValues] = React.useState(input.value || value);
+  const strValues = JSON.stringify(values);
 
   const listener = React.useRef(
     createDecorator((values) => {
@@ -28,7 +29,7 @@ const FormFields = ({ input, value, onChange, onSubmit, render }) => {
     if (typeof onChange === 'function') {
       onChange(values);
     }
-  });
+  }, [strValues]);
 
   return (
     <React.Fragment>

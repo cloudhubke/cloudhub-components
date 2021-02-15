@@ -3,8 +3,10 @@ import {
   Link,
   Router,
   navigate,
+  Redirect,
   createMemorySource,
   createHistory,
+  useParams,
 } from '@reach/router';
 import Rect from '@reach/rect';
 import WindowSize from '@reach/window-size';
@@ -14,7 +16,9 @@ export {
   Rect,
   WindowSize,
   Router,
+  Redirect,
   Link,
+  useParams,
   navigate,
   createMemorySource,
   createHistory,
