@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
 import isEmpty from 'lodash/isEmpty';
 
 const Select = React.forwardRef(
