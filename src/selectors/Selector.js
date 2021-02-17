@@ -40,6 +40,7 @@ const RemoteSelector = React.forwardRef(
     const [searchText, setSearchText] = useState('');
     const [firstoptions, setFirstOptions] = useState([]);
     const [selectedValue, setSelectedValue] = useState([]);
+    const selectRef = React.useRef();
 
     useEffect(() => {
       if (Array.isArray(value)) {
@@ -177,6 +178,13 @@ const RemoteSelector = React.forwardRef(
       reload: () => {
         fetchOptions(searchText, () => null);
       },
+      focus: () => {
+        if (selectRef && selectRef.current) {
+          if (typeof selectRef.current.focus === 'function') {
+            selectRef.current.focus();
+          }
+        }
+      },
     }));
 
     return (
@@ -196,6 +204,7 @@ const RemoteSelector = React.forwardRef(
             menuPlacement={menuPlacement || 'auto'}
             getOptionValue={(option) => option.value}
             isMulti={isMulti}
+            ref={selectRef}
             {...props}
           />
         ) : (
@@ -213,6 +222,7 @@ const RemoteSelector = React.forwardRef(
             menuPlacement={menuPlacement || 'auto'}
             getOptionValue={(option) => option.value}
             isMulti={isMulti}
+            ref={selectRef}
             {...props}
           />
         )}
