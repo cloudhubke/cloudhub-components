@@ -11,7 +11,7 @@ const LocationProvider = ({ children, scrolltop, ...props }) => (
     <Location>
       {({ location, navigate }) => (
         <LocationContext.Provider value={{ location, navigate }}>
-          <ScrollToTop location>{children}</ScrollToTop>
+          <ScrollToTop location={location}>{children}</ScrollToTop>
         </LocationContext.Provider>
       )}
     </Location>
