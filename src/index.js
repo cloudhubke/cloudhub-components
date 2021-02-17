@@ -62,6 +62,7 @@ export { default as Fieldset } from './form/Fieldset';
 export { default as FormSpy } from './form/FormSpy';
 export { default as FieldArray } from './form/FieldArray';
 export { default as arrayMutators } from './form/arrayMutators';
+export { default as formCalculate } from './form/formCalculate';
 
 export { default as SwipeableViews } from './SwipeableViews';
 

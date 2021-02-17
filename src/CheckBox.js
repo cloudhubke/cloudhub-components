@@ -72,10 +72,10 @@ const CheckBox = ({
           )}
           <Text>{label || tag}</Text>
         </Button>
-        <Text small error style={{ height: 10 }}>
-          {meta.touched && meta.error && meta.error}
-        </Text>
       </Block>
+      <Text small error style={{ height: 10 }}>
+        {meta.touched && meta.error && meta.error}
+      </Text>
     </Block>
   );
 };

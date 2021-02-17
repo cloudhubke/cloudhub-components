@@ -17,6 +17,9 @@ const ListMenuItem = ({
   style,
   divider,
   dividerColor,
+  iconStyle,
+  textProps,
+  actionProps,
   ...rest
 }) => (
   <React.Fragment>
@@ -33,6 +36,7 @@ const ListMenuItem = ({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              ...iconStyle,
             }}
           >
             {icon}
@@ -42,7 +46,11 @@ const ListMenuItem = ({
 
         <ListItemText primary={primary} secondary={secondary} />
 
-        {action && <ListItemSecondaryAction>{action}</ListItemSecondaryAction>}
+        {action && (
+          <ListItemSecondaryAction {...actionProps}>
+            {action}
+          </ListItemSecondaryAction>
+        )}
       </ListItem>
     )}
     {divider && !dividerColor && <Divider />}
