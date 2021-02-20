@@ -13,7 +13,12 @@ const RemoteSelector = React.forwardRef(
   ) => {
     const error = meta.error && meta.touched;
     const { sizes, colors } = React.useContext(ThemeContext);
-    const customStyles = getCustomStyles({ error, isMulti, sizes, colors });
+    const customStyles = getCustomStyles({
+      error,
+      isMulti,
+      sizes,
+      colors,
+    });
 
     let labelExtractor = (item) => item.id;
     let valueExtractor = (item) => item.id;

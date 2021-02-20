@@ -14,7 +14,7 @@
     "test:single": "mocha src/index.test.js --require babel-core/register",
     "prebuild": "rimraf dist",
     "build": "npm-run-all --parallel build:*",
-    "build:main": "npx babel --config-file ./babel.json  --source-maps --copy-files --out-dir dist --ignore *.test.js src",
+    "build:main": "npx babel --config-file ./babel.json --copy-files --out-dir dist --ignore *.test.js src",
     "semantic-release": "semantic-release"
   },
   "repository": {

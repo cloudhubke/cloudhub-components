@@ -22,6 +22,7 @@ const StaticListSelector = (props) => {
 
   const error = meta.error && meta.touched;
   const { sizes, colors } = React.useContext(ThemeContext);
+
   const customStyles = getCustomStyles({
     error,
     isMulti,

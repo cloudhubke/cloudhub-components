@@ -1,4 +1,24 @@
-import hexToRgba from 'hex-to-rgba';
+const getPlacementStyles = (placement) => {
+  let styles = {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderTopWidth: 0,
+    marginTop: -2,
+    boxShadow: '3px 3px 5px #ccc',
+  };
+
+  if (placement === 'top') {
+    styles = {
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      borderBottomWidth: 0,
+      marginBottom: -2,
+      boxShadow: '3px -3px 5px #ccc',
+    };
+  }
+
+  return styles;
+};
 
 const getCustomStyles = ({
   error,
@@ -8,26 +28,30 @@ const getCustomStyles = ({
   style: inputStyle,
 }) => {
   const borderColor = error ? colors.error : colors.gray;
+
   const customStyles = {
-    menu: (provided, state) => ({
-      ...provided,
-      zIndex: 10,
-      marginTop: -2,
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      backgroundColor: '#FFF',
-      border: `1.5px solid ${colors.primary || '#2684FF'}`,
-      borderTopWidth: 0,
-      boxShadow: `0 1px 0 1px ${hexToRgba(colors.primary, 0.1)}`,
-    }),
+    menu: (provided, state) => {
+      const placementStyles = getPlacementStyles(state.menuPlacement, colors);
+      return {
+        ...provided,
+        zIndex: 10,
+        backgroundColor: '#FFF',
+        border: `1.5px solid ${colors.primary || '#2684FF'}`,
+        ...placementStyles,
+      };
+    },
+
     option: (provided, state) => ({
       ...provided,
     }),
+
     control: (provided, state) => {
+      const placement = state.selectProps.menuPlacement;
       let style = { ...inputStyle };
       if (state.isFocused) {
         style = {
-          boxShadow: `0 1px 0 1px ${hexToRgba(colors.primary, 0.1)}`,
+          boxShadow:
+            placement !== 'top' ? '3px 3px 5px #ccc' : '3px -3px 5px #ccc',
           borderWidth: 1.5,
           borderColor: colors.primary || '#2684FF',
           '&:hover': {
@@ -39,9 +63,15 @@ const getCustomStyles = ({
 
       if (state.menuIsOpen) {
         style = {
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
-          boxShadow: '0 1px 0 1px hsla(0, 0%, 0%, 0.1)',
+          ...(placement !== 'top'
+            ? {
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+              }
+            : {
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+              }),
           borderWidth: 1.5,
           borderColor: colors.primary || '#2684FF',
           ...style,

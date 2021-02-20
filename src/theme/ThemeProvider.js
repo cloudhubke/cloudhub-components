@@ -108,7 +108,7 @@ const ThemeProvider = ({ children, fonts, colors, sizes, theme, ...props }) => {
             }}
           >
             {children}
-            <div style={{ flex: 0 }}>
+            <div style={{ flex: 0, zIndex: 9999 }}>
               <ToastContainer />
             </div>
           </ThemeContext.Provider>
