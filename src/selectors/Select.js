@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import isObject from 'lodash/isObject';
+import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 
 const Select = React.forwardRef(
@@ -35,9 +35,9 @@ const Select = React.forwardRef(
     useEffect(() => {
       if (Array.isArray(options)) {
         setOpts(
-          [...options].map((item) => ({
-            value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? labelExtractor(item) : item || '',
+          [...options].map((item, index) => ({
+            value: keyExtractor(item, index),
+            label: labelExtractor(item, index),
             item,
           }))
         );
@@ -52,25 +52,25 @@ const Select = React.forwardRef(
       if (isMulti) {
         if (Array.isArray(value)) {
           setSelectedValue(
-            [...value].map((item) => ({
-              value: isObject(item) ? keyExtractor(item) : item || '',
-              label: isObject(item) ? labelExtractor(item) : item || '',
+            [...value].map((item, index) => ({
+              value: keyExtractor(item, index),
+              label: labelExtractor(item, index),
               item,
             }))
           );
         } else {
           setSelectedValue(
-            [value].map((item) => ({
-              value: isObject(item) ? keyExtractor(item) : item || '',
-              label: isObject(item) ? labelExtractor(item) : item || '',
+            [value].map((item, index) => ({
+              value: keyExtractor(item, index),
+              label: labelExtractor(item, index),
               item,
             }))
           );
         }
       } else if (value) {
         setSelectedValue({
-          value: isObject(value) ? keyExtractor(value) : value || '',
-          label: isObject(value) ? labelExtractor(value) : value || '',
+          value: keyExtractor(value, 0),
+          label: labelExtractor(value, 0),
           item: value,
         });
       }
@@ -85,12 +85,12 @@ const Select = React.forwardRef(
       }
       if (isMulti) {
         if (val && Array.isArray(val)) {
-          const options = val.map((item) => {
-            if (!isObject(item.item)) {
+          const options = val.map((item, index) => {
+            if (!isPlainObject(item.item)) {
               return item.item;
             }
             const objValue = { ...item.item };
-            return valueExtractor(objValue);
+            return valueExtractor(objValue, index);
           });
           onChange(options);
           onSelectChange(val || []);
@@ -101,7 +101,7 @@ const Select = React.forwardRef(
         return true;
       }
       if (val && val.value) {
-        if (!isObject(val.item)) {
+        if (!isPlainObject(val.item)) {
           onSelectChange(val.item);
           return onChange(val.item);
         }
@@ -174,9 +174,11 @@ Select.defaultProps = {
   selectUp: false,
   disabled: false,
   menuPlacement: 'auto',
-  labelExtractor: (item) => item,
   valueExtractor: (item) => item,
-  keyExtractor: (item) => item,
+  labelExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `${item}`,
+  keyExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `option-${index}`,
 };
 
 export default Select;

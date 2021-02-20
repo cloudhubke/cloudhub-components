@@ -32,7 +32,6 @@ GridContainer.defaultProps = {
 };
 
 GridContainer.propTypes = {
-  classes: PropTypes.object.isRequired,
   children: PropTypes.node,
   className: PropTypes.string,
 };

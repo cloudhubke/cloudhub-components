@@ -33,12 +33,8 @@ const StaticListSelector = (props) => {
 
   const val = input.value || value;
 
-  let labelExtractor = (item) => item;
-  let valueExtractor = (item) => item;
-
-  if (displayField) {
-    labelExtractor = (item) => item[displayField];
-  }
+  let labelExtractor = rest.labelExtractor || null;
+  let valueExtractor = rest.valueExtractor || null;
 
   if (returnkeys) {
     if (Array.isArray(returnkeys)) {
@@ -52,6 +48,11 @@ const StaticListSelector = (props) => {
     }
   }
 
+  if (displayField) {
+    labelExtractor = (item) =>
+      isPlainObject(item) ? item[displayField] : item;
+  }
+
   return (
     <Block>
       <CloudhubSelector
@@ -63,9 +64,9 @@ const StaticListSelector = (props) => {
         }}
         isMulti={isMulti}
         styles={customStyles}
+        {...rest}
         labelExtractor={labelExtractor}
         valueExtractor={valueExtractor}
-        {...rest}
       />
       {showError && (
         <Text small error style={{ height: 10 }}>
@@ -84,11 +85,12 @@ StaticListSelector.defaultProps = {
   },
   meta: {},
   options: [],
-  returnkeys: [],
   menuPlacement: 'auto',
-  labelExtractor: (item) => item,
-  keyExtractor: (item) => (isPlainObject(item) ? item.id : item),
   valueExtractor: (item) => item,
+  labelExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `${item}`,
+  keyExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `option-${index}`,
 };
 
 export default StaticListSelector;

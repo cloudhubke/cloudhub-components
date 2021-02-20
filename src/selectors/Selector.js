@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import AsyncSelect from 'react-select/async';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 
-import isObject from 'lodash/isObject';
+import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
-import isString from 'lodash/isString';
 import debounce from 'lodash/debounce';
 import axios from 'axios';
 
@@ -66,25 +65,25 @@ const RemoteSelector = React.forwardRef(
       if (isMulti) {
         if (Array.isArray(value)) {
           setSelectedValue(
-            [...value].map((item) => ({
-              value: isObject(item) ? keyExtractor(item) : item || '',
-              label: isObject(item) ? labelExtractor(item) : item || '',
+            [...value].map((item, index) => ({
+              value: keyExtractor(item, index),
+              label: labelExtractor(item, index),
               item,
             }))
           );
         } else {
           setSelectedValue(
-            [value].map((item) => ({
-              value: isObject(item) ? keyExtractor(item) : item || '',
-              label: isObject(item) ? labelExtractor(item) : item || '',
+            [value].map((item, index) => ({
+              value: keyExtractor(item, index),
+              label: labelExtractor(item, index),
               item,
             }))
           );
         }
       } else if (value) {
         setSelectedValue({
-          value: isObject(value) ? keyExtractor(value) : value || '',
-          label: isObject(value) ? labelExtractor(value) : value || '',
+          value: keyExtractor(value, 0),
+          label: labelExtractor(value, 0),
           item: value,
         });
       }
@@ -99,7 +98,7 @@ const RemoteSelector = React.forwardRef(
       if (isMulti) {
         if (val && Array.isArray(val)) {
           const options = val.map((item) => {
-            if (!isObject(item.item)) {
+            if (!isPlainObject(item.item)) {
               return item.item;
             }
             const objValue = { ...item.item };
@@ -114,7 +113,7 @@ const RemoteSelector = React.forwardRef(
         return true;
       }
       if (val && val.value) {
-        if (!isObject(val.item)) {
+        if (!isPlainObject(val.item)) {
           onSelectChange(val.item);
           return onChange(val.item);
         }
@@ -134,9 +133,9 @@ const RemoteSelector = React.forwardRef(
           .then(({ data }) => {
             const array = data ? data.items || data : [];
 
-            const options = [...array, ...otheroptions].map((item) => ({
-              value: isObject(item) ? keyExtractor(item) : item || '',
-              label: isObject(item) ? labelExtractor(item) : item || '',
+            const options = [...array, ...otheroptions].map((item, index) => ({
+              value: keyExtractor(item, index),
+              label: labelExtractor(item, index),
               item,
             }));
 
@@ -152,9 +151,9 @@ const RemoteSelector = React.forwardRef(
         .then(({ data }) => {
           const array = data ? data.items || data : [];
 
-          const options = [...array, ...otheroptions].map((item) => ({
-            value: isObject(item) ? keyExtractor(item) : item || '',
-            label: isObject(item) ? labelExtractor(item) : item || '',
+          const options = [...array, ...otheroptions].map((item, index) => ({
+            value: keyExtractor(item, index),
+            label: labelExtractor(item, index),
             item,
           }));
 
@@ -247,8 +246,10 @@ RemoteSelector.defaultProps = {
   disabled: false,
   menuPlacement: 'auto',
   valueExtractor: (item) => item,
-  labelExtractor: (item) => item,
-  keyExtractor: (item) => item,
+  labelExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `${item}`,
+  keyExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `option-${index}`,
 };
 
 export default RemoteSelector;

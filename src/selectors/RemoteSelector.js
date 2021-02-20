@@ -20,12 +20,8 @@ const RemoteSelector = React.forwardRef(
       colors,
     });
 
-    let labelExtractor = (item) => item.id;
-    let valueExtractor = (item) => item.id;
-
-    if (displayField) {
-      labelExtractor = (item) => item[displayField];
-    }
+    let labelExtractor = rest.labelExtractor || null;
+    let valueExtractor = rest.valueExtractor || null;
 
     if (returnkeys) {
       if (Array.isArray(returnkeys)) {
@@ -37,6 +33,10 @@ const RemoteSelector = React.forwardRef(
           return obj;
         };
       }
+    }
+    if (displayField) {
+      labelExtractor = (item) =>
+        isPlainObject(item) ? item[displayField] : item;
     }
 
     return (
@@ -51,9 +51,9 @@ const RemoteSelector = React.forwardRef(
           meta={meta}
           isMulti={isMulti}
           styles={customStyles}
+          {...rest}
           labelExtractor={labelExtractor}
           valueExtractor={valueExtractor}
-          {...rest}
         />
         <Text small error style={{ height: 10 }}>
           {meta.touched && meta.error && meta.error}
@@ -72,7 +72,11 @@ RemoteSelector.defaultProps = {
   onChange: () => {},
   onSelectChange: () => {},
   meta: {},
-  keyExtractor: (item) => (isPlainObject(item) ? item.id : item),
+  valueExtractor: (item) => item,
+  labelExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `${item}`,
+  keyExtractor: (item, index) =>
+    isPlainObject(item) ? item.id || `option-${index}` : `option-${index}`,
 };
 
 export default RemoteSelector;

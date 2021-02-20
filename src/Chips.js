@@ -3,47 +3,50 @@ import { makeStyles } from '@material-ui/core/styles';
 import isEqual from 'lodash/isEqual';
 import Chip from '@material-ui/core/Chip';
 
-const useStyles = makeStyles(({ sizes }) => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    padding: sizes.padding,
-  },
-  chip: {
-    margin: sizes.margin,
-  },
-}));
+const useStyles = (containerStyle) =>
+  makeStyles(({ sizes }) => ({
+    root: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      padding: sizes.padding,
+      ...containerStyle,
+    },
+    chip: {
+      margin: sizes.margin,
+    },
+  }));
 
-const Chips = ({ onChange, extractKey, extractLabel, data, icon }) => {
-  const classes = useStyles();
+const Chips = ({
+  onChange,
+  onDelete,
+  keyExtractor,
+  labelExtractor,
+  propsExtractor,
+  containerStyle,
+  data,
+  ...props
+}) => {
+  const classes = useStyles(containerStyle)();
   const [chipData, setChipData] = React.useState(data);
-
-  const handleDelete = (index) => () => {
-    setChipData((data) => data.filter((chip, i) => i !== index));
-  };
-
-  useEffect(() => {
-    if (!isEqual(data, chipData)) {
-      setChipData(data || []);
-    }
-  }, [data]);
 
   useEffect(() => {
     if (!isEqual(data, chipData)) {
       onChange(data || []);
+      setChipData(data || []);
     }
   }, [chipData, data]);
 
   return (
     <div className={classes.root}>
-      {chipData.map((data, index) => (
+      {chipData.map((item, index) => (
         <Chip
-          key={`${extractKey(data, index)}`}
-          icon={icon || null}
-          label={`${extractLabel(data, index)}`}
-          onDelete={handleDelete(index)}
+          key={`${keyExtractor(item, index)}`}
+          label={`${labelExtractor(item, index)}`}
+          onDelete={() => onDelete(item, index)}
           className={classes.chip}
+          {...propsExtractor(item, index)}
+          {...props}
         />
       ))}
     </div>
@@ -51,9 +54,13 @@ const Chips = ({ onChange, extractKey, extractLabel, data, icon }) => {
 };
 
 Chips.defaultProps = {
-  extractLabel: () => null,
-  extractKey: () => null,
+  keyExtractor: (item, index) =>
+    typeof item === 'object' ? item.id || `chip-${index}` : `chip-${index}`,
+  labelExtractor: (item, index) =>
+    typeof item === 'object' ? item.id || `${index}` : `${item}`,
   onChange: () => null,
+  onDelete: () => null,
+  propsExtractor: () => ({}),
 };
 
 export default Chips;
