@@ -1,23 +1,5 @@
-import React from 'react';
-import { Form as FinalForm } from 'react-final-form';
-
-const FormComponent = ({ handleSubmit, Render, ...props }) => {
-  return (
-    <form
-      onSubmit={() => {
-        console.log('====================================');
-        console.log('ENTER');
-        console.log('====================================');
-        handleSubmit();
-      }}
-    >
-      {Render({ ...props, handleSubmit })}
-    </form>
-  );
-};
-
-const Form = ({ render, ...props }) => {
-  return <FinalForm component={FormComponent} Render={render} {...props} />;
-};
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+import { Form } from 'react-final-form';
 
 export default Form;

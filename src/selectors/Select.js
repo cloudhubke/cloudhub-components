@@ -67,7 +67,7 @@ const Select = React.forwardRef(
             }))
           );
         }
-      } else if (value) {
+      } else {
         setSelectedValue({
           value: keyExtractor(value, 0),
           label: labelExtractor(value, 0),

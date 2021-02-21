@@ -148,6 +148,39 @@ const FormField = ({
   //   return <Component {...fldprops} {...props} />;
   // };
 
+  //TODO IMPLETEMENT ON KEY ENTER previosly tried on FORM
+
+  // const devRef = React.useRef({
+  //   focused: false,
+  // });
+
+  // const onKeyPressed = (e) => {
+  //   if (e.key === 'Enter') {
+  //     if (devRef.current.focused && submitOnKeyEnter) {
+  //       handleSubmit();
+  //     }
+  //   }
+  // };
+
+  // React.useImperativeHandle(formRef, () => ({
+  //   isFocused: () => devRef.current.focused,
+  // }));
+
+  // return (
+  //   <div
+  //     onKeyDown={onKeyPressed}
+  //     onFocus={() => {
+  //       devRef.current.focused = true;
+  //       onFocus();
+  //     }}
+  //     onBlur={() => {
+  //       devRef.current.focused = false;
+  //       onLostFocus();
+  //     }}
+  //     tabIndex={-1}
+  //     style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+  //   >
+
   return wrap ? (
     <Block
       row={row}
