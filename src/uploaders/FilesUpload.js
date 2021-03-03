@@ -68,6 +68,7 @@ class FilesUpload extends Component {
     },
     onChange: () => {},
     onRemove: () => {},
+    disabled: false,
   };
 
   constructor(props) {
@@ -198,6 +199,7 @@ class FilesUpload extends Component {
             }
             return true;
           }}
+          disabled={this.props.disabled}
         >
           {fileList.length >= limit ? null : uploadButton}
         </Upload>
