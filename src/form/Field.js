@@ -144,42 +144,18 @@ const FormField = ({
       </Block>
     );
   };
-  // const renderComponent = fldprops => {
-  //   return <Component {...fldprops} {...props} />;
-  // };
 
-  //TODO IMPLETEMENT ON KEY ENTER previosly tried on FORM
+  const parseFn = (value) => {
+    if (number && value) {
+      return Number(value);
+    }
 
-  // const devRef = React.useRef({
-  //   focused: false,
-  // });
+    if (email) {
+      return `${value || ''}`.toLocaleLowerCase().trim();
+    }
 
-  // const onKeyPressed = (e) => {
-  //   if (e.key === 'Enter') {
-  //     if (devRef.current.focused && submitOnKeyEnter) {
-  //       handleSubmit();
-  //     }
-  //   }
-  // };
-
-  // React.useImperativeHandle(formRef, () => ({
-  //   isFocused: () => devRef.current.focused,
-  // }));
-
-  // return (
-  //   <div
-  //     onKeyDown={onKeyPressed}
-  //     onFocus={() => {
-  //       devRef.current.focused = true;
-  //       onFocus();
-  //     }}
-  //     onBlur={() => {
-  //       devRef.current.focused = false;
-  //       onLostFocus();
-  //     }}
-  //     tabIndex={-1}
-  //     style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-  //   >
+    return value;
+  };
 
   return wrap ? (
     <Block
@@ -198,6 +174,7 @@ const FormField = ({
           label={null}
           {...fieldprops}
           required={required}
+          parse={parseFn}
           {...props}
           {...rest}
         />
@@ -208,6 +185,7 @@ const FormField = ({
       validate={composeValidators(...validators)}
       component={component}
       label={null}
+      parse={parseFn}
       {...fieldprops}
       {...props}
       {...rest}

@@ -34,9 +34,6 @@
     "@devexpress/dx-react-core": "1.11.2",
     "@devexpress/dx-react-grid": "1.11.2",
     "@devexpress/dx-react-grid-material-ui": "1.11.2",
-    "@material-ui/core": "4.11.3",
-    "@material-ui/icons": "4.11.2",
-    "@material-ui/lab": "4.0.0-alpha.45",
     "@reach/auto-id": "0.4.0",
     "@reach/portal": "0.4.0",
     "@reach/rect": "0.4.0",
@@ -86,6 +83,9 @@
     "uid": "1.0.0"
   },
   "devDependencies": {
+    "@material-ui/core": "4.11.3",
+    "@material-ui/icons": "4.11.2",
+    "@material-ui/lab": "4.0.0-alpha.45",
     "@babel/cli": "7.2.0",
     "@babel/core": "7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
