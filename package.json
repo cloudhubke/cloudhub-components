@@ -31,14 +31,14 @@
   },
   "homepage": "https://github.com/cloudhubke/cloudhub-components#readme",
   "peerDependencies": {
-    "@material-ui/core": "^5.0.0-alpha.26",
-    "@material-ui/icons": "^5.0.0-alpha.26",
-    "@material-ui/lab": "^5.0.0-alpha.26",
-    "@material-ui/utils": "^5.0.0-alpha.26",
     "react": ">=16.8.1",
     "react-dom": ">=16.8.1"
   },
   "dependencies": {
+    "@material-ui/core": "^5.0.0-alpha.26",
+    "@material-ui/icons": "^5.0.0-alpha.26",
+    "@material-ui/lab": "^5.0.0-alpha.26",
+    "@material-ui/utils": "^5.0.0-alpha.26",
     "@devexpress/dx-react-core": "2.7.5",
     "@devexpress/dx-react-grid": "2.7.5",
     "@devexpress/dx-react-grid-material-ui": "2.7.5",
