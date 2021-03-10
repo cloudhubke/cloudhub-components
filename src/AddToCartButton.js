@@ -11,7 +11,7 @@ const styles = () => ({
   button: {
     borderRadius: 3,
     flex: 1,
-    height: 42
+    height: 42,
   },
   paperButton: {
     display: 'flex',
@@ -26,9 +26,9 @@ const styles = () => ({
     cursor: 'pointer',
     background: red[500],
     '&:hover': {
-      background: red[900]
+      background: red[900],
     },
-    height: 42
+    height: 42,
   },
   paperCartButton: {
     display: 'flex',
@@ -42,14 +42,14 @@ const styles = () => ({
     fontWeight: 500,
     cursor: 'pointer',
     background: red[500],
-    height: 42
+    height: 42,
   },
   itemButton: {
-    color: '#FFF'
+    color: '#FFF',
   },
   addremoveButton: {
-    color: '#FFF'
-  }
+    color: '#FFF',
+  },
 });
 
 const AddToCartButton = ({ classes, onAddItem, onRemoveItem, Qty }) => {

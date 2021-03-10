@@ -81,7 +81,7 @@ const SimpleDataGrid = ({ style, ...props }) => {
             cellComponent={cellComponent}
             columnExtensions={columnExtensions}
           />
-          <TableColumnReordering defaultOrder={columns.map(i => i.name)} />
+          <TableColumnReordering defaultOrder={columns.map((i) => i.name)} />
           <TableHeaderRow />
         </Grid>
       </Block>
@@ -97,7 +97,7 @@ const SimpleDataGrid = ({ style, ...props }) => {
             <Grid
               rows={deletingRows}
               columns={props.columns.filter(
-                c => c.name.toLowerCase() !== 'actions'
+                (c) => c.name.toLowerCase() !== 'actions'
               )}
             >
               <Table cellComponent={cellComponent} />

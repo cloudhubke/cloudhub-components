@@ -161,21 +161,22 @@ class FullDataGrid extends Component {
       filters: [],
     };
 
-    this.changeSorting = sorting => this.setState({ sorting });
-    this.changeFilters = filters => this.setState({ filters });
-    this.changeCurrentPage = currentPage => this.setState({ currentPage });
-    this.changePageSize = pageSize => this.setState({ pageSize });
-    this.changeGrouping = grouping => this.setState({ grouping });
-    this.changeSelection = selection => {
+    this.changeSorting = (sorting) => this.setState({ sorting });
+    this.changeFilters = (filters) => this.setState({ filters });
+    this.changeCurrentPage = (currentPage) => this.setState({ currentPage });
+    this.changePageSize = (pageSize) => this.setState({ pageSize });
+    this.changeGrouping = (grouping) => this.setState({ grouping });
+    this.changeSelection = (selection) => {
       this.setState({ selection });
       props.onChangeSelection(selection);
     };
-    this.changeFilters = filters => this.setState({ filters });
+    this.changeFilters = (filters) => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
       if (added) {
-        const startingAddedId =          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
+        const startingAddedId =
+          rows.length - 1 > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
           ...rows,
           ...added.map((row, index) => ({
@@ -185,8 +186,9 @@ class FullDataGrid extends Component {
         ];
       }
       if (changed) {
-        rows = rows.map(row =>
-          (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+        rows = rows.map((row) =>
+          changed[row.id] ? { ...row, ...changed[row.id] } : row
+        );
       }
       this.setState({ rows, deletingRows: deleted || this.state.deletingRows });
     };
@@ -347,7 +349,7 @@ class FullDataGrid extends Component {
           )}
 
           <TableColumnReordering
-            defaultOrder={columns.map(column => column.name)}
+            defaultOrder={columns.map((column) => column.name)}
           />
 
           <TableHeaderRow
@@ -357,10 +359,10 @@ class FullDataGrid extends Component {
           />
 
           <TableFilterRow
-            cellComponent={props => {
+            cellComponent={(props) => {
               if (
-                props.column.name === 'actions'
-                || props.column.name === 'counter'
+                props.column.name === 'actions' ||
+                props.column.name === 'counter'
               ) {
                 return <TableCell />;
               }
@@ -391,7 +393,7 @@ class FullDataGrid extends Component {
             <Grid
               rows={this.props.deletingRows}
               columns={this.props.columns.filter(
-                c => c.name.toLowerCase() !== 'actions'
+                (c) => c.name.toLowerCase() !== 'actions'
               )}
             >
               <Table cellComponent={this.cellComponent} />

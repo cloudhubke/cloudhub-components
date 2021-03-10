@@ -212,19 +212,19 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       },
     };
 
-    this.changeExpandedDetails = expandedRows =>
+    this.changeExpandedDetails = (expandedRows) =>
       this.setState({ expandedRows });
 
-    this.changeSorting = sorting => this.setState({ sorting });
-    this.changeFilters = filters => this.setState({ filters });
-    this.changeCurrentPage = currentPage => this.setState({ currentPage });
-    this.changePageSize = pageSize => this.setState({ pageSize });
-    this.changeGrouping = grouping => this.setState({ grouping });
-    this.changeSelection = selection => {
+    this.changeSorting = (sorting) => this.setState({ sorting });
+    this.changeFilters = (filters) => this.setState({ filters });
+    this.changeCurrentPage = (currentPage) => this.setState({ currentPage });
+    this.changePageSize = (pageSize) => this.setState({ pageSize });
+    this.changeGrouping = (grouping) => this.setState({ grouping });
+    this.changeSelection = (selection) => {
       this.setState({ selection });
       props.onChangeSelection(selection);
     };
-    this.changeFilters = filters => this.setState({ filters });
+    this.changeFilters = (filters) => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
@@ -240,7 +240,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
         ];
       }
       if (changed) {
-        rows = rows.map(row =>
+        rows = rows.map((row) =>
           changed[row.id] ? { ...row, ...changed[row.id] } : row
         );
       }
@@ -305,7 +305,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
       }
       if (column.name === 'counter') {
         const ind =
-          1 + this.props.data.items.findIndex(item => item.id === row.id);
+          1 + this.props.data.items.findIndex((item) => item.id === row.id);
         return (
           <TableCell>
             {this.state.currentPage === 0
@@ -358,7 +358,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
     });
   }
 
-  searchChange = text => {
+  searchChange = (text) => {
     this.setState({ searchTerm: text });
     this.loadData();
   };
@@ -512,7 +512,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
               <Toolbar />
 
               <TableColumnReordering
-                defaultOrder={columns.map(column => column.name)}
+                defaultOrder={columns.map((column) => column.name)}
               />
               <TableHeaderRow
                 showSortingControls
@@ -524,7 +524,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
               <TableRowDetail contentComponent={this.props.detailTemplate} />
 
               <TableFilterRow
-                cellComponent={props => {
+                cellComponent={(props) => {
                   if (
                     props.column.name === 'actions' ||
                     props.column.name === 'counter'
@@ -560,7 +560,7 @@ class RemoteDataGridWithDetailView extends React.PureComponent {
                 <Grid
                   rows={this.props.deletingRows}
                   columns={this.props.columns.filter(
-                    c => c.name.toLowerCase() !== 'actions'
+                    (c) => c.name.toLowerCase() !== 'actions'
                   )}
                 >
                   <Table cellComponent={this.cellComponent} />

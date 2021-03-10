@@ -166,19 +166,19 @@ class DataGridWithDetailView extends React.PureComponent {
       filters: [],
     };
 
-    this.changeExpandedDetails = expandedRows =>
+    this.changeExpandedDetails = (expandedRows) =>
       this.setState({ expandedRows });
 
-    this.changeSorting = sorting => this.setState({ sorting });
-    this.changeFilters = filters => this.setState({ filters });
-    this.changeCurrentPage = currentPage => this.setState({ currentPage });
-    this.changePageSize = pageSize => this.setState({ pageSize });
-    this.changeGrouping = grouping => this.setState({ grouping });
-    this.changeSelection = selection => {
+    this.changeSorting = (sorting) => this.setState({ sorting });
+    this.changeFilters = (filters) => this.setState({ filters });
+    this.changeCurrentPage = (currentPage) => this.setState({ currentPage });
+    this.changePageSize = (pageSize) => this.setState({ pageSize });
+    this.changeGrouping = (grouping) => this.setState({ grouping });
+    this.changeSelection = (selection) => {
       this.setState({ selection });
       props.onChangeSelection(selection);
     };
-    this.changeFilters = filters => this.setState({ filters });
+    this.changeFilters = (filters) => this.setState({ filters });
 
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
@@ -194,7 +194,7 @@ class DataGridWithDetailView extends React.PureComponent {
         ];
       }
       if (changed) {
-        rows = rows.map(row =>
+        rows = rows.map((row) =>
           changed[row.id] ? { ...row, ...changed[row.id] } : row
         );
       }
@@ -309,7 +309,7 @@ class DataGridWithDetailView extends React.PureComponent {
     return (
       <Paper className="grid-container">
         {this.renderHeader()}
-        <Grid rows={data} columns={columns} getRowId={row => row.id}>
+        <Grid rows={data} columns={columns} getRowId={(row) => row.id}>
           <SelectionState
             selection={selection}
             onSelectionChange={this.changeSelection}
@@ -388,7 +388,7 @@ class DataGridWithDetailView extends React.PureComponent {
             <Grid
               rows={this.props.deletingRows}
               columns={this.props.columns.filter(
-                c => c.name.toLowerCase() !== 'actions'
+                (c) => c.name.toLowerCase() !== 'actions'
               )}
             >
               <Table cellComponent={this.cellComponent} />

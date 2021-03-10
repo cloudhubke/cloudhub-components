@@ -10,12 +10,12 @@ function Progress() {
   const classes = makeStyles({
     root: {
       width: '100%',
-      marginTop: 30
+      marginTop: 30,
     },
     primary: {
       backgroundColor: colors.secondary,
-      color: colors.primary
-    }
+      color: colors.primary,
+    },
   })();
 
   return (

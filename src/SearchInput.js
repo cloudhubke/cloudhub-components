@@ -34,15 +34,15 @@ const SearchInput = ({
       ...rightComponent.props,
       onClick: () => {
         onSubmit();
-      }
+      },
     });
   }
 
   return (
     <Block>
       <Paper className={classes.root} elevation={1}>
-        {isMobile
-          && (leftComponent || (
+        {isMobile &&
+          (leftComponent || (
             <IconButton
               className={classes.iconButton}
               aria-label="Menu"
@@ -56,7 +56,7 @@ const SearchInput = ({
           placeholder={props.placeholder || 'Search for anything'}
           onFocus={props.onFocus}
           onBlur={props.onLostFocus}
-          onChange={e => setText(e.target.value)}
+          onChange={(e) => setText(e.target.value)}
           {...input}
           {...props}
         />
@@ -79,27 +79,27 @@ const styles = () => ({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
   },
   input: {
     marginLeft: 8,
-    flex: 1
+    flex: 1,
   },
   iconButton: {
-    padding: 10
+    padding: 10,
   },
   divider: {
     width: 1,
     height: 28,
-    margin: 4
-  }
+    margin: 4,
+  },
 });
 
 SearchInput.defaultProps = {
   onMenuClick: () => {},
   onFocus: () => {},
   onLostFocus: () => {},
-  onSubmit: () => {}
+  onSubmit: () => {},
 };
 
 export default withStyles(styles)(SearchInput);

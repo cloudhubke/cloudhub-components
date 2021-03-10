@@ -57,7 +57,7 @@ class TableHeaderBar extends Component {
     this.onSearch = debounce(this.onSearch, 500);
   }
 
-  onSearch = text => {
+  onSearch = (text) => {
     this.props.onSearchChange(text);
   };
 
@@ -74,7 +74,7 @@ class TableHeaderBar extends Component {
             style={{ flex: 1, minWidth: 200 }}
             icon="search"
             placeholder="Search..."
-            onChange={e => this.onSearch(e.target.value)}
+            onChange={(e) => this.onSearch(e.target.value)}
           />
           <Button
             onClick={this.props.onAdd}

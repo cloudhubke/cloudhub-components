@@ -14,34 +14,34 @@ const getStyles = ({ fonts, sizes }) => {
       '& .ant-time-picker-input': {
         ...fonts.default,
         height: sizes.inputHeight,
-        padding: `0px ${sizes.padding}px`
+        padding: `0px ${sizes.padding}px`,
       },
       '& .ant-time-picker': {
-        width: 154
+        width: 154,
       },
       '& .ant-time-picker-icon': {
         right: -sizes.padding,
-        top: `calc(${sizes.inputHeight / 2}px - 2px)`
-      }
+        top: `calc(${sizes.inputHeight / 2}px - 2px)`,
+      },
     },
 
     root: {
       '& .ant-time-picker-panel-input': {
         ...fonts.default,
-        height: sizes.inputHeight
+        height: sizes.inputHeight,
       },
       '& .ant-time-picker-panel-input-wrap': {
         height: sizes.inputHeight + 4,
-        padding: '0 7px 0 7px'
+        padding: '0 7px 0 7px',
       },
       '& .ant-time-picker-panel-clear-btn': {
-        top: 'calc(50%  - 8px)'
-      }
-    }
+        top: 'calc(50%  - 8px)',
+      },
+    },
   });
 
   return {
-    useStyles
+    useStyles,
   };
 };
 
@@ -53,7 +53,7 @@ const TimePicker = ({ meta, value, input, onChange, ...props }) => {
 
   const classes = getStyles({ fonts, sizes }).useStyles();
 
-  const onTimeChange = time => {
+  const onTimeChange = (time) => {
     setTime(time);
   };
 
@@ -100,8 +100,8 @@ TimePicker.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
-    onBlur: () => {}
-  }
+    onBlur: () => {},
+  },
 };
 
 export default TimePicker;

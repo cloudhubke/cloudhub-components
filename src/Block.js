@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import ThemeContext from './theme/ThemeContext';
 
