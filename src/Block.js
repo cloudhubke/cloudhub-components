@@ -21,8 +21,7 @@ const useStyles = () =>
 let styles;
 
 const Block = React.forwardRef((props, ref) => {
-  const theme = React.useContext(ThemeContext);
-  const { sizes, colors } = theme;
+  const { colors, sizes } = React.useContext(ThemeContext);
 
   const classes = useStyles();
   if (!styles) {

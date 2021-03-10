@@ -59,7 +59,7 @@ const TableHeaderBar = ({
       <Block>
         <Text h6>{title}</Text>
       </Block>
-      <Block flex={false} row wrap>
+      <Block flex={false} row wrap middle>
         <Input
           style={{ flex: 1, minWidth: 200 }}
           icon="search"

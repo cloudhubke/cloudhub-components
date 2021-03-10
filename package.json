@@ -31,6 +31,10 @@
   },
   "homepage": "https://github.com/cloudhubke/cloudhub-components#readme",
   "dependencies": {
+    "@material-ui/core": "^5.0.0-alpha.26",
+    "@material-ui/icons": "^5.0.0-alpha.26",
+    "@material-ui/lab": "^5.0.0-alpha.26",
+    "@material-ui/utils": "^5.0.0-alpha.26",
     "@devexpress/dx-react-core": "2.7.5",
     "@devexpress/dx-react-grid": "2.7.5",
     "@devexpress/dx-react-grid-material-ui": "2.7.5",
@@ -83,9 +87,6 @@
     "uid": "1.0.0"
   },
   "devDependencies": {
-    "@material-ui/core": "4.11.3",
-    "@material-ui/icons": "4.11.2",
-    "@material-ui/lab": "4.0.0-alpha.45",
     "@babel/cli": "7.2.0",
     "@babel/core": "7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
