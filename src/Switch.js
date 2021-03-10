@@ -1,7 +1,7 @@
 import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MuiSwitch from '@material-ui/core/Switch';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import Block from './Block';
 import colors from './theme/Colors';
 

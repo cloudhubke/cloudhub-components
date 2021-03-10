@@ -1,8 +1,8 @@
 import React from 'react';
 import { Close } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
+import { TextField, IconButton, Divider } from '@material-ui/core';
 import Block from './Block';
-import { makeStyles } from './mui/styles';
-import { TextField, IconButton, Divider } from './mui/core';
 import ThemeContext from './theme/ThemeContext';
 
 const useStyles = ({ inputStyle }) =>

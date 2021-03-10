@@ -6,7 +6,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import classNames from 'classnames';
 import ThemeContext from './theme/ThemeContext';
 
-import { Slide, Grow, Paper } from './mui/core';
+import { Slide, Grow, Paper } from '@material-ui/core';
 
 const useStyles = () =>
   makeStyles({
