@@ -14,7 +14,7 @@
       "babel-plugin-transform-imports",
       {
         "@material-ui/core": {
-          "transform": "@material-ui/core/esm/${member}",
+          "transform": "@material-ui/core/${member}",
           "preventFullImport": true
         },
         "@material-ui/icons": {
