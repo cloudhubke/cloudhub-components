@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRect } from '@reach/rect';
-import AntPopOver from '../ant/AntPopOver';
+import AntPopOver from './AntPopOver';
 
 const AntPopper = ({
   arrow,

@@ -1,10 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AntRangePicker from './ant/DateFilter';
+import AntRangePicker from './AntDateFilter';
 
-import Block from './Block';
-import Text from './Text';
-import ThemeContext from './theme/ThemeContext';
+import Block from '../Block';
+import Text from '../Text';
+import ThemeContext from '../theme/ThemeContext';
 
 const getStyles = ({ fonts, sizes }) => {
   const useStyles = makeStyles({

@@ -9,7 +9,7 @@ import FieldBlock from './FieldBlock';
 import Button from './Button';
 import Field from './form/Field';
 import Text from './Text';
-import TimePicker from './TimePicker';
+import TimePicker from './AntTimePicker';
 import ThemeContext from './theme/ThemeContext';
 
 let styles;

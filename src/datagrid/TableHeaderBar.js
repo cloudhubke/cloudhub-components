@@ -55,7 +55,7 @@ const TableHeaderBar = ({
   const { allowprint, allowadd } = permissions;
 
   return (
-    <Block row paper middle padding={sizes.padding} wrap>
+    <Block row paper middle margin={sizes.margin} padding={sizes.padding} wrap>
       <Block>
         <Text h6>{title}</Text>
       </Block>
@@ -65,6 +65,7 @@ const TableHeaderBar = ({
           icon="search"
           placeholder="Search..."
           onChange={(e) => setText(e.target.value)}
+          showError={false}
         />
         <Button onClick={onAdd} style={styles.buttonStyle} disabled={!allowadd}>
           <AddIcon /> Add
