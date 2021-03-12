@@ -312,7 +312,7 @@ FullDataGridWithDetailView.defaultProps = {
   onDelete: () => {},
   onDeleteRows: () => {},
   onChangeSelection: () => {},
-  rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
+  rowComponent: ({ row, ...restProps }) => <Table.Row hover {...restProps} />,
   cellComponent,
   onSaveRow: () => {},
   onCancelEdit: () => {},

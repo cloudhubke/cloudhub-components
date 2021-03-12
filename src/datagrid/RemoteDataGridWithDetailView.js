@@ -1,5 +1,7 @@
 import React from 'react';
 import includes from 'lodash/includes';
+import difference from 'lodash/difference';
+
 import axios from 'axios';
 
 import {
@@ -45,8 +47,8 @@ import Block from '../Block';
 import GridLoading from './GridLoading';
 import './grid.css';
 import RowActions from './RowActions';
-import CounterComponent from './CounterComponent';
 import Header from './Header';
+import PagingComponent from './PagingComponent';
 
 const styleSheet = () => ({
   gridContainer: {
@@ -130,11 +132,14 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       keyExtractor,
       dataExtractor,
       countExtractor,
+      pagingComponent = PagingComponent,
+      stickyHeader = false,
       params,
       ...props
     },
     ref
   ) => {
+    const selectionRef = React.useRef({});
     const [columns] = React.useState([
       ...counterColumn,
       ...props.columns,
@@ -159,15 +164,32 @@ const RemoteDataGridWithDetailView = React.forwardRef(
     const [filters, setFilters] = React.useState([]);
     const [searchTerm, setSearchTerm] = React.useState('');
 
-    const [lastQuery, setLastQuery] = React.useState({});
-
-    const [rows, setRows] = React.useState([]);
     const [deletingRows, setDeletingRows] = React.useState([]);
 
-    const changeSelection = (selection) => {
-      setSelection(selection);
-      props.onChangeSelection(selection);
+    const changeSelection = (indexes) => {
+      const removedKeys = difference(selection, indexes).map((i) =>
+        keyExtractor(data[i])
+      );
+
+      for (let key of Object.keys(selectionRef.current)) {
+        if (removedKeys.includes(key));
+        delete selectionRef.current[key];
+      }
+
+      for (let i of indexes) {
+        selectionRef.current[keyExtractor(data[i])] = data[i];
+      }
+
+      setSelection(indexes);
     };
+
+    React.useEffect(() => {
+      props.onChangeSelection(
+        Object.keys(selectionRef.current).map(
+          (key) => selectionRef.current[key]
+        )
+      );
+    }, [selection.length]);
 
     const getQueryParams = () => {
       const queryparams = {
@@ -199,8 +221,22 @@ const RemoteDataGridWithDetailView = React.forwardRef(
           params: { ...params, ...queryparams },
         });
 
-        setData(dataExtractor(data).map((d, i) => ({ ...d, counter: i + 1 })));
+        let indexes = [];
+        let dataArray = dataExtractor(data).map((d, i) => {
+          if (Object.keys(selectionRef.current).includes(keyExtractor(d))) {
+            indexes.push(i);
+          }
+          return {
+            ...d,
+            counter: currentPage * pageSize + (i + 1),
+          };
+        });
+
+        setData(dataArray);
+        setSelection(indexes);
+
         setTotalCount(countExtractor(data));
+
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -224,13 +260,19 @@ const RemoteDataGridWithDetailView = React.forwardRef(
         const ind = data.findIndex(
           (d) => keyExtractor(d) === keyExtractor(row)
         );
+
         if (ind === -1) {
-          setData([row, ...data].map((d, i) => ({ ...d, counter: i + 1 })));
+          setData(
+            [row, ...data].map((d, i) => ({
+              ...d,
+              counter: currentPage * pageSize + (i + 1),
+            }))
+          );
         } else {
           setData(
             [...data].map((r, i) => {
               if (keyExtractor(r) === keyExtractor(row)) {
-                return { ...row, counter: i + 1 };
+                return { ...row, counter: currentPage * pageSize + (i + 1) };
               }
               return r;
             })
@@ -333,7 +375,14 @@ const RemoteDataGridWithDetailView = React.forwardRef(
               <DragDropProvider />
 
               <Table
-                rowComponent={rowComponent}
+                stickyHeader={stickyHeader}
+                rowComponent={(props) => {
+                  const isSelected = Object.keys(selectionRef.current).includes(
+                    keyExtractor(props.row)
+                  );
+
+                  return rowComponent({ selected: isSelected, ...props });
+                }}
                 cellComponent={cellComponent}
                 allowColumnReordering
               />
@@ -381,7 +430,14 @@ const RemoteDataGridWithDetailView = React.forwardRef(
               {hiddencolumns.length > 0 && <ColumnChooser />}
 
               <GroupingPanel allowDragging />
-              <PagingPanel pageSizes={allowedPageSizes} />
+              {pagingComponent ? (
+                <PagingPanel
+                  pageSizes={allowedPageSizes}
+                  containerComponent={pagingComponent}
+                />
+              ) : (
+                <PagingPanel pageSizes={allowedPageSizes} />
+              )}
             </Grid>
 
             {loading && <GridLoading />}
@@ -442,7 +498,9 @@ RemoteDataGridWithDetailView.defaultProps = {
   columnWidths: [],
   allowColumnResizing: true,
   detailTemplate: () => <div />,
-  rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
+  rowComponent: ({ selected, ...restProps }) => (
+    <Table.Row selected={selected} hover {...restProps} />
+  ),
   cellComponent,
   actionsComponent: () => null,
   onEdit: () => {},

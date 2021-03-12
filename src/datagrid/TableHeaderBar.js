@@ -13,22 +13,6 @@ import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
 
 const styles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    padding: '10px 20px 10px 20px',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    overflow: 'hidden',
-  },
-  inputs: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flexBasis: '50%',
-    marginLeft: 10,
-  },
   buttonStyle: {
     fontWeight: 500,
     textTransform: 'capitalize',
@@ -67,6 +51,7 @@ const TableHeaderBar = ({
           onChange={(e) => setText(e.target.value)}
           showError={false}
         />
+
         <Button onClick={onAdd} style={styles.buttonStyle} disabled={!allowadd}>
           <AddIcon /> Add
         </Button>
