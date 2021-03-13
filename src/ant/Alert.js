@@ -1,5 +1,5 @@
 import React from 'react';
-import AntAlert from './Alert';
+import AntAlert from './AntAlert';
 import Block from '../Block';
 import ThemeContext from '../theme/ThemeContext';
 
