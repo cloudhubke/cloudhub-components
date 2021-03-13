@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import AntTimePicker from './AntTimePicker';
-import Block from './Block';
-import Text from './Text';
-import ThemeContext from './theme/ThemeContext';
+import Block from '../Block';
+import Text from '../Text';
+import ThemeContext from '../theme/ThemeContext';
 
 const getStyles = ({ fonts, sizes }) => {
   const useStyles = makeStyles({

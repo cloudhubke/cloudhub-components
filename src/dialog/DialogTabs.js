@@ -6,7 +6,7 @@ const DialogTabs = ({ children, ...props }) => {
   const { sizes } = React.useContext(ThemeContext);
 
   return (
-    <Block flex={false} padding={[sizes.padding, 0]} {...props}>
+    <Block flex={false} padding={sizes.padding} {...props}>
       <div>{children}</div>
     </Block>
   );

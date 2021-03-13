@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
-import Popper from './dialog/Popper';
-import IconButton from './IconButton';
-import Chips from './Chips';
-import Block from './Block';
-import FieldBlock from './FieldBlock';
-import Button from './Button';
-import Field from './form/Field';
-import Text from './Text';
+import Popper from '../dialog/Popper';
+import IconButton from '../IconButton';
+import Chips from '../Chips';
+import Block from '../Block';
+import FieldBlock from '../FieldBlock';
+import Button from '../Button';
+import Field from '../form/Field';
+import Text from '../Text';
 import TimePicker from './AntTimePicker';
-import ThemeContext from './theme/ThemeContext';
+import ThemeContext from '../theme/ThemeContext';
 
 let styles;
 

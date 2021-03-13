@@ -4,16 +4,16 @@ import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 
-import Popper from './dialog/Popper';
-import IconButton from './IconButton';
-import Chips from './Chips';
-import Block from './Block';
-import FieldBlock from './FieldBlock';
-import Button from './Button';
-import Field from './form/Field';
-import Text from './Text';
+import Popper from '../dialog/Popper';
+import IconButton from '../IconButton';
+import Chips from '../Chips';
+import Block from '../Block';
+import FieldBlock from '../FieldBlock';
+import Button from '../Button';
+import Field from '../form/Field';
+import Text from '../Text';
 import TimePicker from './AntTimePicker';
-import ThemeContext from './theme/ThemeContext';
+import ThemeContext from '../theme/ThemeContext';
 
 const TimeDurationPicker = ({
   spy,
