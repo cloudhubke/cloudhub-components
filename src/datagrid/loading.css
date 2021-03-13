@@ -13,3 +13,7 @@
   top: calc(45% - 10px);
   left: calc(50% - 10px);
 }
+
+.MuiSelect-root.MuiInput-input {
+  background-color: 'cyan';
+}

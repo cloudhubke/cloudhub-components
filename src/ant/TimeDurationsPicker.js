@@ -1,53 +1,69 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
-import Popper from './dialog/Popper';
-import IconButton from './IconButton';
-import Chips from './Chips';
-import Block from './Block';
-import FieldBlock from './FieldBlock';
-import Button from './Button';
-import Field from './form/Field';
-import Text from './Text';
-import TimePicker from './TimePicker';
-import ThemeContext from './theme/ThemeContext';
+import isEqual from 'lodash/isEqual';
+import moment from 'moment';
 
-let styles;
+import Popper from '../dialog/Popper';
+import IconButton from '../IconButton';
+import Chips from '../Chips';
+import Block from '../Block';
+import FieldBlock from '../FieldBlock';
+import Button from '../Button';
+import Field from '../form/Field';
+import Text from '../Text';
+import TimePicker from './AntTimePicker';
+import ThemeContext from '../theme/ThemeContext';
 
-const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
-  const { colors, sizes } = React.useContext(ThemeContext);
-  if (!styles) {
-    styles = createStyles({ sizes, colors });
+const TimeDurationPicker = ({
+  spy,
+  onChange,
+  input,
+  value,
+  meta,
+  ...props
+}) => {
+  let values = input.value || value;
+  if (!Array.isArray(values)) {
+    values = [];
   }
-  const savedPopper = useRef();
-  const [popperopen, setPopperOpen] = useState(false);
 
+  const [durations, setDurations] = useState(values);
+  const [popperopen, setPopperOpen] = useState(false);
   const id = popperopen ? 'time-duration-popover' : null;
+  const { colors, sizes } = React.useContext(ThemeContext);
+
+  const styles = {
+    input: {
+      height: sizes.inputHeight,
+      border: `0.5px solid ${colors.gray}`,
+      borderRadius: 5,
+    },
+  };
 
   const onInputChange = (values) => {
-    input.onChange(values);
-    onChange(values);
+    if (values.Start && values.End) {
+      setDurations([...durations, values]);
+    }
   };
 
   useEffect(() => {
-    savedPopper.current = popperopen;
-  }, [popperopen]);
+    if (!isEqual(values, durations)) {
+      input.onChange(durations);
+      input.onBlur();
+      onChange(durations);
+    }
+  }, [durations, values, input, onChange]);
 
-  const data = [
-    { id: 0, label: 'Angular' },
-    { id: 1, label: 'jQuery' },
-    { id: 2, label: 'Polymer' },
-    { id: 3, label: 'React' },
-    { id: 4, label: 'Vue.js' },
-  ];
+  const format = (tt) => moment(tt, 'HHmmss').format('hh:mm a');
 
   return (
     <Block row middle style={styles.input} padding={[0, sizes.padding]}>
       <Block style={{ maxHeight: sizes.inputHeight, overflow: 'auto' }}>
         <Chips
-          data={data}
-          getLabel={(data) => data.label}
-          extractKey={(data) => data.id}
+          data={durations}
+          extractLabel={(data) => `${format(data.Start)} - ${format(data.End)}`}
+          extractKey={(d, i) => i}
         />
       </Block>
       <Block flex={false}>
@@ -98,7 +114,14 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
                     />
                   </FieldBlock>
                   <Block right>
-                    <Button color="primary" rounded onClick={handleSubmit}>
+                    <Button
+                      color="primary"
+                      rounded
+                      onClick={() => {
+                        handleSubmit();
+                        setPopperOpen(false);
+                      }}
+                    >
                       <Text white>Ok</Text>
                     </Button>
                   </Block>
@@ -116,19 +139,12 @@ const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
   );
 };
 
-const createStyles = ({ sizes, colors }) => ({
-  input: {
-    height: sizes.inputHeight,
-    border: `0.5px solid ${colors.gray}`,
-    borderRadius: 5,
-  },
-});
-
 TimeDurationPicker.defaultProps = {
   onChange: () => {},
   input: {
     value: [],
     onChange: () => {},
+    onBlur: () => {},
   },
   spy: true,
 };

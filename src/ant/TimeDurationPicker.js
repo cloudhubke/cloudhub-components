@@ -1,69 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
-import isEqual from 'lodash/isEqual';
-import moment from 'moment';
+import Popper from '../dialog/Popper';
+import IconButton from '../IconButton';
+import Chips from '../Chips';
+import Block from '../Block';
+import FieldBlock from '../FieldBlock';
+import Button from '../Button';
+import Field from '../form/Field';
+import Text from '../Text';
+import TimePicker from './AntTimePicker';
+import ThemeContext from '../theme/ThemeContext';
 
-import Popper from './dialog/Popper';
-import IconButton from './IconButton';
-import Chips from './Chips';
-import Block from './Block';
-import FieldBlock from './FieldBlock';
-import Button from './Button';
-import Field from './form/Field';
-import Text from './Text';
-import TimePicker from './TimePicker';
-import ThemeContext from './theme/ThemeContext';
+let styles;
 
-const TimeDurationPicker = ({
-  spy,
-  onChange,
-  input,
-  value,
-  meta,
-  ...props
-}) => {
-  let values = input.value || value;
-  if (!Array.isArray(values)) {
-    values = [];
-  }
-
-  const [durations, setDurations] = useState(values);
-  const [popperopen, setPopperOpen] = useState(false);
-  const id = popperopen ? 'time-duration-popover' : null;
+const TimeDurationPicker = ({ spy, onChange, input, meta, ...props }) => {
   const { colors, sizes } = React.useContext(ThemeContext);
+  if (!styles) {
+    styles = createStyles({ sizes, colors });
+  }
+  const savedPopper = useRef();
+  const [popperopen, setPopperOpen] = useState(false);
 
-  const styles = {
-    input: {
-      height: sizes.inputHeight,
-      border: `0.5px solid ${colors.gray}`,
-      borderRadius: 5,
-    },
-  };
+  const id = popperopen ? 'time-duration-popover' : null;
 
   const onInputChange = (values) => {
-    if (values.Start && values.End) {
-      setDurations([...durations, values]);
-    }
+    input.onChange(values);
+    onChange(values);
   };
 
   useEffect(() => {
-    if (!isEqual(values, durations)) {
-      input.onChange(durations);
-      input.onBlur();
-      onChange(durations);
-    }
-  }, [durations, values, input, onChange]);
+    savedPopper.current = popperopen;
+  }, [popperopen]);
 
-  const format = (tt) => moment(tt, 'HHmmss').format('hh:mm a');
+  const data = [
+    { id: 0, label: 'Angular' },
+    { id: 1, label: 'jQuery' },
+    { id: 2, label: 'Polymer' },
+    { id: 3, label: 'React' },
+    { id: 4, label: 'Vue.js' },
+  ];
 
   return (
     <Block row middle style={styles.input} padding={[0, sizes.padding]}>
       <Block style={{ maxHeight: sizes.inputHeight, overflow: 'auto' }}>
         <Chips
-          data={durations}
-          extractLabel={(data) => `${format(data.Start)} - ${format(data.End)}`}
-          extractKey={(d, i) => i}
+          data={data}
+          getLabel={(data) => data.label}
+          extractKey={(data) => data.id}
         />
       </Block>
       <Block flex={false}>
@@ -114,14 +98,7 @@ const TimeDurationPicker = ({
                     />
                   </FieldBlock>
                   <Block right>
-                    <Button
-                      color="primary"
-                      rounded
-                      onClick={() => {
-                        handleSubmit();
-                        setPopperOpen(false);
-                      }}
-                    >
+                    <Button color="primary" rounded onClick={handleSubmit}>
                       <Text white>Ok</Text>
                     </Button>
                   </Block>
@@ -139,12 +116,19 @@ const TimeDurationPicker = ({
   );
 };
 
+const createStyles = ({ sizes, colors }) => ({
+  input: {
+    height: sizes.inputHeight,
+    border: `0.5px solid ${colors.gray}`,
+    borderRadius: 5,
+  },
+});
+
 TimeDurationPicker.defaultProps = {
   onChange: () => {},
   input: {
     value: [],
     onChange: () => {},
-    onBlur: () => {},
   },
   spy: true,
 };

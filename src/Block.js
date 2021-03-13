@@ -2,11 +2,11 @@
 
 import React from 'react';
 
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import ThemeContext from './theme/ThemeContext';
 
-import { Slide, Grow, Paper } from './mui/core';
+import { Slide, Grow, Paper } from '@material-ui/core';
 
 const useStyles = () =>
   makeStyles({
@@ -21,8 +21,7 @@ const useStyles = () =>
 let styles;
 
 const Block = React.forwardRef((props, ref) => {
-  const theme = React.useContext(ThemeContext);
-  const { sizes, colors } = theme;
+  const { colors, sizes } = React.useContext(ThemeContext);
 
   const classes = useStyles();
   if (!styles) {

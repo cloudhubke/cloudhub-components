@@ -1,5 +1,7 @@
 import React from 'react';
 import includes from 'lodash/includes';
+import uniq from 'lodash/uniq';
+import difference from 'lodash/difference';
 import axios from 'axios';
 
 import {
@@ -45,6 +47,7 @@ import { useDebounce } from '../customhooks';
 import './grid.css';
 import RowActions from './RowActions';
 import Header from './Header';
+import PagingComponent from './PagingComponent';
 
 const styleSheet = () => ({
   gridContainer: {
@@ -128,12 +131,15 @@ const RemoteDataGrid = React.forwardRef(
       keyExtractor,
       dataExtractor,
       countExtractor,
+      pagingComponent = PagingComponent,
+      stickyHeader = false,
       limit = 20,
       params,
       ...props
     },
     ref
   ) => {
+    const selectionRef = React.useRef({});
     const [columns] = React.useState([
       ...counterColumn,
       ...props.columns,
@@ -161,12 +167,27 @@ const RemoteDataGrid = React.forwardRef(
     const [deletingRows, setDeletingRows] = React.useState([]);
 
     const changeSelection = (indexes) => {
+      const removedKeys = difference(selection, indexes).map((i) =>
+        keyExtractor(data[i])
+      );
+      for (let key of Object.keys(selectionRef.current)) {
+        if (removedKeys.includes(key));
+        delete selectionRef.current[key];
+      }
+
+      for (let i of indexes) {
+        selectionRef.current[keyExtractor(data[i])] = data[i];
+      }
+
       setSelection(indexes);
     };
 
     React.useEffect(() => {
-      const selectedrows = data.filter((r, i) => [...selection].includes(i));
-      props.onChangeSelection(selectedrows);
+      props.onChangeSelection(
+        Object.keys(selectionRef.current).map(
+          (key) => selectionRef.current[key]
+        )
+      );
     }, [selection.length]);
 
     const getQueryParams = () => {
@@ -199,7 +220,20 @@ const RemoteDataGrid = React.forwardRef(
           params: { ...params, ...queryparams },
         });
 
-        setData(dataExtractor(data).map((d, i) => ({ ...d, counter: i + 1 })));
+        let indexes = [];
+        let dataArray = dataExtractor(data).map((d, i) => {
+          if (Object.keys(selectionRef.current).includes(keyExtractor(d))) {
+            indexes.push(i);
+          }
+          return {
+            ...d,
+            counter: currentPage * pageSize + (i + 1),
+          };
+        });
+
+        setData(dataArray);
+        setSelection(indexes);
+
         setTotalCount(countExtractor(data));
         setLoading(false);
       } catch (error) {
@@ -224,12 +258,17 @@ const RemoteDataGrid = React.forwardRef(
           (d) => keyExtractor(d) === keyExtractor(row)
         );
         if (ind === -1) {
-          setData([row, ...data].map((d, i) => ({ ...d, counter: i + 1 })));
+          setData(
+            [row, ...data].map((d, i) => ({
+              ...d,
+              counter: currentPage * pageSize + (i + 1),
+            }))
+          );
         } else {
           setData(
             [...data].map((r, i) => {
               if (keyExtractor(r) === keyExtractor(row)) {
-                return { ...row, counter: i + 1 };
+                return { ...row, counter: currentPage * pageSize + (i + 1) };
               }
               return r;
             })
@@ -333,7 +372,14 @@ const RemoteDataGrid = React.forwardRef(
               <DragDropProvider />
 
               <Table
-                rowComponent={rowComponent}
+                stickyHeader={stickyHeader}
+                rowComponent={(props) => {
+                  const isSelected = Object.keys(selectionRef.current).includes(
+                    keyExtractor(props.row)
+                  );
+
+                  return rowComponent({ selected: isSelected, ...props });
+                }}
                 cellComponent={cellComponent}
                 allowColumnReordering
               />
@@ -377,7 +423,14 @@ const RemoteDataGrid = React.forwardRef(
               {hiddencolumns.length > 0 && <ColumnChooser />}
 
               <GroupingPanel allowDragging />
-              <PagingPanel pageSizes={allowedPageSizes} />
+              {pagingComponent ? (
+                <PagingPanel
+                  pageSizes={allowedPageSizes}
+                  containerComponent={pagingComponent}
+                />
+              ) : (
+                <PagingPanel pageSizes={allowedPageSizes} />
+              )}
             </Grid>
 
             {loading && <GridLoading />}
@@ -438,7 +491,9 @@ RemoteDataGrid.defaultProps = {
   columnWidths: [],
   allowColumnResizing: true,
   detailTemplate: () => <div />,
-  rowComponent: ({ row, ...restProps }) => <Table.Row {...restProps} />,
+  rowComponent: ({ selected, ...restProps }) => {
+    return <Table.Row selected={selected} hover {...restProps} />;
+  },
   cellComponent,
   actionsComponent: () => null,
   onEdit: () => {},

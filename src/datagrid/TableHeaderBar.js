@@ -13,22 +13,6 @@ import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
 
 const styles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    padding: '10px 20px 10px 20px',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    overflow: 'hidden',
-  },
-  inputs: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flexBasis: '50%',
-    marginLeft: 10,
-  },
   buttonStyle: {
     fontWeight: 500,
     textTransform: 'capitalize',
@@ -55,17 +39,19 @@ const TableHeaderBar = ({
   const { allowprint, allowadd } = permissions;
 
   return (
-    <Block row paper middle padding={sizes.padding} wrap>
+    <Block row paper middle margin={sizes.margin} padding={sizes.padding} wrap>
       <Block>
         <Text h6>{title}</Text>
       </Block>
-      <Block flex={false} row wrap>
+      <Block flex={false} row wrap middle>
         <Input
           style={{ flex: 1, minWidth: 200 }}
           icon="search"
           placeholder="Search..."
           onChange={(e) => setText(e.target.value)}
+          showError={false}
         />
+
         <Button onClick={onAdd} style={styles.buttonStyle} disabled={!allowadd}>
           <AddIcon /> Add
         </Button>

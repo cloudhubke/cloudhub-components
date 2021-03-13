@@ -1,51 +1,16 @@
 import React from 'react';
-import AntAlert from 'antd/lib/alert';
+import AntAlert from './AntAlert';
+import Block from '../Block';
+import ThemeContext from '../theme/ThemeContext';
 
-import 'antd/lib/alert/style/index.css';
-
-const Alert = ({
-  danger,
-  info,
-  success,
-  error,
-  warning,
-  message,
-  description,
-  closable,
-  onClose,
-  showIcon,
-}) => {
-  let type = 'info';
-
-  if (info) {
-    type = 'info';
-  }
-  if (danger || error) {
-    type = 'error';
-  }
-  if (success) {
-    type = 'success';
-  }
-  if (warning) {
-    type = 'warning';
-  }
+const Alert = (props) => {
+  const { sizes } = React.useContext(ThemeContext);
 
   return (
-    <AntAlert
-      message={message}
-      description={description}
-      type={type}
-      closable={closable}
-      onClose={onClose}
-      showIcon={showIcon}
-    />
+    <Block margin={sizes.margin} flex={props.flex}>
+      <AntAlert {...props} />
+    </Block>
   );
-};
-
-Alert.defaultProps = {
-  closable: true,
-  onClose: () => {},
-  showIcon: true,
 };
 
 export default Alert;

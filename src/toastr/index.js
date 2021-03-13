@@ -2,7 +2,7 @@ import React from 'react';
 import each from 'lodash/each';
 import {
   ToastContainer as RootContainer,
-  toast as roottoast
+  toast as roottoast,
 } from 'react-toastify';
 import Close from '@material-ui/icons/Close';
 
@@ -15,24 +15,24 @@ const ToastContainer = ({ constainerStyle, ...props }) => {
     toastcontainer: {
       '& .Toastify__toast--default': {
         background: colors.milkyWhite,
-        color: colors.dark
+        color: colors.dark,
       },
       '& .Toastify__toast--info': {
-        background: colors.info
+        background: colors.info,
       },
       '& .Toastify__toast--success': {
-        background: colors.success
+        background: colors.success,
       },
       '& .Toastify__toast--warning': {
-        background: colors.warning
+        background: colors.warning,
       },
       '& .Toastify__toast--error': {
-        background: colors.danger
-      }
+        background: colors.danger,
+      },
     },
     toast: {
-      borderRadius: 5
-    }
+      borderRadius: 5,
+    },
   })();
 
   return (
@@ -50,12 +50,12 @@ const ToastContainer = ({ constainerStyle, ...props }) => {
 
 ToastContainer.defaultProps = {
   constainerStyle: {
-    borderRadius: 5
-  }
+    borderRadius: 5,
+  },
 };
 
 const defaultOptions = {
-  containerId: 'main'
+  containerId: 'main',
 };
 
 const toast = (content, options = {}) => {
