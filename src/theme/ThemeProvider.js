@@ -14,15 +14,25 @@ import localcolors from './Colors';
 import localfonts from './Fonts';
 import { ToastContainer } from '../toastr';
 
+import customeBaseuiTheme from './basetheme/BaseWebTheme';
+
 const engine = new Styletron({
   hydrate: document.getElementsByClassName('_styletron_hydrate_'),
 });
 
-const ThemeProvider = ({ children, fonts, colors, sizes, theme, ...props }) => {
+const ThemeProvider = ({
+  children,
+  fonts,
+  colors,
+  sizes,
+  theme,
+  baseuiTheme,
+  ...props
+}) => {
   const newfonts = { ...localfonts, ...fonts };
   const newcolors = { ...localcolors, ...colors };
   const newsizes = { ...localsizes, ...sizes };
-
+  const { primitives, overrides } = baseuiTheme || {};
   const mainFontFamily = newfonts.body.fontFamily;
 
   const {
@@ -96,7 +106,11 @@ const ThemeProvider = ({ children, fonts, colors, sizes, theme, ...props }) => {
               },
             },
           }}
-          theme={LightTheme}
+          theme={
+            primitives || overrides
+              ? customeBaseuiTheme(baseuiTheme)
+              : LightTheme
+          }
         >
           <ThemeContext.Provider
             value={{
