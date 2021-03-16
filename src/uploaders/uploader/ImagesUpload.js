@@ -101,6 +101,7 @@ class ImagesUpload extends Component {
     url: '/fileapi/upload/image',
     example: null,
     flex: false,
+    disabled: false,
   };
 
   constructor(props) {
@@ -348,6 +349,7 @@ class ImagesUpload extends Component {
             onChange={this.handleChange}
             onRemove={this.handleRemove}
             customRequest={this.customRequest}
+            disabled={this.props.disabled}
             ref={(node) => {
               this.uploader = node;
             }}

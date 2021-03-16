@@ -56,6 +56,13 @@ const S3ImageUpload = ({
       setfileList(incominginput);
     }
   }, [incominginput]);
+  React.useEffect(() => {
+    if (uploaderror) {
+      setTimeout(() => {
+        setuploaderror(false);
+      }, 500);
+    }
+  }, [uploaderror]);
 
   React.useEffect(() => {
     if (deleting && confirmdelete) {
@@ -67,7 +74,7 @@ const S3ImageUpload = ({
             if (files.length > 0) {
               const progressArray = files
                 .map((obj) => {
-                  if (obj.fd === deleting) {
+                  if (obj && obj.fd === deleting) {
                     return null;
                   }
                   return obj;
@@ -102,7 +109,7 @@ const S3ImageUpload = ({
 
   React.useEffect(() => {
     if (Array.isArray(fileList)) {
-      const isuploading = fileList.map(({ status }) => {
+      const isuploading = fileList.filter(Boolean).map(({ status }) => {
         if (status === 'done') return 'done';
         return 'uploading';
       });
@@ -123,7 +130,7 @@ const S3ImageUpload = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.signedUrl === url) {
+            if (obj && obj.signedUrl === url) {
               const progress = Math.round(
                 (progressEvent.loaded * 100) / progressEvent.total
               );
@@ -143,7 +150,7 @@ const S3ImageUpload = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
+            if (obj && url === obj.signedUrl) {
               const newobj = { ...obj, status: 'done' };
               delete newobj.signedUrl;
               delete newobj.progress;
@@ -163,7 +170,7 @@ const S3ImageUpload = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
+            if (obj && url === obj.signedUrl) {
               toastr.error(
                 `File ${
                   obj.filename || obj.name
@@ -185,7 +192,7 @@ const S3ImageUpload = ({
     setfileList((files) => {
       if (files.length > 0) {
         const progressArray = files.map((obj) => {
-          if (obj.fd === fileobj.fd) {
+          if (obj && obj.fd === fileobj.fd) {
             return fileobj;
           }
           return obj;
@@ -208,7 +215,7 @@ const S3ImageUpload = ({
       ) {
         return toastr.error(`Only a maximum of ${limit} files allowed`);
       }
-      const fileObjArray = await [...(files || [])].map(
+      const fileObjArray = await [...(files || [])].filter(Boolean).map(
         async (file) =>
           new Promise((resolve, reject) => {
             const img = new Image();
@@ -312,8 +319,10 @@ const S3ImageUpload = ({
       await Promise.all(fileObjArray).then((Files) => {
         Allfiles = Files;
       });
-      const fileArray = Allfiles.map(({ fileprops }) => fileprops);
-      const filesArray = Allfiles.map(({ newfile }) => newfile);
+      const fileArray = Allfiles.filter(Boolean).map(
+        ({ fileprops }) => fileprops
+      );
+      const filesArray = Allfiles.filter(Boolean).map(({ newfile }) => newfile);
       const signedUrls = await getSignedUrl(fileArray, true).then(
         (urls) => urls
       );
@@ -321,8 +330,12 @@ const S3ImageUpload = ({
       const uploads = [...(filesArray || [])].map(
         (file) =>
           signedUrls
+            .filter(Boolean)
             .map(({ signedUrl, filename }) => {
-              if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+              if (
+                file &&
+                filename === file.name.replace(/[^\w\d_\-.]+/gi, '')
+              ) {
                 return {
                   signedUrl,
                   file,
@@ -380,7 +393,7 @@ const S3ImageUpload = ({
         dirname: dirname || 'images/',
       });
       const signedUrls = data.signedUrls.map((obj) => ({
-        ...obj,
+        ...(obj || {}),
         progress: 0,
       }));
       setfileList((files) => [...(files || []), ...signedUrls]);
@@ -392,24 +405,26 @@ const S3ImageUpload = ({
 
   return (
     <Block paper padding={20}>
-      <input
-        type="file"
-        id={`fileElem${elemId}`}
-        multiple={limit && limit > 1}
-        accept={accept || 'image/*'}
-        style={{
-          position: 'absolute',
-          width: 1,
-          height: 1,
-          overflow: 'hidden',
-          clip: 'rect(1px, 1px, 1px, 1px)',
-        }}
-        onChange={handleFiles}
-        disabled={readOnly || disabled}
-      />
+      {!uploaderror && (
+        <input
+          type="file"
+          id={`fileElem${elemId}`}
+          multiple={limit && limit > 1}
+          accept={accept || 'image/*'}
+          style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            overflow: 'hidden',
+            clip: 'rect(1px, 1px, 1px, 1px)',
+          }}
+          onChange={handleFiles}
+          disabled={readOnly || disabled}
+        />
+      )}
       <Block row wrap>
         {Array.isArray(fileList) &&
-          fileList.map((file) => (
+          fileList.filter(Boolean).map((file) => (
             <Block
               key={file.fd}
               middle
@@ -418,7 +433,7 @@ const S3ImageUpload = ({
               flex={false}
               style={{
                 backgroundImage: `url(${
-                  file.status === 'done' ? file.Location : ''
+                  file.status === 'done' ? file.url : ''
                 })`,
                 backgroundSize: 'cover',
                 width: previewWidth || 150,

@@ -75,6 +75,21 @@ const S3Uploader = ({
     }
   }, [incominginput]);
 
+  React.useEffect(() => {
+    if (uploaderror) {
+      setTimeout(() => {
+        setuploaderror(false);
+      }, 500);
+    }
+  }, [uploaderror]);
+  React.useEffect(() => {
+    if (thumberror) {
+      setTimeout(() => {
+        setthumberror(false);
+      }, 500);
+    }
+  }, [thumberror]);
+
   const logChange = (fileUpdate) => {
     if (typeof input.onChange === 'function') {
       input.onChange(fileUpdate || []);
@@ -86,7 +101,7 @@ const S3Uploader = ({
 
   React.useEffect(() => {
     if (Array.isArray(fileList)) {
-      const isuploading = fileList.map(({ status }) => {
+      const isuploading = fileList.filter(Boolean).map(({ status }) => {
         if (status === 'done') return 'done';
         return 'uploading';
       });
@@ -110,6 +125,7 @@ const S3Uploader = ({
   React.useEffect(() => {
     if (deleting && confirmdelete && Array.isArray(fileList)) {
       const fileArr = fileList
+        .filter(Boolean)
         .map(({ Location, fd, thumbfd }) => {
           if (Location === deleting) {
             if (thumbfd) {
@@ -129,7 +145,7 @@ const S3Uploader = ({
             if (files.length > 0) {
               const progressArray = files
                 .map((obj) => {
-                  if (obj.Location === deleting) {
+                  if (obj && obj.Location === deleting) {
                     return null;
                   }
                   return obj;
@@ -154,7 +170,7 @@ const S3Uploader = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.signedUrl === url) {
+            if (obj && obj.signedUrl === url) {
               const progress = Math.round(
                 (progressEvent.loaded * 100) / progressEvent.total
               );
@@ -174,7 +190,7 @@ const S3Uploader = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
+            if (obj && url === obj.signedUrl) {
               const newobj = { ...obj, status: 'done' };
               delete newobj.signedUrl;
               delete newobj.progress;
@@ -194,7 +210,7 @@ const S3Uploader = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
+            if (obj && url === obj.signedUrl) {
               toastr.error(
                 `File ${
                   obj.filename || obj.name
@@ -229,7 +245,7 @@ const S3Uploader = ({
         setfileList((urls) => {
           if (urls.length > 0) {
             const progressArray = urls.map((obj) => {
-              if (obj.uid === current.video) {
+              if (obj && obj.uid === current.video) {
                 const newobj = {
                   ...obj,
                   status: 'done',
@@ -268,7 +284,9 @@ const S3Uploader = ({
       if (maxSize && maxSize > 0) {
         const sizelimit = Number(maxSize * 1024 * 1024);
         const inds = [...(files || [])]
-          .map((file, index) => (file.size > sizelimit ? index + 1 : null))
+          .map((file, index) =>
+            file && file.size > sizelimit ? index + 1 : null
+          )
           .filter(Boolean);
         if (inds.length > 0) {
           return toastr.error(
@@ -278,7 +296,7 @@ const S3Uploader = ({
           );
         }
       }
-      const fileObjArray = await [...(files || [])].map(
+      const fileObjArray = await [...(files || [])].filter(Boolean).map(
         async (file) =>
           new Promise((resolve, reject) => {
             const video = document.createElement('video');
@@ -357,16 +375,22 @@ const S3Uploader = ({
         Allfiles = Files;
       });
 
-      const fileArray = Allfiles.map(({ fileprops }) => fileprops);
-      const filesArray = Allfiles.map(({ file }) => file);
+      const fileArray = Allfiles.filter(Boolean).map(
+        ({ fileprops }) => fileprops
+      );
+      const filesArray = Allfiles.filter(Boolean).map(({ file }) => file);
 
       const signedUrls = await getSignedUrl(fileArray, true);
       signedUrls.filter(Boolean);
       const uploads = [...(filesArray || [])].map(
         (file) =>
           signedUrls
+            .filter(Boolean)
             .map(({ signedUrl, filename }) => {
-              if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+              if (
+                file &&
+                filename === file.name.replace(/[^\w\d_\-.]+/gi, '')
+              ) {
                 return {
                   signedUrl,
                   file,
@@ -423,7 +447,9 @@ const S3Uploader = ({
     if (thumbMaxSize && thumbMaxSize > 0) {
       const sizelimit = Number(thumbMaxSize * 1024);
       const inds = [...(files || [])]
-        .map((file, index) => (file.size > sizelimit ? index + 1 : null))
+        .map((file, index) =>
+          file && file.size > sizelimit ? index + 1 : null
+        )
         .filter(Boolean);
       if (inds.length > 0) {
         return toastr.error(
@@ -433,7 +459,7 @@ const S3Uploader = ({
         );
       }
     }
-    const fileObjArray = await [...(files || [])].map(
+    const fileObjArray = await [...(files || [])].filter(Boolean).map(
       async (file) =>
         new Promise((resolve, reject) => {
           const img = new Image();
@@ -474,8 +500,9 @@ const S3Uploader = ({
     const uploads = [...(filesArray || [])].map(
       (file) =>
         signedUrls
+          .filter(Boolean)
           .map(({ signedUrl, filename }) => {
-            if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
+            if (file && filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
               return {
                 signedUrl,
                 file,
@@ -549,7 +576,7 @@ const S3Uploader = ({
     setfileList((files) => {
       if (files.length > 0) {
         const progressArray = files.map((obj) => {
-          if (obj.fd === fileobj.fd) {
+          if (obj && obj.fd === fileobj.fd) {
             return fileobj;
           }
           return obj;
@@ -562,21 +589,23 @@ const S3Uploader = ({
 
   return (
     <Block paper padding={20}>
-      <input
-        type="file"
-        id={`videoElem${elemId}`}
-        multiple={limit && limit > 1}
-        accept={accept || 'video/*'}
-        style={{
-          position: 'absolute',
-          width: 1,
-          height: 1,
-          overflow: 'hidden',
-          clip: 'rect(1px, 1px, 1px, 1px)',
-        }}
-        onChange={handleFiles}
-        disabled={disabled || readOnly}
-      />
+      {!uploaderror && (
+        <input
+          type="file"
+          id={`videoElem${elemId}`}
+          multiple={limit && limit > 1}
+          accept={accept || 'video/*'}
+          style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            overflow: 'hidden',
+            clip: 'rect(1px, 1px, 1px, 1px)',
+          }}
+          onChange={handleFiles}
+          disabled={disabled || readOnly}
+        />
+      )}
       <label htmlFor={`videoElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
           <VideoLibrarySharp />
@@ -585,7 +614,7 @@ const S3Uploader = ({
       </label>
       <List>
         {Array.isArray(fileList) &&
-          fileList.map((file) => (
+          fileList.filter(Boolean).map((file) => (
             <ListItem dense key={file.fd}>
               <Block row paper>
                 {file.status === 'done' && (
@@ -596,31 +625,35 @@ const S3Uploader = ({
                       length={file.length}
                       list
                       flex={false}
-                      thumbnail={file.thumbnail}
+                      thumbnail={`/cloud${
+                        (file.thumbfd || '').substring(0, 1) === '/' ? '' : '/'
+                      }${file.thumbfd}`}
                     />
                     {!file.thumbnail && (
                       <React.Fragment>
-                        <input
-                          type="file"
-                          id={`thumbElem${elemId}`}
-                          accept={acceptThumb || 'image/*'}
-                          style={{
-                            position: 'absolute',
-                            width: 1,
-                            height: 1,
-                            overflow: 'hidden',
-                            clip: 'rect(1px, 1px, 1px, 1px)',
-                          }}
-                          onChange={(e) => {
-                            setaddingThumbnail({
-                              video: file.uid,
-                              videoHeight: file.videoHeight,
-                              videoWidth: file.videoWidth,
-                            });
-                            addThumb(e);
-                          }}
-                          disabled={disabled || readOnly}
-                        />
+                        {!thumberror && (
+                          <input
+                            type="file"
+                            id={`thumbElem${elemId}`}
+                            accept={acceptThumb || 'image/*'}
+                            style={{
+                              position: 'absolute',
+                              width: 1,
+                              height: 1,
+                              overflow: 'hidden',
+                              clip: 'rect(1px, 1px, 1px, 1px)',
+                            }}
+                            onChange={(e) => {
+                              setaddingThumbnail({
+                                video: file.uid,
+                                videoHeight: file.videoHeight,
+                                videoWidth: file.videoWidth,
+                              });
+                              addThumb(e);
+                            }}
+                            disabled={disabled || readOnly}
+                          />
+                        )}
                         {!addingThumbnail && (
                           <label
                             htmlFor={`thumbElem${elemId}`}

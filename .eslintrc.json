@@ -17,6 +17,7 @@
     "no-underscore-dangle": "off",
     "no-case-declarations": "off",
     "no-use-before-define": "off",
+    "no-restricted-globals": "off",
     "comma-dangle": 0,
     "no-shadow": 0,
     "max-len": 0,
