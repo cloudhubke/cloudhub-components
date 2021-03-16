@@ -5,7 +5,7 @@ import { LayersManager } from 'baseui/layer';
 import Block from '../Block';
 import Text from '../Text';
 
-const BasewebSelect = (props) => {
+const BaseWebSelect = (props) => {
   const {
     options,
     input,
@@ -18,6 +18,8 @@ const BasewebSelect = (props) => {
     search,
     select,
     onSelectChange,
+    getOptionLabel,
+    getValueLabel,
     ...rest
   } = props;
 
@@ -97,6 +99,8 @@ const BasewebSelect = (props) => {
               },
             },
           }}
+          getOptionLabel={getOptionLabel}
+          getValueLabel={getValueLabel || getOptionLabel}
           {...rest}
         />
       </LayersManager>
@@ -109,7 +113,7 @@ const BasewebSelect = (props) => {
   );
 };
 
-BasewebSelect.defaultProps = {
+BaseWebSelect.defaultProps = {
   input: {
     value: null,
     onChange: () => {},
@@ -121,9 +125,9 @@ BasewebSelect.defaultProps = {
   valueExtractor: (item) => item,
   getOptionLabel: ({ option, index }) =>
     isPlainObject(option) ? option.id || `option-${index}` : `${option}`,
-  getValueLabel: ({ option, index }) =>
-    isPlainObject(option) ? option.id || `option-${index}` : `option-${index}`,
+  // getValueLabel: ({ option, index }) =>
+  //   isPlainObject(option) ? option.id || `option-${index}` : `option-${index}`,
   onSelectChange: () => {},
 };
 
-export default BasewebSelect;
+export default BaseWebSelect;
