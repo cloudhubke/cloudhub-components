@@ -39,8 +39,6 @@ const AutoComplete = ({
   showError = true,
   meta,
   readOnly,
-  startAdornment,
-  endAdornment,
   onInputChange,
   ...rest
 }) => {
@@ -78,8 +76,11 @@ const AutoComplete = ({
             size="medium"
             variant="outlined"
             {...params}
-            // value={input.value || value}
-
+            inputProps={{
+              autoComplete: 'new-password',
+              ...(params.inputProps || {}),
+            }}
+            // eslint-disable-next-line react/jsx-no-duplicate-props
             InputProps={{
               ...(params.InputProps || {}),
               classes: {
@@ -88,9 +89,6 @@ const AutoComplete = ({
                 focused: classes.cssFocused,
                 notchedOutline: classes.notchedOutline,
               },
-              //   readOnly,
-              //   startAdornment,
-              //   endAdornment,
             }}
           />
         )}
@@ -112,6 +110,5 @@ AutoComplete.defaultProps = {
   onChange: () => {},
   onInputChange: () => {},
   getOptionLabel: (option) => (option && option.id ? option.id : `${option}`),
-  getValueLabel: (option) => (option && option.id ? option.id : `${option}`),
 };
 export default AutoComplete;
