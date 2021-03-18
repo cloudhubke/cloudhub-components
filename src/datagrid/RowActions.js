@@ -4,6 +4,7 @@ import TableCell from '@material-ui/core/TableCell';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ViewList from '@material-ui/icons/ViewList';
+import Visibility from '@material-ui/icons/Visibility';
 
 import IconButton from '../IconButton';
 import Block from '../Block';
@@ -36,7 +37,7 @@ const RowActions = ({ row, column, permissions, ...props }) => {
             onClick={() => props.onView(row)}
             title="View row"
           >
-            <ViewList style={{ fontSize: 24, color: colors.primary }} />
+            <Visibility style={{ fontSize: 24, color: colors.primary }} />
           </IconButton>
         )}
         <IconButton

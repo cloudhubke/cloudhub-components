@@ -3,10 +3,9 @@ import { Field as FinalFormField } from 'react-final-form';
 import isEmpty from 'lodash/isEmpty';
 
 import Block from '../Block';
-import FieldBlock from '../FieldBlock';
 
 const notEmptyField = (value) => (isEmpty(value) ? undefined : 'Required');
-const requiredField = (value) => (value ? undefined : 'Required');
+const requiredField = (value) => (`${value}` ? undefined : 'Required');
 
 function mustBeAlphabet(value) {
   const letters = /^[A-Za-z]+$/;

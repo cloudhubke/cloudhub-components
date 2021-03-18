@@ -16,6 +16,7 @@ export { default as Input } from './Input';
 export { default as TextInput } from './TextInput';
 export { default as CounterInput } from './CounterInput';
 export { default as TextArea } from './TextArea';
+export { default as Alert } from './Alert';
 
 export { default as PhoneInput } from './PhoneInput';
 export { default as SearchInput } from './SearchInput';

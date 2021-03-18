@@ -2,7 +2,9 @@ import React from 'react';
 import { ListItem, ListItemText, ListItemAvatar } from '@material-ui/core';
 import { PlayArrow, PlayCircleOutline } from '@material-ui/icons';
 import moment from 'moment';
-import { Block, Text, Avatar } from './index';
+import Block from './Block';
+import Text from './Text';
+import Avatar from './Avatar';
 import ThemeContext from './theme/ThemeContext';
 
 const VideoThumbnail = ({
