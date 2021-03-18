@@ -76,11 +76,6 @@ const AutoComplete = ({
             size="medium"
             variant="outlined"
             {...params}
-            inputProps={{
-              autoComplete: 'new-password',
-              ...(params.inputProps || {}),
-            }}
-            // eslint-disable-next-line react/jsx-no-duplicate-props
             InputProps={{
               ...(params.InputProps || {}),
               classes: {
@@ -89,6 +84,11 @@ const AutoComplete = ({
                 focused: classes.cssFocused,
                 notchedOutline: classes.notchedOutline,
               },
+            }}
+            // eslint-disable-next-line react/jsx-no-duplicate-props
+            inputProps={{
+              autocomplete: 'new-password',
+              ...(params.inputProps || {}),
             }}
           />
         )}
