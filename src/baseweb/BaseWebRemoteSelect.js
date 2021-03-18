@@ -1,36 +1,29 @@
 import React from 'react';
 import axios from 'axios';
-import BasewebSelect from './BasewebSelect';
+import BaseWebSelect from './BaseWebSelect';
+import { useDebounce } from '../customhooks';
 
 const BasewebRemoteSelect = (props) => {
-  const {
-    input,
-    value,
-    onChange,
-    meta,
-    multi,
-    returnkeys,
-    axiosinstance,
-    search,
-    select,
-    url,
-    ...rest
-  } = props;
+  const { axiosinstance, url, ...rest } = props;
   const cachedResults = React.useRef({});
   const [isLoading, setisLoading] = React.useState(false);
   const [filter, setfilter] = React.useState('');
   const [options, setoptions] = React.useState([]);
 
+  const debouncedFilter = useDebounce(filter, 1000);
+
   const getOptions = React.useCallback(async () => {
     try {
-      const filterkey = `${url}${filter || ''}`;
+      const filterkey = `${url}${debouncedFilter || ''}`;
       if (url) {
         if (cachedResults.current[filterkey]) {
           setoptions(cachedResults.current[filterkey]);
           return;
         }
         setisLoading(true);
-        const { data } = await axiosinstance().get(url, { params: { filter } });
+        const { data } = await axiosinstance().get(url, {
+          params: { filter: debouncedFilter },
+        });
         if (data && Array.isArray(data.items)) {
           setoptions(data.items);
           cachedResults.current[filterkey] = data.items;
@@ -42,14 +35,14 @@ const BasewebRemoteSelect = (props) => {
         setisLoading(false);
       }
     } catch (error) {}
-  }, [url, filter]);
+  }, [url, debouncedFilter]);
 
   React.useEffect(() => {
     getOptions();
   }, [getOptions]);
 
   return (
-    <BasewebSelect
+    <BaseWebSelect
       options={options}
       onInputChange={(event) => {
         const { target } = event;

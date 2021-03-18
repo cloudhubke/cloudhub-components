@@ -314,14 +314,21 @@ const S3Uploader = ({
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <Text subHeader underline>
+                  <Text
+                    subHeader
+                    underline
+                    style={{
+                      marginRight: progress < 100 ? 75 : 25,
+                      overflow: 'hidden',
+                    }}
+                  >
                     {filename}
                   </Text>
                 }
               />
               <ListItemSecondaryAction>
                 {progress < 100 && (
-                  <Text small edge="end">
+                  <Text small edge="end" style={{ backgroundColor: 'white' }}>
                     ...uploading <Text subHeader>{`${progress}%`}</Text>
                   </Text>
                 )}
@@ -333,6 +340,7 @@ const S3Uploader = ({
                         onDelete(fd);
                       }
                     }}
+                    style={{ backgroundColor: 'white' }}
                   >
                     <Close />
                   </IconButton>
@@ -350,7 +358,7 @@ const S3Uploader = ({
       >
         <DialogHeader onClose={() => setdeleting(null)} />
         <DialogContent>
-          <Text>Sure you want to remove video?</Text>
+          <Text>Sure you want to remove File?</Text>
         </DialogContent>
         <DialogActions>
           <Button

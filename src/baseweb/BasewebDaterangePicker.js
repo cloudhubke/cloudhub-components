@@ -14,7 +14,7 @@ const useStyles = ({ sizes }) =>
     },
   });
 
-const BasewebDatePicker = ({
+const BaseWebDatePicker = ({
   input,
   value,
   onChange,
@@ -60,4 +60,4 @@ const BasewebDatePicker = ({
   );
 };
 
-export default BasewebDatePicker;
+export default BaseWebDatePicker;
