@@ -63,7 +63,7 @@ const S3Uploader = ({
 
   React.useEffect(() => {
     if (Array.isArray(fileList)) {
-      const uploading = fileList.map(({ status }) => {
+      const uploading = fileList.filter(Boolean).map(({ status }) => {
         if (status === 'done') return 'done';
         return 'uploading';
       });
@@ -86,8 +86,9 @@ const S3Uploader = ({
           setfileList((files) => {
             if (files.length > 0) {
               const progressArray = files
+                .filter(Boolean)
                 .map((obj) => {
-                  if (obj.fd === deleting) {
+                  if ((obj || {}).fd === deleting) {
                     return null;
                   }
                   return obj;
@@ -112,7 +113,7 @@ const S3Uploader = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.signedUrl === url) {
+            if (obj && obj.signedUrl === url) {
               const progress = Math.round(
                 (progressEvent.loaded * 100) / progressEvent.total
               );
@@ -132,7 +133,7 @@ const S3Uploader = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
+            if (obj && url === obj.signedUrl) {
               const newobj = { ...obj, status: 'done' };
               delete newobj.signedUrl;
               delete newobj.progress;
@@ -152,7 +153,7 @@ const S3Uploader = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
+            if (obj && url === obj.signedUrl) {
               toastr.error(
                 `File ${
                   obj.filename || obj.name
@@ -182,7 +183,9 @@ const S3Uploader = ({
     if (maxSize && maxSize > 0) {
       const sizelimit = Number(maxSize * 1024 * 1024);
       const inds = [...(files || [])]
-        .map((file, index) => (file.size > sizelimit ? index + 1 : null))
+        .map((file, index) =>
+          file && file.size > sizelimit ? index + 1 : null
+        )
         .filter(Boolean);
       if (inds.length > 0) {
         return toastr.error(
@@ -193,7 +196,7 @@ const S3Uploader = ({
       }
     }
 
-    const fileArray = [...(files || [])].map((file) => ({
+    const fileArray = [...(files || [])].filter(Boolean).map((file) => ({
       name: file.name.replace(/[^\w\d_\-.]+/gi, ''),
       type: file.type,
       size: file.size,
@@ -202,9 +205,10 @@ const S3Uploader = ({
     if (fileArray.length > 0) {
       const signedUrls = await getSignedUrl(fileArray).then((urls) => urls);
       signedUrls.filter(Boolean);
-      const uploads = [...(files || [])].map(
+      const uploads = [...(files || [])].filter(Boolean).map(
         (file) =>
           signedUrls
+            .filter(Boolean)
             .map(({ signedUrl, filename }) => {
               if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
                 return {
@@ -262,12 +266,14 @@ const S3Uploader = ({
         dirname: dirname || 'files/',
       })
       .then(({ data }) => {
-        const signedUrls = data.signedUrls.map((obj) => ({
-          ...obj,
-          progress: 0,
-        }));
-        setfileList((files) => [...files, ...signedUrls]);
-        return signedUrls;
+        if (data && Array.isArray(data.signedUrls)) {
+          const signedUrls = data.signedUrls.map((obj) => ({
+            ...obj,
+            progress: 0,
+          }));
+          setfileList((files) => [...files, ...signedUrls]);
+          return signedUrls;
+        }
       })
       .catch(() => {
         toastr.error(
@@ -301,21 +307,28 @@ const S3Uploader = ({
       </label>
       <List>
         {Array.isArray(fileList) &&
-          fileList.map(({ fd, filename, progress, status }) => (
+          fileList.filter(Boolean).map(({ fd, filename, progress, status }) => (
             <ListItem key={fd} dense divider>
               <ListItemIcon>
                 <Attachment edge="start" />
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <Text subHeader underline>
+                  <Text
+                    subHeader
+                    underline
+                    style={{
+                      marginRight: progress < 100 ? 75 : 25,
+                      overflow: 'hidden',
+                    }}
+                  >
                     {filename}
                   </Text>
                 }
               />
               <ListItemSecondaryAction>
                 {progress < 100 && (
-                  <Text small edge="end">
+                  <Text small edge="end" style={{ backgroundColor: 'white' }}>
                     ...uploading <Text subHeader>{`${progress}%`}</Text>
                   </Text>
                 )}
@@ -327,6 +340,7 @@ const S3Uploader = ({
                         onDelete(fd);
                       }
                     }}
+                    style={{ backgroundColor: 'white' }}
                   >
                     <Close />
                   </IconButton>
@@ -344,7 +358,7 @@ const S3Uploader = ({
       >
         <DialogHeader onClose={() => setdeleting(null)} />
         <DialogContent>
-          <Text>Sure you want to remove video?</Text>
+          <Text>Sure you want to remove File?</Text>
         </DialogContent>
         <DialogActions>
           <Button

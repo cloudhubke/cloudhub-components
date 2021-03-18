@@ -61,6 +61,14 @@ const S3ImageUpload = ({
   }, [incominginput]);
 
   React.useEffect(() => {
+    if (uploaderror) {
+      setTimeout(() => {
+        setuploaderror(false);
+      }, 500);
+    }
+  }, [uploaderror]);
+
+  React.useEffect(() => {
     if (deleting && confirmdelete) {
       signaxiosinstance()
         .post(deleteurl, { files: [deleting] })
@@ -70,7 +78,7 @@ const S3ImageUpload = ({
             if (files.length > 0) {
               const progressArray = files
                 .map((obj) => {
-                  if (obj.fd === deleting) {
+                  if (obj && obj.fd === deleting) {
                     return null;
                   }
                   return obj;
@@ -104,7 +112,7 @@ const S3ImageUpload = ({
 
   React.useEffect(() => {
     if (Array.isArray(fileList)) {
-      const isuploading = fileList.map(({ status }) => {
+      const isuploading = fileList.filter(Boolean).map(({ status }) => {
         if (status === 'done') return 'done';
         return 'uploading';
       });
@@ -125,7 +133,7 @@ const S3ImageUpload = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (obj.signedUrl === url) {
+            if (obj && obj.signedUrl === url) {
               const progress = Math.round(
                 (progressEvent.loaded * 100) / progressEvent.total
               );
@@ -145,7 +153,7 @@ const S3ImageUpload = ({
       setfileList((urls) => {
         if (urls.length > 0) {
           const progressArray = urls.map((obj) => {
-            if (url === obj.signedUrl) {
+            if (obj && url === obj.signedUrl) {
               const newobj = { ...obj, status: 'done' };
               delete newobj.signedUrl;
               delete newobj.progress;
@@ -163,10 +171,10 @@ const S3ImageUpload = ({
   const onUploadError = (url) => {
     if (url) {
       setfileList((urls) => {
-        if (urls.length > 0) {
+        if (urls && urls.length > 0) {
           const progressArray = urls
             .map((obj) => {
-              if (url === obj.signedUrl) {
+              if (obj && url === obj.signedUrl) {
                 toastr.error(
                   `File ${
                     obj.filename || obj.name
@@ -189,7 +197,7 @@ const S3ImageUpload = ({
     setfileList((files) => {
       if (files.length > 0) {
         const progressArray = files.map((obj) => {
-          if (obj.fd === fileobj.fd) {
+          if (obj && obj.fd === fileobj.fd) {
             return fileobj;
           }
           return obj;
@@ -342,15 +350,20 @@ const S3ImageUpload = ({
         setcropping(null);
         i += 1;
         if (i === files.length) {
-          const fileArray = fileObjArray.map(({ fileprops }) => fileprops);
-          const filesArray = fileObjArray.map(({ newfile }) => newfile);
+          const fileArray = fileObjArray
+            .filter(Boolean)
+            .map(({ fileprops }) => fileprops);
+          const filesArray = fileObjArray
+            .filter(Boolean)
+            .map(({ newfile }) => newfile);
           const signedUrls = await getSignedUrl(fileArray, true).then(
             (urls) => urls
           );
           signedUrls.filter(Boolean);
-          const uploads = [...(filesArray || [])].map(
+          const uploads = [...(filesArray || [])].filter(Boolean).map(
             (file) =>
               signedUrls
+                .filter(Boolean)
                 .map(({ signedUrl, filename }) => {
                   if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
                     return {
@@ -411,7 +424,7 @@ const S3ImageUpload = ({
         dirname: dirname || 'images/',
       });
       const signedUrls = (data.signedUrls || []).map((obj) => ({
-        ...obj,
+        ...(obj || {}),
         progress: 0,
       }));
       setfileList((files) => [...(files || []), ...signedUrls]);
@@ -423,28 +436,30 @@ const S3ImageUpload = ({
 
   return (
     <Block paper padding={20}>
-      <input
-        type="file"
-        id={`fileElem${elemId}`}
-        multiple={limit && limit > 1}
-        accept={accept || 'image/*'}
-        style={{
-          position: 'absolute',
-          width: 1,
-          height: 1,
-          overflow: 'hidden',
-          clip: 'rect(1px, 1px, 1px, 1px)',
-        }}
-        onChange={handleFiles}
-        disabled={readOnly || disabled}
-      />
+      {!uploaderror && (
+        <input
+          type="file"
+          id={`fileElem${elemId}`}
+          multiple={limit && limit > 1}
+          accept={accept || 'image/*'}
+          style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            overflow: 'hidden',
+            clip: 'rect(1px, 1px, 1px, 1px)',
+          }}
+          onChange={handleFiles}
+          disabled={readOnly || disabled}
+        />
+      )}
       <label htmlFor={`fileElem${elemId}`} style={{ cursor: 'pointer' }}>
         <Block middle center>
           <AddAPhotoSharp />
           <Text caption>upload</Text>
         </Block>
       </label>
-      {cropurls.map((fileURL, index) => (
+      {cropurls.filter(Boolean).map((fileURL, index) => (
         <Block
           key={fileURL}
           middle
@@ -488,7 +503,7 @@ const S3ImageUpload = ({
       ))}
       <Block row wrap>
         {Array.isArray(fileList) &&
-          fileList.map((file) => (
+          fileList.filter(Boolean).map((file) => (
             <Block
               key={file.fd}
               middle
@@ -497,7 +512,7 @@ const S3ImageUpload = ({
               flex={false}
               style={{
                 backgroundImage: `url(${
-                  file.status === 'done' ? file.Location : ''
+                  file.status === 'done' ? file.url : ''
                 })`,
                 backgroundSize: 'cover',
                 width: previewWidth || 150,
