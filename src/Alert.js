@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@material-ui/core/Box';
-import MuiAlert from '@material-ui/core/Alert';
-import AlertTitle from '@material-ui/core/AlertTitle';
+import MuiAlert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import Collapse from '@material-ui/core/Collapse';
 
 const Alert = ({
