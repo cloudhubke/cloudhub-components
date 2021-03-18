@@ -3,10 +3,9 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { Slide, Grow, Paper } from '@material-ui/core';
 import classNames from 'classnames';
 import ThemeContext from './theme/ThemeContext';
-
-import { Slide, Grow, Paper } from '@material-ui/core';
 
 const useStyles = () =>
   makeStyles({

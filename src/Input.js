@@ -11,6 +11,13 @@ import ThemeContext from './theme/ThemeContext';
 
 const useStyles = ({ sizes, colors }) =>
   makeStyles({
+    container: {
+      '&.MuiFormControl-root.MuiTextField-root': {
+        backgroundColor: 'cyan',
+        marginTop: 0,
+        marginBottom: 0,
+      },
+    },
     margin: {
       marginTop: 0,
       marginBottom: 0,
@@ -66,11 +73,12 @@ const Input = ({
 
   const inputStyles = {
     height: sizes.inputHeight,
+    margin: 0,
     ...style,
   };
 
   return (
-    <Block>
+    <Block className={classes.container}>
       <TextField
         label={label}
         className={classes.margin}

@@ -223,7 +223,7 @@ class ImagesUpload extends Component {
 
   handlePreview = (file) => {
     this.setState({
-      previewImage: file.url || file.thumbUrl,
+      previewImage: file.Location || file.url || file.thumbUrl,
       previewVisible: true,
     });
   };

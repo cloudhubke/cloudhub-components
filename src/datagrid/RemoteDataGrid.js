@@ -135,6 +135,7 @@ const RemoteDataGrid = React.forwardRef(
       stickyHeader = false,
       limit = 20,
       params,
+      onRowClick,
       ...props
     },
     ref
@@ -378,7 +379,11 @@ const RemoteDataGrid = React.forwardRef(
                     keyExtractor(props.row)
                   );
 
-                  return rowComponent({ selected: isSelected, ...props });
+                  return rowComponent({
+                    selected: isSelected,
+                    onRowClick,
+                    ...props,
+                  });
                 }}
                 cellComponent={cellComponent}
                 allowColumnReordering
@@ -455,6 +460,7 @@ const RemoteDataGrid = React.forwardRef(
                   <TableHeaderRow />
                 </Grid>
               </DialogContent>
+
               <DialogActions>
                 <Button onClick={() => setDeletingRows([])} color="primary">
                   Cancel
@@ -491,8 +497,15 @@ RemoteDataGrid.defaultProps = {
   columnWidths: [],
   allowColumnResizing: true,
   detailTemplate: () => <div />,
-  rowComponent: ({ selected, ...restProps }) => {
-    return <Table.Row selected={selected} hover {...restProps} />;
+  rowComponent: ({ selected, onRowClick, ...restProps }) => {
+    return (
+      <Table.Row
+        selected={selected}
+        hover
+        onClick={() => onRowClick(restProps.row)}
+        {...restProps}
+      />
+    );
   },
   cellComponent,
   actionsComponent: () => null,
@@ -515,6 +528,7 @@ RemoteDataGrid.defaultProps = {
     allowprint: true,
   },
   actionsMenu: null,
+  onRowClick: () => null,
 };
 
 export default withStyles(styleSheet)(RemoteDataGrid);

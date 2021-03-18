@@ -52,6 +52,9 @@ const styles = () => ({
   },
 });
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Cart Button
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const AddToCartButton = ({ classes, onAddItem, onRemoveItem, Qty }) => {
   if (!Qty) {
     return (
@@ -60,6 +63,7 @@ const AddToCartButton = ({ classes, onAddItem, onRemoveItem, Qty }) => {
       </Button>
     );
   }
+
   return (
     <Paper className={classes.paperCartButton}>
       <IconButton className={classes.addremoveButton} onClick={onRemoveItem}>
