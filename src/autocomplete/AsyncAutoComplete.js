@@ -3,7 +3,7 @@ import axios from 'axios';
 import AutoComplete from './AutoComplete';
 import { useDebounce } from '../customhooks';
 
-const BasewebRemoteSelect = (props) => {
+const AsyncAutocomplete = (props) => {
   const { axiosinstance, url, ...rest } = props;
   const cachedResults = React.useRef({});
   const [loading, setloading] = React.useState(false);
@@ -53,8 +53,8 @@ const BasewebRemoteSelect = (props) => {
   );
 };
 
-BasewebRemoteSelect.defaultProps = {
+AsyncAutocomplete.defaultProps = {
   axiosinstance: () => axios.create({}),
 };
 
-export default BasewebRemoteSelect;
+export default AsyncAutocomplete;

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Autocomplete } from '@material-ui/lab';
-import { TextField } from '@material-ui/core';
+import { TextField, Autocomplete } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ThemeContext from '../theme/ThemeContext';
 import Block from '../Block';
@@ -39,8 +38,6 @@ const AutoComplete = ({
   showError = true,
   meta,
   readOnly,
-  startAdornment,
-  endAdornment,
   onInputChange,
   ...rest
 }) => {
@@ -78,8 +75,6 @@ const AutoComplete = ({
             size="medium"
             variant="outlined"
             {...params}
-            // value={input.value || value}
-
             InputProps={{
               ...(params.InputProps || {}),
               classes: {
@@ -88,9 +83,11 @@ const AutoComplete = ({
                 focused: classes.cssFocused,
                 notchedOutline: classes.notchedOutline,
               },
-              //   readOnly,
-              //   startAdornment,
-              //   endAdornment,
+            }}
+            // eslint-disable-next-line react/jsx-no-duplicate-props
+            inputProps={{
+              autocomplete: 'new-password',
+              ...(params.inputProps || {}),
             }}
           />
         )}
@@ -112,6 +109,5 @@ AutoComplete.defaultProps = {
   onChange: () => {},
   onInputChange: () => {},
   getOptionLabel: (option) => (option && option.id ? option.id : `${option}`),
-  getValueLabel: (option) => (option && option.id ? option.id : `${option}`),
 };
 export default AutoComplete;
