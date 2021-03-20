@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { StatefulPopover } from 'baseui/popover';
 import { useRect } from '@reach/rect';
-// import { Button } from 'baseui/button';
-import Button from '../Button';
-import Input from '../Input';
-import Block from '../Block';
 import ThemeContext from '../theme/ThemeContext';
 
 let rect = {};
