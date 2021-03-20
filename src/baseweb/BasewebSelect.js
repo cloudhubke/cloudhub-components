@@ -24,7 +24,7 @@ const BaseWebSelect = (props) => {
   } = props;
 
   const val = input.value || value || [];
-  const [initalValue, setValue] = React.useState(
+  const [initialValue, setValue] = React.useState(
     Array.isArray(val) ? val : [val]
   );
   const [itemOptions, setitemOptions] = React.useState(options);
@@ -76,7 +76,7 @@ const BaseWebSelect = (props) => {
       <LayersManager zIndex={1301}>
         <Select
           options={itemOptions || []}
-          value={initalValue}
+          value={initialValue}
           onChange={(params) => {
             const val = multi
               ? params.value.map((item) => rest.valueExtractor(item))
