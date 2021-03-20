@@ -1,6 +1,6 @@
 // just copy this code from the driving repo :)
 import React from 'react';
-// import withStyles from '@material-ui/core/styles/withStyles';
+// import {withStyles} from '@material-ui/core/styles';
 
 import ThemeContext from './theme/ThemeContext';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { DatePicker } from 'baseui/datepicker';
 import { LayersManager } from 'baseui/layer';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Block from '../Block';
 import ThemeContext from '../theme/ThemeContext';

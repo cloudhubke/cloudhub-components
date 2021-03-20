@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
 
 import 'antd/lib/input/style/index.css';
 import 'antd/lib/date-picker/style/index.css';
 import './datepicker.css';
-import ThemeContext from '../theme/ThemeContext';
 import { makeStyles } from '@material-ui/core/styles';
+import ThemeContext from '../theme/ThemeContext';
 
 const useStyles = ({ fonts, colors, sizes }) =>
   makeStyles({

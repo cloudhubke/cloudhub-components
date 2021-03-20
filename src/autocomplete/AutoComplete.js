@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, Autocomplete } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { makeStyles } from '@material-ui/core/styles';
 import ThemeContext from '../theme/ThemeContext';
 import Block from '../Block';
 import Text from '../Text';
