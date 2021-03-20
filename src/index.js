@@ -36,6 +36,7 @@ export { default as Rating } from './Rating';
 export { default as Flag } from './Flag';
 export { default as IconButton } from './IconButton';
 export { default as ActionsMenu } from './ActionsMenu';
+export { default as StatusLabel } from './widgets/StatusLabel';
 
 export { default as ListMenu } from './ListMenu';
 export { default as ListSubMenu } from './ListSubMenu';

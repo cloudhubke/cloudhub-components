@@ -1,6 +1,6 @@
 import React from 'react';
-import MuiAvatar from '@material-ui/core/Avatar';
+import { MAvatar } from './@material-extend';
 
-const Avatar = props => <MuiAvatar {...props} />;
+const Avatar = (props) => <MAvatar {...props} />;
 
 export default Avatar;
