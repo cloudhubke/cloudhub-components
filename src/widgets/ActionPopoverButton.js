@@ -9,15 +9,15 @@ import CardToolbar from './CardToolbar';
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTimelineItem-missingOppositeContent:before': {
-      display: 'none'
+      display: 'none',
     },
-    margin: theme.sizes.margin
+    margin: theme.sizes.margin,
   },
   actionsComponent: {
     padding: theme.sizes.padding,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   contentArea: {
     position: 'relative',
@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     height: '100%',
     padding: theme.sizes.padding,
-    flex: 1
-  }
+    flex: 1,
+  },
 }));
 
 const ActionPopoverButton = React.forwardRef(
@@ -78,12 +78,12 @@ const ActionPopoverButton = React.forwardRef(
         ...AnchorComponent.props,
         onClick: () => {
           setAnchorEl(anchorRef.current);
-        }
+        },
       });
     };
 
     React.useImperativeHandle(ref, () => ({
-      close: () => setAnchorEl(null)
+      close: () => setAnchorEl(null),
     }));
 
     return (
@@ -97,11 +97,11 @@ const ActionPopoverButton = React.forwardRef(
           getContentAnchorEl={null}
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'right'
+            horizontal: 'right',
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'right'
+            horizontal: 'right',
           }}
           open={Boolean(anchorEl)}
           onClose={handleClose}

@@ -1,43 +1,65 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import moment from 'moment';
 
+import {
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListItemSecondaryAction,
+  Typography,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Link } from '../reach';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+  inline: {
+    display: 'inline',
+  },
+}));
+
 const UserActionListItem = ({
-  title = '',
-  username = '',
+  primary = '',
+  secondary = '',
   avatar,
   timestamp,
   rightComponent,
+  linkto,
   imgUrl,
   ...props
 }) => {
-  const [] = React.useState(0);
+  const classes = useStyles();
 
   return (
-    <div className="d-flex justify-content-between">
-      <div>
-        <div className="font-weight-bold">
-          <a
-            href="#/"
-            onClick={(e) => e.preventDefault()}
-            className="text-black"
-          >
-            {title}
-          </a>
-        </div>
-        <small className="d-flex pt-2 align-items-center">
-          {avatar}
-          <a href="" onClick={(e) => e.preventDefault()}>
-            {username}
-          </a>
-          {timestamp && (
-            <span className="pl-2 text-muted">
-              {moment(timestamp).fromNow()}
-            </span>
-          )}
-        </small>
-      </div>
-      {rightComponent}
-    </div>
+    <ListItem alignItems="flex-start">
+      <ListItemAvatar>{avatar}</ListItemAvatar>
+      <ListItemText
+        component={linkto ? Link : 'div'}
+        to={linkto}
+        primary={
+          <React.Fragment>
+            {primary}
+            {timestamp && (
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.inline}
+                color="textSecondary"
+              >
+                {` ${moment(timestamp).fromNow()}`}
+              </Typography>
+            )}
+          </React.Fragment>
+        }
+        secondary={<React.Fragment>{secondary}</React.Fragment>}
+      />
+      <ListItemSecondaryAction>{rightComponent}</ListItemSecondaryAction>
+    </ListItem>
   );
 };
 

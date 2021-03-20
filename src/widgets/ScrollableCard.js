@@ -8,7 +8,7 @@ import Block from '../Block';
 import Text from '../Text';
 
 const useStyles = makeStyles((theme) => ({
-  actionsComponent: {
+  footerActionsComponent: {
     padding: theme.sizes.padding,
     display: 'flex',
     flexDirection: 'row',
@@ -24,10 +24,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ScrollableBox = ({
+const ScrollableCard = ({
   children,
-  rightComponent,
-  actionsComponent,
+  headerActionsComponent,
+  footerActionsComponent,
   cardActions,
   title = '',
   size = 'md',
@@ -44,25 +44,23 @@ const ScrollableBox = ({
           {typeof title === 'string' ? <Text header>{title}</Text> : title}
         </Block>
         <Block right row>
-          {rightComponent}
+          {headerActionsComponent}
         </Block>
       </CardToolbar>
       <CardContent>
-        <PerfectScrollbar
-          className={`scroll-area-${size}`}
-          options={{ wheelPropagation: false }}
-        >
-          <Block padding={5} {...props}>
-            {children}
-          </Block>
-        </PerfectScrollbar>
+        <Block className={`scroll-area-${size}`} padding={5} {...props}>
+          {children}
+        </Block>
       </CardContent>
+
       {cardActions && <CardActions>{cardActions}</CardActions>}
-      {actionsComponent && (
-        <div className={classes.actionsComponent}>{actionsComponent}</div>
+      {footerActionsComponent && (
+        <div className={classes.footerActionsComponent}>
+          {footerActionsComponent}
+        </div>
       )}
     </Card>
   );
 };
 
-export default ScrollableBox;
+export default ScrollableCard;
