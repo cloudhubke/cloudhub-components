@@ -21,6 +21,7 @@ export { default as Alert } from './Alert';
 export { default as PhoneInput } from './PhoneInput';
 export { default as SearchInput } from './SearchInput';
 
+export { default as Scrollbars } from './Scrollbars';
 export { default as GridContainer } from './GridContainer';
 export { default as Container } from './Container';
 export { default as GridItem } from './GridItem';

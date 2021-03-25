@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { Card, CardContent, CardActions } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import Scrollbars from '../Scrollbars';
 import CardToolbar from './CardToolbar';
 import Block from '../Block';
 import Text from '../Text';
@@ -48,9 +48,9 @@ const ScrollableCard = ({
         </Block>
       </CardToolbar>
       <CardContent>
-        <Block className={`scroll-area-${size}`} padding={5} {...props}>
+        <Scrollbars className={`scroll-area-${size}`} {...props}>
           {children}
-        </Block>
+        </Scrollbars>
       </CardContent>
 
       {cardActions && <CardActions>{cardActions}</CardActions>}

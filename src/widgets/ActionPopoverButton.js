@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { Popover, CardActions, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-// import Scrollbars from '../components/Scrollbars';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import Scrollbars from '../Scrollbars';
+import Text from '../Text';
 import CardToolbar from './CardToolbar';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,9 +23,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     padding: theme.sizes.padding,
-    flex: 1,
   },
 }));
 
@@ -108,13 +106,19 @@ const ActionPopoverButton = React.forwardRef(
           {...props}
         >
           <div className={`size-${width}`}>
-            <CardToolbar>{headerComponent}</CardToolbar>
+            <CardToolbar>
+              {typeof headerComponent === 'string' ? (
+                <Text header>{headerComponent}</Text>
+              ) : (
+                headerComponent
+              )}
+            </CardToolbar>
 
-            <div className={clsx(`scroll-area-${size}`)}>
-              <PerfectScrollbar className={classes.contentArea}>
-                {children}
-              </PerfectScrollbar>
-            </div>
+            <Scrollbars
+              className={clsx(`scroll-area-${size}`, classes.contentArea)}
+            >
+              {children}
+            </Scrollbars>
 
             <div className={classes.actionsComponent}>{actionsComponent}</div>
           </div>

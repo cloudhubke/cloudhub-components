@@ -1,6 +1,6 @@
 // just copy this code from the driving repo :)
 import React from 'react';
-// import {withStyles} from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 import ThemeContext from './theme/ThemeContext';
 
@@ -95,6 +95,7 @@ const Text = ({
   children,
   classes,
   cropped,
+  middle,
   ...props
 }) => {
   const { fonts, colors } = React.useContext(ThemeContext) || {
@@ -131,6 +132,7 @@ const Text = ({
     // position
     center: { textAlign: 'center' },
     right: { textAlign: 'right' },
+    middle: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
     // colors
     accent: { color: colors.accent },
     primary: { color: colors.primary },
@@ -238,6 +240,7 @@ const Text = ({
     ...(strikethrough && styles.strikethrough),
     ...(normal && styles.normal),
     ...(center && styles.center),
+    ...(middle && styles.middle),
     ...(right && styles.right),
     ...(color && styles[color]),
     ...(color && !styles[color] && { color }),
@@ -307,27 +310,29 @@ const Text = ({
           lineHeight: '0.75em',
         }}
       >
-        <span
+        <Typography
+          component="span"
           style={{
             position: 'relative',
             bottom: '-0.13em',
           }}
         >
           {children}
-        </span>
+        </Typography>
       </span>
     );
   }
 
   return (
-    <span
+    <Typography
+      component="span"
       onMouseEnter={() => sethovered(true)}
       onMouseLeave={() => sethovered(false)}
       style={textStyles}
       {...props}
     >
       {children}
-    </span>
+    </Typography>
   );
 };
 

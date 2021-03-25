@@ -17,6 +17,8 @@ import { ToastContainer } from '../toastr';
 
 import customeBaseuiTheme from './basetheme/BaseWebTheme';
 
+import 'react-perfect-scrollbar/dist/css/styles.css';
+
 const engine = new Styletron({
   hydrate: document.getElementsByClassName('_styletron_hydrate_'),
 });

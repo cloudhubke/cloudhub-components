@@ -87,6 +87,7 @@ const getColors = (colors) => {
     info: createGradient(INFO.light, INFO.main),
     success: createGradient(SUCCESS.light, SUCCESS.main),
     warning: createGradient(WARNING.light, WARNING.main),
+    danger: createGradient(ERROR.light, ERROR.main),
     error: createGradient(ERROR.light, ERROR.main),
   };
 
@@ -100,6 +101,7 @@ const getColors = (colors) => {
     info: { ...INFO, contrastText: '#fff' },
     success: { ...SUCCESS, contrastText: GREY['800'] },
     warning: { ...WARNING, contrastText: GREY['800'] },
+    danger: { ...ERROR, contrastText: '#fff' },
     error: { ...ERROR, contrastText: '#fff' },
     grey: GREY,
     gradients: GRADIENTS,
