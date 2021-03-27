@@ -68,10 +68,13 @@ export { default as SwipeableViews } from './SwipeableViews';
 export { default as Pagination } from './Pagination';
 export { default as Progress } from './Progress';
 export { toast as toastr } from './toastr';
-
 export { toast, ToastContainer } from './toastr';
 
 // Media
 
 export { default as VideoThumbnail } from './VideoThumbnail';
 export { default as CountrySelector } from './countrypicker/CountrySelector';
+
+export { default as DatePicker } from './baseweb/BaseWebDatePicker';
+export { default as DateRangePicker } from './baseweb/BaseWebDaterangePicker';
+export { default as AutoComplete } from './autocomplete/AutoComplete';
