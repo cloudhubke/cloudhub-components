@@ -1,8 +1,8 @@
 import React from 'react';
-import { DatePicker } from 'baseui/datepicker';
+import { StatefulDatepicker } from 'baseui/datepicker';
 import { LayersManager } from 'baseui/layer';
 import { makeStyles } from '@material-ui/core/styles';
-import moment from 'moment';
+import en from 'date-fns/locale/en-US';
 import Block from '../Block';
 import ThemeContext from '../theme/ThemeContext';
 
@@ -19,7 +19,7 @@ const BaseWebDatePicker = ({
   value,
   onChange,
   overrides,
-  dateFormat = 'DD/MM/YYYY',
+  dateFormat = 'dd/MM/yyyy',
   meta,
   showError,
   ...rest
@@ -39,16 +39,23 @@ const BaseWebDatePicker = ({
     }
   }, [initialValue]);
 
+  const format = `${dateFormat}`
+    .replace(/D/g, 'd')
+    .replace(/Y/g, 'y')
+    .replace(/M/g, 'L');
+
   return (
     <Block ref={containerRef} className={classes.pickerContainer}>
       <LayersManager zIndex={1301}>
-        <DatePicker
+        <StatefulDatepicker
+          locale={en}
           value={initialValue ? initialValue.map((d) => new Date(d)) : []}
           onChange={({ date }) => {
             const msTstamp = (date || []).map((d) => d.getTime());
             setinitialValue(msTstamp);
           }}
-          formatString={dateFormat}
+          formatString={format}
+          mask={null}
           overrides={{
             Input: {
               props: {

@@ -1,6 +1,7 @@
 import React from 'react';
-import { DatePicker } from 'baseui/datepicker';
+import { StatefulDatepicker } from 'baseui/datepicker';
 import { LayersManager } from 'baseui/layer';
+import en from 'date-fns/locale/en-US';
 import { makeStyles } from '@material-ui/core/styles';
 import Block from '../Block';
 import ThemeContext from '../theme/ThemeContext';
@@ -20,7 +21,7 @@ const BaseWebDatePicker = ({
   overrides,
   meta,
   showError,
-  dateFormat = 'DD/MM/YYYY',
+  dateFormat = 'dd/MM/yyyy',
   ...rest
 }) => {
   const val = value || input.value || new Date().getTime();
@@ -40,15 +41,22 @@ const BaseWebDatePicker = ({
     }
   }, [initialValue]);
 
+  const format = `${dateFormat}`
+    .replace(/D/g, 'd')
+    .replace(/Y/g, 'y')
+    .replace(/M/g, 'L');
+
   return (
     <Block ref={containerRef} className={classes.pickerContainer}>
       <LayersManager zIndex={1301}>
-        <DatePicker
+        <StatefulDatepicker
+          locale={en}
           value={initialValue ? [new Date(initialValue)] : null}
           onChange={({ date }) => {
             setinitialValue(date ? date.getTime() : null);
           }}
-          formatString={dateFormat}
+          formatString={format}
+          mask={null}
           overrides={{
             Input: {
               props: {
