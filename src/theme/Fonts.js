@@ -39,7 +39,6 @@ const Fonts = {
     lineHeight: '150%',
     letterSpacing: 0.5,
     fontWeight: 700,
-    color: colors.black,
   },
   subHeader: {
     fontFamily: 'Montserrat',
@@ -47,7 +46,6 @@ const Fonts = {
     lineHeight: '150%',
     letterSpacing: 0.5,
     fontWeight: 500,
-    color: colors.black,
   },
 
   title: {
@@ -56,7 +54,6 @@ const Fonts = {
     lineHeight: '150%',
     letterSpacing: 0.5,
     fontWeight: 700,
-    color: colors.black,
   },
 
   subTitle: {
@@ -65,7 +62,6 @@ const Fonts = {
     lineHeight: '150%',
     letterSpacing: 0.5,
     fontWeight: 400,
-    color: colors.black,
   },
 
   semibold: {
@@ -115,11 +111,9 @@ const Fonts = {
     fontSize: sizes.small,
     fontWeight: 500,
     lineHeight: '200%',
-    color: colors.darkGray,
   },
   button: {
     fontSize: sizes.button,
-    color: colors.white,
   },
 };
 

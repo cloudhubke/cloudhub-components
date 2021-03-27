@@ -7,6 +7,7 @@ import {
   ThemeProvider as MuiThemeProvider,
   createMuiTheme,
 } from '@material-ui/core/styles';
+import { getLightColors, getDarkColors } from './palette';
 
 import ThemeContext from './ThemeContext';
 import localsizes from './Sizes';
@@ -15,6 +16,8 @@ import localfonts from './Fonts';
 import { ToastContainer } from '../toastr';
 
 import customeBaseuiTheme from './basetheme/BaseWebTheme';
+
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 const engine = new Styletron({
   hydrate: document.getElementsByClassName('_styletron_hydrate_'),
@@ -35,39 +38,14 @@ const ThemeProvider = ({
   const { primitives, overrides } = baseuiTheme || {};
   const mainFontFamily = newfonts.body.fontFamily;
 
-  const {
-    primaryColors,
-    secondaryColors,
-    tertiaryColors,
-    textColors,
-    backgroundColors,
-  } = newcolors;
+  const themeMode = 'light';
+
+  const isLight = themeMode === 'light';
 
   const createTheme = React.useCallback(
     () =>
       createMuiTheme({
-        palette: {
-          primary: {
-            main: newcolors.primary,
-            ...(primaryColors || {}),
-          },
-          secondary: {
-            main: newcolors.secondary,
-            ...(secondaryColors || {}),
-          },
-          tertiary: {
-            main: newcolors.tertiary,
-            ...(tertiaryColors || {}),
-          },
-          text: {
-            main: newcolors.text,
-            ...(textColors || {}),
-          },
-          background: {
-            main: newcolors.background,
-            ...(backgroundColors || {}),
-          },
-        },
+        palette: isLight ? getLightColors(newcolors) : getDarkColors(newcolors),
         layout: {
           contentWidth: 1236,
         },

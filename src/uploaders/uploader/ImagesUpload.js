@@ -133,7 +133,7 @@ class ImagesUpload extends Component {
           uid: item.uid || index,
           name: item.name || 'xxx.png',
           status: 'done',
-          url: item.url || '',
+          url: item.Location || item.url || '',
         })),
       };
     }
@@ -335,6 +335,9 @@ class ImagesUpload extends Component {
         </div>
       </div>
     );
+    console.log('====================================');
+    console.log('PREVIEW', previewImage);
+    console.log('====================================');
     return (
       <Fragment>
         <ImagesCard {...this.props}>

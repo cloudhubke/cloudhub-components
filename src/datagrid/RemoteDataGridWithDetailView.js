@@ -1,5 +1,6 @@
 import React from 'react';
 import includes from 'lodash/includes';
+import isEqual from 'lodash/isEqual';
 import difference from 'lodash/difference';
 
 import axios from 'axios';
@@ -49,6 +50,7 @@ import './grid.css';
 import RowActions from './RowActions';
 import Header from './Header';
 import PagingComponent from './PagingComponent';
+import useGridStore from './store/useGridStore';
 
 const styleSheet = () => ({
   gridContainer: {
@@ -134,12 +136,10 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       countExtractor,
       pagingComponent = PagingComponent,
       stickyHeader = false,
-      params,
       ...props
     },
     ref
   ) => {
-    const selectionRef = React.useRef({});
     const [columns] = React.useState([
       ...counterColumn,
       ...props.columns,
@@ -150,46 +150,60 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       { columnName: 'actions', width: 150 },
       ...props.columnWidths,
     ]);
-    const [data, setData] = React.useState([]);
-    const [totalCount, setTotalCount] = React.useState(0);
+
+    const dispatch = useGridStore((state) => state.dispatch);
+    const { data, selection, params, totalCount, loading } = useGridStore(
+      (state) =>
+        state[props.url] || {
+          data: [],
+          params: {},
+          selection: {},
+          totalCount: 0,
+          loading: false,
+        }
+    );
 
     const [sorting, setSorting] = React.useState([]);
 
     const [currentPage, setCurrrentPage] = React.useState(0);
     const [pageSize, setPageSize] = React.useState(20);
     const [allowedPageSizes] = React.useState([20, 50, 200, 500]);
-    const [loading, setLoading] = React.useState(false);
     const [grouping, setGrouping] = React.useState([]);
-    const [selection, setSelection] = React.useState([]);
     const [filters, setFilters] = React.useState([]);
     const [searchTerm, setSearchTerm] = React.useState('');
-
+    const [selectedIndexes, setSelectedIndexes] = React.useState([]);
     const [deletingRows, setDeletingRows] = React.useState([]);
 
     const changeSelection = (indexes) => {
-      const removedKeys = difference(selection, indexes).map((i) =>
+      const selectedDocs = { ...selection };
+      const removedKeys = difference(selectedIndexes, indexes).map((i) =>
         keyExtractor(data[i])
       );
 
-      for (let key of Object.keys(selectionRef.current)) {
-        if (removedKeys.includes(key));
-        delete selectionRef.current[key];
+      for (let key of Object.keys(selection)) {
+        if (removedKeys.includes(key)) {
+          delete selectedDocs[key];
+        }
       }
 
       for (let i of indexes) {
-        selectionRef.current[keyExtractor(data[i])] = data[i];
+        selectedDocs[keyExtractor(data[i])] = data[i];
       }
 
-      setSelection(indexes);
+      dispatch({
+        url: props.url,
+        type: 'update',
+        payload: { selection: selectedDocs },
+      });
+
+      setSelectedIndexes(indexes);
     };
 
     React.useEffect(() => {
       props.onChangeSelection(
-        Object.keys(selectionRef.current).map(
-          (key) => selectionRef.current[key]
-        )
+        Object.keys(selection).map((key) => selection[key])
       );
-    }, [selection.length]);
+    }, [selectedIndexes.length]);
 
     const getQueryParams = () => {
       const queryparams = {
@@ -212,34 +226,65 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       return queryparams;
     };
 
-    const loadData = async () => {
+    const getSelectedIndexes = () => {
+      const indexes = data
+        .map((d, i) => {
+          if (Object.keys(selection).includes(keyExtractor(d))) {
+            return i;
+          }
+          return null;
+        })
+        .filter((i) => i !== null);
+
+      setSelectedIndexes(indexes);
+    };
+
+    const loadData = async (reload) => {
       const queryparams = getQueryParams();
+      if (isEqual(queryparams, params) && data.length > 0 && !reload) {
+        getSelectedIndexes();
+        return;
+      }
 
       try {
-        setLoading(true);
+        dispatch({
+          url: props.url,
+          type: 'update',
+          payload: {
+            params: queryparams,
+            loading: false,
+          },
+        });
         const { data } = await props.axiosinstance().get(`${props.url}`, {
-          params: { ...params, ...queryparams },
+          params: { ...queryparams },
         });
 
-        let indexes = [];
-        let dataArray = dataExtractor(data).map((d, i) => {
-          if (Object.keys(selectionRef.current).includes(keyExtractor(d))) {
-            indexes.push(i);
-          }
+        const dataArray = dataExtractor(data).map((d, i) => {
           return {
             ...d,
             counter: currentPage * pageSize + (i + 1),
           };
         });
 
-        setData(dataArray);
-        setSelection(indexes);
+        // setData(dataArray);
 
-        setTotalCount(countExtractor(data));
+        dispatch({
+          url: props.url,
+          type: 'update',
+          payload: {
+            data: dataArray,
+            totalCount: countExtractor(data),
+            loading: false,
+          },
+        });
 
-        setLoading(false);
+        getSelectedIndexes();
       } catch (error) {
-        setLoading(false);
+        dispatch({
+          url: props.url,
+          type: 'update',
+          payload: { loading: false },
+        });
       }
     };
 
@@ -260,23 +305,26 @@ const RemoteDataGridWithDetailView = React.forwardRef(
         const ind = data.findIndex(
           (d) => keyExtractor(d) === keyExtractor(row)
         );
-
         if (ind === -1) {
-          setData(
-            [row, ...data].map((d, i) => ({
+          dispatch({
+            url: props.url,
+            type: 'data',
+            payload: [row, ...data].map((d, i) => ({
               ...d,
               counter: currentPage * pageSize + (i + 1),
-            }))
-          );
+            })),
+          });
         } else {
-          setData(
-            [...data].map((r, i) => {
+          dispatch({
+            url: props.url,
+            type: 'data',
+            payload: [...data].map((r, i) => {
               if (keyExtractor(r) === keyExtractor(row)) {
                 return { ...row, counter: currentPage * pageSize + (i + 1) };
               }
               return r;
-            })
-          );
+            }),
+          });
         }
       },
       reload: () => {
@@ -284,7 +332,11 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       },
       onDeleteSuccess: (deletedRows) => {
         const deleted = [...deletedRows].map((r) => keyExtractor(r));
-        setData(data.filter((r) => !includes(deleted, keyExtractor(r))));
+        dispatch({
+          url: props.url,
+          type: 'data',
+          payload: data.filter((r) => !includes(deleted, keyExtractor(r))),
+        });
       },
       getData: () => ({
         data,
@@ -340,7 +392,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
           >
             <Grid rows={data} columns={columns}>
               <SelectionState
-                selection={selection}
+                selection={selectedIndexes}
                 onSelectionChange={changeSelection}
               />
               <SortingState
@@ -377,7 +429,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
               <Table
                 stickyHeader={stickyHeader}
                 rowComponent={(props) => {
-                  const isSelected = Object.keys(selectionRef.current).includes(
+                  const isSelected = Object.keys(selection).includes(
                     keyExtractor(props.row)
                   );
 

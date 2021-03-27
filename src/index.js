@@ -21,6 +21,7 @@ export { default as Alert } from './Alert';
 export { default as PhoneInput } from './PhoneInput';
 export { default as SearchInput } from './SearchInput';
 
+export { default as Scrollbars } from './Scrollbars';
 export { default as GridContainer } from './GridContainer';
 export { default as Container } from './Container';
 export { default as GridItem } from './GridItem';
@@ -36,6 +37,7 @@ export { default as Rating } from './Rating';
 export { default as Flag } from './Flag';
 export { default as IconButton } from './IconButton';
 export { default as ActionsMenu } from './ActionsMenu';
+export { default as StatusLabel } from './widgets/StatusLabel';
 
 export { default as ListMenu } from './ListMenu';
 export { default as ListSubMenu } from './ListSubMenu';

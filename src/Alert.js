@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Box from '@material-ui/core/Box';
-import MuiAlert from '@material-ui/core/Alert';
+import { Alert as MuiAlert } from '@material-ui/core';
+import { Alert as LabAlert } from '@material-ui/lab';
 import AlertTitle from '@material-ui/core/AlertTitle';
 import Collapse from '@material-ui/core/Collapse';
 
@@ -60,10 +61,17 @@ const Alert = ({
       }}
     >
       <Collapse in={alertopen}>
-        <MuiAlert severity={type} {...closeProps} {...props}>
-          <AlertTitle>{`${title || type}`}</AlertTitle>
-          {message || description || children}
-        </MuiAlert>
+        {MuiAlert ? (
+          <MuiAlert severity={type} {...closeProps} {...props}>
+            <AlertTitle>{`${title || type}`}</AlertTitle>
+            {message || description || children}
+          </MuiAlert>
+        ) : (
+          <LabAlert severity={type} {...closeProps} {...props}>
+            <AlertTitle>{`${title || type}`}</AlertTitle>
+            {message || description || children}
+          </LabAlert>
+        )}
       </Collapse>
     </Box>
   );

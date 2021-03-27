@@ -1,6 +1,7 @@
 import React from 'react';
 import MuiButton from '@material-ui/core/Button';
 import ThemeContext from './theme/ThemeContext';
+import hexContrastColor from 'hex-contrast-color';
 
 let height = 48;
 
@@ -42,11 +43,18 @@ const Button = React.forwardRef(
         paddingBottom: 0,
         paddingLeft: sizes.padding,
         paddingRight: sizes.padding,
-        color: colors.white,
         height: sizes.inputHeight,
+        display: 'flex',
+        flexDirection: 'row',
       },
-      accent: { backgroundColor: colors.accent, borderColor: colors.accent },
-      primary: { backgroundColor: colors.primary, borderColor: colors.primary },
+      accent: {
+        backgroundColor: colors.accent,
+        borderColor: colors.accent,
+      },
+      primary: {
+        backgroundColor: colors.primary,
+        borderColor: colors.primary,
+      },
       secondary: {
         backgroundColor: colors.secondary,
         borderColor: colors.secondary,
@@ -55,12 +63,30 @@ const Button = React.forwardRef(
         backgroundColor: colors.tertiary,
         borderColor: colors.tertiary,
       },
-      black: { backgroundColor: colors.black, borderColor: colors.black },
-      white: { backgroundColor: colors.white, borderColor: colors.white },
-      gray: { backgroundColor: colors.gray, borderColor: colors.gray },
-      gray2: { backgroundColor: colors.gray2, borderColor: colors.gray2 },
-      gray3: { backgroundColor: colors.gray3, borderColor: colors.gray3 },
-      gray4: { backgroundColor: colors.gray4, borderColor: colors.gray4 },
+      black: {
+        backgroundColor: colors.black,
+        borderColor: colors.black,
+      },
+      white: {
+        backgroundColor: colors.white,
+        borderColor: colors.white,
+      },
+      gray: {
+        backgroundColor: colors.gray,
+        borderColor: colors.gray,
+      },
+      gray2: {
+        backgroundColor: colors.gray2,
+        borderColor: colors.gray2,
+      },
+      gray3: {
+        backgroundColor: colors.gray3,
+        borderColor: colors.gray3,
+      },
+      gray4: {
+        backgroundColor: colors.gray4,
+        borderColor: colors.gray4,
+      },
       dark: { backgroundColor: colors.dark, borderColor: colors.dark },
       mistyWhite: {
         backgroundColor: colors.mistyWhite,
@@ -70,8 +96,14 @@ const Button = React.forwardRef(
         backgroundColor: colors.milkyWhite,
         borderColor: colors.milkyWhite,
       },
-      error: { backgroundColor: colors.error, borderColor: colors.error },
-      clear: { backgroundColor: colors.clear, borderColor: colors.clear },
+      error: {
+        backgroundColor: colors.error,
+        borderColor: colors.error,
+      },
+      clear: {
+        backgroundColor: colors.clear,
+        borderColor: colors.clear,
+      },
       facebook: {
         backgroundColor: colors.facebook,
         borderColor: colors.facebook,
@@ -80,7 +112,10 @@ const Button = React.forwardRef(
         backgroundColor: colors.transparent,
         borderColor: colors.transparent,
       },
-      silver: { backgroundColor: colors.silver, borderColor: colors.silver },
+      silver: {
+        backgroundColor: colors.silver,
+        borderColor: colors.silver,
+      },
       steel: { backgroundColor: colors.steel, borderColor: colors.steel },
       ricePaper: {
         backgroundColor: colors.ricePaper,
@@ -97,14 +132,26 @@ const Button = React.forwardRef(
         backgroundColor: colors.charcoal,
         borderColor: colors.charcoal,
       },
-      coal: { backgroundColor: colors.coal, borderColor: colors.coal },
+      coal: {
+        backgroundColor: colors.coal,
+        borderColor: colors.coal,
+      },
       bloodOrange: {
         backgroundColor: colors.bloodOrange,
         borderColor: colors.bloodOrange,
       },
-      snow: { backgroundColor: colors.snow, borderColor: colors.snow },
-      ember: { backgroundColor: colors.ember, borderColor: colors.ember },
-      fire: { backgroundColor: colors.fire, borderColor: colors.fire },
+      snow: {
+        backgroundColor: colors.snow,
+        borderColor: colors.snow,
+      },
+      ember: {
+        backgroundColor: colors.ember,
+        borderColor: colors.ember,
+      },
+      fire: {
+        backgroundColor: colors.fire,
+        borderColor: colors.fire,
+      },
       drawer: { backgroundColor: colors.drawer, borderColor: colors.drawer },
       eggplant: {
         backgroundColor: colors.eggplan,
@@ -291,18 +338,14 @@ const Button = React.forwardRef(
           ...(small && { height: getHeight(32), padding: '0, 15px' }),
           ...(margin && { ...handleMargins() }),
           ...(padding && { ...handlePaddings() }),
-          ...(!color && { color: colors.dark }),
           ...(color && styles[color]), // predefined styles colors for backgroundColor
-
           ...(primary && styles[primary]),
           ...(secondary && styles[secondary]),
           ...(tertiary && styles[tertiary]),
           ...(info && styles[info]),
           ...(success && styles[success]),
           ...(danger && styles[danger]),
-
           ...(color && !styles[color] && { backgroundColor: color }), // custom backgroundColor
-          ...(textColor && { color: textColor }), // custom backgroundColor
           ...(outlined && { backgroundColor: 'transparent' }),
           ...(rounded && { borderRadius: height / 2 }),
           ...(disabled && { opacity: 0.7 }),
@@ -312,7 +355,10 @@ const Button = React.forwardRef(
     return (
       <MuiButton
         ref={ref}
-        style={buttonStyles}
+        style={{
+          ...buttonStyles,
+          color: hexContrastColor(buttonStyles.backgroundColor),
+        }}
         {...buttonProps}
         disabled={disabled}
         {...props}

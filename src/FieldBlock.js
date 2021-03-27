@@ -26,7 +26,7 @@ const FieldBlock = ({ children, style, label, ...rest }) => {
         return React.cloneElement(child, {
           ...child.props,
           style: {
-            marginLeft: sizes.margin / 2,
+            paddingLeft: sizes.margin / 2,
             ...child.props.style,
           },
         });
