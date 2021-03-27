@@ -13,7 +13,6 @@ const useStyles = ({ sizes, colors }) =>
   makeStyles({
     container: {
       '&.MuiFormControl-root.MuiTextField-root': {
-        backgroundColor: 'cyan',
         marginTop: 0,
         marginBottom: 0,
       },
