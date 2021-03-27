@@ -1,2 +1,2 @@
-const primitives = {};
+const primitives = (props) => {};
 export default primitives;
