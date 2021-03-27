@@ -51,8 +51,8 @@ export { default as Dialog } from './dialog/Dialog';
 export { default as SlideComponent } from './SlideComponent';
 export { default as PleaseWait } from './PleaseWait';
 export { default as SpeechBubble } from './SpeechBubble';
-// Forms
 
+// Final Forms
 export { default as Form } from './form/Form';
 export { default as Field } from './form/Field';
 export { default as FormFields } from './form/FormFields';
@@ -61,7 +61,6 @@ export { default as FormSpy } from './form/FormSpy';
 export { default as FieldArray } from './form/FieldArray';
 export { default as arrayMutators } from './form/arrayMutators';
 export { default as formCalculate } from './form/formCalculate';
-
 export { default as SwipeableViews } from './SwipeableViews';
 
 // Others
@@ -71,7 +70,6 @@ export { toast as toastr } from './toastr';
 export { toast, ToastContainer } from './toastr';
 
 // Media
-
 export { default as VideoThumbnail } from './VideoThumbnail';
 export { default as CountrySelector } from './countrypicker/CountrySelector';
 
