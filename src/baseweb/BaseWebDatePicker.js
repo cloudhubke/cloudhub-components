@@ -20,6 +20,7 @@ const BaseWebDatePicker = ({
   overrides,
   meta,
   showError,
+  dateFormat = 'DD/MM/YYYY',
   ...rest
 }) => {
   const val = value || input.value || new Date().getTime();
@@ -47,6 +48,7 @@ const BaseWebDatePicker = ({
           onChange={({ date }) => {
             setinitialValue(date ? date.getTime() : null);
           }}
+          formatString={dateFormat}
           overrides={{
             Input: {
               props: {
