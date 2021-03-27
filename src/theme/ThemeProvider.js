@@ -86,7 +86,7 @@ const ThemeProvider = ({
           }}
           theme={
             primitives || overrides
-              ? customeBaseuiTheme(baseuiTheme)
+              ? customeBaseuiTheme({ baseuiTheme, colors, sizes })
               : LightTheme
           }
         >

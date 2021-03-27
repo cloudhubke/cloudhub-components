@@ -84,6 +84,7 @@
     "react-helmet": "latest",
     "react-intl-tel-input": "^7.0.1",
     "react-lazy-load-image-component": "^1.5.0",
+    "react-perfect-scrollbar": "1.5.8",
     "react-select": "^3.0.4",
     "react-swipeable": "^5.2.0",
     "react-swipeable-views": "0.13.9",
