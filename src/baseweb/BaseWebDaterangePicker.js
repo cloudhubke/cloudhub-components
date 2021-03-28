@@ -15,7 +15,7 @@ const useStyles = ({ sizes }) =>
   });
 
 const BaseWebDatePicker = ({
-  input,
+  input = {},
   value,
   onChange,
   overrides,
@@ -24,11 +24,17 @@ const BaseWebDatePicker = ({
   showError,
   ...rest
 }) => {
-  const val = value || input.value || new Date().getTime();
+  const val = input.value || value;
   const [initialValue, setinitialValue] = React.useState(val);
   const { sizes, colors } = React.useContext(ThemeContext);
   const classes = useStyles({ sizes, colors, active: meta.active })();
   const containerRef = React.useRef();
+
+  React.useEffect(() => {
+    if (val !== initialValue) {
+      setinitialValue(val);
+    }
+  }, [val]);
 
   React.useEffect(() => {
     if (typeof onChange === 'function') {
