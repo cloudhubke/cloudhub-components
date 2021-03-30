@@ -13,13 +13,16 @@ const BaseWebSelect = (props) => {
     onChange,
     meta,
     multi,
+    isMulti,
     returnkeys,
     showError = true,
     search,
     select,
+    labelExtractor,
     onSelectChange,
     getOptionLabel,
     getValueLabel,
+    placeholder,
     ...rest
   } = props;
 
@@ -71,6 +74,25 @@ const BaseWebSelect = (props) => {
     }
   }, [JSON.stringify(options)]);
 
+  const optionLabelExtractor = ({ option, index }) => {
+    if (labelExtractor) {
+      return labelExtractor(option);
+    }
+    return getOptionLabel({ option, index });
+  };
+
+  const valueLabelExtractor = ({ option, index }) => {
+    if (typeof getValueLabel === 'function') {
+      return getValueLabel({ option, index });
+    }
+    if (labelExtractor) {
+      const valLabel = labelExtractor(option);
+      return <div>{valLabel}</div>;
+    }
+    const valLabel = getOptionLabel({ option, index });
+    return <div>{valLabel}</div>;
+  };
+
   return (
     <Block ref={containerRef}>
       <LayersManager zIndex={1301}>
@@ -78,9 +100,10 @@ const BaseWebSelect = (props) => {
           options={itemOptions || []}
           value={initialValue}
           onChange={(params) => {
-            const val = multi
-              ? params.value.map((item) => rest.valueExtractor(item))
-              : rest.valueExtractor(params.value[0] || null);
+            const val =
+              multi || isMulti
+                ? params.value.map((item) => rest.valueExtractor(item))
+                : rest.valueExtractor(params.value[0] || null);
 
             if (typeof onChange === 'function') {
               onChange(val);
@@ -90,7 +113,7 @@ const BaseWebSelect = (props) => {
             input.onBlur();
             setValue(params.value);
           }}
-          multi={Boolean(multi)}
+          multi={Boolean(multi || isMulti)}
           type={search ? TYPE.search : TYPE.select}
           overrides={{
             Popover: {
@@ -99,8 +122,8 @@ const BaseWebSelect = (props) => {
               },
             },
           }}
-          getOptionLabel={getOptionLabel}
-          getValueLabel={getValueLabel || getOptionLabel}
+          getOptionLabel={optionLabelExtractor}
+          getValueLabel={valueLabelExtractor}
           {...rest}
         />
       </LayersManager>

@@ -3,6 +3,7 @@ const sizes = {
   base: 10,
   font: 14,
   border: 15,
+  borderRadius: 5,
   padding: 15,
   margin: 15,
 

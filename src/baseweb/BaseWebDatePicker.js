@@ -4,6 +4,7 @@ import { LayersManager } from 'baseui/layer';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Block from '../Block';
+import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
 
 const useStyles = ({ sizes }) =>
@@ -21,6 +22,15 @@ const BaseWebDatePicker = ({
   overrides,
   meta,
   showError,
+  showTime,
+  dateFormat,
+  formatString,
+  excludeDates,
+  disabledDate,
+  filterDate,
+  step,
+  timeSelectStart,
+  timeSelectEnd,
   ...rest
 }) => {
   const val = value || input.value || new Date().getTime();
@@ -50,14 +60,40 @@ const BaseWebDatePicker = ({
                 onChange: () => {},
               },
             },
+            TimeSelect: {
+              props: {
+                step: step || 900,
+              },
+            },
             ...overrides,
           }}
-          clearable
+          formatString={formatString || dateFormat}
+          timeSelectEnd={Boolean(timeSelectEnd || showTime)}
+          timeSelectStart={Boolean(timeSelectStart || showTime)}
+          filterDate={(val) => {
+            if (typeof disabledDate === 'function') {
+              const isDisabled = disabledDate(val);
+              return !isDisabled;
+            }
+            if (typeof filterDate === 'function') {
+              return filterDate(val);
+            }
+            return true;
+          }}
           {...rest}
         />
       </LayersManager>
+      <Text small error style={{ height: 10 }}>
+        {meta.touched && meta.error && meta.error}
+      </Text>
     </Block>
   );
 };
-
+BaseWebDatePicker.defaultProps = {
+  showTime: false,
+  dateFormat: 'yyyy/MM/dd',
+  clearable: true,
+  filterDate: () => true,
+  meta: {},
+};
 export default BaseWebDatePicker;
