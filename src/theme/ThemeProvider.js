@@ -15,7 +15,7 @@ import localcolors from './Colors';
 import localfonts from './Fonts';
 import { ToastContainer } from '../toastr';
 
-import customeBaseuiTheme from './basetheme/BaseWebTheme';
+import customBaseuiTheme from './basetheme/BaseWebTheme';
 
 const engine = new Styletron({
   hydrate: document.getElementsByClassName('_styletron_hydrate_'),
@@ -77,16 +77,16 @@ const ThemeProvider = ({
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-
-                backgroundColor: newcolors.background || '#FFFFCC',
+                backgroundColor: newcolors.background || '#FFFFFC',
               },
             },
           }}
-          theme={
-            primitives || overrides
-              ? customeBaseuiTheme({ baseuiTheme, colors, sizes })
-              : LightTheme
-          }
+          theme={customBaseuiTheme({
+            baseuiTheme,
+            colors: newcolors,
+            fonts: newfonts,
+            sizes: newsizes,
+          })}
         >
           <ThemeContext.Provider
             value={{

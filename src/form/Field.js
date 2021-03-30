@@ -5,7 +5,17 @@ import isEmpty from 'lodash/isEmpty';
 import Block from '../Block';
 
 const notEmptyField = (value) => (isEmpty(value) ? undefined : 'Required');
-const requiredField = (value) => (`${value}` ? undefined : 'Required');
+const requiredField = (value) => {
+  if (typeof value === 'object') {
+    return isEmpty(value) ? 'Required' : undefined;
+  }
+
+  if (typeof value === 'number') {
+    return `${value}` ? undefined : 'Required';
+  }
+
+  return value ? undefined : 'Required';
+};
 
 function mustBeAlphabet(value) {
   const letters = /^[A-Za-z]+$/;

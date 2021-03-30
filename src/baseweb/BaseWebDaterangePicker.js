@@ -1,8 +1,8 @@
 import React from 'react';
-import { DatePicker } from 'baseui/datepicker';
+import { StatefulDatepicker } from 'baseui/datepicker';
 import { LayersManager } from 'baseui/layer';
 import { makeStyles } from '@material-ui/core/styles';
-import moment from 'moment';
+import en from 'date-fns/locale/en-US';
 import Block from '../Block';
 import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
@@ -16,15 +16,14 @@ const useStyles = ({ sizes }) =>
   });
 
 const BaseWebDatePicker = ({
-  input,
+  input = {},
   value,
   onChange,
   overrides,
+  dateFormat = 'dd/MM/yyyy',
   meta,
   showError,
   showTime,
-  dateFormat,
-  formatString,
   excludeDates,
   disabledDate,
   filterDate,
@@ -33,30 +32,77 @@ const BaseWebDatePicker = ({
   timeSelectEnd,
   ...rest
 }) => {
-  const val = value || input.value || new Date().getTime();
-  const [initialValue, setinitialValue] = React.useState([new Date(val)]);
+  const val = input.value || value;
+  const [initialValue, setinitialValue] = React.useState(val);
   const { sizes, colors } = React.useContext(ThemeContext);
   const classes = useStyles({ sizes, colors, active: meta.active })();
   const containerRef = React.useRef();
+
+  React.useEffect(() => {
+    if (val !== initialValue) {
+      setinitialValue(val);
+    }
+  }, [val]);
+
+  React.useEffect(() => {
+    if (typeof onChange === 'function') {
+      onChange(initialValue);
+    }
+    if (input && typeof input.onChange === 'function') {
+      input.onChange(initialValue);
+    }
+  }, [initialValue]);
+
+  const format = `${dateFormat}`
+    .replace(/D/g, 'd')
+    .replace(/Y/g, 'y')
+    .replace(/M/g, 'L');
+
   return (
     <Block ref={containerRef} className={classes.pickerContainer}>
       <LayersManager zIndex={1301}>
-        <DatePicker
-          value={initialValue}
+        <StatefulDatepicker
+          locale={en}
+          value={initialValue ? initialValue.map((d) => new Date(d)) : []}
           onChange={({ date }) => {
-            const msTstamp = (date || []).map((d) => moment(d).valueOf());
-            if (typeof onChange === 'function') {
-              onChange(msTstamp);
-            }
-            if (input && typeof input.onChange === 'function') {
-              input.onChange(msTstamp);
-            }
-            setinitialValue(Array.isArray(date) ? date : [date]);
+            const msTstamp = (date || []).map((d) => d.getTime());
+            setinitialValue(msTstamp);
           }}
+          formatString={format}
+          mask={null}
           overrides={{
             Input: {
               props: {
-                onChange: () => {},
+                overrides: {
+                  Input: {
+                    style: ({ $disabled }) => ({
+                      height: sizes.inputHeight,
+                      borderRadius: `${sizes.borderRadius}px`,
+                      borderWidth: '0.5px',
+                      borderTopWidth: '0.5px',
+                      borderRightWidth: '0.5px',
+                      borderBottomWidth: '0.5px',
+                      borderLeftWidth: '0.5px',
+
+                      ...($disabled
+                        ? {
+                            borderStyle: 'solid',
+                            borderColor: '#CCC',
+                          }
+                        : {}),
+                    }),
+                  },
+
+                  InputContainer: {
+                    style: {
+                      height: sizes.inputHeight,
+                      borderTopWidth: '0.5px',
+                      borderRightWidth: '0.5px',
+                      borderBottomWidth: '0.5px',
+                      borderLeftWidth: '0.5px',
+                    },
+                  },
+                },
               },
             },
             TimeSelect: {
@@ -67,7 +113,6 @@ const BaseWebDatePicker = ({
             ...overrides,
           }}
           range
-          formatString={formatString || dateFormat}
           timeSelectEnd={Boolean(timeSelectEnd || showTime)}
           timeSelectStart={Boolean(timeSelectStart || showTime)}
           filterDate={(val) => {
@@ -92,7 +137,7 @@ const BaseWebDatePicker = ({
 
 BaseWebDatePicker.defaultProps = {
   showTime: false,
-  dateFormat: 'yyyy/MM/dd',
+  dateFormat: 'dd/MM/yyyy',
   clearable: true,
   filterDate: () => true,
   meta: {},
