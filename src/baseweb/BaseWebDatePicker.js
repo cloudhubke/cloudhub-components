@@ -68,6 +68,7 @@ const BaseWebDatePicker = ({
         style={{ height: sizes.inputHeight, position: 'relative', zIndex: 1 }}
         ref={containerRef}
       >
+        {/* consider using LayersManager to correctly display timeselect dropdown */}
         <Layer
           index={1}
           host={containerRef.current}
@@ -78,7 +79,11 @@ const BaseWebDatePicker = ({
             locale={en}
             value={[date ? new Date(date) : null]}
             onChange={({ date }) => {
-              setDate(date ? date.getTime() : null);
+              try {
+                const dateString =
+                  Array.isArray(date) && date[0] ? date[0] : date;
+                setDate(dateString ? dateString.getTime() : null);
+              } catch (error) {}
             }}
             formatString={format}
             mask={null}
