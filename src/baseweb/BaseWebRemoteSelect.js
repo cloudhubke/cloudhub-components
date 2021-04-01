@@ -22,23 +22,25 @@ const BasewebRemoteSelect = ({
     try {
       const resultkey = `${url}${debouncedFilter || ''}`;
       if (url) {
+        setisLoading(true);
         if (cachedResults.current[resultkey]) {
           setoptions(cachedResults.current[resultkey]);
-          return;
+        } else {
+          const { data } = await axiosinstance().get(url, {
+            params: { ...params, [filterkey]: debouncedFilter },
+          });
+          if (data && Array.isArray(data.items)) {
+            setoptions(data.items);
+            cachedResults.current[resultkey] = data.items;
+          }
+          if (Array.isArray(data)) {
+            setoptions(data);
+            cachedResults.current[resultkey] = data;
+          }
         }
-        setisLoading(true);
-        const { data } = await axiosinstance().get(url, {
-          params: { ...params, [filterkey]: debouncedFilter },
-        });
-        if (data && Array.isArray(data.items)) {
-          setoptions(data.items);
-          cachedResults.current[resultkey] = data.items;
-        }
-        if (Array.isArray(data)) {
-          setoptions(data);
-          cachedResults.current[resultkey] = data;
-        }
-        setisLoading(false);
+        setTimeout(() => {
+          setisLoading(false);
+        }, 200);
       }
     } catch (error) {}
   }, [url, debouncedFilter]);
