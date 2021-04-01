@@ -42,7 +42,7 @@ const Select = React.forwardRef(
           }))
         );
       }
-    }, [options]);
+    }, [JSON.stringify(options)]);
 
     useEffect(() => {
       if (!value) {
@@ -74,7 +74,7 @@ const Select = React.forwardRef(
           item: value,
         });
       }
-    }, [value, isMulti]);
+    }, [JSON.stringify(value), isMulti]);
 
     const logChange = (val) => {
       setSelectedValue(val);
