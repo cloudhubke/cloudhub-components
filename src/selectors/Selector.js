@@ -48,14 +48,14 @@ const RemoteSelector = React.forwardRef(
         }
       }
       return () => null;
-    }, [options, value]);
+    }, [JSON.stringify(options), JSON.stringify(value)]);
 
     useEffect(() => {
       if (!searchText) {
         setOptions([...firstoptions]);
       }
       return () => null;
-    }, [searchText, firstoptions]);
+    }, [searchText, JSON.stringify(firstoptions)]);
 
     useEffect(() => {
       if (!value) {
@@ -87,7 +87,7 @@ const RemoteSelector = React.forwardRef(
           item: value,
         });
       }
-    }, [value, isMulti]);
+    }, [JSON.stringify(value), isMulti]);
 
     const logChange = (val) => {
       setSelectedValue(val);
