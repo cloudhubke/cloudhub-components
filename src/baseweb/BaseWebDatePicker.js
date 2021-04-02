@@ -1,12 +1,11 @@
 import React from 'react';
-import isEqual from 'lodash/isEqual';
 import { Datepicker } from 'baseui/datepicker';
-import { Layer } from 'baseui/layer';
 import en from 'date-fns/locale/en-US';
 import { makeStyles } from '@material-ui/core/styles';
 import Block from '../Block';
 import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
+import LayersManager from './LayersManager';
 
 const useStyles = ({ sizes }) =>
   makeStyles({
@@ -27,26 +26,26 @@ const BaseWebDatePicker = ({
 }) => {
   const val = input.value || value;
   const [date, setDate] = React.useState(val);
-  const { sizes, colors } = React.useContext(ThemeContext);
-  const classes = useStyles({ sizes, colors, active: meta.active })();
+  const { sizes } = React.useContext(ThemeContext);
+
   const containerRef = React.useRef();
 
-  // React.useEffect(() => {
-  //   if (val !== date) {
-  //     setDate(val);
-  //   }
-  // }, [val]);
+  React.useEffect(() => {
+    if (val !== date) {
+      setDate(val);
+    }
+  }, [val]);
 
-  // React.useEffect(() => {
-  //   if (date !== val) {
-  //     if (typeof onChange === 'function') {
-  //       onChange(date);
-  //     }
-  //     if (input && typeof input.onChange === 'function') {
-  //       input.onChange(date);
-  //     }
-  //   }
-  // }, [date]);
+  React.useEffect(() => {
+    if (date !== val) {
+      if (typeof onChange === 'function') {
+        onChange(date);
+      }
+      if (input && typeof input.onChange === 'function') {
+        input.onChange(date);
+      }
+    }
+  }, [date]);
 
   const format = `${dateFormat}`
     .replace(/D/g, 'd')
@@ -54,76 +53,83 @@ const BaseWebDatePicker = ({
     .replace(/M/g, 'L');
 
   return (
-    <Block>
-      <Block
-        flex={false}
-        style={{ height: sizes.inputHeight, position: 'relative', zIndex: 1 }}
-        ref={containerRef}
-      >
-        <Datepicker
-          mountNode={containerRef.current}
-          locale={en}
-          value={[date ? new Date(date) : null]}
-          onChange={({ date }) => {
-            // try {
-            //   setDate(date ? date.getTime() : null);
-            // } catch (error) {}
-          }}
-          formatString={format}
-          mask={null}
-          overrides={{
-            Input: {
-              props: {
-                overrides: {
-                  Input: {
-                    style: ({ $disabled }) => ({
-                      height: sizes.inputHeight,
-                      borderRadius: `${sizes.borderRadius}px`,
-                      // borderWidth: '0.5px',
-                      borderTopWidth: '0.5px',
-                      borderRightWidth: '0.5px',
-                      borderBottomWidth: '0.5px',
-                      borderLeftWidth: '0.5px',
+    <LayersManager zIndex={1310}>
+      <Block>
+        <Block
+          flex={false}
+          style={{ height: sizes.inputHeight, position: 'relative', zIndex: 1 }}
+          ref={containerRef}
+        >
+          <Datepicker
+            autoFocusCalendar={false}
+            mountNode={containerRef.current}
+            locale={en}
+            value={[date ? new Date(date) : null]}
+            onChange={({ date }) => {
+              if (!date) {
+                return setDate(null);
+              }
+              if (Array.isArray(date)) {
+                return setDate(date.map((d) => d.getTime()));
+              }
+              return setDate(date.getTime());
+            }}
+            formatString={format}
+            mask={null}
+            overrides={{
+              Input: {
+                props: {
+                  overrides: {
+                    Input: {
+                      style: ({ $disabled }) => ({
+                        height: sizes.inputHeight,
+                        borderRadius: `${sizes.borderRadius}px`,
+                        // borderWidth: '0.5px',
+                        borderTopWidth: '0.5px',
+                        borderRightWidth: '0.5px',
+                        borderBottomWidth: '0.5px',
+                        borderLeftWidth: '0.5px',
 
-                      ...($disabled
-                        ? {
-                            borderTopStyle: 'solid',
-                            borderRightStyle: 'solid',
-                            borderBottomStyle: 'solid',
-                            borderLeftStyle: 'solid',
-                            borderColor: '#CCC',
-                          }
-                        : {}),
-                    }),
-                  },
+                        ...($disabled
+                          ? {
+                              borderTopStyle: 'solid',
+                              borderRightStyle: 'solid',
+                              borderBottomStyle: 'solid',
+                              borderLeftStyle: 'solid',
+                              borderColor: '#CCC',
+                            }
+                          : {}),
+                      }),
+                    },
 
-                  InputContainer: {
-                    style: {
-                      height: sizes.inputHeight,
-                      borderTopWidth: '0.5px',
-                      borderRightWidth: '0.5px',
-                      borderBottomWidth: '0.5px',
-                      borderLeftWidth: '0.5px',
+                    InputContainer: {
+                      style: {
+                        height: sizes.inputHeight,
+                        borderTopWidth: '0.5px',
+                        borderRightWidth: '0.5px',
+                        borderBottomWidth: '0.5px',
+                        borderLeftWidth: '0.5px',
+                      },
                     },
                   },
                 },
-              },
-              MonthYearSelectPopover: {
-                props: {
-                  mountNode: containerRef.current,
+                MonthYearSelectPopover: {
+                  props: {
+                    mountNode: containerRef.current,
+                  },
                 },
               },
-            },
-            ...overrides,
-          }}
-          clearable
-          {...rest}
-        />
+              ...overrides,
+            }}
+            clearable
+            {...rest}
+          />
+        </Block>
+        <Text small error style={{ height: 10 }}>
+          {meta.touched && meta.error && meta.error}
+        </Text>
       </Block>
-      <Text small error style={{ height: 10 }}>
-        {meta.touched && meta.error && meta.error}
-      </Text>
-    </Block>
+    </LayersManager>
   );
 };
 
