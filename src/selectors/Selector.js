@@ -90,7 +90,6 @@ const RemoteSelector = React.forwardRef(
     }, [JSON.stringify(value), isMulti]);
 
     const logChange = (val) => {
-      setSelectedValue(val);
       if (!val || isEmpty(val)) {
         onSelectChange(val);
         return onChange(val);

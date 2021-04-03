@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": ["airbnb"],
-  "plugins": ["react", "import"],
+  "plugins": ["react", "import", "baseui"],
   "rules": {
     "react/jsx-filename-extension": [
       1,
@@ -9,6 +9,9 @@
         "extensions": [".js", ".jsx"]
       }
     ],
+    "baseui/deprecated-theme-api": "warn",
+    "baseui/deprecated-component-api": "warn",
+    "baseui/no-deep-imports": "warn",
     "jsx-a11y/label-has-for": 0,
     "jsx-a11y/anchor-is-valid": 0,
     "jsx-a11y/click-events-have-key-events": 0,

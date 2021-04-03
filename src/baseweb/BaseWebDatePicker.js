@@ -1,12 +1,11 @@
 import React from 'react';
-import isEqual from 'lodash/isEqual';
 import { Datepicker } from 'baseui/datepicker';
-import { Layer } from 'baseui/layer';
 import en from 'date-fns/locale/en-US';
 import { makeStyles } from '@material-ui/core/styles';
 import Block from '../Block';
 import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
+import LayersManager from './LayersManager';
 
 const useStyles = ({ sizes }) =>
   makeStyles({
@@ -35,8 +34,8 @@ const BaseWebDatePicker = ({
 }) => {
   const val = input.value || value;
   const [date, setDate] = React.useState(val);
-  const { sizes, colors } = React.useContext(ThemeContext);
-  const classes = useStyles({ sizes, colors, active: meta.active })();
+  const { sizes } = React.useContext(ThemeContext);
+
   const containerRef = React.useRef();
 
   React.useEffect(() => {
@@ -62,28 +61,26 @@ const BaseWebDatePicker = ({
     .replace(/M/g, 'L');
 
   return (
-    <Block>
-      <Block
-        flex={false}
-        style={{ height: sizes.inputHeight, position: 'relative', zIndex: 1 }}
-        ref={containerRef}
-      >
-        {/* consider using LayersManager to correctly display timeselect dropdown */}
-        <Layer
-          index={1}
-          host={containerRef.current}
-          mountNode={containerRef.current}
+    <LayersManager zIndex={1310}>
+      <Block>
+        <Block
+          flex={false}
+          style={{ height: sizes.inputHeight, position: 'relative', zIndex: 1 }}
+          ref={containerRef}
         >
           <Datepicker
+            autoFocusCalendar={false}
             mountNode={containerRef.current}
             locale={en}
             value={[date ? new Date(date) : null]}
             onChange={({ date }) => {
-              try {
-                const dateString =
-                  Array.isArray(date) && date[0] ? date[0] : date;
-                setDate(dateString ? dateString.getTime() : null);
-              } catch (error) {}
+              if (!date) {
+                return setDate(null);
+              }
+              if (Array.isArray(date)) {
+                return setDate(date.map((d) => d.getTime()));
+              }
+              return setDate(date.getTime());
             }}
             formatString={format}
             mask={null}
@@ -124,6 +121,11 @@ const BaseWebDatePicker = ({
                     },
                   },
                 },
+                MonthYearSelectPopover: {
+                  props: {
+                    mountNode: containerRef.current,
+                  },
+                },
               },
               TimeSelect: {
                 props: {
@@ -146,12 +148,12 @@ const BaseWebDatePicker = ({
             }}
             {...rest}
           />
-        </Layer>
+        </Block>
+        <Text small error style={{ height: 10 }}>
+          {meta.touched && meta.error && meta.error}
+        </Text>
       </Block>
-      <Text small error style={{ height: 10 }}>
-        {meta.touched && meta.error && meta.error}
-      </Text>
-    </Block>
+    </LayersManager>
   );
 };
 BaseWebDatePicker.defaultProps = {

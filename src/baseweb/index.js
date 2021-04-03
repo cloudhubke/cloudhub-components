@@ -7,3 +7,5 @@ export { default as StaticListSelector } from './BaseWebSelect';
 export { default as RemoteSelector } from './BaseWebRemoteSelect';
 export { default as Popover } from './BaseWebPopover';
 export { default as CountrySelector } from './BaseWebCountrySelector';
+export { default as BaseWebLayer } from './BaseWebLayer';
+export { default as LayersManager } from './LayersManager';

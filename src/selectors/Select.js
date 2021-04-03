@@ -3,6 +3,7 @@ import Dropdown from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 
 const Select = React.forwardRef(
   (
@@ -28,12 +29,16 @@ const Select = React.forwardRef(
     },
     ref
   ) => {
+    const [list, setList] = React.useState([]);
+    const [listVal, setListVal] = React.useState(value);
+
     const [opts, setOpts] = useState([]);
     const [selectedValue, setSelectedValue] = useState(null);
     const selectRef = React.useRef();
 
     useEffect(() => {
-      if (Array.isArray(options)) {
+      if (!isEqual(options, list) && Array.isArray(options)) {
+        setList(options);
         setOpts(
           [...options].map((item, index) => ({
             value: keyExtractor(item, index),
@@ -45,10 +50,17 @@ const Select = React.forwardRef(
     }, [JSON.stringify(options)]);
 
     useEffect(() => {
+      if (isEqual(listVal, value)) {
+        return;
+      }
+
+      setListVal(value);
+
       if (!value) {
         setSelectedValue(null);
         return;
       }
+
       if (isMulti) {
         if (Array.isArray(value)) {
           setSelectedValue(
@@ -74,11 +86,9 @@ const Select = React.forwardRef(
           item: value,
         });
       }
-    }, [JSON.stringify(value), isMulti]);
+    }, [JSON.stringify(value)]);
 
     const logChange = (val) => {
-      setSelectedValue(val);
-
       if (!val || isEmpty(val)) {
         onSelectChange(val);
         return onChange(val);
