@@ -91,7 +91,6 @@ const BaseWebDatePicker = ({
                 return setDate(date[0].getTime());
               }
               if (Array.isArray(date)) {
-                console.log(date);
                 return setDate(
                   // only parse unparsed datetime strings and return numbers as is. Helps avoid parse errors when selecting daterange with start/end time
                   date.map((d) => (typeof d === 'number' ? d : d.getTime()))

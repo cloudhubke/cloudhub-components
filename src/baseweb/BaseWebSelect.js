@@ -2,7 +2,7 @@ import React from 'react';
 import isPlainObject from 'lodash/isPlainObject';
 import isEqual from 'lodash/isEqual';
 import { Select, TYPE } from 'baseui/select';
-import { LayersManager } from 'baseui/layer';
+import LayersManager from './LayersManager';
 import Block from '../Block';
 import Text from '../Text';
 
