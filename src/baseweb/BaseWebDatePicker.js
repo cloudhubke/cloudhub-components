@@ -21,7 +21,15 @@ const BaseWebDatePicker = ({
   overrides,
   meta,
   showError,
+  showTime,
   dateFormat = 'dd/MM/yyyy',
+  formatString,
+  excludeDates,
+  disabledDate,
+  filterDate,
+  step,
+  timeSelectStart,
+  timeSelectEnd,
   ...rest
 }) => {
   const val = input.value || value;
@@ -64,13 +72,29 @@ const BaseWebDatePicker = ({
             autoFocusCalendar={false}
             mountNode={containerRef.current}
             locale={en}
-            value={[date ? new Date(date) : null]}
+            value={
+              date
+                ? [
+                    ...(Array.isArray(date)
+                      ? date.map((d) => new Date(d))
+                      : [new Date(date)]),
+                  ]
+                : // empty array preferred for falsy value to avoid onClear error
+                  []
+            }
             onChange={({ date }) => {
               if (!date) {
                 return setDate(null);
               }
+              // date is a single element array when showTime/timeSelect props are true.
+              if (Array.isArray(date) && date.length === 1) {
+                return setDate(date[0].getTime());
+              }
               if (Array.isArray(date)) {
-                return setDate(date.map((d) => d.getTime()));
+                return setDate(
+                  // only parse unparsed datetime strings and return numbers as is. Helps avoid parse errors when selecting daterange with start/end time
+                  date.map((d) => (typeof d === 'number' ? d : d.getTime()))
+                );
               }
               return setDate(date.getTime());
             }}
@@ -119,9 +143,25 @@ const BaseWebDatePicker = ({
                   },
                 },
               },
+              TimeSelect: {
+                props: {
+                  step: step || 900,
+                },
+              },
               ...overrides,
             }}
-            clearable
+            timeSelectEnd={Boolean(timeSelectEnd || showTime)}
+            timeSelectStart={Boolean(timeSelectStart || showTime)}
+            filterDate={(val) => {
+              if (typeof disabledDate === 'function') {
+                const isDisabled = disabledDate(val);
+                return !isDisabled;
+              }
+              if (typeof filterDate === 'function') {
+                return filterDate(val);
+              }
+              return true;
+            }}
             {...rest}
           />
         </Block>
@@ -132,5 +172,10 @@ const BaseWebDatePicker = ({
     </LayersManager>
   );
 };
-
+BaseWebDatePicker.defaultProps = {
+  showTime: false,
+  clearable: true,
+  filterDate: () => true,
+  meta: {},
+};
 export default BaseWebDatePicker;

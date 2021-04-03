@@ -3,36 +3,44 @@ import axios from 'axios';
 import BaseWebSelect from './BaseWebSelect';
 import { useDebounce } from '../customhooks';
 
-const BasewebRemoteSelect = (props) => {
-  const { axiosinstance, url, ...rest } = props;
+const BasewebRemoteSelect = ({
+  axiosinstance,
+  url,
+  debounceTime,
+  params,
+  filterkey = 'filter',
+  ...rest
+}) => {
   const cachedResults = React.useRef({});
   const [isLoading, setisLoading] = React.useState(false);
   const [filter, setfilter] = React.useState('');
   const [options, setoptions] = React.useState([]);
 
-  const debouncedFilter = useDebounce(filter, 1000);
+  const debouncedFilter = useDebounce(filter, debounceTime);
 
   const getOptions = React.useCallback(async () => {
     try {
-      const filterkey = `${url}${debouncedFilter || ''}`;
+      const resultkey = `${url}${debouncedFilter || ''}`;
       if (url) {
-        if (cachedResults.current[filterkey]) {
-          setoptions(cachedResults.current[filterkey]);
-          return;
-        }
         setisLoading(true);
-        const { data } = await axiosinstance().get(url, {
-          params: { filter: debouncedFilter },
-        });
-        if (data && Array.isArray(data.items)) {
-          setoptions(data.items);
-          cachedResults.current[filterkey] = data.items;
+        if (cachedResults.current[resultkey]) {
+          setoptions(cachedResults.current[resultkey]);
+        } else {
+          const { data } = await axiosinstance().get(url, {
+            params: { ...params, [filterkey]: debouncedFilter },
+          });
+          if (data && Array.isArray(data.items)) {
+            setoptions(data.items);
+            cachedResults.current[resultkey] = data.items;
+          }
+          if (Array.isArray(data)) {
+            setoptions(data);
+            cachedResults.current[resultkey] = data;
+          }
         }
-        if (Array.isArray(data)) {
-          setoptions(data);
-          cachedResults.current[filterkey] = data;
-        }
-        setisLoading(false);
+        setTimeout(() => {
+          setisLoading(false);
+        }, 200);
       }
     } catch (error) {}
   }, [url, debouncedFilter]);
@@ -56,6 +64,8 @@ const BasewebRemoteSelect = (props) => {
 
 BasewebRemoteSelect.defaultProps = {
   axiosinstance: () => axios.create({}),
+  debounceTime: 1000,
+  params: {},
 };
 
 export default BasewebRemoteSelect;
