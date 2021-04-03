@@ -72,13 +72,30 @@ const BaseWebDatePicker = ({
             autoFocusCalendar={false}
             mountNode={containerRef.current}
             locale={en}
-            value={[date ? new Date(date) : null]}
+            value={
+              date
+                ? [
+                    ...(Array.isArray(date)
+                      ? date.map((d) => new Date(d))
+                      : [new Date(date)]),
+                  ]
+                : // empty array preferred for falsy value to avoid onClear error
+                  []
+            }
             onChange={({ date }) => {
               if (!date) {
                 return setDate(null);
               }
+              // date is a single element array when showTime/timeSelect props are true.
+              if (Array.isArray(date) && date.length === 1) {
+                return setDate(date[0].getTime());
+              }
               if (Array.isArray(date)) {
-                return setDate(date.map((d) => d.getTime()));
+                console.log(date);
+                return setDate(
+                  // only parse unparsed datetime strings and return numbers as is. Helps avoid parse errors when selecting daterange with start/end time
+                  date.map((d) => (typeof d === 'number' ? d : d.getTime()))
+                );
               }
               return setDate(date.getTime());
             }}
