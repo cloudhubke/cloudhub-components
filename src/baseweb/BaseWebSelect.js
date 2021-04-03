@@ -143,7 +143,9 @@ const BaseWebSelect = (props) => {
             if (typeof onChange === 'function') {
               onChange(val);
             }
-            onSelectChange(val);
+            onSelectChange(
+              multi || isMulti ? params.value : (params.value || [])[0]
+            );
             input.onChange(val);
             input.onBlur();
             setValue(params.value);
