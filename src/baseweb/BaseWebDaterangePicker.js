@@ -1,8 +1,8 @@
 import React from 'react';
 import BaseWebDatePicker from './BaseWebDatePicker';
 
-const DateRangePicker = (props) => {
+const BaseWebDateRangePicker = (props) => {
   return <BaseWebDatePicker range {...props} />;
 };
 
-export default DateRangePicker;
+export default BaseWebDateRangePicker;

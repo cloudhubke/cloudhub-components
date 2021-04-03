@@ -1,18 +1,10 @@
 import React from 'react';
 import { Datepicker } from 'baseui/datepicker';
 import en from 'date-fns/locale/en-US';
-import { makeStyles } from '@material-ui/core/styles';
 import Block from '../Block';
 import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
 import LayersManager from './LayersManager';
-
-const useStyles = ({ sizes }) =>
-  makeStyles({
-    pickerContainer: {
-      marginBottom: sizes.baseMargin,
-    },
-  });
 
 const BaseWebDatePicker = ({
   input = {},
