@@ -28,7 +28,6 @@ export { default as UploadAvatar } from './components/Upload/UploadAvatar';
 export * from './@material-extend';
 
 // Editors
-export { default as QuillEditor } from './components/Editor/QuillEditor';
 export { default as DraftEditor } from './components/Editor/DraftEditor';
 
 // Color Utility
