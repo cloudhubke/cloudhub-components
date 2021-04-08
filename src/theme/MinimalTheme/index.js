@@ -12,7 +12,6 @@ export { default as GoogleAnalytics } from './components/GoogleAnalytics';
 export { default as LazySize } from './components/LazySize';
 export { default as LoadingScreen } from './components/LoadingScreen';
 export { default as Logo } from './components/Logo';
-export { default as Markdown } from './components/Markdown';
 export { default as ModalLightBox } from './components/BadgeStatus';
 export { default as MoreButton } from './components/MoreButton';
 export { default as Page } from './components/Page';
