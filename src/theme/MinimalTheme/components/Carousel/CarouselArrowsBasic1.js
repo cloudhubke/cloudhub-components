@@ -6,7 +6,7 @@ import arrowLeftFill from '@iconify-icons/eva/arrow-left-fill';
 import arrowRightFill from '@iconify-icons/eva/arrow-right-fill';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
-import { MIconButton } from '../../theme';
+import { MIconButton } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -16,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     position: 'absolute',
     top: theme.spacing(2),
-    right: theme.spacing(2)
+    right: theme.spacing(2),
   },
   arrow: {
     padding: 6,
     opacity: 0.48,
-    '&:hover': { opacity: 1 }
-  }
+    '&:hover': { opacity: 1 },
+  },
 }));
 
 // ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 CarouselArrowsBasic1.propTypes = {
   onNext: PropTypes.func,
   onPrevious: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 function CarouselArrowsBasic1({ onNext, onPrevious, className, ...other }) {

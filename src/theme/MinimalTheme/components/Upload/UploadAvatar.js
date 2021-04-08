@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 
 import { useDropzone } from 'react-dropzone';
-import { fData } from '../utils/formatNumber';
 import React, { useCallback, useState } from 'react';
-import useIsMountedRef from '../../hooks/useIsMountedRef';
 import roundAddAPhoto from '@iconify-icons/ic/round-add-a-photo';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import {
@@ -15,6 +13,9 @@ import {
   FormHelperText,
   CircularProgress,
 } from '@material-ui/core';
+
+import { fData } from '../../utils/formatNumber';
+import useIsMountedRef from '../../hooks/useIsMountedRef';
 
 // ----------------------------------------------------------------------
 
