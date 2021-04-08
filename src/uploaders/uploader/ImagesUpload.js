@@ -25,40 +25,23 @@ const Transition = React.forwardRef((props, ref) => (
 const getStyles = ({ cardStyles }) => {
   const useStyles = makeStyles({
     imagesList: {
-      display: 'flex',
-      position: 'relative',
-      '& .ant-upload-list': {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        flexWrap: 'wrap',
-      },
-      '& .ant-upload.ant-upload-select, .ant-upload-list-picture-card .ant-upload-list-item': {
-        float: 'left',
-        margin: '4px 4px',
-        display: 'flex',
+      '& .image-uploader > .ant-upload-list > .ant-upload.ant-upload-select-picture-card': {
+        width: '128px',
+        height: '128px',
         ...cardStyles,
       },
-      '& .ant-upload-list-item.ant-upload-list-item-done img': {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
+      '& .image-uploader > .ant-upload-list > .ant-upload-list-picture-card-container': {
+        width: '128px',
+        height: '128px',
         ...cardStyles,
       },
-      '& .ant-upload-list-item.ant-upload-list-item-done .ant-upload-list-item-info': {
-        width: '100%',
-        height: '100%',
+      '& .ant-upload-list-picture-card .ant-upload-list-item': {
+        width: '128px',
+        height: '128px',
         ...cardStyles,
       },
-      '& .ant-upload-select-picture-card i': {
-        fontSize: 28,
-        color: '#999',
-      },
-
-      '& .ant-upload-select-picture-card .ant-upload-text': {
-        marginTop: 8,
-        fontSize: 12,
-        color: '#666',
+      '& .ant-upload-list-item-actions > .ant-btn': {
+        backgroundColor: 'transparent',
       },
     },
   });
@@ -68,11 +51,11 @@ const getStyles = ({ cardStyles }) => {
   };
 };
 
-const ImagesCard = ({ cardStyles, children, flex }) => {
+const ImagesCard = ({ cardStyles, children, flex, ...otherProps }) => {
   const classes = getStyles({ cardStyles }).useStyles();
 
   return (
-    <Block flex={flex} className={classes.imagesList}>
+    <Block flex={flex} row wrap className={classes.imagesList} {...otherProps}>
       {children}
     </Block>
   );
@@ -132,7 +115,7 @@ class ImagesUpload extends Component {
           ...item,
           uid: item.uid || index,
           name: item.name || 'xxx.png',
-          status: 'done',
+          status: item.status || 'done',
           url: item.Location || item.url || '',
         })),
       };
@@ -237,7 +220,7 @@ class ImagesUpload extends Component {
           uid:
             (fl.fd || '').replace('images', '').replace(/\//g, '') ||
             new Date().getTime(),
-          status: 'done',
+          status: item.status || 'done',
         };
       }
       return item;
@@ -330,14 +313,12 @@ class ImagesUpload extends Component {
         <div style={{ color: '#FF0000', zIndex: 1 }}>
           <Fab variant="extended" style={{ textTransform: 'none' }}>
             <Add />
-            Upload
+            {fileList.length > 0 ? 'Upload more' : 'Upload'}
           </Fab>
         </div>
       </div>
     );
-    console.log('====================================');
-    console.log('PREVIEW', previewImage);
-    console.log('====================================');
+
     return (
       <Fragment>
         <ImagesCard {...this.props}>
@@ -345,6 +326,7 @@ class ImagesUpload extends Component {
             accept="image/*"
             action={url}
             listType="picture-card"
+            className="image-uploader"
             fileList={fileList}
             multiple={limit > 1}
             beforeUpload={this.beforeUpload}
@@ -379,7 +361,7 @@ class ImagesUpload extends Component {
             </div>
           </Dialog>
 
-          {this.state.isuploading && (
+          {/* {this.state.isuploading && (
             <div
               style={{
                 position: 'absolute',
@@ -395,7 +377,7 @@ class ImagesUpload extends Component {
             >
               <CircularProgress />
             </div>
-          )}
+          )} */}
         </ImagesCard>
         {meta.touched && meta.error && (
           <div className="error">{meta.error}</div>

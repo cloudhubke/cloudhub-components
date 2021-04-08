@@ -129,11 +129,6 @@ const BaseWebDatePicker = ({
                     },
                   },
                 },
-                MonthYearSelectPopover: {
-                  props: {
-                    mountNode: containerRef.current,
-                  },
-                },
               },
               TimeSelect: {
                 props: {
