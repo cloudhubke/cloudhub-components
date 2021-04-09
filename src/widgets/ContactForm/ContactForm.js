@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Grid, Button, TextField } from '@material-ui/core';
 import validate from 'validate.js';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
@@ -49,7 +49,11 @@ const INITIAL_STATE = {
   errors: {},
 };
 
-const ContactForm = props => {
+const ContactForm = ({
+  title = 'Contact Us',
+  subTitle = ' We carefully read and answer to all our emails.',
+  ...props
+}) => {
   const classes = useStyles();
 
   const [formState, setFormState] = React.useState(INITIAL_STATE);
@@ -57,17 +61,17 @@ const ContactForm = props => {
   React.useEffect(() => {
     const errors = validate(formState.values, schema);
 
-    setFormState(formState => ({
+    setFormState((formState) => ({
       ...formState,
       isValid: errors ? false : true,
       errors: errors || {},
     }));
   }, [formState.values]);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     event.persist();
 
-    setFormState(formState => ({
+    setFormState((formState) => ({
       ...formState,
       values: {
         ...formState.values,
@@ -90,13 +94,13 @@ const ContactForm = props => {
     }
   };
 
-  const hasError = field =>
+  const hasError = (field) =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
   return (
     <div className={classes.root}>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           onSubmit();
         }}
@@ -105,10 +109,10 @@ const ContactForm = props => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h4" align="center">
-              <strong>Contact Us</strong>
+              <strong>{title}</strong>
             </Typography>
             <Typography variant="h6" color="textSecondary" align="center">
-              We carefully read and answer to all our emails.
+              {subTitle}
             </Typography>
           </Grid>
           <Grid item sm={12}>
@@ -175,19 +179,21 @@ const ContactForm = props => {
               value={formState.values.Message || ''}
             />
           </Grid>
+
           <Grid item xs={12}>
             <Typography variant="subtitle2" gutterBottom>
               Fields that are marked with * sign are required.
             </Typography>
             <Button
-              size="large"
+              sx={{ height: 54 }}
               variant="contained"
-              type="submit"
               color="primary"
+              size="medium"
+              fullWidth
               disabled={!formState.isValid}
               onClick={onSubmit}
             >
-              Send
+              Submit
             </Button>
           </Grid>
         </Grid>
