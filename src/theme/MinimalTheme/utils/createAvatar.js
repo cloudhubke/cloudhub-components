@@ -1,4 +1,4 @@
-import { capitalize } from 'lodash';
+import capitalize from 'lodash/capitalize';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +27,6 @@ function getAvatarColor(name) {
 export default function createAvatar(name) {
   return {
     name: getFirstCharacter(name),
-    color: getAvatarColor(name)
+    color: getAvatarColor(name),
   };
 }

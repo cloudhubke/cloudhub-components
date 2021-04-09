@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import Card from './Card';
 import Chip from './Chip';
 import Tabs from './Tabs';

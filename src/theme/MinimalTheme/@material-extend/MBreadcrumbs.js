@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { last } from 'lodash';
+import last from 'lodash/last';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Box, Link, Breadcrumbs } from '@material-ui/core';

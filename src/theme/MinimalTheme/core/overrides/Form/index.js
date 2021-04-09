@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import Input from './Input';
 import Radio from './Radio';
 import Switch from './Switch';

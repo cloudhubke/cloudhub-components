@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import Fab from './Fab';
 import Button from './Button';
 import IconButton from './IconButton';
