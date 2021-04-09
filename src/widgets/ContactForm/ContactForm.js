@@ -115,7 +115,7 @@ const ContactForm = ({
               {subTitle}
             </Typography>
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
               placeholder="Full Name"
               label="Full Name *"
