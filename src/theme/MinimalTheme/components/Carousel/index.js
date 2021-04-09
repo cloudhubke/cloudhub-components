@@ -1,3 +1,6 @@
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 export { default as CarouselCustomPaging1 } from './CarouselCustomPaging1';
 export { default as CarouselCustomPaging2 } from './CarouselCustomPaging2';
 

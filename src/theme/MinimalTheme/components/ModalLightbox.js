@@ -1,3 +1,5 @@
+import 'react-image-lightbox/style.css';
+
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
@@ -16,7 +18,7 @@ const useStyles = makeStyles((theme) => {
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       backgroundColor: alpha(theme.palette.grey['900'], 0.8),
-      backgroundImage: `url("/static/icons/controls/${iconName}.svg")`
+      backgroundImage: `url("/static/icons/controls/${iconName}.svg")`,
     };
   };
 
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => {
       '& .ril__toolbar': {
         height: 'auto !important',
         padding: theme.spacing(2, 3),
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       },
       '& .ril__toolbarLeftSide': { display: 'none' },
       '& .ril__toolbarRightSide': {
@@ -40,18 +42,18 @@ const useStyles = makeStyles((theme) => {
         alignItems: 'center',
         '& li': {
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
         },
         '& li:first-child': {
-          flexGrow: 1
+          flexGrow: 1,
         },
         '& li:not(:first-child)': {
           width: theme.spacing(5),
           height: theme.spacing(5),
           justifyContent: 'center',
           marginLeft: theme.spacing(1),
-          borderRadius: theme.shape.borderRadius
-        }
+          borderRadius: theme.shape.borderRadius,
+        },
       },
 
       // Button
@@ -61,7 +63,7 @@ const useStyles = makeStyles((theme) => {
         height: '100%',
         '&.ril__zoomInButton': backgroundIcon('maximize-outline'),
         '&.ril__zoomOutButton': backgroundIcon('minimize-outline'),
-        '&.ril__closeButton': backgroundIcon('close')
+        '&.ril__closeButton': backgroundIcon('close'),
       },
       '& .ril__navButtons': {
         padding: theme.spacing(3),
@@ -69,15 +71,15 @@ const useStyles = makeStyles((theme) => {
         '&.ril__navButtonPrev': {
           left: theme.spacing(2),
           right: 'auto',
-          ...backgroundIcon(isRTL ? 'arrow-ios-forward' : 'arrow-ios-back')
+          ...backgroundIcon(isRTL ? 'arrow-ios-forward' : 'arrow-ios-back'),
         },
         '&.ril__navButtonNext': {
           right: theme.spacing(2),
           left: 'auto',
-          ...backgroundIcon(isRTL ? 'arrow-ios-back' : 'arrow-ios-forward')
-        }
-      }
-    }
+          ...backgroundIcon(isRTL ? 'arrow-ios-back' : 'arrow-ios-forward'),
+        },
+      },
+    },
   };
 });
 
@@ -89,7 +91,7 @@ ModalLightbox.propTypes = {
   setPhotoIndex: PropTypes.func,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 function ModalLightbox({
@@ -123,8 +125,8 @@ function ModalLightbox({
   const toolbarButtons = [showIndex];
   const customStyles = {
     overlay: {
-      zIndex: 9999
-    }
+      zIndex: 9999,
+    },
   };
 
   return (

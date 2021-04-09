@@ -1,13 +1,3 @@
-import 'lazysizes';
-import 'lazysizes/plugins/attrchange/ls.attrchange';
-import 'lazysizes/plugins/object-fit/ls.object-fit';
-import 'lazysizes/plugins/parent-fit/ls.parent-fit';
-
-import '../utils/highlight';
-import 'slick-carousel/slick/slick.css';
-import 'react-image-lightbox/style.css';
-import 'slick-carousel/slick/slick-theme.css';
-
 import { alpha, withStyles } from '@material-ui/core/styles';
 import scrollAreaStyles from './scrollAreaStyles';
 // ----------------------------------------------------------------------

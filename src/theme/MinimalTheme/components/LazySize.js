@@ -1,3 +1,8 @@
+import 'lazysizes';
+import 'lazysizes/plugins/attrchange/ls.attrchange';
+import 'lazysizes/plugins/object-fit/ls.object-fit';
+import 'lazysizes/plugins/parent-fit/ls.parent-fit';
+
 import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,8 +15,8 @@ import placeholdersvg from '../assets/placeholder.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    objectFit: 'cover'
-  }
+    objectFit: 'cover',
+  },
 }));
 
 // ----------------------------------------------------------------------
@@ -22,7 +27,7 @@ LazySize.propTypes = {
   size: PropTypes.string,
   noBlur: PropTypes.bool,
   noPlaceholder: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 function LazySize({
