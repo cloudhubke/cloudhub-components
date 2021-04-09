@@ -26,9 +26,6 @@ export { default as UploadAvatar } from './components/Upload/UploadAvatar';
 
 export * from './@material-extend';
 
-// Editors
-export { default as DraftEditor } from './components/Editor/DraftEditor';
-
 // Color Utility
 export { default as PreviewColor } from './components/ColorUtility/PreviewColor';
 export { default as PickerManyColor } from './components/ColorUtility/PickerManyColor';

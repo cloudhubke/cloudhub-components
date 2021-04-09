@@ -41,7 +41,6 @@ const ThemeProvider = ({
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                backgroundColor: newcolors.background || '#FFFFFC',
               },
             },
           }}

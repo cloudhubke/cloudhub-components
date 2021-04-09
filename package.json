@@ -58,7 +58,6 @@
     "@react-google-maps/api": "^1.7.7",
     "@react-loadable/revised": "^0.0.23",
     "antd": "4.15.0",
-    "aos": "^2.3.4",
     "apexcharts": "^3.22.0",
     "autosuggest-highlight": "^3.1.1",
     "awesome-phonenumber": "^2.10.0",
@@ -123,7 +122,8 @@
     "styletron-engine-atomic": "1.4.7",
     "styletron-react": "6.0.1",
     "stylis-plugin-rtl": "^2.0.1",
-    "uid": "1.0.0"
+    "uid": "1.0.0",
+    "validate.js": "0.13.1"
   },
   "devDependencies": {
     "@babel/cli": "7.2.0",

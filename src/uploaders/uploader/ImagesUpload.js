@@ -212,19 +212,21 @@ class ImagesUpload extends Component {
   };
 
   handleChange = ({ file, fileList }) => {
-    const files = [...(fileList || [])].map((item, index) => {
-      if (item.response) {
-        const fl = item.response[0] || {};
-        return {
-          ...fl,
-          uid:
-            (fl.fd || '').replace('images', '').replace(/\//g, '') ||
-            new Date().getTime(),
-          status: item.status || 'done',
-        };
-      }
-      return item;
-    });
+    const files = [...(fileList || [])]
+      .map((item, index) => {
+        if (item.response) {
+          const fl = item.response[0] || {};
+          return {
+            ...fl,
+            uid:
+              (fl.fd || '').replace('images', '').replace(/\//g, '') ||
+              new Date().getTime(),
+            status: item.status || 'done',
+          };
+        }
+        return item;
+      })
+      .map((item) => ({ ...item, error: null }));
 
     const isuploading = files.filter((f) => !has(f, 'Location')).length > 0;
 

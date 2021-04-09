@@ -30,9 +30,6 @@ const GlobalStyles = withStyles((theme) => ({
     body: {
       width: '100%',
       height: '100%',
-      overflow: 'hidden',
-      overflowY: 'auto',
-
       '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
         width: 8,
         height: 6,
@@ -56,6 +53,7 @@ const GlobalStyles = withStyles((theme) => ({
       display: 'flex',
       flexDirection: 'column',
     },
+
     input: {
       '&[type=number]': {
         MozAppearance: 'textfield',
