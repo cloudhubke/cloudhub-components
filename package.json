@@ -16,7 +16,7 @@
     "build:main": "npx babel --config-file ./babel.json --copy-files --out-dir dist --ignore *.test.js src",
     "postbuild": "cp package.json dist && cp README.md dist",
     "lint": "node ./node_modules/.bin/eslint ./src --max-warnings=0 && echo '✔  Your code looks good.'",
-    "semantic-release": "semantic-release"
+    "semantic-release": "cd dist && semantic-release"
   },
   "repository": {
     "type": "git",
