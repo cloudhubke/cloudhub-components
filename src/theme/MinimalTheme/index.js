@@ -18,8 +18,6 @@ export { default as PopoverMenu } from './components/PopoverMenu';
 export { default as Scrollbars } from './components/Scrollbars';
 export { default as SearchNotFound } from './components/SearchNotFound';
 
-export * from './@material-extend';
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Widgets
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
