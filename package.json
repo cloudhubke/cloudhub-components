@@ -2,10 +2,6 @@
   "name": "cloudhub-components",
   "version": "0.0.0-development",
   "description": "Various components to use in react projects",
-  "exports":{
-    ".": "./dist/index.js",
-    "./": "./dist/"
-  },
   "main": "./dist/index.js",
   "module": "./dist/index.es.js",
   "files": [
