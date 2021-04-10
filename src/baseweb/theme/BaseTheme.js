@@ -1,6 +1,6 @@
 import React from 'react';
 import { Client as Styletron } from 'styletron-engine-atomic';
-import { LightTheme, BaseProvider } from 'baseui';
+import { BaseProvider } from 'baseui';
 import { Provider as StyletronProvider } from 'styletron-react';
 import customBaseuiTheme from './BaseWebTheme';
 

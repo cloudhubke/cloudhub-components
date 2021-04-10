@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { capitalize } from '@material-ui/core/utils';
-import { TimelineDot } from '@material-ui/lab';
+import TimelineDot from '@material-ui/lab/Timeline';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   outlinedInfo: { borderColor: theme.palette.info.main },
   outlinedSuccess: { borderColor: theme.palette.success.main },
   outlinedWarning: { borderColor: theme.palette.warning.main },
-  outlinedError: { borderColor: theme.palette.error.main }
+  outlinedError: { borderColor: theme.palette.error.main },
 }));
 
 // ----------------------------------------------------------------------
@@ -53,7 +53,7 @@ function MTimelineDot({
       className={clsx(
         classes[variant],
         {
-          [classes[`${variant}${capitalize(color)}`]]: color
+          [classes[`${variant}${capitalize(color)}`]]: color,
         },
 
         className
@@ -74,12 +74,12 @@ MTimelineDot.propTypes = {
     'info',
     'success',
     'warning',
-    'error'
+    'error',
   ]),
   variant: PropTypes.oneOfType([
     PropTypes.oneOf(['filled', 'outlined']),
-    PropTypes.string
-  ])
+    PropTypes.string,
+  ]),
 };
 
 export default MTimelineDot;

@@ -1,10 +1,12 @@
 import React from 'react';
 import AntPopOver from 'antd/lib/popover';
-import ThemeContext from '../theme/ThemeContext';
 
-import 'antd/lib/popover/style/index.css';
+import 'antd/lib/popover/style/css';
 // import './popover.css';
+
 import { makeStyles } from '@material-ui/core/styles';
+
+import ThemeContext from '../theme/ThemeContext';
 
 const useStyles = ({
   fonts,

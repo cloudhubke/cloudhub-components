@@ -14,7 +14,7 @@ import { ToastContainer } from '../../toastr';
 
 const BaseTheme = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "BaseTheme" */ '../basetheme/BaseTheme'),
+    import(/* webpackChunkName: "BaseTheme" */ '../../baseweb/theme/BaseTheme'),
   loading: () => (
     <Box justifyContent="center" alignItems="center">
       <Loading />
@@ -28,7 +28,7 @@ const ThemeProvider = ({
   colors = {},
   sizes = {},
   theme,
-  baseuiTheme,
+  addBaseWeb = true,
   ...props
 }) => {
   const newfonts = { ...localfonts, ...fonts };
@@ -38,7 +38,24 @@ const ThemeProvider = ({
   return (
     // Apply theme for designs (Premium themes)
     <MuiThemeProvider fonts={newfonts} colors={newcolors} sizes={newsizes}>
-      <BaseTheme fonts={newfonts} colors={newcolors} sizes={newsizes}>
+      {addBaseWeb ? (
+        <BaseTheme fonts={newfonts} colors={newcolors} sizes={newsizes}>
+          <ThemeContext.Provider
+            value={{
+              fonts: newfonts,
+              colors: newcolors,
+              sizes: newsizes,
+              CONFIG: props.CONFIG || {},
+              ...props,
+            }}
+          >
+            {children}
+            <div style={{ flex: 0, zIndex: 9999 }}>
+              <ToastContainer />
+            </div>
+          </ThemeContext.Provider>
+        </BaseTheme>
+      ) : (
         <ThemeContext.Provider
           value={{
             fonts: newfonts,
@@ -53,7 +70,7 @@ const ThemeProvider = ({
             <ToastContainer />
           </div>
         </ThemeContext.Provider>
-      </BaseTheme>
+      )}
     </MuiThemeProvider>
   );
 };
