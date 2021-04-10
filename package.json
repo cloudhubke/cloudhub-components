@@ -2,8 +2,8 @@
   "name": "cloudhub-components",
   "version": "0.0.0-development",
   "description": "Various components to use in react projects",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "main": "index.js",
+  "module": "index.es.js",
   "files": [
     "dist",
     "README.md"
@@ -14,7 +14,7 @@
     "test:single": "mocha src/index.test.js --require babel-core/register",
     "build": "npm-run-all --parallel build:*",
     "build:main": "npx babel --config-file ./babel.json --copy-files --out-dir dist --ignore *.test.js src",
-    "postbuild": "cp package.json dist",
+    "postbuild": "cp package.json dist && cp README.md dist",
     "lint": "node ./node_modules/.bin/eslint ./src --max-warnings=0 && echo '✔  Your code looks good.'",
     "semantic-release": "semantic-release"
   },
@@ -157,7 +157,6 @@
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
-    },
-    "pkgRoot": "dist"
+    }
   }
 }
