@@ -1,22 +1,20 @@
 import * as React from 'react';
 import Loadable from '@react-loadable/revised';
 import Box from '@material-ui/core/Box';
-import { Alert as MAlert } from '@material-ui/core';
-import AlertTitle from '@material-ui/core/AlertTitle';
+// import { Alert as MAlert } from '@material-ui/core';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import Collapse from '@material-ui/core/Collapse';
 import Loading from './Loading';
 
-const MuiAlert =
-  MAlert ||
-  Loadable({
-    loader: () =>
-      import(/* webpackChunkName: "BaseTheme" */ '@material-ui/lab/Alert'),
-    loading: () => (
-      <Box justifyContent="center" alignItems="center">
-        <Loading />
-      </Box>
-    ),
-  });
+const MuiAlert = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "BaseTheme" */ '@material-ui/lab/Alert'),
+  loading: () => (
+    <Box justifyContent="center" alignItems="center">
+      <Loading />
+    </Box>
+  ),
+});
 
 const Alert = ({
   danger,
