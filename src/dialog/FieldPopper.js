@@ -175,8 +175,12 @@ const FieldPopper = ({
           disablePortal
           className={classes.popper}
           modifiers={[
-            { name: 'flip', enabled: flip },
-            { name: 'arrow', enabled: arrow, element: arrowRef },
+            { name: 'flip', enabled: Boolean(flip) },
+            {
+              name: 'arrow',
+              enabled: Boolean(arrow),
+              options: { element: arrowRef },
+            },
 
             {
               name: 'preventOverflow',

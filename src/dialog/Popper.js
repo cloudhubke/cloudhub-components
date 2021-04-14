@@ -165,7 +165,11 @@ const Popper = (props) => {
         className={classes.popper}
         modifiers={[
           { name: 'flip', enabled: Boolean(flip) },
-          { name: 'arrow', enabled: Boolean(arrow), element: arrowRef },
+          {
+            name: 'arrow',
+            enabled: Boolean(arrow),
+            options: { element: arrowRef },
+          },
           {
             name: 'preventOverflow',
             enabled: preventOverflow !== 'disabled',
