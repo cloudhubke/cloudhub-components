@@ -1,12 +1,16 @@
 {
   "presets": [
     [
-      "@babel/preset-env"
+      "@babel/preset-env",
+      {
+        "modules":"commonjs"
+      }
     ],
     "@babel/preset-react",
     "@babel/flow"
   ],
   "plugins": [
+    "css-modules-transform",
     "@babel/plugin-transform-object-assign",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import",
@@ -17,9 +21,16 @@
           "transform": "@material-ui/core/${member}",
           "preventFullImport": true
         },
-        
+        "@material-ui/lab": {
+          "transform": "@material-ui/core/${member}",
+          "preventFullImport": true
+        },
         "@material-ui/icons": {
           "transform": "@material-ui/icons/${member}",
+          "preventFullImport": true
+        },
+        "lodash": {
+          "transform": "lodash/${member}",
           "preventFullImport": true
         }
       }
@@ -28,6 +39,6 @@
       "libraryName": "antd",
       "libraryDirectory": "lib",
       "style": true
-    }]
+    }]    
   ]
 }

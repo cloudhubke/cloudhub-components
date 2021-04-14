@@ -1,4 +1,4 @@
-const colors26 = [
+export const colors26 = [
   '#1f1017',
   '#a7cc45',
   '#2b2297',
@@ -27,7 +27,7 @@ const colors26 = [
   '#645142',
 ];
 
-const AZ = [
+export const AZ = [
   'A',
   'B',
   'C',
@@ -55,8 +55,3 @@ const AZ = [
   'Y',
   'Z',
 ];
-
-module.exports = {
-  colors26,
-  AZ,
-};

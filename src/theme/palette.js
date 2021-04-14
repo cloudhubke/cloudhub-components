@@ -1,4 +1,5 @@
 import { alpha, fade } from '@material-ui/core/styles';
+import getPalette from './palettes';
 
 const alphaFn = alpha || fade;
 // ----------------------------------------------------------------------
@@ -8,20 +9,7 @@ function createGradient(color1, color2) {
 }
 
 // SETUP COLORS
-const PRIMARY = {
-  lighter: '#C8FACD',
-  light: '#5BE584',
-  main: '#00AB55',
-  dark: '#007B55',
-  darker: '#005249',
-};
-const SECONDARY = {
-  lighter: '#D6E4FF',
-  light: '#84A9FF',
-  main: '#3366FF',
-  dark: '#1939B7',
-  darker: '#091A7A',
-};
+
 const INFO = {
   lighter: '#D0F2FF',
   light: '#74CAFF',
@@ -73,7 +61,8 @@ const GREY = {
   '500_80': alphaFn('#919EAB', 0.8)
 };
 
-const getColors = (colors) => {
+const getColors = (colors, paletteType = 'green') => {
+  const { PRIMARY, SECONDARY, ALTERNATE } = getPalette({ paletteType });
   const {
     primaryColors,
     secondaryColors,
@@ -96,6 +85,7 @@ const getColors = (colors) => {
     primary: { ...PRIMARY, contrastText: '#fff', ...primaryColors },
     secondary: { ...SECONDARY, contrastText: '#fff', ...secondaryColors },
     tertiary: { ...tertiaryColors },
+    alternate: { main: '#f7f9fc', dark: '#edf1f7', ...ALTERNATE },
     background: { ...backgroundColors },
     text: { ...textColors },
     info: { ...INFO, contrastText: '#fff' },
@@ -155,6 +145,8 @@ export const getDarkColors = (colors) => {
       paper: GREY['800'],
       default: GREY['900'],
       neutral: GREY['500_16'],
+      level2: '#333',
+      level1: '#2D3748',
     },
     action: {
       active: GREY['500'],

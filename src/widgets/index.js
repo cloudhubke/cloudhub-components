@@ -7,3 +7,4 @@ export { default as CardToolbar } from './CardToolbar';
 export { default as UserActionListItem } from './UserActionListItem';
 export { default as ScrollableCard } from './ScrollableCard';
 export { default as ActionPopoverButton } from './ActionPopoverButton';
+export { default as ContactForm } from './ContactForm';

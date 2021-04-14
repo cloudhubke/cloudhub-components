@@ -130,54 +130,53 @@ const BaseWebSelect = (props) => {
 
   return (
     <Block ref={containerRef}>
-      <LayersManager zIndex={1301}>
-        <Select
-          options={itemOptions || []}
-          value={initialValue}
-          onChange={(params) => {
-            const val =
-              multi || isMulti
-                ? params.value.map((item) => rest.valueExtractor(item))
-                : rest.valueExtractor(params.value[0] || null);
+      <Select
+        options={itemOptions || []}
+        value={initialValue}
+        onChange={(params) => {
+          const val =
+            multi || isMulti
+              ? params.value.map((item) => rest.valueExtractor(item))
+              : rest.valueExtractor(params.value[0] || null);
 
-            if (typeof onChange === 'function') {
-              onChange(val);
-            }
-            onSelectChange(
-              multi || isMulti ? params.value : (params.value || [])[0]
-            );
-            input.onChange(val);
-            input.onBlur();
-            setValue(params.value);
-          }}
-          multi={Boolean(multi || isMulti)}
-          type={search ? TYPE.search : TYPE.select}
-          overrides={{
-            Popover: {
-              props: {
-                mountNode: containerRef.current,
-              },
-            },
-          }}
-          getOptionLabel={optionLabelExtractor}
-          getValueLabel={valueLabelExtractor}
-          labelKey={labelKey || labelField}
-          valueKey={valueKey || valueField}
-          filterOptions={
-            filterOptions ||
-            ((options || [])[0] &&
-              typeof (options || [])[0] === 'object' &&
-              !labelKey &&
-              !valueKey &&
-              !labelField &&
-              !valueField)
-              ? customFilter
-              : undefined
+          if (typeof onChange === 'function') {
+            onChange(val);
           }
-          onInputChange={rest.onInputChange || handleInputChange}
-          {...rest}
-        />
-      </LayersManager>
+          onSelectChange(
+            multi || isMulti ? params.value : (params.value || [])[0]
+          );
+          input.onChange(val);
+          input.onBlur();
+          setValue(params.value);
+        }}
+        multi={Boolean(multi || isMulti)}
+        type={search ? TYPE.search : TYPE.select}
+        overrides={{
+          Popover: {
+            props: {
+              mountNode: containerRef.current,
+            },
+          },
+        }}
+        getOptionLabel={optionLabelExtractor}
+        getValueLabel={valueLabelExtractor}
+        labelKey={labelKey || labelField}
+        valueKey={valueKey || valueField}
+        filterOptions={
+          filterOptions ||
+          ((options || [])[0] &&
+            typeof (options || [])[0] === 'object' &&
+            !labelKey &&
+            !valueKey &&
+            !labelField &&
+            !valueField)
+            ? customFilter
+            : undefined
+        }
+        onInputChange={rest.onInputChange || handleInputChange}
+        {...rest}
+      />
+
       {showError && (
         <Text small error style={{ height: 10 }}>
           {meta.touched && meta.error && meta.error}

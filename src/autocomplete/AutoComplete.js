@@ -29,6 +29,7 @@ const useStyles = ({ sizes, colors }) =>
     cssFocused: {},
     cssLabel: {},
   });
+
 const AutoComplete = ({
   options,
   input,

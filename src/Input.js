@@ -73,7 +73,7 @@ const Input = ({
   const inputStyles = {
     height: sizes.inputHeight,
     margin: 0,
-    backgroundColor: '#FFF',
+    // backgroundColor: '#FFF',
     ...style,
   };
 

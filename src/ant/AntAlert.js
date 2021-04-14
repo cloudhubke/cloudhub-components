@@ -1,7 +1,7 @@
 import React from 'react';
 import AntAlert from 'antd/lib/alert';
 
-import 'antd/lib/alert/style/index.css';
+import 'antd/lib/alert/style/css';
 
 const Alert = ({
   danger,

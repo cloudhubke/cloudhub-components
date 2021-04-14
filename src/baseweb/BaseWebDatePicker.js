@@ -53,115 +53,108 @@ const BaseWebDatePicker = ({
     .replace(/M/g, 'L');
 
   return (
-    <LayersManager zIndex={1310}>
-      <Block>
-        <Block
-          flex={false}
-          style={{ height: sizes.inputHeight, position: 'relative', zIndex: 1 }}
-          ref={containerRef}
-        >
-          <Datepicker
-            autoFocusCalendar={false}
-            mountNode={containerRef.current}
-            locale={en}
-            value={
-              date
-                ? [
-                    ...(Array.isArray(date)
-                      ? date.map((d) => new Date(d))
-                      : [new Date(date)]),
-                  ]
-                : // empty array preferred for falsy value to avoid onClear error
-                  []
+    <Block>
+      <Block
+        flex={false}
+        trapTabbing={false}
+        style={{ height: sizes.inputHeight, position: 'relative' }}
+        ref={containerRef}
+      >
+        <Datepicker
+          autoFocusCalendar={false}
+          mountNode={containerRef.current}
+          locale={en}
+          value={
+            date
+              ? [
+                  ...(Array.isArray(date)
+                    ? date.map((d) => new Date(d))
+                    : [new Date(date)]),
+                ]
+              : // empty array preferred for falsy value to avoid onClear error
+                []
+          }
+          onChange={({ date }) => {
+            if (!date) {
+              return setDate(null);
             }
-            onChange={({ date }) => {
-              if (!date) {
-                return setDate(null);
-              }
-              // date is a single element array when showTime/timeSelect props are true.
-              if (Array.isArray(date) && date.length === 1) {
-                return setDate(date[0].getTime());
-              }
-              if (Array.isArray(date)) {
-                return setDate(
-                  // only parse unparsed datetime strings and return numbers as is. Helps avoid parse errors when selecting daterange with start/end time
-                  date.map((d) => (typeof d === 'number' ? d : d.getTime()))
-                );
-              }
-              return setDate(date.getTime());
-            }}
-            formatString={format}
-            mask={null}
-            overrides={{
-              Input: {
-                props: {
-                  overrides: {
-                    Input: {
-                      style: ({ $disabled }) => ({
-                        height: sizes.inputHeight,
-                        borderRadius: `${sizes.borderRadius}px`,
-                        // borderWidth: '0.5px',
-                        borderTopWidth: '0.5px',
-                        borderRightWidth: '0.5px',
-                        borderBottomWidth: '0.5px',
-                        borderLeftWidth: '0.5px',
+            // date is a single element array when showTime/timeSelect props are true.
+            if (Array.isArray(date) && date.length === 1) {
+              return setDate(date[0].getTime());
+            }
+            if (Array.isArray(date)) {
+              return setDate(
+                // only parse unparsed datetime strings and return numbers as is. Helps avoid parse errors when selecting daterange with start/end time
+                date.map((d) => (typeof d === 'number' ? d : d.getTime()))
+              );
+            }
+            return setDate(date.getTime());
+          }}
+          formatString={format}
+          mask={null}
+          overrides={{
+            Input: {
+              props: {
+                overrides: {
+                  Input: {
+                    style: ({ $disabled }) => ({
+                      height: sizes.inputHeight,
+                      borderRadius: `${sizes.borderRadius}px`,
+                      // borderWidth: '0.5px',
+                      borderTopWidth: '0.5px',
+                      borderRightWidth: '0.5px',
+                      borderBottomWidth: '0.5px',
+                      borderLeftWidth: '0.5px',
 
-                        ...($disabled
-                          ? {
-                              borderTopStyle: 'solid',
-                              borderRightStyle: 'solid',
-                              borderBottomStyle: 'solid',
-                              borderLeftStyle: 'solid',
-                              borderColor: '#CCC',
-                            }
-                          : {}),
-                      }),
-                    },
+                      ...($disabled
+                        ? {
+                            borderTopStyle: 'solid',
+                            borderRightStyle: 'solid',
+                            borderBottomStyle: 'solid',
+                            borderLeftStyle: 'solid',
+                            borderColor: '#CCC',
+                          }
+                        : {}),
+                    }),
+                  },
 
-                    InputContainer: {
-                      style: {
-                        height: sizes.inputHeight,
-                        borderTopWidth: '0.5px',
-                        borderRightWidth: '0.5px',
-                        borderBottomWidth: '0.5px',
-                        borderLeftWidth: '0.5px',
-                      },
+                  InputContainer: {
+                    style: {
+                      height: sizes.inputHeight,
+                      borderTopWidth: '0.5px',
+                      borderRightWidth: '0.5px',
+                      borderBottomWidth: '0.5px',
+                      borderLeftWidth: '0.5px',
                     },
                   },
                 },
-                MonthYearSelectPopover: {
-                  props: {
-                    mountNode: containerRef.current,
-                  },
-                },
               },
-              TimeSelect: {
-                props: {
-                  step: step || 900,
-                },
+            },
+            TimeSelect: {
+              props: {
+                step: step || 900,
               },
-              ...overrides,
-            }}
-            timeSelectEnd={Boolean(timeSelectEnd || showTime)}
-            timeSelectStart={Boolean(timeSelectStart || showTime)}
-            filterDate={(val) => {
-              if (typeof disabledDate === 'function') {
-                const isDisabled = disabledDate(val);
-                return !isDisabled;
-              }
-              if (typeof filterDate === 'function') {
-                return filterDate(val);
-              }
-              return true;
-            }}
-            {...rest}
-          />
-        </Block>
-        <Text small error style={{ height: 10 }}>
-          {meta.touched && meta.error && meta.error}
-        </Text>
+            },
+            ...overrides,
+          }}
+          timeSelectEnd={Boolean(timeSelectEnd || showTime)}
+          timeSelectStart={Boolean(timeSelectStart || showTime)}
+          filterDate={(val) => {
+            if (typeof disabledDate === 'function') {
+              const isDisabled = disabledDate(val);
+              return !isDisabled;
+            }
+            if (typeof filterDate === 'function') {
+              return filterDate(val);
+            }
+          }}
+          {...rest}
+        />
       </Block>
-    </LayersManager>
+      <Text small error style={{ height: 10 }}>
+        {meta.touched && meta.error && meta.error}
+      </Text>
+    </Block>
   );
 };
 BaseWebDatePicker.defaultProps = {
