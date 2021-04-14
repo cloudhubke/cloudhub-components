@@ -163,20 +163,20 @@ const Popper = (props) => {
         placement={placement}
         disablePortal={disableportal}
         className={classes.popper}
-        modifiers={{
-          flip: {
-            enabled: flip,
-          },
-          arrow: {
-            enabled: arrow,
-            element: arrowRef,
-          },
-          preventOverflow: {
+        modifiers={[
+          { name: 'flip', enabled: Boolean(flip) },
+          { name: 'arrow', enabled: Boolean(arrow), element: arrowRef },
+          {
+            name: 'preventOverflow',
             enabled: preventOverflow !== 'disabled',
-            boundariesElement:
-              preventOverflow === 'disabled' ? 'scrollParent' : preventOverflow,
+            options: {
+              boundariesElement:
+                preventOverflow === 'disabled'
+                  ? 'scrollParent'
+                  : preventOverflow,
+            },
           },
-        }}
+        ]}
         transition
         elevation={5}
       >
