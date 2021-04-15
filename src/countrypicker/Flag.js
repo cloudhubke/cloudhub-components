@@ -1,5 +1,5 @@
 import React from 'react';
-import countries from './countrypicker/data/countries';
+import countries from './countries';
 
 const Flag = ({ country, small, medium, large, width, height, ...props }) => {
   const flagWidth = () => {
