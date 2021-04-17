@@ -1,7 +1,7 @@
 import React from 'react';
 import AntPopOver from 'antd/lib/popover';
 
-import 'antd/lib/popover/style/css';
+import 'antd/lib/popover/style/index.css';
 // import './popover.css';
 
 import { makeStyles } from '@material-ui/core/styles';

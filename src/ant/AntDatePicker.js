@@ -1,7 +1,9 @@
 import React from 'react';
 import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
-import 'antd/lib/date-picker/style/css';
+
+import 'antd/lib/input/style/index.css';
+import 'antd/lib/date-picker/style/index.css';
 import './datepicker.css';
 
 import { makeStyles } from '@material-ui/core/styles';

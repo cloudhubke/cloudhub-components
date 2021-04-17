@@ -9,8 +9,6 @@ const engine = new Styletron({
 });
 
 const BaseTheme = ({ children, colors, fonts, sizes }) => {
-  const [] = React.useState(0);
-
   return (
     <StyletronProvider value={engine}>
       <BaseProvider
