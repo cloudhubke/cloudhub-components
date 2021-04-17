@@ -1,7 +1,4 @@
-import ClientThemeProvider from './ClientThemeProvider';
-
-export const ThemeProvider = ClientThemeProvider;
-
+export { default as ThemeProvider } from './ClientThemeProvider';
 export { default as BadgeStatus } from './components/BadgeStatus';
 export { default as Block } from './components/Block';
 export { default as CopyClipboard } from './components/CopyClipboard';
