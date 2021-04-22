@@ -2,7 +2,9 @@ import React from 'react';
 import AntTimePicker from 'antd/lib/time-picker';
 import moment from 'moment';
 
-import 'antd/lib/time-picker/style/css';
+import 'antd/lib/input/style/index.css';
+import 'antd/lib/time-picker/style/index.css';
+
 import './time-picker.css';
 
 const TimePicker = ({ input, ...props }) => (

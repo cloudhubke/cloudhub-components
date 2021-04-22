@@ -4,9 +4,8 @@ import {
   ToastContainer as RootContainer,
   toast as roottoast,
 } from 'react-toastify';
-import Close from '@material-ui/icons/Close';
+import 'react-toastify/dist/ReactToastify.css';
 
-import './toastr.css';
 import { makeStyles } from '@material-ui/core/styles';
 import colors from '../theme/Colors';
 

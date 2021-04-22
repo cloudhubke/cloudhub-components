@@ -119,6 +119,7 @@ const Input = ({
 };
 
 Input.defaultProps = {
+  input: {},
   meta: {},
   onKeyEnter: () => null,
   showError: true,

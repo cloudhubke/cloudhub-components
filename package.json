@@ -112,7 +112,7 @@
     "react-svg": "^11.0.41",
     "react-swipeable": "^5.2.0",
     "react-swipeable-views": "0.13.9",
-    "react-toastify": "5.4.1",
+    "react-toastify": "7.0.3",
     "react-use": "15.3.2",
     "react-visibility-sensor": "^5.1.1",
     "recharts": "^1.8.5",

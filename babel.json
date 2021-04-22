@@ -10,7 +10,10 @@
     "@babel/flow"
   ],
   "plugins": [
-    "css-modules-transform",
+    // ["css-modules-transform", {
+    //   "extractCss": "./dist/styles/components.css"
+    //   }  
+    // ],
     "@babel/plugin-transform-object-assign",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import",

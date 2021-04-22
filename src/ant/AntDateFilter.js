@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
 
-import 'antd/lib/input/style/css';
+import 'antd/lib/input/style/index.css';
+import 'antd/lib/date-picker/style/index.css';
 import './datepicker.css';
 
 const { RangePicker } = DatePicker;

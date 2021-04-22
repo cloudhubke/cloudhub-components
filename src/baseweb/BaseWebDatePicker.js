@@ -4,7 +4,6 @@ import en from 'date-fns/locale/en-US';
 import Block from '../Block';
 import Text from '../Text';
 import ThemeContext from '../theme/ThemeContext';
-import LayersManager from './LayersManager';
 
 const BaseWebDatePicker = ({
   input = {},
@@ -22,6 +21,7 @@ const BaseWebDatePicker = ({
   step,
   timeSelectStart,
   timeSelectEnd,
+  borderWidth,
   ...rest
 }) => {
   const val = input.value || value;
@@ -56,11 +56,11 @@ const BaseWebDatePicker = ({
     <Block>
       <Block
         flex={false}
-        trapTabbing={false}
         style={{ height: sizes.inputHeight, position: 'relative' }}
         ref={containerRef}
       >
         <Datepicker
+          trapTabbing={false}
           autoFocusCalendar={false}
           mountNode={containerRef.current}
           locale={en}

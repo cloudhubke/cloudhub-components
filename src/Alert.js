@@ -4,17 +4,28 @@ import Box from '@material-ui/core/Box';
 // import { Alert as MAlert } from '@material-ui/core';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import Collapse from '@material-ui/core/Collapse';
+import mui from '@material-ui/core/package.json';
 import Loading from './Loading';
 
-const MuiAlert = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "BaseTheme" */ '@material-ui/lab/Alert'),
-  loading: () => (
-    <Box justifyContent="center" alignItems="center">
-      <Loading />
-    </Box>
-  ),
-});
+const MuiAlert = mui.version.includes('4.')
+  ? Loadable({
+      loader: () =>
+        import(/* webpackChunkName: "BaseTheme" */ '@material-ui/lab/Alert'),
+      loading: () => (
+        <Box justifyContent="center" alignItems="center">
+          <Loading />
+        </Box>
+      ),
+    })
+  : Loadable({
+      loader: () =>
+        import(/* webpackChunkName: "BaseTheme" */ '@material-ui/core/Alert'),
+      loading: () => (
+        <Box justifyContent="center" alignItems="center">
+          <Loading />
+        </Box>
+      ),
+    });
 
 const Alert = ({
   danger,
