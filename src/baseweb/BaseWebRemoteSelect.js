@@ -43,7 +43,7 @@ const BasewebRemoteSelect = ({
         }, 200);
       }
     } catch (error) {}
-  }, [url, debouncedFilter]);
+  }, [url, debouncedFilter, JSON.stringify(params)]);
 
   React.useEffect(() => {
     getOptions();

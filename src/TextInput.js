@@ -180,7 +180,7 @@ const SearchPopper = React.forwardRef(
           label={placeholder || label || ''}
           onFocus={onFocus}
           onBlur={onLostFocus}
-          style={{ width: '100%', height: 'auto', minWidth: 40 }}
+          style={{ width: '100%', height: 'auto', minWidth: 60 }}
           multiline
           {...input}
           {...props}
