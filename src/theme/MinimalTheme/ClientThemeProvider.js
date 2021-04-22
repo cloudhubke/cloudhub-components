@@ -1,6 +1,7 @@
 import React from 'react';
 import Loadable from '@react-loadable/revised';
 import Box from '@material-ui/core/Box';
+
 import MuiThemeProvider from './core';
 
 import ThemeContext from '../ThemeContext';

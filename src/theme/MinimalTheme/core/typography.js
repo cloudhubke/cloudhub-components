@@ -1,10 +1,10 @@
-import createBreakpoints from './createBreakpoints';
+import createBreakPoints from './createBreakPoints';
 import { pxToRem } from '../utils/formatFontSize';
 
 // ----------------------------------------------------------------------
 
 function responsiveFontSizes({ sm, md, lg }) {
-  const breakpoints = createBreakpoints({});
+  const breakpoints = createBreakPoints({});
 
   return {
     [breakpoints.up('sm')]: {

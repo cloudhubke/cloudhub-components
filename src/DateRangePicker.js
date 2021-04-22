@@ -11,7 +11,7 @@ const BaseWebDatePicker = Loadable({
     <Box
       borderColor={colors.gray}
       height={sizes.inputHeight}
-      borderWidth={0.5}
+      boder="0.5px solid"
       borderRadius={sizes.borderRadius}
     >
       <div>loading...</div>
