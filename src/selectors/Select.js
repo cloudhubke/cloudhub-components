@@ -4,6 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
+import uniq from 'lodash/uniq';
 
 const Select = React.forwardRef(
   (
@@ -30,7 +31,7 @@ const Select = React.forwardRef(
     ref
   ) => {
     const [list, setList] = React.useState([]);
-    const [listVal, setListVal] = React.useState(value);
+    const [listVal, setListVal] = React.useState(null);
 
     const [opts, setOpts] = useState([]);
     const [selectedValue, setSelectedValue] = useState(null);
