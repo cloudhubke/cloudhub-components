@@ -180,13 +180,13 @@ const RemoteDataGridWithDetailView = React.forwardRef(
         keyExtractor(data[i])
       );
 
-      for (let key of Object.keys(selection)) {
+      for (const key of Object.keys(selection)) {
         if (removedKeys.includes(key)) {
           delete selectedDocs[key];
         }
       }
 
-      for (let i of indexes) {
+      for (const i of indexes) {
         selectedDocs[keyExtractor(data[i])] = data[i];
       }
 
@@ -259,12 +259,10 @@ const RemoteDataGridWithDetailView = React.forwardRef(
           params: { ...queryparams },
         });
 
-        const dataArray = dataExtractor(data).map((d, i) => {
-          return {
-            ...d,
-            counter: currentPage * pageSize + (i + 1),
-          };
-        });
+        const dataArray = dataExtractor(data).map((d, i) => ({
+          ...d,
+          counter: currentPage * pageSize + (i + 1),
+        }));
 
         // setData(dataArray);
 
@@ -300,6 +298,10 @@ const RemoteDataGridWithDetailView = React.forwardRef(
       setCurrrentPage(currentPage);
     };
 
+    const reload = () => {
+      loadData(true);
+    };
+
     React.useImperativeHandle(ref, () => ({
       onSave: (row) => {
         const ind = data.findIndex(
@@ -327,9 +329,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
           });
         }
       },
-      reload: () => {
-        loadData();
-      },
+      reload,
       onDeleteSuccess: (deletedRows) => {
         const deleted = [...deletedRows].map((r) => keyExtractor(r));
         dispatch({
@@ -377,7 +377,7 @@ const RemoteDataGridWithDetailView = React.forwardRef(
           permissions={permissions}
           queryString={getQueryParams()}
           onSearch={(text) => setSearchTerm(text)}
-          onRefresh={() => loadData()}
+          onRefresh={reload}
           {...props}
         />
         <Block className={classes.gridContainer}>

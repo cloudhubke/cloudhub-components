@@ -74,7 +74,7 @@ FieldLabel.defaultProps = {
   label: 'Label',
   height: sizes.inputHeight,
   onClick: () => {},
-  textStyles: { color: 'inherit' },
+  textStyles: { color: 'inherit', marginRight: 10 },
   disabled: true,
 };
 
