@@ -360,10 +360,9 @@ const S3ImageUpload = ({
           const signedUrls = await getSignedUrl(fileArray, true).then(
             (urls) => urls
           );
-          signedUrls.filter(Boolean);
           const uploads = [...(filesArray || [])].filter(Boolean).map(
             (file) =>
-              signedUrls
+              (signedUrls || [])
                 .filter(Boolean)
                 .map(({ signedUrl, filename }) => {
                   if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {
