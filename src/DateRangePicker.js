@@ -19,8 +19,13 @@ const BaseWebDatePicker = Loadable({
   ),
 });
 
-const DateRangePicker = (props) => {
-  return <BaseWebDatePicker range {...props} />;
-};
+const DateRangePicker = (props) => (
+  <BaseWebDatePicker
+    range
+    quickSelect
+    placeholder="DD/MM/YYYY – DD/MM/YYYY"
+    {...props}
+  />
+);
 
 export default DateRangePicker;
