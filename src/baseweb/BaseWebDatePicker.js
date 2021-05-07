@@ -148,6 +148,7 @@ const BaseWebDatePicker = ({
               return filterDate(val);
             }
           }}
+          placeholder="DD/MM/YYYY"
           {...rest}
         />
       </Block>
