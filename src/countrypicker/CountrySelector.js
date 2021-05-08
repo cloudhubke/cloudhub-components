@@ -6,8 +6,8 @@ const CountrySelector = ({ ...props }) => (
   <StaticListSelector
     options={countries}
     labelExtractor={(item) => item.name || item}
-    keyExtractor={(item) => item.name}
-    valueExtractor={(item) => item.name}
+    keyExtractor={(item) => item.name || item}
+    valueExtractor={(item) => item.name || item}
     placeholder="Select Country"
     {...props}
   />
