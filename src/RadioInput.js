@@ -3,6 +3,7 @@ import {
   FormControl,
   RadioGroup,
   FormControlLabel,
+  FormHelperText,
   Radio,
 } from '@material-ui/core';
 
@@ -15,6 +16,8 @@ const RadioInput = ({
   Row,
   valueKey,
   labelKey,
+  meta,
+  showError,
 }) => (
   <FormControl component="fieldset">
     <RadioGroup
@@ -36,6 +39,9 @@ const RadioInput = ({
         />
       ))}
     </RadioGroup>
+    {showError && (
+      <FormHelperText id="component-helper-text">{meta.error}</FormHelperText>
+    )}
   </FormControl>
 );
 RadioInput.defaultProps = {
@@ -47,5 +53,6 @@ RadioInput.defaultProps = {
   },
   value: '',
   options: [],
+  showError: true,
 };
 export default RadioInput;

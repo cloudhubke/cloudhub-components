@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { TimePicker } from 'baseui/timepicker';
 import moment from 'moment';
+import ThemeContext from '../theme/ThemeContext';
+import Block from '../Block';
 
 const BaseWebTimePicker = ({ input, onChange, ...props }) => {
+  const { sizes } = React.useContext(ThemeContext);
   const val = input.value || value;
   const [value, setValue] = React.useState(
     new Date(
@@ -22,14 +25,23 @@ const BaseWebTimePicker = ({ input, onChange, ...props }) => {
     }
   }, [value]);
   return (
-    <TimePicker
-      value={value}
-      onChange={(date) => setValue(date)}
-      minTime={
-        new Date(moment().startOf('D').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
-      }
-      {...props}
-    />
+    <Block
+      flex={false}
+      style={{
+        height: sizes.inputHeight,
+        position: 'relative',
+        marginBottom: sizes.base,
+      }}
+    >
+      <TimePicker
+        value={value}
+        onChange={(date) => setValue(date)}
+        minTime={
+          new Date(moment().startOf('D').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
+        }
+        {...props}
+      />
+    </Block>
   );
 };
 BaseWebTimePicker.defaultProps = {
