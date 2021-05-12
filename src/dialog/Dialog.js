@@ -2,6 +2,7 @@ import React from 'react';
 import MuiDialog from '@material-ui/core/Dialog';
 import { makeStyles } from '@material-ui/core/styles';
 import SlideComponent from '../SlideComponent';
+import useMetrics from '../customhooks/useMetrics';
 import ThemeContext from '../theme/ThemeContext';
 
 const getAnimation = (animation) => {
@@ -43,9 +44,10 @@ const Dialog = ({
   ...props
 }) => {
   const { colors } = React.useContext(ThemeContext);
+  const { height } = useMetrics();
   const classes = getStyles({
-    minHeight,
-    maxHeight,
+    minHeight: minHeight > height ? height : minHeight,
+    maxHeight: maxHeight > height ? height : maxHeight,
     fullScreen,
     colors,
   }).useStyles();
