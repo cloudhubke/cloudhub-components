@@ -50,7 +50,7 @@ const SearchPopper = React.forwardRef(
       readOnly,
       startAdornment,
       endAdornment,
-      disableUnderline,
+      // disableUnderline,
       paper,
       label,
       style,
@@ -174,7 +174,7 @@ const SearchPopper = React.forwardRef(
             },
             startAdornment,
             endAdornment,
-            disableUnderline,
+            // disableUnderline,
             ...inputProps,
           }}
           label={placeholder || label || ''}
@@ -210,7 +210,9 @@ SearchPopper.defaultProps = {
     onChange: () => null,
   },
   paper: false,
-  disableUnderline: true,
+  inputProps: {
+    disableUnderline: true,
+  },
   showRemove: false,
   removeTextComponent: (
     <IconButton>
