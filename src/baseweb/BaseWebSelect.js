@@ -187,6 +187,7 @@ const BaseWebSelect = (props) => {
           input.onChange(val);
           input.onBlur();
           setValue(params.value);
+          setsearchTerm('');
         }}
         multi={Boolean(multi || isMulti)}
         type={search ? TYPE.search : TYPE.select}
