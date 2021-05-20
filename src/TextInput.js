@@ -50,7 +50,7 @@ const SearchPopper = React.forwardRef(
       readOnly,
       startAdornment,
       endAdornment,
-      disableUnderline,
+      // disableUnderline,
       paper,
       label,
       style,
@@ -174,13 +174,13 @@ const SearchPopper = React.forwardRef(
             },
             startAdornment,
             endAdornment,
-            disableUnderline,
+            // disableUnderline,
             ...inputProps,
           }}
           label={placeholder || label || ''}
           onFocus={onFocus}
           onBlur={onLostFocus}
-          style={{ width: '100%', height: 'auto', minWidth: 40 }}
+          style={{ width: '100%', height: 'auto', minWidth: 60 }}
           multiline
           {...input}
           {...props}
@@ -210,7 +210,9 @@ SearchPopper.defaultProps = {
     onChange: () => null,
   },
   paper: false,
-  disableUnderline: true,
+  inputProps: {
+    disableUnderline: true,
+  },
   showRemove: false,
   removeTextComponent: (
     <IconButton>

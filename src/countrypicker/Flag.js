@@ -1,5 +1,5 @@
 import React from 'react';
-import countries from './countries';
+import countries from './data/countries.json';
 
 const Flag = ({ country, small, medium, large, width, height, ...props }) => {
   const flagWidth = () => {
