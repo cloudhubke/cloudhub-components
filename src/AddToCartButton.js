@@ -19,7 +19,6 @@ const styles = () => ({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    // color: '#FFF',
     border: `0.5px solid ${red[500]}`,
     fontSize: 14,
     textTransform: 'uppercase',
