@@ -13,26 +13,20 @@ const useStyles = makeStyles((theme) => {
     isLight = theme.palette.mode === 'light';
   }
 
-  const styleFilled = (color) => {
-    return {
-      color: theme.palette[color].contrastText,
-      backgroundColor: theme.palette[color].main,
-    };
-  };
+  const styleFilled = (color) => ({
+    color: theme.palette[color].contrastText,
+    backgroundColor: theme.palette[color].main,
+  });
 
-  const styleOutlined = (color) => {
-    return {
-      color: theme.palette[color].main,
-      border: `1px solid ${theme.palette[color].main}`,
-    };
-  };
+  const styleOutlined = (color) => ({
+    color: theme.palette[color].main,
+    border: `1px solid ${theme.palette[color].main}`,
+  });
 
-  const styleGhost = (color) => {
-    return {
-      color: theme.palette[color][isLight ? 'dark' : 'light'],
-      backgroundColor: alpha(theme.palette[color].main, 0.16),
-    };
-  };
+  const styleGhost = (color) => ({
+    color: theme.palette[color][isLight ? 'dark' : 'light'],
+    backgroundColor: alpha(theme.palette[color].main, 0.16),
+  });
 
   return {
     root: {
