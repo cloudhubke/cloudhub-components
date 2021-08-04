@@ -43,6 +43,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { withStyles } from '@material-ui/core/styles';
+import Colors from '../theme/Colors';
 import Block from '../Block';
 import GridLoading from './GridLoading';
 import './grid.css';
@@ -184,13 +185,13 @@ const RemoteDataGrid = React.forwardRef(
         keyExtractor(data[i])
       );
 
-      for (let key of Object.keys(selection)) {
+      for (const key of Object.keys(selection)) {
         if (removedKeys.includes(key)) {
           delete selectedDocs[key];
         }
       }
 
-      for (let i of indexes) {
+      for (const i of indexes) {
         selectedDocs[keyExtractor(data[i])] = data[i];
       }
 
@@ -263,12 +264,10 @@ const RemoteDataGrid = React.forwardRef(
           params: { ...queryparams },
         });
 
-        const dataArray = dataExtractor(data).map((d, i) => {
-          return {
-            ...d,
-            counter: currentPage * pageSize + (i + 1),
-          };
-        });
+        const dataArray = dataExtractor(data).map((d, i) => ({
+          ...d,
+          counter: currentPage * pageSize + (i + 1),
+        }));
 
         // setData(dataArray);
 
@@ -315,22 +314,26 @@ const RemoteDataGrid = React.forwardRef(
         if (ind === -1) {
           dispatch({
             url: props.url,
-            type: 'data',
-            payload: [row, ...data].map((d, i) => ({
-              ...d,
-              counter: currentPage * pageSize + (i + 1),
-            })),
+            type: 'update',
+            payload: {
+              data: [row, ...data].map((d, i) => ({
+                ...d,
+                counter: currentPage * pageSize + (i + 1),
+              })),
+            },
           });
         } else {
           dispatch({
             url: props.url,
-            type: 'data',
-            payload: [...data].map((r, i) => {
-              if (keyExtractor(r) === keyExtractor(row)) {
-                return { ...row, counter: currentPage * pageSize + (i + 1) };
-              }
-              return r;
-            }),
+            type: 'update',
+            payload: {
+              data: [...data].map((r, i) => {
+                if (keyExtractor(r) === keyExtractor(row)) {
+                  return { ...row, counter: currentPage * pageSize + (i + 1) };
+                }
+                return r;
+              }),
+            },
           });
         }
       },
@@ -339,8 +342,10 @@ const RemoteDataGrid = React.forwardRef(
         const deleted = [...deletedRows].map((r) => keyExtractor(r));
         dispatch({
           url: props.url,
-          type: 'data',
-          payload: data.filter((r) => !includes(deleted, keyExtractor(r))),
+          type: 'update',
+          payload: {
+            update: data.filter((r) => !includes(deleted, keyExtractor(r))),
+          },
         });
       },
       getData: () => ({
@@ -563,16 +568,14 @@ RemoteDataGrid.defaultProps = {
   columnWidths: [],
   allowColumnResizing: true,
   detailComponent: null,
-  rowComponent: ({ selected, onRowClick, ...restProps }) => {
-    return (
-      <Table.Row
-        selected={selected}
-        hover
-        onClick={() => onRowClick(restProps.row)}
-        {...restProps}
-      />
-    );
-  },
+  rowComponent: ({ selected, onRowClick, ...restProps }) => (
+    <Table.Row
+      selected={selected}
+      hover
+      onClick={() => onRowClick(restProps.row)}
+      {...restProps}
+    />
+  ),
   cellComponent,
   actionsComponent: () => null,
   onEdit: () => {},

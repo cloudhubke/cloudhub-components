@@ -310,22 +310,26 @@ const RemoteDataGridWithDetailView = React.forwardRef(
         if (ind === -1) {
           dispatch({
             url: props.url,
-            type: 'data',
-            payload: [row, ...data].map((d, i) => ({
-              ...d,
-              counter: currentPage * pageSize + (i + 1),
-            })),
+            type: 'update',
+            payload: {
+              data: [row, ...data].map((d, i) => ({
+                ...d,
+                counter: currentPage * pageSize + (i + 1),
+              })),
+            },
           });
         } else {
           dispatch({
             url: props.url,
-            type: 'data',
-            payload: [...data].map((r, i) => {
-              if (keyExtractor(r) === keyExtractor(row)) {
-                return { ...row, counter: currentPage * pageSize + (i + 1) };
-              }
-              return r;
-            }),
+            type: 'update',
+            payload: {
+              data: [...data].map((r, i) => {
+                if (keyExtractor(r) === keyExtractor(row)) {
+                  return { ...row, counter: currentPage * pageSize + (i + 1) };
+                }
+                return r;
+              }),
+            },
           });
         }
       },
@@ -334,8 +338,10 @@ const RemoteDataGridWithDetailView = React.forwardRef(
         const deleted = [...deletedRows].map((r) => keyExtractor(r));
         dispatch({
           url: props.url,
-          type: 'data',
-          payload: data.filter((r) => !includes(deleted, keyExtractor(r))),
+          type: 'update',
+          payload: {
+            data: data.filter((r) => !includes(deleted, keyExtractor(r))),
+          },
         });
       },
       getData: () => ({

@@ -17,17 +17,20 @@ const BasewebRemoteSelect = ({
   const [options, setoptions] = React.useState([]);
 
   const debouncedFilter = useDebounce(filter, debounceTime);
+  const debouncedParams = useDebounce(params, debounceTime);
 
   const getOptions = React.useCallback(async () => {
     try {
-      const resultkey = `${url}${debouncedFilter || ''}`;
+      const resultkey = `${url}${debouncedFilter || ''}${JSON.stringify(
+        debouncedParams
+      )}`;
       if (url) {
         setisLoading(true);
         if (cachedResults.current[resultkey]) {
           setoptions(cachedResults.current[resultkey]);
         } else {
           const { data } = await axiosinstance().get(url, {
-            params: { ...params, [filterkey]: debouncedFilter },
+            params: { ...debouncedParams, [filterkey]: debouncedFilter },
           });
           if (data && Array.isArray(data.items)) {
             setoptions(data.items);
@@ -40,10 +43,10 @@ const BasewebRemoteSelect = ({
         }
         setTimeout(() => {
           setisLoading(false);
-        }, 200);
+        });
       }
     } catch (error) {}
-  }, [url, debouncedFilter, JSON.stringify(params)]);
+  }, [url, debouncedFilter, JSON.stringify(debouncedParams)]);
 
   React.useEffect(() => {
     getOptions();

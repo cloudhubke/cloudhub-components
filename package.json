@@ -31,9 +31,6 @@
   },
   "homepage": "https://github.com/cloudhubke/cloudhub-components#readme",
   "peerDependencies": {
-    "@devexpress/dx-react-core": "2.7.5",
-    "@devexpress/dx-react-grid": "2.7.5",
-    "@devexpress/dx-react-grid-material-ui": "2.7.5",
     "@emotion/cache": "^11.1.3",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
@@ -44,7 +41,15 @@
     "react-dom": ">=16.8.1",
     "zustand": "^3.3.3"
   },
+  "bundledDependencies": [
+    "@devexpress/dx-react-core",
+    "@devexpress/dx-react-grid",
+    "@devexpress/dx-react-grid-material-ui"
+  ],
   "dependencies": {
+    "@devexpress/dx-react-core": "2.7.5",
+    "@devexpress/dx-react-grid": "2.7.5",
+    "@devexpress/dx-react-grid-material-ui": "2.7.5",
     "@iconify-icons/ant-design": "^1.1.0",
     "@iconify-icons/eva": "^1.1.0",
     "@iconify-icons/ic": "^1.1.3",

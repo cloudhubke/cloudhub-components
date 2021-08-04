@@ -8,12 +8,10 @@ import { makeStyles } from '@material-ui/core/styles';
 // ----------------------------------------------------------------------
 
 const useStyles = makeStyles((theme) => {
-  const createStyle = (color) => {
-    return {
-      color: `${theme.palette[color].contrastText} !important`,
-      backgroundColor: `${theme.palette[color].main} !important`,
-    };
-  };
+  const createStyle = (color) => ({
+    color: `${theme.palette[color].contrastText} !important`,
+    backgroundColor: `${theme.palette[color].main} !important`,
+  });
 
   return {
     root: {
