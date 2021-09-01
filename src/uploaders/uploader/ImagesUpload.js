@@ -25,16 +25,18 @@ const Transition = React.forwardRef((props, ref) => (
 const getStyles = ({ cardStyles }) => {
   const useStyles = makeStyles({
     imagesList: {
-      '& .image-uploader > .ant-upload-list > .ant-upload.ant-upload-select-picture-card': {
-        width: '128px',
-        height: '128px',
-        ...cardStyles,
-      },
-      '& .image-uploader > .ant-upload-list > .ant-upload-list-picture-card-container': {
-        width: '128px',
-        height: '128px',
-        ...cardStyles,
-      },
+      '& .image-uploader > .ant-upload-list > .ant-upload.ant-upload-select-picture-card':
+        {
+          width: '128px',
+          height: '128px',
+          ...cardStyles,
+        },
+      '& .image-uploader > .ant-upload-list > .ant-upload-list-picture-card-container':
+        {
+          width: '128px',
+          height: '128px',
+          ...cardStyles,
+        },
       '& .ant-upload-list-picture-card .ant-upload-list-item': {
         width: '128px',
         height: '128px',
@@ -54,8 +56,16 @@ const getStyles = ({ cardStyles }) => {
 const ImagesCard = ({ cardStyles, children, flex, ...otherProps }) => {
   const classes = getStyles({ cardStyles }).useStyles();
 
+  // TEMP FIX to silence console warnings
+  const rest = { ...otherProps };
+  delete rest.axiosinstance;
+  delete rest.maxSize;
+  delete rest.maxWidth;
+  delete rest.onRemove;
+  delete rest.defaultCountry;
+  delete rest.preferredCountries;
   return (
-    <Block flex={flex} row wrap className={classes.imagesList} {...otherProps}>
+    <Block flex={flex} row wrap className={classes.imagesList} {...rest}>
       {children}
     </Block>
   );

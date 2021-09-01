@@ -15,7 +15,6 @@ const BaseWebDatePicker = ({
   showTime,
   dateFormat = 'dd/MM/yyyy',
   formatString,
-  excludeDates,
   disabledDate,
   filterDate,
   step,

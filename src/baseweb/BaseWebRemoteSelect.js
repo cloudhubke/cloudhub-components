@@ -15,6 +15,7 @@ const BasewebRemoteSelect = ({
   const [isLoading, setisLoading] = React.useState(false);
   const [filter, setfilter] = React.useState('');
   const [options, setoptions] = React.useState([]);
+  const [dropdownOpen, setdropdownOpen] = React.useState(false);
 
   const debouncedFilter = useDebounce(filter, debounceTime);
   const debouncedParams = useDebounce(params, debounceTime);
@@ -24,7 +25,7 @@ const BasewebRemoteSelect = ({
       const resultkey = `${url}${debouncedFilter || ''}${JSON.stringify(
         debouncedParams
       )}`;
-      if (url) {
+      if (url && dropdownOpen) {
         setisLoading(true);
         if (cachedResults.current[resultkey]) {
           setoptions(cachedResults.current[resultkey]);
@@ -46,7 +47,7 @@ const BasewebRemoteSelect = ({
         });
       }
     } catch (error) {}
-  }, [url, debouncedFilter, JSON.stringify(debouncedParams)]);
+  }, [url, debouncedFilter, JSON.stringify(debouncedParams), dropdownOpen]);
 
   React.useEffect(() => {
     getOptions();
@@ -60,6 +61,11 @@ const BasewebRemoteSelect = ({
         setfilter(target.value);
       }}
       isLoading={isLoading}
+      onOpen={() => setdropdownOpen(true)}
+      onClose={() => {
+        setdropdownOpen(false);
+        setfilter('');
+      }}
       {...rest}
     />
   );
