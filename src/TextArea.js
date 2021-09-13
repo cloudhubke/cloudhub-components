@@ -1,6 +1,6 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
+import TextField from '@mui/material/TextField';
+import { withStyles } from '@mui/styles';
 import Block from './Block';
 import Text from './Text';
 import ThemeContext from './theme/ThemeContext';

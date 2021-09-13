@@ -1,8 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import CountUp from 'react-countup';
-import { alpha, useTheme, makeStyles } from '@material-ui/core/styles';
-import { Box, Paper, Typography } from '@material-ui/core';
+import { useTheme, makeStyles } from '@mui/styles';
+import { alpha } from '@mui/material/styles';
+import { Box, Paper, Typography } from '@mui/material';
 import { Icon } from '@iconify/react';
 import ReactApexChart from 'react-apexcharts';
 import trendingUpFill from '@iconify-icons/eva/trending-up-fill';
@@ -62,7 +63,7 @@ function StatisticPaper({
   const theme = useTheme();
   const length = data.length || 0;
 
-  let hasData = length > 0;
+  const hasData = length > 0;
 
   let PERCENT = 0;
   const FIGURE = data[length - 1] || figure;
@@ -83,7 +84,7 @@ function StatisticPaper({
       y: {
         formatter: (seriesName) => fNumber(seriesName),
         title: {
-          formatter: function (seriesName) {
+          formatter(seriesName) {
             return '';
           },
         },

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Toolbar } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { Toolbar } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme) => {
       height: 65,
       display: 'flex',
       justifyContent: 'space-between',
-      padding: theme.spacing(0, 1, 0, 3)
-    }
+      padding: theme.spacing(0, 1, 0, 3),
+    },
   };
 });
 

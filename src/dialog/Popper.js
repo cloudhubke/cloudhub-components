@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import MuiPopper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import Fade from '@material-ui/core/Fade';
+import MuiPopper from '@mui/material/Popper';
+import Paper from '@mui/material/Paper';
+import Fade from '@mui/material/Fade';
 
-import { ClickAwayListener } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { ClickAwayListener } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import Block from '../Block';
 import colors from '../theme/Colors';
 import ThemeContext from '../theme/ThemeContext';

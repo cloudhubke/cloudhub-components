@@ -5,7 +5,7 @@ import {
   FormControlLabel,
   // FormHelperText,
   Radio,
-} from '@material-ui/core';
+} from '@mui/material';
 import Text from './Text';
 import ThemeContext from './theme/ThemeContext';
 

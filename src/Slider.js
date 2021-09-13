@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { Slider, Tooltip } from '@material-ui/core';
+import { withStyles } from '@mui/styles';
+import { Slider, Tooltip } from '@mui/material';
 import Block from './Block';
 import ThemeContext from './theme/ThemeContext';
 

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
-import { Add, Remove } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { Add, Remove } from '@mui/icons-material';
+import { makeStyles } from '@mui/styles';
 import IconButton from './IconButton';
 import TextInput from './TextInput';
 import Block from './Block';

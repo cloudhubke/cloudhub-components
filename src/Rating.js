@@ -1,13 +1,13 @@
 import React from 'react';
 import Loadable from '@react-loadable/revised';
-import Box from '@material-ui/core/Box';
-import mui from '@material-ui/core/package.json';
+import Box from '@mui/material/Box';
+import mui from '@mui/material/package.json';
 import Loading from './Loading';
 
 const Rating = mui.version.includes('4.')
   ? Loadable({
       loader: () =>
-        import(/* webpackChunkName: "BaseTheme" */ '@material-ui/lab/Rating'),
+        import(/* webpackChunkName: "BaseTheme" */ '@mui/material/Rating'),
       loading: () => (
         <Box justifyContent="center" alignItems="center">
           <Loading />
@@ -16,7 +16,7 @@ const Rating = mui.version.includes('4.')
     })
   : Loadable({
       loader: () =>
-        import(/* webpackChunkName: "BaseTheme" */ '@material-ui/core/Rating'),
+        import(/* webpackChunkName: "BaseTheme" */ '@mui/material/Rating'),
       loading: () => (
         <Box justifyContent="center" alignItems="center">
           <Loading />

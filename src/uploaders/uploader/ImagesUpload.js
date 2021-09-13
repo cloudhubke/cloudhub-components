@@ -4,14 +4,14 @@ import isEmpty from 'lodash/isEmpty';
 import has from 'lodash/has';
 
 import Upload from 'antd/lib/upload';
-import Add from '@material-ui/icons/Add';
+import Add from '@mui/icons-material/Add';
 
-import { makeStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
+import { makeStyles } from '@mui/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
 
-import Fab from '@material-ui/core/Fab';
+import Fab from '@mui/material/Fab';
 
 import 'antd/lib/upload/style/index.css';
 

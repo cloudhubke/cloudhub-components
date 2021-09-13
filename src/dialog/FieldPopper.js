@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import MuiPopper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import Collapse from '@material-ui/core/Collapse';
+import MuiPopper from '@mui/material/Popper';
+import Paper from '@mui/material/Paper';
+import Collapse from '@mui/material/Collapse';
 
-import { ClickAwayListener } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { ClickAwayListener } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useRect } from '@reach/rect';
 import Block from '../Block';
 import TextInput from '../TextInput';

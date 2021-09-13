@@ -7,7 +7,7 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 
 import { editorToolbar } from './EditorToolbar';
 
@@ -100,32 +100,33 @@ const useStyles = makeStyles((theme) => {
         background: theme.palette.background.paper,
 
         // Action
-        '& .rdw-link-modal-buttonsection, .rdw-embedded-modal-btn-section, .rdw-image-modal-btn-section': {
-          margin: 0,
-          display: 'flex',
-          marginTop: theme.spacing(2),
-          justifyContent: 'space-between',
-          '& button': {
+        '& .rdw-link-modal-buttonsection, .rdw-embedded-modal-btn-section, .rdw-image-modal-btn-section':
+          {
             margin: 0,
-            fontSize: 13,
-            border: 'none',
-            fontWeight: 'bold',
-            width: 'calc(50% - 4px)',
-            color: theme.palette.common.white,
-            background: theme.palette.primary.main,
-            borderRadius: theme.shape.borderRadius,
-            '&:disabled': {
-              color: theme.palette.action.disabled,
-              background: theme.palette.action.disabledBackground,
+            display: 'flex',
+            marginTop: theme.spacing(2),
+            justifyContent: 'space-between',
+            '& button': {
+              margin: 0,
+              fontSize: 13,
+              border: 'none',
+              fontWeight: 'bold',
+              width: 'calc(50% - 4px)',
+              color: theme.palette.common.white,
+              background: theme.palette.primary.main,
+              borderRadius: theme.shape.borderRadius,
+              '&:disabled': {
+                color: theme.palette.action.disabled,
+                background: theme.palette.action.disabledBackground,
+              },
+              '&:last-child': {
+                background: 'transparent',
+                color: theme.palette.text.primary,
+              },
+              '&:hover': { boxShadow: 'none' },
+              '&:active': { boxShadow: 'none' },
             },
-            '&:last-child': {
-              background: 'transparent',
-              color: theme.palette.text.primary,
-            },
-            '&:hover': { boxShadow: 'none' },
-            '&:active': { boxShadow: 'none' },
           },
-        },
         // Input
         '& input': {
           height: 26,

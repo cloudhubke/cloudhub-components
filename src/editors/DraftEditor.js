@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, Box, CardContent } from '@material-ui/core';
+import { Card, CardHeader, Box, CardContent } from '@mui/material';
 import DEditor from './deditor';
 import Block from '../Block';
 

@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import { capitalize } from '@material-ui/core/utils';
-import { Box } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { alpha } from '@mui/material/styles';
+import { capitalize } from '@mui/material/utils';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

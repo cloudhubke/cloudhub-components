@@ -1,5 +1,5 @@
 import React from 'react';
-import MuiContainer from '@material-ui/core/Container';
+import MuiContainer from '@mui/material/Container';
 import { useMetrics } from './customhooks';
 import ThemeContext from './theme/ThemeContext';
 

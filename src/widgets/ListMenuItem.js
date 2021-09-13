@@ -1,13 +1,14 @@
 import React from 'react';
 
 import clsx from 'clsx';
-import { makeStyles, alpha } from '@material-ui/core/styles';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Divider from '@material-ui/core/Divider';
+import { makeStyles } from '@mui/styles';
+import { alpha } from '@mui/material/styles';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Divider from '@mui/material/Divider';
 
 import { useLocation } from 'cloudhub-components/dist/customhooks';
 import { Link } from 'cloudhub-components/dist/reach';
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'capitalize',
     paddingLeft: theme.spacing(5),
     paddingRight: theme.spacing(2.5),
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   isActiveListItem: {
     color: theme.palette.primary.main,
@@ -36,9 +37,9 @@ const useStyles = makeStyles((theme) => ({
       bottom: 0,
       content: "''",
       position: 'absolute',
-      backgroundColor: theme.palette.primary.main
-    }
-  }
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
 }));
 
 const ListMenuItem = ({
@@ -71,7 +72,7 @@ const ListMenuItem = ({
           className={clsx(
             classes.listItem,
             {
-              [classes.isActiveListItem]: isActive
+              [classes.isActiveListItem]: isActive,
             },
             className
           )}
@@ -90,7 +91,7 @@ const ListMenuItem = ({
           className={clsx(
             classes.listItem,
             {
-              [classes.isActiveListItem]: isActive
+              [classes.isActiveListItem]: isActive,
             },
             className
           )}
@@ -103,7 +104,7 @@ const ListMenuItem = ({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                ...iconStyle
+                ...iconStyle,
               }}
               className={classes.listItemIcon}
             >
@@ -131,7 +132,7 @@ const ListMenuItem = ({
 
 ListMenuItem.defaultProps = {
   icon: null,
-  button: true
+  button: true,
 };
 
 export default ListMenuItem;

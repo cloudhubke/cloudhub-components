@@ -3,10 +3,8 @@ import { LightTheme, BaseProvider } from 'baseui';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { Server as Styletron } from 'styletron-engine-atomic';
 
-import {
-  ThemeProvider as MuiThemeProvider,
-  createMuiTheme,
-} from '@material-ui/core/styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/styles';
+import { createMuiTheme } from '@mui/matterial/styles';
 import ThemeContext from './ThemeContext';
 import localsizes from './Sizes';
 import localcolors from './Colors';

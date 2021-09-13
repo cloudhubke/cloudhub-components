@@ -5,9 +5,9 @@
 import React from 'react';
 import qs from 'qs';
 import uniq from 'uid';
-import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
+import { AddAPhotoSharp, Cancel } from '@mui/icons-material';
 import { Block, Text, toastr, Dialog, Button, Input } from '..';
-import { Tooltip } from '@material-ui/core';
+import { Tooltip } from '@mui/material';
 import isEqual from 'lodash/isEqual';
 import Cropper from 'cropperjs';
 import { Form, Field } from '../form';

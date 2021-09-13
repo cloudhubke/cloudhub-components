@@ -6,14 +6,14 @@
 import React from 'react';
 import qs from 'qs';
 import uniq from 'uid';
-import { List, ListItem, ListItemSecondaryAction } from '@material-ui/core';
+import { List, ListItem, ListItemSecondaryAction } from '@mui/material';
 import {
   VideoLibrarySharp,
   Delete,
   AddPhotoAlternate,
   Close,
   InfoOutlined,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import isEqual from 'lodash/isEqual';
 import { Block, Text, toastr, VideoThumbnail, Button, Dialog, Input } from '..';
 import { Form, Field } from '../form';

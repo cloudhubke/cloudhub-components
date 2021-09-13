@@ -18,7 +18,7 @@ import {
   brown,
   grey,
   blueGrey,
-} from '@material-ui/core/colors';
+} from '@mui/material/colors';
 
 const colors = {
   primary: '#37b38b', // '#0976b4',

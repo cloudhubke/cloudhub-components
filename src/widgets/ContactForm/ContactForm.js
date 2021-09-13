@@ -1,6 +1,6 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Grid, Button, TextField } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { Typography, Grid, Button, TextField } from '@mui/material';
 import validate from 'validate.js';
 
 const useStyles = makeStyles((theme) => ({

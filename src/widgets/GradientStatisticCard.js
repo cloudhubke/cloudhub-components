@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@material-ui/core';
+import { Card } from '@mui/material';
 import CountUp from 'react-countup';
 
 const GradientStatisticCard = ({
@@ -10,7 +10,7 @@ const GradientStatisticCard = ({
   color = 'deep-sky',
   textColor = 'white',
   figure = 0,
-  countUp = false
+  countUp = false,
 }) => {
   const [] = React.useState(0);
 

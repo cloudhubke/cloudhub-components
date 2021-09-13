@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-// import CircularProgress from '@material-ui/core/CircularProgress';
+// import CircularProgress from '@mui/material/CircularProgress';
 
 export default class Loading extends Component {
   static defaultProps = {
-    size: 16
+    size: 16,
   };
 
   constructor(props) {
@@ -21,7 +21,7 @@ export default class Loading extends Component {
           maxHeight: '100%',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Box from '@material-ui/core/Box';
+import Box from '@mui/material/Box';
 import Loadable from '@react-loadable/revised';
 import colors from './theme/Colors';
 import sizes from './theme/Sizes';

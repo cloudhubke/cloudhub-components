@@ -1,6 +1,6 @@
 import React from 'react';
-import { ListItem, ListItemText, ListItemAvatar } from '@material-ui/core';
-import { PlayArrow, PlayCircleOutline } from '@material-ui/icons';
+import { ListItem, ListItemText, ListItemAvatar } from '@mui/material';
+import { PlayArrow, PlayCircleOutline } from '@mui/icons-material';
 import moment from 'moment';
 import Block from './Block';
 import Text from './Text';
