@@ -1,7 +1,7 @@
 import React from 'react';
-import { green } from '@material-ui/core/colors';
-import MuiCheckBox from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
+import { green } from '@mui/material/colors';
+import MuiCheckBox from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import Text from './Text';
 import Block from './Block';
 import Button from './Button';

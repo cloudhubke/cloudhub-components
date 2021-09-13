@@ -1,10 +1,8 @@
 import React from 'react';
 import Loadable from '@react-loadable/revised';
-import Box from '@material-ui/core/Box';
-import {
-  ThemeProvider as MuiThemeProvider,
-  createMuiTheme,
-} from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import { ThemeProvider as MuiThemeProvider } from '@mui/styles';
+import { createMuiTheme } from '@mui/matterial/styles';
 import { getLightColors, getDarkColors } from './palette';
 
 import Loading from '../Loading';

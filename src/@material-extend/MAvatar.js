@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { forwardRef } from 'react';
-import { Avatar } from '@material-ui/core';
-import { capitalize } from '@material-ui/core/utils';
-import { makeStyles } from '@material-ui/core/styles';
+import { Avatar } from '@mui/material';
+import { capitalize } from '@mui/material/utils';
+import { makeStyles } from '@mui/styles';
 
 // ----------------------------------------------------------------------
 

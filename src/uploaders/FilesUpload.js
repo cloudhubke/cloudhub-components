@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Upload from 'antd/lib/upload';
 import List from 'antd/lib/list';
 import Icon from 'antd/lib/icon';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import IconButton from '@material-ui/core/IconButton';
-import Close from '@material-ui/icons/Close';
-import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import Close from '@mui/icons-material/Close';
+import { withStyles } from '@mui/styles';
 import Button from '../Button';
 import Input from '../Input';
 

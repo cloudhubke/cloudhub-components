@@ -5,11 +5,12 @@
 import React from 'react';
 import qs from 'qs';
 import uniq from 'uid';
-import { AddAPhotoSharp, Cancel } from '@material-ui/icons';
-import { Block, Text, toastr, Dialog, Button, Form, Field, Input } from '..';
-import { Tooltip } from '@material-ui/core';
+import { AddAPhotoSharp, Cancel } from '@mui/icons-material';
+import { Block, Text, toastr, Dialog, Button, Input } from '..';
+import { Tooltip } from '@mui/material';
 import isEqual from 'lodash/isEqual';
 import Cropper from 'cropperjs';
+import { Form, Field } from '../form';
 import 'cropperjs/dist/cropper.min.css';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import AntProgress from '../ant/AntProgress';
@@ -359,10 +360,9 @@ const S3ImageUpload = ({
           const signedUrls = await getSignedUrl(fileArray, true).then(
             (urls) => urls
           );
-          signedUrls.filter(Boolean);
           const uploads = [...(filesArray || [])].filter(Boolean).map(
             (file) =>
-              signedUrls
+              (signedUrls || [])
                 .filter(Boolean)
                 .map(({ signedUrl, filename }) => {
                   if (filename === file.name.replace(/[^\w\d_\-.]+/gi, '')) {

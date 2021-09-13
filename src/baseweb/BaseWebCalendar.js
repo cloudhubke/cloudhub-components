@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StatefulCalendar } from 'baseui/datepicker';
 
-const BaseWebCalendar = ({ value, input, onChange }) => {
+const BaseWebCalendar = ({ value, input, onChange, ...rest }) => {
   const val = value || input.value || new Date().getTime();
 
   const [date, setDate] = React.useState([new Date(val)]);
@@ -21,6 +21,7 @@ const BaseWebCalendar = ({ value, input, onChange }) => {
       // use the 'onChange' prop to pull data from the component into your application state
       value={date}
       onChange={onChangeDate}
+      {...rest}
     />
   );
 };

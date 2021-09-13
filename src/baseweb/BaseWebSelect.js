@@ -2,7 +2,6 @@ import React from 'react';
 import isPlainObject from 'lodash/isPlainObject';
 import isEqual from 'lodash/isEqual';
 import { Select, TYPE } from 'baseui/select';
-import LayersManager from './LayersManager';
 import Block from '../Block';
 import Text from '../Text';
 
@@ -29,6 +28,7 @@ const BaseWebSelect = (props) => {
     labelField,
     valueField,
     filterOptions,
+    dropDownStyle,
     ...rest
   } = props;
 
@@ -37,6 +37,7 @@ const BaseWebSelect = (props) => {
     Array.isArray(val) ? val : [val]
   );
   const [searchTerm, setsearchTerm] = React.useState('');
+  const [tagProps, settagProps] = React.useState({});
 
   // Effect clears displayed value on form reinitialize
   React.useEffect(() => {
@@ -90,6 +91,45 @@ const BaseWebSelect = (props) => {
     }
   }, [JSON.stringify(options)]);
 
+  React.useEffect(() => {
+    if (multi || isMulti) {
+      settagProps({
+        Tag: {
+          props: {
+            onActionClick: (event) => {
+              let deletedText;
+              try {
+                deletedText = event.currentTarget.previousSibling.textContent;
+                setValue((currentVal) => {
+                  const newVal = currentVal
+                    .map((val, index) => {
+                      if (
+                        (val && val === deletedText) ||
+                        (typeof labelExtractor === 'function' &&
+                          labelExtractor(val) === deletedText) ||
+                        getOptionLabel({ option: val, index }) === deletedText
+                      ) {
+                        return null;
+                      }
+                      return val;
+                    })
+                    .filter(Boolean);
+                  if (deletedText && typeof input.onChange === 'function') {
+                    input.onChange(newVal);
+                  }
+                  if (deletedText && typeof onChange === 'function') {
+                    onChange(newVal);
+                  }
+                  return newVal;
+                });
+              } catch (error) {}
+            },
+          },
+        },
+      });
+    }
+  }, [multi, isMulti]);
+
   const optionLabelExtractor = ({ option, index }) => {
     if (labelExtractor) {
       return labelExtractor(option);
@@ -127,7 +167,6 @@ const BaseWebSelect = (props) => {
     const { target } = event;
     setsearchTerm((target || {}).value || '');
   };
-
   return (
     <Block ref={containerRef}>
       <Select
@@ -148,6 +187,7 @@ const BaseWebSelect = (props) => {
           input.onChange(val);
           input.onBlur();
           setValue(params.value);
+          setsearchTerm('');
         }}
         multi={Boolean(multi || isMulti)}
         type={search ? TYPE.search : TYPE.select}
@@ -157,6 +197,12 @@ const BaseWebSelect = (props) => {
               mountNode: containerRef.current,
             },
           },
+          Dropdown: {
+            // pass sizes as strings, "10px" rather than 10
+            style: dropDownStyle,
+          },
+          ...tagProps,
+          // TODO investigate maxDropdownHeight
         }}
         getOptionLabel={optionLabelExtractor}
         getValueLabel={valueLabelExtractor}
@@ -201,6 +247,7 @@ BaseWebSelect.defaultProps = {
   // getValueLabel: ({ option, index }) =>
   //   isPlainObject(option) ? option.id || `option-${index}` : `option-${index}`,
   onSelectChange: () => {},
+  dropDownStyle: { maxHeight: '350px' },
 };
 
 export default BaseWebSelect;

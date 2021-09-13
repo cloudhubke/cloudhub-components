@@ -1,17 +1,18 @@
 import React, { Fragment, useState } from 'react';
 
 import clsx from 'clsx';
-import { makeStyles, alpha } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Collapse from '@material-ui/core/Collapse';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
+import { makeStyles } from '@mui/styles';
+import { alpha } from '@mui/material/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Collapse from '@mui/material/Collapse';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
 
-import Lens from '@material-ui/icons/Lens';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import ChevronRight from '@material-ui/icons/ChevronRight';
+import Lens from '@mui/icons-material/Lens';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ChevronRight from '@mui/icons-material/ChevronRight';
 import ThemeContext from 'cloudhub-components/dist/theme/ThemeContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'capitalize',
     paddingLeft: theme.spacing(2.5),
     paddingRight: theme.spacing(2.5),
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
 
   isActiveListItem: {
@@ -39,9 +40,9 @@ const useStyles = makeStyles((theme) => ({
       bottom: 0,
       content: "''",
       position: 'absolute',
-      backgroundColor: theme.palette.primary.main
-    }
-  }
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
 }));
 
 const ListSubMenu = ({
@@ -70,7 +71,7 @@ const ListSubMenu = ({
         className={clsx(
           classes.listItem,
           {
-            [classes.isActiveListItem]: menuexpanded
+            [classes.isActiveListItem]: menuexpanded,
           },
           className
         )}
@@ -86,7 +87,7 @@ const ListSubMenu = ({
           <ExpandMore
             style={{
               fontSize: 24,
-              color: style && style.color ? style.color : 'inherit'
+              color: style && style.color ? style.color : 'inherit',
             }}
           />
         )}
@@ -95,7 +96,7 @@ const ListSubMenu = ({
           <ChevronRight
             style={{
               fontSize: 24,
-              color: style && style.color ? style.color : 'inherit'
+              color: style && style.color ? style.color : 'inherit',
             }}
           />
         )}
@@ -116,7 +117,7 @@ const ListSubMenu = ({
 ListSubMenu.defaultProps = {
   headerIcon: <Lens />,
   header: '',
-  showHeaderIcon: true
+  showHeaderIcon: true,
 };
 
 export default ListSubMenu;

@@ -1,8 +1,8 @@
 import React from 'react';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Paper from '@material-ui/core/Paper';
-import Menu from '@material-ui/core/Menu';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Paper from '@mui/material/Paper';
+import Menu from '@mui/material/Menu';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Block from './Block';
 import IconButton from './IconButton';
 

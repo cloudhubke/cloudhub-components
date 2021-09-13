@@ -6,7 +6,7 @@ import {
 } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import colors from '../theme/Colors';
 
 const ToastContainer = ({ constainerStyle, ...props }) => {

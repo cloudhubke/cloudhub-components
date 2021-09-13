@@ -1,7 +1,7 @@
 import React from 'react';
-import { Close } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
-import { TextField, IconButton, Divider } from '@material-ui/core';
+import { Close } from '@mui/icons-material';
+import { makeStyles } from '@mui/styles';
+import { TextField, IconButton, Divider } from '@mui/material';
 import Block from './Block';
 import ThemeContext from './theme/ThemeContext';
 
@@ -180,7 +180,7 @@ const SearchPopper = React.forwardRef(
           label={placeholder || label || ''}
           onFocus={onFocus}
           onBlur={onLostFocus}
-          style={{ width: '100%', height: 'auto', minWidth: 40 }}
+          style={{ width: '100%', height: 'auto', minWidth: 60 }}
           multiline
           {...input}
           {...props}
@@ -210,7 +210,9 @@ SearchPopper.defaultProps = {
     onChange: () => null,
   },
   paper: false,
-  disableUnderline: true,
+  inputProps: {
+    disableUnderline: true,
+  },
   showRemove: false,
   removeTextComponent: (
     <IconButton>

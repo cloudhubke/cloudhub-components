@@ -1,6 +1,6 @@
 import React from 'react';
-import MuiDialog from '@material-ui/core/Dialog';
-import { makeStyles } from '@material-ui/core/styles';
+import MuiDialog from '@mui/material/Dialog';
+import { makeStyles } from '@mui/styles';
 import SlideComponent from '../SlideComponent';
 import useMetrics from '../customhooks/useMetrics';
 import ThemeContext from '../theme/ThemeContext';

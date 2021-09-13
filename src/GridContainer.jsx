@@ -1,10 +1,10 @@
 import React from 'react';
-import clsx from 'clsx'
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 // @material-ui/core components
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@mui/styles';
+import Grid from '@mui/material/Grid';
 
 const useStyles = makeStyles(({ sizes }) => ({
   grid: {
@@ -20,7 +20,13 @@ function GridContainer({ children, className, ...rest }) {
   const classes = useStyles();
 
   return (
-    <Grid container spacing={2} justifyContent="space-between" {...rest} className={clsx(classes.grid, className)}>
+    <Grid
+      container
+      spacing={2}
+      justifyContent="space-between"
+      {...rest}
+      className={clsx(classes.grid, className)}
+    >
       {children}
     </Grid>
   );

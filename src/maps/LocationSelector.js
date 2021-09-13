@@ -76,7 +76,13 @@ const LocationSelector = ({
         </FieldButton>
       )}
       {showmap && (
-        <Block style={{ height: height || 500, width: width || '100%' }}>
+        <Block
+          style={{
+            minHeight: height || 500,
+            height: height || 500,
+            width: width || '100%',
+          }}
+        >
           <LoadScript
             id="script-loader"
             googleMapsApiKey={CONFIG.GOOGLE_APIKEY}

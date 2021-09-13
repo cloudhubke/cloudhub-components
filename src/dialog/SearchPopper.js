@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Search, PinDrop } from '@material-ui/icons';
+import { Search, PinDrop } from '@mui/icons-material';
 import isObject from 'lodash/isObject';
 import isEmpty from 'lodash/isEmpty';
 
 import Axios from 'axios';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { Block, IconButton } from '..';
 import { useDebounce } from '../customhooks';
 import TextInput from '../TextInput';

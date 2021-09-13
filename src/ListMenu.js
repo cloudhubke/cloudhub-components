@@ -1,8 +1,8 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import { makeStyles } from '@material-ui/core/styles';
+import List from '@mui/material/List';
+import { makeStyles } from '@mui/styles';
 
-import ListSubheader from '@material-ui/core/ListSubheader';
+import ListSubheader from '@mui/material/ListSubheader';
 
 const useStyles = makeStyles(({ sizes }) => ({
   root: {

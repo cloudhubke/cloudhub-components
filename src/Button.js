@@ -1,5 +1,5 @@
 import React from 'react';
-import MuiButton from '@material-ui/core/Button';
+import MuiButton from '@mui/material/Button';
 import ThemeContext from './theme/ThemeContext';
 import hexContrastColor from 'hex-contrast-color';
 

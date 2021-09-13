@@ -3,7 +3,7 @@
     [
       "@babel/preset-env",
       {
-        "modules":"commonjs"
+        "modules": "commonjs"
       }
     ],
     "@babel/preset-react",
@@ -12,7 +12,7 @@
   "plugins": [
     // ["css-modules-transform", {
     //   "extractCss": "./dist/styles/components.css"
-    //   }  
+    //   }
     // ],
     ["css-modules-transform"],
     "@babel/plugin-transform-object-assign",
@@ -21,16 +21,16 @@
     [
       "babel-plugin-transform-imports",
       {
-        "@material-ui/core": {
-          "transform": "@material-ui/core/${member}",
+        "@mui/material": {
+          "transform": "@mui/material/${member}",
           "preventFullImport": true
         },
-        "@material-ui/lab": {
-          "transform": "@material-ui/core/${member}",
+        "@mui/lab": {
+          "transform": "@mui/lab/${member}",
           "preventFullImport": true
         },
-        "@material-ui/icons": {
-          "transform": "@material-ui/icons/${member}",
+        "@mui/icons-material": {
+          "transform": "@mui/icons-material/${member}",
           "preventFullImport": true
         },
         "lodash": {
@@ -39,10 +39,13 @@
         }
       }
     ],
-    ["babel-plugin-import",   {
-      "libraryName": "antd",
-      "libraryDirectory": "lib",
-      "style": true
-    }]    
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "lib",
+        "style": true
+      }
+    ]
   ]
 }

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import MuiPopper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import Collapse from '@material-ui/core/Collapse';
+import MuiPopper from '@mui/material/Popper';
+import Paper from '@mui/material/Paper';
+import Collapse from '@mui/material/Collapse';
 
-import { ClickAwayListener } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { ClickAwayListener } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useRect } from '@reach/rect';
 import Block from '../Block';
 import TextInput from '../TextInput';
@@ -174,26 +174,26 @@ const FieldPopper = ({
           placement={placement}
           disablePortal
           className={classes.popper}
-          modifiers={{
-            flip: {
-              enabled: flip,
-            },
-            arrow: {
-              enabled: arrow,
-              element: arrowRef,
+          modifiers={[
+            { name: 'flip', enabled: Boolean(flip) },
+            {
+              name: 'arrow',
+              enabled: Boolean(arrow),
+              options: { element: arrowRef },
             },
 
-            preventOverflow: {
+            {
+              name: 'preventOverflow',
               enabled: preventOverflow !== 'disabled',
-              boundariesElement:
-                preventOverflow === 'disabled'
-                  ? 'scrollParent'
-                  : preventOverflow,
+              options: {
+                boundariesElement:
+                  preventOverflow === 'disabled'
+                    ? 'scrollParent'
+                    : preventOverflow,
+              },
             },
-            hide: {
-              enabled: false,
-            },
-          }}
+            { name: 'hide', enabled: false },
+          ]}
           transition
           elevation={5}
         >

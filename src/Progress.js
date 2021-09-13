@@ -1,7 +1,7 @@
 import React from 'react';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@mui/material/LinearProgress';
+import { makeStyles } from '@mui/styles';
 import ThemeContext from './theme/ThemeContext';
 
 function Progress() {

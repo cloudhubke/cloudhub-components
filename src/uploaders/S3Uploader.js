@@ -13,9 +13,9 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-} from '@material-ui/core';
+} from '@mui/material';
 import isEqual from 'lodash/isEqual';
-import { AttachFile, Attachment, Close } from '@material-ui/icons';
+import { AttachFile, Attachment, Close } from '@mui/icons-material';
 import { DialogHeader, DialogContent, DialogActions } from '../dialog';
 import ThemeContext from '../theme/ThemeContext';
 

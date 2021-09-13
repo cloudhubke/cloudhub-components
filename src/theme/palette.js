@@ -1,4 +1,4 @@
-import { alpha, fade } from '@material-ui/core/styles';
+import { alpha, fade } from '@mui/styles';
 import getPalette from './palettes';
 
 const alphaFn = alpha || fade;

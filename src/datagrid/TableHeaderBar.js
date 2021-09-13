@@ -1,9 +1,9 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@mui/styles';
 
-import AddIcon from '@material-ui/icons/Add';
-import PrintIcon from '@material-ui/icons/Print';
-import RefreshIcon from '@material-ui/icons/Cached';
+import AddIcon from '@mui/icons-material/Add';
+import PrintIcon from '@mui/icons-material/Print';
+import RefreshIcon from '@mui/icons-material/Cached';
 
 import Input from '../Input';
 import Button from '../Button';

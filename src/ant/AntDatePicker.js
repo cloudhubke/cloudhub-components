@@ -6,7 +6,7 @@ import 'antd/lib/input/style/index.css';
 import 'antd/lib/date-picker/style/index.css';
 import './datepicker.css';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import ThemeContext from '../theme/ThemeContext';
 
 const useStyles = (theme) =>

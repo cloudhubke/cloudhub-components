@@ -1,15 +1,14 @@
 import * as React from 'react';
 import Loadable from '@react-loadable/revised';
-import Box from '@material-ui/core/Box';
-import AlertTitle from '@material-ui/lab/AlertTitle';
-import Collapse from '@material-ui/core/Collapse';
-import mui from '@material-ui/core/package.json';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import mui from '@mui/material/package.json';
 import Loading from './Loading';
 
-const MuiAlert = mui.version.includes('4.')
+const AlertTitle = mui.version.includes('4.')
   ? Loadable({
       loader: () =>
-        import(/* webpackChunkName: "BaseTheme" */ '@material-ui/lab/Alert'),
+        import(/* webpackChunkName: "BaseTheme" */ '@mui/material/AlertTitle'),
       loading: () => (
         <Box justifyContent="center" alignItems="center">
           <Loading />
@@ -18,7 +17,26 @@ const MuiAlert = mui.version.includes('4.')
     })
   : Loadable({
       loader: () =>
-        import(/* webpackChunkName: "BaseTheme" */ '@material-ui/core/Alert'),
+        import(/* webpackChunkName: "BaseTheme" */ '@mui/material/AlertTitle'),
+      loading: () => (
+        <Box justifyContent="center" alignItems="center">
+          <Loading />
+        </Box>
+      ),
+    });
+const MuiAlert = mui.version.includes('4.')
+  ? Loadable({
+      loader: () =>
+        import(/* webpackChunkName: "BaseTheme" */ '@mui/material/Alert'),
+      loading: () => (
+        <Box justifyContent="center" alignItems="center">
+          <Loading />
+        </Box>
+      ),
+    })
+  : Loadable({
+      loader: () =>
+        import(/* webpackChunkName: "BaseTheme" */ '@mui/material/Alert'),
       loading: () => (
         <Box justifyContent="center" alignItems="center">
           <Loading />

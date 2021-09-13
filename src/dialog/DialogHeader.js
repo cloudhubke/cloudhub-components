@@ -1,5 +1,5 @@
 import React from 'react';
-import Close from '@material-ui/icons/Close';
+import Close from '@mui/icons-material/Close';
 import Block from '../Block';
 import IconButton from '../IconButton';
 import Text from '../Text';

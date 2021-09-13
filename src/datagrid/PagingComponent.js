@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, TablePagination } from '@material-ui/core';
+import { Box, TablePagination } from '@mui/material';
 
 const PagingComponent = ({
   pageSize,

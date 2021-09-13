@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
-import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
+import WatchLaterOutlined from '@mui/icons-material/WatchLaterOutlined';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 

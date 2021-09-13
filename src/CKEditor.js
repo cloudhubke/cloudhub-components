@@ -1,6 +1,6 @@
 import React from 'react';
 import CKEditor5 from 'react-ckeditor5';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import Block from './Block';
 import Text from './Text';
 

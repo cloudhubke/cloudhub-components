@@ -1,6 +1,6 @@
 // just copy this code from the driving repo :)
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 import ThemeContext from './theme/ThemeContext';
 

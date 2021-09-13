@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRight } from '@material-ui/icons';
+import { ChevronRight } from '@mui/icons-material';
 import Block from './Block';
 import Text from './Text';
 import hexToRgb from './theme/hexToRgb';

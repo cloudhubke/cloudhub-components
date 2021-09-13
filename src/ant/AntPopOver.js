@@ -4,7 +4,7 @@ import AntPopOver from 'antd/lib/popover';
 import 'antd/lib/popover/style/index.css';
 // import './popover.css';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 
 import ThemeContext from '../theme/ThemeContext';
 
